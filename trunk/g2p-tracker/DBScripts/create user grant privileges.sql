@@ -1,0 +1,1 @@
+GRANT ALL ON `g2p_tracker` TO `tracker`@`localhost` IDENTIFIED BY 'tracker';

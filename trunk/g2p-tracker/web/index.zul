@@ -1,0 +1,16 @@
+ 
+
+ <!-- index.zul -->
+ 
+  <!-- Created on 30 de marzo de 2009, 20:35  -->
+
+ <!-- @author Administrador   -->
+ <!-- @version   --> 
+ 
+
+
+
+
+<window title="My First Window" border="normal" width="200px">
+  Hello, World!
+</window>
