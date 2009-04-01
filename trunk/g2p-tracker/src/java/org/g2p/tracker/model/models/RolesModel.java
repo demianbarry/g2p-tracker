@@ -9,7 +9,6 @@ import javax.persistence.EntityNotFoundException;
 import org.g2p.tracker.model.daos.RolesDAO;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.zkoss.lang.Strings;
-import org.zkoss.zreg.login.Login;
 
 public class RolesModel {
 	@Resource
