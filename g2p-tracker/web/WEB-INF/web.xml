@@ -13,6 +13,7 @@
             <param-name>update-uri</param-name>
             <param-value>/zkau</param-value>
         </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <description>The asynchronous update engine for ZK</description>
@@ -59,6 +60,6 @@
         <mime-type>application/vnd.mozilla.xul-xml</mime-type>
     </mime-mapping>
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.zul</welcome-file>
         </welcome-file-list>
     </web-app>
