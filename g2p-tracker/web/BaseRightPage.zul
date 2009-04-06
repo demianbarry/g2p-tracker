@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <html>
+		&lt;ul&gt;
+		&lt;li&gt;Tutorial&lt;/li&gt;
+		&lt;li&gt;Docs&lt;/li&gt;
+		&lt;li&gt;ZK vs GWT&lt;/li&gt;
+		&lt;li&gt;ZK vs Ajax JSF&lt;/li&gt;
+		&lt;li&gt;Forum&lt;/li&gt;
+		&lt;li&gt;FAQ&lt;/li&gt;
+		&lt;li&gt;Contact us&lt;/li&gt;
+		&lt;/ul&gt;
+    </html>
+</zk>

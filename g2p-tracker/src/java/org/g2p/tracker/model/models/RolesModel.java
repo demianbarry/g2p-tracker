@@ -4,13 +4,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-
-import javax.persistence.EntityNotFoundException;
 import org.g2p.tracker.model.daos.RolesDAO;
 import org.g2p.tracker.model.entities.RolesEntity;
-import org.zkoss.lang.Strings;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.zkoss.lang.Strings;
+import org.zkoss.spring.jpa.EntityNotFoundException;
+
+@Scope("idspace")
+@Component
 public class RolesModel {
+
 	@Resource
 	protected RolesDAO rolesDAO;
 
@@ -27,7 +32,7 @@ public class RolesModel {
 	}
 
 	public void setDAO(RolesDAO rolesDAO) {
-		this.rolesDAO = this.rolesDAO;
+		this.rolesDAO = rolesDAO;
 	}
 
 	public RolesEntity getSelected() {

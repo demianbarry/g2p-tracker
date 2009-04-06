@@ -49,7 +49,6 @@ public class AuditaEstadosCircuitosEntity implements Serializable {
     private int registroId;
     @Column(name = "host")
     private String host;
-    @Lob
     @Column(name = "observaciones")
     private String observaciones;
     @JoinColumn(name = "circuito", referencedColumnName = "circuito")
