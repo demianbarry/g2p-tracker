@@ -11,9 +11,6 @@
     </head>
     <body>
     <h1>JSP Page</h1>
-    
-    
-    
-    
+     
     </body>
 </html>
