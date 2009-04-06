@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence      http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <!-- TODO: using Hypersonic DB so will use LOCAL at the moment. Derby might be a suitable JTA source -->
+  <persistence-unit name="g2p-tracker-PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>g2p-tracker-datasource</jta-data-source>
+    <class>org.g2p.tracker.model.entities.RolesEntity</class>
+    <class>org.g2p.tracker.model.entities.AccesoMenuEntity</class>
+    <class>org.g2p.tracker.model.entities.UsuarioRolesEntity</class>
+    <class>org.g2p.tracker.model.entities.MenuEntity</class>
+    <class>org.g2p.tracker.model.entities.WebsiteUserEntity</class>
+    <class>org.g2p.tracker.model.entities.AuditaEstadosCircuitosEntity</class>
+    <class>org.g2p.tracker.model.entities.EstadosEntity</class>
+    <class>org.g2p.tracker.model.entities.AccionesAppsEntity</class>
+    <class>org.g2p.tracker.model.entities.CircuitosEstadosEntity</class>
+    <class>org.g2p.tracker.model.entities.UsuarioPreferenciasEntity</class>
+    <class>org.g2p.tracker.model.entities.PreferenciasEntity</class>
+    <class>org.g2p.tracker.model.entities.TransicionEstadosEntity</class>
+    <class>org.g2p.tracker.model.entities.AplicaCircuitoEntity</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+  </persistence-unit>
+</persistence>

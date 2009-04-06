@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Created by ZK Studio
+-->
+
+<zk>
+	<system-config>
+		<disable-event-thread />
+		<ui-factory-class>org.zkoss.spring.bean.ZkSpringUiFactory</ui-factory-class>
+	</system-config>
+</zk>

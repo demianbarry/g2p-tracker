@@ -130,7 +130,7 @@ public class MenuEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.MenuEntity[menuId=" + menuId + "]";
+        return "org.g2p.tracker.model.entities.Menu[menuId=" + menuId + "]";
     }
 
 }
