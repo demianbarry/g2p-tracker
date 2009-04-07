@@ -30,9 +30,9 @@
                     <west size="640px" splittable="true" flex="true">
                         <listbox id="rolesList" multiple="true" width="100%" model="@{rolesModel.all}" selectedItem="@{rolesModel.selected}">
                             <listhead sizable="true">
-                                <listheader id="rolIdSort" label="Rol" sort="auto(rolId)"/>
+                                <listheader id="rolIdSort" label="Rol" sort="auto(rolId)" width="10px"/>
                                 <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
-                                <listheader id="rolDescripcionSort" label="Descripcion" width="90px" sort="auto(descripcion)"/>
+                                <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
                                 <listheader id="rolObservacionesSort" label="Observaciones" width="80px" sort="auto(observaciones)"/>
                             </listhead>
                             <listitem self="@{each=x0}">
