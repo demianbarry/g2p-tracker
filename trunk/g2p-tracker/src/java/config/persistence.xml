@@ -3,7 +3,7 @@
   <!-- TODO: using Hypersonic DB so will use LOCAL at the moment. Derby might be a suitable JTA source -->
   <persistence-unit name="g2p-tracker-PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>g2p-tracker-datasource</jta-data-source>
+    <non-jta-data-source>g2p-tracker-datasource</non-jta-data-source>
     <class>org.g2p.tracker.model.entities.RolesEntity</class>
     <class>org.g2p.tracker.model.entities.AccesoMenuEntity</class>
     <class>org.g2p.tracker.model.entities.UsuarioRolesEntity</class>
@@ -18,5 +18,8 @@
     <class>org.g2p.tracker.model.entities.TransicionEstadosEntity</class>
     <class>org.g2p.tracker.model.entities.AplicaCircuitoEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.connection.isolation" value="8"/>
+    </properties>
   </persistence-unit>
 </persistence>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Spring namespace-based configuration
+  -->
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:zksp="http://www.zkoss.org/2008/zkspring"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-2.0.1.xsd
+        http://www.zkoss.org/2008/zkspring
+        http://www.zkoss.org/2008/zkspring/zkspring.xsd">
+
+    <http ...>
+        ...
+    </http>
+    ...
+
+    <!--
+      - Secure the ZK event processing per the event name and ZK component path pattern
+      -->
+    <zksp:zk-event login-template-close-delay="5">
+        <zksp:intercept-event event="onClick" path="//**/btn_*" access="ROLE_TELLER"/>
+        <zksp:intercept-event path="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    </zksp:zk-event>
+
+</beans:beans>

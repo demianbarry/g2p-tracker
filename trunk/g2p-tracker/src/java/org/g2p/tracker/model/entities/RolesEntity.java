@@ -25,6 +25,10 @@ import javax.persistence.Table;
  * @author Administrador
  */
 @Entity
+@org.hibernate.annotations.Entity(
+    optimisticLock = org.hibernate.annotations.OptimisticLockType.DIRTY,
+    dynamicUpdate=true  
+)
 @Table(name = "roles")
 @NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r"), @NamedQuery(name = "RolesEntity.findByRolId", query = "SELECT r FROM RolesEntity r WHERE r.rolId = :rolId"), @NamedQuery(name = "RolesEntity.findByNombre", query = "SELECT r FROM RolesEntity r WHERE r.nombre = :nombre"), @NamedQuery(name = "RolesEntity.findByDescripcion", query = "SELECT r FROM RolesEntity r WHERE r.descripcion = :descripcion"), @NamedQuery(name = "RolesEntity.findByObservaciones", query = "SELECT r FROM RolesEntity r WHERE r.observaciones = :observaciones")})
 public class RolesEntity implements Serializable {

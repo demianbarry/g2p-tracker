@@ -4,22 +4,22 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import org.g2p.tracker.model.daos.RolesDAO;
-import org.g2p.tracker.model.entities.RolesEntity;
+import org.g2p.tracker.model.daos.AccesoMenuDAO;
+import org.g2p.tracker.model.entities.AccesoMenuEntity;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.zkoss.lang.Strings;
 import org.zkoss.spring.jpa.EntityNotFoundException;
 
 @Scope("idspace")
-@Repository
-public class RolesModel {
+@Component
+public class AccesoMenuModel {
 
 	@Resource
-	protected RolesDAO rolesDAO;
+	protected AccesoMenuDAO accesoMenuDAO;
 
-	protected RolesEntity selected;
+	protected AccesoMenuEntity selected;
 	protected String queryString;
 	protected String where;
 	protected String orderBy;
@@ -27,19 +27,19 @@ public class RolesModel {
 	protected int maxResults;
 	protected Map<String, ?> parameters;
 
-	public RolesDAO getDAO() {
-		return rolesDAO;
+	public AccesoMenuDAO getDAO() {
+		return accesoMenuDAO;
 	}
 
-	public void setDAO(RolesDAO rolesDAO) {
-		this.rolesDAO = rolesDAO;
+	public void setDAO(AccesoMenuDAO accesoAccesoMenuDAO) {
+		this.accesoMenuDAO = accesoAccesoMenuDAO;
 	}
 
-	public RolesEntity getSelected() {
+	public AccesoMenuEntity getSelected() {
 		return this.selected;
 	}
 
-	public void setSelected(RolesEntity todo) {
+	public void setSelected(AccesoMenuEntity todo) {
 		this.selected = todo;
 	}
 
@@ -80,26 +80,26 @@ public class RolesModel {
 
 	//-- DB access on the selected bean --//
 	public void persist() {
-		rolesDAO.persist(selected);
+		accesoMenuDAO.persist(selected);
 	}
 
 	public void merge() throws EntityNotFoundException {
-		rolesDAO.merge(selected);
+		accesoMenuDAO.merge(selected);
 	}
 
 	public void delete() throws EntityNotFoundException {
-		rolesDAO.delete(selected);
+		accesoMenuDAO.delete(selected);
 	}
 
-	public List<RolesEntity> getAll() {
-		return rolesDAO.find(getQueryString(), this.offset, this.maxResults, getParameters());
+	public List<AccesoMenuEntity> getAll() {
+		return accesoMenuDAO.find(getQueryString(), this.offset, this.maxResults, getParameters());
 	}
 
 	//-- overridable --//
 	/** Generate query string */
 	protected String generateQueryString(String where, String orderBy) {
 		final StringBuffer sb = new StringBuffer(256);
-		sb.append("FROM " + RolesEntity.class.getName());
+		sb.append("FROM " + AccesoMenuEntity.class.getName());
 		if (!Strings.isBlank(where)) {
 			sb.append(" WHERE "+where);
 		}
