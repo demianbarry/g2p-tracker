@@ -4,14 +4,14 @@
  */
 package org.g2p.tracker.controllers;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
 
-import java.util.Set;
 import javax.annotation.Resource;
 import org.g2p.tracker.model.entities.RolesEntity;
+import org.g2p.tracker.model.entities.WebsiteUserEntity;
 import org.g2p.tracker.model.models.RolesModel;
+import org.g2p.tracker.model.models.WebsiteUserModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.spring.context.annotation.For;
@@ -32,20 +32,23 @@ import org.zkoss.zul.Window;
 
 @Scope("idspace")
 @Controller
-@For("abmcRolesWin")
-public class AbmcRolesController {
+@For("abmcUsuarioRolesWin")
+public class AbmcUsuarioRolesController {
 
-    protected static Set<Integer> rolesEditando = Collections.synchronizedSet(new HashSet<Integer>());
     //ZK databinder
     protected DataBinder binder;
 
     //Roles Model
-    @Resource(/*name="rolesModel",type=RolesDAO.class*/)
+    @Resource
+    protected WebsiteUserModel websiteUserModel = null;
+    @Resource
     protected RolesModel rolesModel = null;
 
     //main control window
     @Resource
-    protected Window abmcRolesWin; //main window
+    protected Window abmcUsuarioRolesWin; //main window
+    @Resource
+    protected Listbox usersList; //domain object summary list
     @Resource
     protected Listbox rolesList; //domain object summary list
     @Resource
@@ -84,7 +87,7 @@ public class AbmcRolesController {
     protected boolean _editMode; //switch to edit mode when doing editing(new/update)
     protected int _lastSelectedIndex = -1; //last selectedIndex before delete
 
-    public AbmcRolesController() {
+    public AbmcUsuarioRolesController() {
     }
 
     public RolesModel getModel() {
@@ -130,7 +133,7 @@ public class AbmcRolesController {
         if (_editMode) {
             rolNombre.focus();
         } else {
-            if (((List) rolesList.getModel()).isEmpty()) {
+            if (((Collection) rolesList.getModel()).isEmpty()) {
                 //no result in list, focus on new button
                 rolCreate.focus();
             } else {
@@ -144,19 +147,27 @@ public class AbmcRolesController {
     }
 
     //-- Initialization --//
-    @On("abmcRolesWin.onCreate")
+    @On("abmcUsuarioRolesWin.onCreate")
     public void init() {
-        binder = (DataBinder) abmcRolesWin.getVariable("binder", true);
+        binder = (DataBinder) abmcUsuarioRolesWin.getVariable("binder", true);
+        System.out.println("Pero");
+        final List usersListModel = (List) usersList.getModel();
+        if (!usersListModel.isEmpty()) {
+            websiteUserModel.setSelected((WebsiteUserEntity) usersListModel.get(0));
+//            binder.loadComponent(rolesDetail);
+        }
+
         final List model = (List) rolesList.getModel();
         if (!model.isEmpty()) {
             rolesModel.setSelected((RolesEntity) model.get(0));
             binder.loadComponent(rolesDetail);
         }
+        binder.loadComponent(rolesList);
         setFocus();
     }
 
     //-- view mode control --//
-    @On("abmcRolesWin.onCtrlKey")
+    @On("abmcUsuarioRolesWin.onCtrlKey")
     public void doCtrlKey(Event event) {
         final List items = rolesList.getItems();
         if (!items.isEmpty() && (!_editMode || !_create)) {
@@ -228,25 +239,25 @@ public class AbmcRolesController {
     //-- sorting --//
     /*@On("rolNameSort.onSort,rolDateSort.onSort,rolPrioritySort.onSort")
     public void doSort(Event event) {
-        final Listheader lh = (Listheader) event.getTarget();
-        final String sortDirection = lh.getSortDirection(); //original direction
-        if ("ascending".equals(sortDirection)) {
-            final Comparator cmpr = lh.getSortDescending();
-            if (cmpr instanceof FieldComparator) {
-                final String orderBy = ((FieldComparator) cmpr).getOrderBy();
-                rolesModel.setOrderBy(orderBy); //update query string
-            }
-        } else if ("descending".equals(sortDirection) || "natural".equals(sortDirection) || Strings.isBlank(sortDirection)) {
-            final Comparator cmpr = lh.getSortAscending();
-            if (cmpr instanceof FieldComparator) {
-                final String orderBy = ((FieldComparator) cmpr).getOrderBy();
-                rolesModel.setOrderBy(orderBy); //update query string
-            }
-        }
+    final Listheader lh = (Listheader) event.getTarget();
+    final String sortDirection = lh.getSortDirection(); //original direction
+    if ("ascending".equals(sortDirection)) {
+    final Comparator cmpr = lh.getSortDescending();
+    if (cmpr instanceof FieldComparator) {
+    final String orderBy = ((FieldComparator) cmpr).getOrderBy();
+    rolesModel.setOrderBy(orderBy); //update query string
+    }
+    } else if ("descending".equals(sortDirection) || "natural".equals(sortDirection) || Strings.isBlank(sortDirection)) {
+    final Comparator cmpr = lh.getSortAscending();
+    if (cmpr instanceof FieldComparator) {
+    final String orderBy = ((FieldComparator) cmpr).getOrderBy();
+    rolesModel.setOrderBy(orderBy); //update query string
+    }
+    }
     }*/
 
     //-- edit mode control --//
-    @On("rolSave.onClick,abmcRolesWin.onOK")
+    @On("rolSave.onClick,abmcUsuarioRolesWin.onOK")
     public void doSave(Event event) {
         if (isEditMode()) {
             //validate
@@ -277,7 +288,7 @@ public class AbmcRolesController {
         }
     }
 
-    @On("rolCancel.onClick,abmcRolesWin.onCancel")
+    @On("rolCancel.onClick,abmcUsuarioRolesWin.onCancel")
     public void doCancel(Event event) {
         if (isEditMode()) {
             //restore to original selected RolesEntity if cancel from new

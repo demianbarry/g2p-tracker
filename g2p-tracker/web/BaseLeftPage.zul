@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul">
-    <div>
+    <div apply="org.g2p.tracker.composers.BaseLeftPageComposer">
+        <space width="2%"/>
         <panel width="100%" border="normal" title="Navigation">
             <panelchildren style="padding:5px;">
-                <vbox>
-                    <toolbarbutton label="Home"/>
-                    <toolbarbutton label="Sitemap"/>
-                    <toolbarbutton label="Statement of Direction"/>
-                    <toolbarbutton label="ZK Team"/>
-                    <toolbarbutton label="Releases"/>
-                    <toolbarbutton label="Calender"/>
+                <vbox id="navBar">                    
                 </vbox>
             </panelchildren>
         </panel>

@@ -2,14 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.models;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import org.g2p.tracker.model.daos.WebsiteUserDAO;
+import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUserEntity;
 
 import org.springframework.context.annotation.Scope;
@@ -24,96 +25,116 @@ import org.zkoss.spring.jpa.EntityNotFoundException;
 @Scope("idspace")
 @Component
 public class WebsiteUserModel {
+
     @Resource
-	protected WebsiteUserDAO websiteUserDAO;
+    protected WebsiteUserDAO websiteUserDAO;
+    protected WebsiteUserEntity selected;
+    protected UsuarioRolesEntity rolSelected;
 
-	protected WebsiteUserEntity selected;
-	protected String queryString;
-	protected String where;
-	protected String orderBy;
-	protected int offset;
-	protected int maxResults;
-	protected Map<String, ?> parameters;
+    public void setRolSelected(UsuarioRolesEntity rolSelected) {
+        this.rolSelected = rolSelected;
+    }
 
-	public WebsiteUserDAO getDAO() {
-		return websiteUserDAO;
-	}
+    public UsuarioRolesEntity getRolSelected() {
+        return rolSelected;
+    }
+    protected String queryString;
+    protected String where;
+    protected String orderBy;
+    protected int offset;
+    protected int maxResults;
+    protected List<UsuarioRolesEntity> usuariosRoles;
+    protected Map<String, Integer> parameters;
 
-	public void setDAO(WebsiteUserDAO websiteUserDAO) {
-		this.websiteUserDAO = websiteUserDAO;
-	}
 
-	public WebsiteUserEntity getSelected() {
-		return this.selected;
-	}
+    public Collection<UsuarioRolesEntity> getUsuariosRoles() {
+        System.out.println("Hola");
+        if (selected != null) {
+            return selected.getUsuarioRolesEntityCollection();
+        }
 
-	public void setSelected(WebsiteUserEntity todo) {
-		this.selected = todo;
-	}
+        return null;
+    }    
 
-	public void setWhere(String where) {
-		this.where = where;
-	}
+    public WebsiteUserDAO getDAO() {
+        return websiteUserDAO;
+    }
 
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
+    public void setDAO(WebsiteUserDAO websiteUserDAO) {
+        this.websiteUserDAO = websiteUserDAO;
+    }
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
+    public WebsiteUserEntity getSelected() {
+        return this.selected;
+    }
 
-	public void setMaxResults(int maxResults) {
-		this.maxResults = maxResults;
-	}
+    public void setSelected(WebsiteUserEntity todo) {
+        this.selected = todo;
+    }
 
-	public String getQueryString() {
-		if (queryString != null) {
-			return this.queryString;
-		}
-		return generateQueryString(this.where, this.orderBy);
-	}
+    public void setWhere(String where) {
+        this.where = where;
+    }
 
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
-	}
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
 
-	public Map<String,?> getParameters() {
-		return this.parameters;
-	}
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
-	public void setParameters(Map<String,?> params) {
-		this.parameters = params;
-	}
+    public void setMaxResults(int maxResults) {
+        this.maxResults = maxResults;
+    }
 
-	//-- DB access on the selected bean --//
-	public void persist() {
-		websiteUserDAO.persist(selected);
-	}
+    public String getQueryString() {
+        if (queryString != null) {
+            return this.queryString;
+        }
+        return generateQueryString(this.where, this.orderBy);
+    }
 
-	public void merge() throws EntityNotFoundException {
-		websiteUserDAO.merge(selected);
-	}
+    public void setQueryString(String queryString) {
+        this.queryString = queryString;
+    }
 
-	public void delete() throws EntityNotFoundException {
-		websiteUserDAO.delete(selected);
-	}
+    public Map<String, ?> getParameters() {
+        return this.parameters;
+    }
 
-	public List<WebsiteUserEntity> getAll() {
-		return websiteUserDAO.find(getQueryString(), this.offset, this.maxResults, getParameters());
-	}
+    public void setParameters(Map<String, Integer> params) {
+        this.parameters = params;
+    }
 
-	//-- overridable --//
-	/** Generate query string */
-	protected String generateQueryString(String where, String orderBy) {
-		final StringBuffer sb = new StringBuffer(256);
-		sb.append("FROM " + WebsiteUserEntity.class.getName());
-		if (!Strings.isBlank(where)) {
-			sb.append(" WHERE "+where);
-		}
-		if (!Strings.isBlank(orderBy)) {
-			sb.append(" ORDER BY "+orderBy);
-		}
-		return sb.toString();
-	}
+    //-- DB access on the selected bean --//
+    public void persist() {
+        websiteUserDAO.persist(selected);
+    }
+
+    public void merge() throws EntityNotFoundException {
+        websiteUserDAO.merge(selected);
+    }
+
+    public void delete() throws EntityNotFoundException {
+        websiteUserDAO.delete(selected);
+    }
+
+    public List<WebsiteUserEntity> getAll() {
+        return websiteUserDAO.find(getQueryString(), this.offset, this.maxResults, getParameters());
+    }
+
+    //-- overridable --//
+    /** Generate query string */
+    protected String generateQueryString(String where, String orderBy) {
+        final StringBuffer sb = new StringBuffer(256);
+        sb.append("FROM " + WebsiteUserEntity.class.getName());
+        if (!Strings.isBlank(where)) {
+            sb.append(" WHERE " + where);
+        }
+        if (!Strings.isBlank(orderBy)) {
+            sb.append(" ORDER BY " + orderBy);
+        }
+        return sb.toString();
+    }
 }

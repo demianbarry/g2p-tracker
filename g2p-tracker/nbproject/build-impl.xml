@@ -502,11 +502,11 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.mysql-connector-java-5.1.6-bin.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.mysql-connector-java-5.1.6-bin.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.ZK3.6.0.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.ZK3.6.0.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.ZK-Spring.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.ZK-Spring.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.hibernate-persistence.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.hibernate-persistence.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.Spring-ZK.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.Spring-ZK.classpath" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.spring-ZK.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.spring-ZK.classpath" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.hibernate-support.classpath} ${manifest.file.reference.mysql-connector-java-5.1.6-bin.jar} ${manifest.libs.ZK3.6.0.classpath} ${manifest.libs.ZK-Spring.classpath} ${manifest.libs.Spring-ZK.classpath} ${manifest.libs.spring-ZK.classpath} "/>
+            <attribute name="Class-Path" value="${manifest.libs.hibernate-support.classpath} ${manifest.file.reference.mysql-connector-java-5.1.6-bin.jar} ${manifest.libs.ZK3.6.0.classpath} ${manifest.libs.ZK-Spring.classpath} ${manifest.libs.hibernate-persistence.classpath} ${manifest.libs.Spring-ZK.classpath} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
@@ -514,8 +514,8 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.mysql-connector-java-5.1.6-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.ZK3.6.0.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.ZK-Spring.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.hibernate-persistence.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.Spring-ZK.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${libs.spring-ZK.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul">
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcRolesWin"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" <!--arg0="./abmcRolesWin"-->?>
     <window id="abmcRolesWin" width="100%" height="100%" ctrlKeys="#up#down">
-        <borderlayout height="650px" style="background:#c5e6ef;">
-            <north size="80px" border="0" style="background:#c5e6ef;">
+        <borderlayout height="100%" style="background:#c5e6ef;">
+            <north size="10%" border="0" style="background:#c5e6ef;">
                 <include src="BaseBeforePage.zul"/>
             </north>
 	<!-- Sidebar -->
-            <west width="150px" border="0" flex="true" splittable="true" margins="0,5,0,0" style="background:#c5e6ef;">
-                <include src="BaseLeftPage.zul"/>
+            <west width="10%" title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
+                <include src="BaseLeftPage.zul" />
             </west>
-            <east width="150px" title="Quick Links" flex="true" margins="0,5,5,0" collapsible="true">
+            <east width="15%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
                 <include src="BaseRightPage.zul" />
             </east>
 	<!-- Content -->
             <center flex="true">
                 <borderlayout>
-                    <north size="60px">
+                    <north size="20%">
                         <borderlayout>
                             <center border="none" style="background-color:#B1CBD5">
                                 <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Administración de Roles</h2>]]>
@@ -27,13 +27,15 @@
                     <south style="background-color:#B1CBD5">
                         <span style="font-size:small">Copyright © 2009 Potix Corporation. All rights reserved.</span>
                     </south>
-                    <west size="640px" splittable="true" flex="true">
-                        <listbox id="rolesList" multiple="true" width="100%" model="@{rolesModel.all}" selectedItem="@{rolesModel.selected}">
+                    <west size="60%" splittable="true" flex="true">
+                        <listbox id="rolesList" fixedLayout="true"  mold="paging" multiple="true" width="100%" model="@{rolesModel.all}" selectedItem="@{rolesModel.selected}">
                             <listhead sizable="true">
-                                <listheader id="rolIdSort" label="Rol" sort="auto(rolId)" width="10px"/>
-                                <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
-                                <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
-                                <listheader id="rolObservacionesSort" label="Observaciones" width="80px" sort="auto(observaciones)"/>
+
+                                <listheader id="rolIdSort" label="Rol" width="10%" sort="auto(rolId)"/>
+                                <listheader id="rolNombreSort" label="Nombre" width="20%" sort="auto(nombre)"/>
+                                <listheader id="rolDescripcionSort" label="Descripcion" width="30" sort="auto(descripcion)"/>
+                                <listheader id="rolObservacionesSort" label="Observaciones" width="40%" sort="auto(observaciones)"/>                                
+
                             </listhead>
                             <listitem self="@{each=x0}">
                                 <listcell label="@{x0.rolId}"/>
@@ -111,7 +113,7 @@
                     </center>
                 </borderlayout>
             </center>
-            <south size="20%" border="0" style="background:#c5e6ef;">
+            <south size="10%" border="0" style="background:#c5e6ef;">
                 <include src="BaseAfterPage.zul" />
             </south>
         </borderlayout>
