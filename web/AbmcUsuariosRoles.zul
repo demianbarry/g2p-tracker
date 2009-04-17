@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="abmcUsuarioRolesWin"?>
+    <window id="abmcUsuarioRolesWin" width="100%" height="100%" ctrlKeys="#up#down">
+        <borderlayout height="100%" style="background:#c5e6ef;">
+            <north size="10%" border="0" style="background:#c5e6ef;">
+                <include src="BaseBeforePage.zul"/>
+            </north>
+	<!-- Sidebar -->
+            <west width="10%" title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
+                <include src="BaseLeftPage.zul" />
+            </west>
+            <east width="15%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
+                <include src="BaseRightPage.zul" />
+            </east>
+	<!-- Content -->
+            <center flex="true">
+                <borderlayout>
+                    <north size="60px">
+                        <borderlayout>
+                            <center border="none" style="background-color:#B1CBD5">
+                                <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Vinculacion de UsuarioRoles con Usuarios</h2>]]>
+                                </html>
+                            </center>
+                        </borderlayout>
+                    </north>
+                    <south style="background-color:#B1CBD5">
+                        <span style="font-size:small">Copyright © 2009 Potix Corporation. All rights reserved.</span>
+                    </south>
+                    <west size="300px">
+                        <borderlayout>
+                            <north title="Usuarios">
+                            </north>
+                            <center>
+                                <listbox id="usersList" multiple="true" width="100%" model="@{websiteUserModel.all}" selectedItem="@{websiteUserModel.selected}">
+                                    <listhead sizable="true">
+                                        <listheader id="userLoginName" label="Login Name" width="90px"  sort="auto(loginName)"/>
+                                        <listheader id="userNombreCompleto" label="Nombre completo" width="120px"  sort="auto(nombreCompleto)"/>
+                                    </listhead>
+                                    <listitem self="@{each=x0}">
+                                        <listcell label="@{x0.loginName}"/>
+                                        <listcell label="@{x0.nombreCompleto}"/>
+                                    </listitem>
+                                </listbox>
+                            </center>
+                        </borderlayout>
+                    </west>
+                    <center>
+                        <borderlayout>
+                            <north title="Roles del Usuario">
+                            </north>
+                            <center>
+                                <listbox id="usuarioRolesList" multiple="true" width="100%" model="@{websiteUserModel.usuariosRoles}" selectedItem="@{websiteUserModel.rolSelected}">
+                                    <listhead sizable="true">
+                                        <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
+                                        <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
+                                    </listhead>
+                                    <listitem self="@{each=x1}">
+                                        <listcell label="@{x1.rolesEntity.nombre}"/>
+                                        <listcell label="@{x1.rolesEntity.descripcion}"/>
+                                    </listitem>
+                                </listbox>
+                            </center>
+                        </borderlayout>
+                    </center>
+                    <east size="300px">
+                        <borderlayout>
+                            <north title="Asignaciones de Roles a Usuarios">
+                            </north>
+                            <center>
+                                <div id="usuarioRolesDetail">
+                <!-- view mode -->
+                                    <div visible="@{abmcUsuarioRolesController.viewMode}" width="100%">
+                                        <grid width="100%" >
+                                            <columns>
+                                                <column align="right" width="80px"/>
+                                                <column align="left"/>
+                                            </columns>
+                                            <rows>
+                                                <row>Rol ID:
+                                                    <label value="@{websiteUserModel.rolSelected.rolesEntity.rolId}"/>
+                                                </row>
+                                                <row>Nombre:
+                                                    <label value="@{websiteUserModel.rolSelected.rolesEntity.nombre}"/>
+                                                </row>
+                                                <row>Descripcion:
+                                                    <label value="@{websiteUserModel.rolSelected.rolesEntity.descripcion}"/>
+                                                </row>
+                                                <row>Observaciones:
+                                                    <label value="@{websiteUserModel.rolSelected.rolesEntity.observaciones}"/>
+                                                </row>
+                                            </rows>
+                                        </grid>
+                                        <separator/>
+                                        <div align="right">
+                                            <hbox>
+                                                <button id="usuarioRolCreate" label="New"/>
+                                                <button id="usuarioRolUpdate" label="Edit" disabled="@{abmcUsuarioRolesController.notSelected,load-when='rolesList.onSelect'}"/>
+                                                <button id="usuarioRolDelete" label="Delete" disabled="@{abmcUsuarioRolesController.notSelected,load-when='rolesList.onSelect'}"/>
+                                            </hbox>
+                                        </div>
+                                    </div>
+
+                <!-- edit mode -->
+                                    <div id="usuarioRolesEdit" visible="@{abmcUsuarioRolesController.editMode}">
+                                        <grid width="100%" fixedLayout="true">
+                                            <columns>
+                                                <column align="right" style="width:80px"/>
+                                                <column align="left"/>
+                                            </columns>
+                                            <rows>
+                                                <row>Rol ID:
+                                                    <label id="usuarioRolId" width="99%" value="@{usuariosRolesModel.selected.rolId}"/>
+                                                </row>
+                                                <row>Nombre:
+                                                    <textbox id="usuarioRolNombre" width="99%" constraint="no empty" value="@{usuariosRolesModel.selected.nombre,save-when=none}"/>
+                                                </row>
+                                                <row>Descripción:
+                                                    <textbox id="usuarioRolDescripcion" constraint="no empty" value="@{usuariosRolesModel.selected.descripcion,save-when=none}"/>
+                                                </row>
+                                                <row>Observaciones:
+                                                    <textbox id="usuarioRolObservaciones" rows="3" value="@{usuariosRolesModel.selected.observaciones,save-when=none}"/>
+                                                </row>
+                                            </rows>
+                                        </grid>
+                                        <separator/>
+                                        <div align="right">
+                                            <hbox>
+                                                <button id="usuarioRolSave" label="Save"/>
+                                                <button id="usuarioRolCancel" label="Cancel"/>
+                                            </hbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </center>
+                        </borderlayout>
+                    </east>
+                </borderlayout>
+            </center>
+            <south size="20%" border="0" style="background:#c5e6ef;">
+                <include src="BaseAfterPage.zul" />
+            </south>
+        </borderlayout>
+    </window>
+</zk>
