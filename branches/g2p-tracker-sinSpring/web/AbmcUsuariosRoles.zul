@@ -109,7 +109,7 @@
                                             </columns>
                                             <rows>
                                                 <row>User ID:
-                                                    <label id="userId" width="99%" value="@{abmcUsuarioRolesWin.websiteUserModel.selected.userId}"/>
+                                                    <label id="userId" width="99%" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.userId}"/>
                                                 </row>
                                                 <row>Rol ID:
                                                     <textbox id="usuarioRolId" width="99%" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId,save-when=none}"/>
