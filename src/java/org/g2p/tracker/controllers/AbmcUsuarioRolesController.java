@@ -15,6 +15,7 @@ import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.daos.exceptions.PreexistingEntityException;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
+import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
 import org.g2p.tracker.model.entities.WebsiteUserEntity;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.UsuarioRolesModel;
@@ -227,7 +228,9 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             //prepare a new UsuarioRolesEntity
             _tmpSelected = websiteUserModel.getRolSelected();
             _create = true;
-            usuarioRolesModel.setSelected(new UsuarioRolesEntity());
+            websiteUserModel.setRolSelected(new UsuarioRolesEntity());
+            websiteUserModel.getRolSelected().setUsuarioRolesEntityPK(new UsuarioRolesEntityPK());
+            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(websiteUserModel.getSelected().getUserId());
             //switch to edit mode
             setEditMode(true);
         }
@@ -246,7 +249,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             //store into db
             if (_create) {
                 try {
-                    this.usuarioRolesModel.persist();
+                    this.websiteUserModel.persistRol();
                 } catch (PreexistingEntityException ex) {
                     Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
