@@ -95,8 +95,8 @@
                                         <div align="right">
                                             <hbox>
                                                 <button id="usuarioRolCreate" label="Nuevo"/>
-                                                <button id="usuarioRolUpdate" label="Editar" disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"/>
-                                                <button id="usuarioRolDelete" label="Borrar" disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"/>
+                                                <button id="usuarioRolUpdate" label="Editar"/> <!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
+                                                <button id="usuarioRolDelete" label="Borrar"/><!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
                                             </hbox>
                                         </div>
                                     </div>
