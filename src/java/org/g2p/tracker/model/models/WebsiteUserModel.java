@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.g2p.tracker.model.daos.UsuarioRolesEntityJpaController;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.daos.WebsiteUserEntityJpaController;
@@ -23,6 +24,7 @@ import org.zkoss.lang.Strings;
 public class WebsiteUserModel {
 
     protected WebsiteUserEntityJpaController websiteUserDAO = new WebsiteUserEntityJpaController();
+    protected UsuarioRolesEntityJpaController usuarioRolesDAO = new UsuarioRolesEntityJpaController();
     protected WebsiteUserEntity selected;
     protected UsuarioRolesEntity rolSelected;
     protected static List<WebsiteUserEntity> all;
@@ -107,6 +109,10 @@ public class WebsiteUserModel {
     //-- DB access on the selected bean --//
     public void persist() {
         websiteUserDAO.create(selected);
+    }
+
+    public void persistRol() throws Exception {
+        usuarioRolesDAO.create(rolSelected);
     }
 
     public void merge() throws IllegalOrphanException, NonexistentEntityException, Exception {
