@@ -4,6 +4,7 @@
  */
 
 package org.g2p.tracker.model.models;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +23,9 @@ import org.zkoss.lang.Strings;
 
 public class UsuarioRolesModel {
 
-    protected UsuarioRolesEntityJpaController usuarioRolesDAO;
-
+    protected UsuarioRolesEntityJpaController usuarioRolesDAO = new UsuarioRolesEntityJpaController();
 	protected UsuarioRolesEntity selected;
+    protected static List<UsuarioRolesEntity> all;
 	protected String queryString;
 	protected String where;
 	protected String orderBy;
@@ -32,7 +33,12 @@ public class UsuarioRolesModel {
 	protected int maxResults;
 	protected Map<String, ?> parameters;
 
-	public UsuarioRolesEntityJpaController getDAO() {
+
+	public UsuarioRolesModel() {
+        all = new ArrayList<UsuarioRolesEntity>(usuarioRolesDAO.findUsuarioRolesEntityEntities());
+    }
+
+    public UsuarioRolesEntityJpaController getDAO() {
 		return usuarioRolesDAO;
 	}
 
@@ -95,6 +101,10 @@ public class UsuarioRolesModel {
 	public void delete() throws EntityNotFoundException, NonexistentEntityException {
 		usuarioRolesDAO.destroy(selected.getUsuarioRolesEntityPK());
 	}
+
+    public void setAll(List<UsuarioRolesEntity> allEntities) {
+        all = allEntities;
+    }
 
 	public List<UsuarioRolesEntity> getAll() {
 		return usuarioRolesDAO.findUsuarioRolesEntityEntities();

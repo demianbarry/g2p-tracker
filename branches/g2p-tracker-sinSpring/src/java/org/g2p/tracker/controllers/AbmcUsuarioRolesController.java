@@ -12,44 +12,66 @@ import java.util.logging.Logger;
 import javax.persistence.EntityNotFoundException;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
+import org.g2p.tracker.model.daos.exceptions.PreexistingEntityException;
 import org.g2p.tracker.model.entities.RolesEntity;
+import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUserEntity;
 import org.g2p.tracker.model.models.RolesModel;
+import org.g2p.tracker.model.models.UsuarioRolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-public class AbmcUsuarioRolesController {
+public class AbmcUsuarioRolesController extends Window implements AfterCompose {
 
     //ZK databinder
     protected DataBinder binder;
 
     //Roles Model
     protected WebsiteUserModel websiteUserModel = null;
-    protected RolesModel usuariosRolesModel;
+    protected RolesModel rolesModel = null;
+    protected UsuarioRolesModel usuarioRolesModel = null;
+
+    public RolesModel getRolesModel() {
+        return rolesModel;
+    }
+
+    public void setRolesModel(RolesModel rolesModel) {
+        this.rolesModel = rolesModel;
+    }
+
+    public WebsiteUserModel getWebsiteUserModel() {
+        return websiteUserModel;
+    }
+
+    public void setWebsiteUserModel(WebsiteUserModel websiteUserModel) {
+        this.websiteUserModel = websiteUserModel;
+    }
 
     //main control window
-    protected Window abmcUsuarioRolesWin; //main window
     protected Listbox usersList; //domain object summary list
     protected Listbox usuarioRolesList; //domain object summary list
     protected Component usuarioRolesDetail; //domain object detail
 
     //edit mode
     protected Component usuarioRolesEdit; //edit panel
-    protected Label usuarioRolId;
-    protected Textbox usuarioRolNombre;
-    protected Textbox usuarioRolDescripcion;
-    protected Textbox usuarioRolObservaciones;
+    protected Label userId;
+    protected Textbox usuarioRolId;
+    protected Datebox usuarioRolDesde;
+    protected Datebox usuarioRolHasta;
 
     //buttons
     protected Button usuarioRolCreate; //new button
@@ -62,20 +84,92 @@ public class AbmcUsuarioRolesController {
     //protected Vbox navBar;
 
     //operation transient state
-    protected RolesEntity _tmpSelected; //store original selected entity
+    protected UsuarioRolesEntity _tmpSelected; //store original selected entity
     protected boolean _create; //when new a entity
     protected boolean _editMode; //switch to edit mode when doing editing(new/update)
     protected int _lastSelectedIndex = -1; //last selectedIndex before delete
 
+
     public AbmcUsuarioRolesController() {
+        websiteUserModel = new WebsiteUserModel();
+        rolesModel = new RolesModel();
+        usuarioRolesModel = new UsuarioRolesModel();
+    }
+
+    @Override
+    public void afterCompose() {
+
+        //wire variables
+        Components.wireVariables(this, this);
+
+        //auto forward
+        Components.addForwards(this, this);
+
+    }
+
+    //-- Initialization --//
+    //@On("abmcUsuarioRolesWin.onCreate")
+    public void onCreate$abmcUsuarioRolesWin(Event event) {
+        // Obtengo el DataBinder que instancia la página
+        binder = (DataBinder) getVariable("binder", true);
+
+        final List usersListModel = (List) usersList.getModel();
+
+        if (!usersListModel.isEmpty()) {
+            websiteUserModel.setSelected((WebsiteUserEntity) usersListModel.get(0));
+            binder.loadComponent(usuarioRolesDetail);
+        }
+
+        final List model = (List) usuarioRolesList.getModel();
+        if (!model.isEmpty()) {
+            rolesModel.setSelected((RolesEntity) model.get(0));
+            binder.loadComponent(usuarioRolesDetail);
+        }
+        binder.loadComponent(usuarioRolesList);
+        setFocus();
+    }
+
+    //Cuando selecciono un usuario de la lista muestro sus roles
+    public void onSelect$usersList(Event event) {
+        binder.loadComponent(usuarioRolesList);
+    }
+
+    //Cuando selecciono un rol del usuario muestro las fechas//
+    public void onSelect$usuarioRolesList(Event event) {
+        final int index = usuarioRolesList.getSelectedIndex();
+        if (index >= 0) {
+            _lastSelectedIndex = index;
+            _create = false;
+        }
+    }
+
+           //-- view mode control --//
+    //@On("abmcUsuarioRolesWin.onCtrlKey")
+    public void onCtrlKey$abmcUsuarioRolesWin(Event event) {
+        final List items = usuarioRolesList.getItems();
+        if (!items.isEmpty() && (!_editMode || !_create)) {
+            final int keycode = ((KeyEvent) event).getKeyCode();
+            if (keycode == KeyEvent.DOWN || keycode == KeyEvent.UP) {
+                //handle no selected item case
+                if (usuarioRolesList.getSelectedIndex() < 0) { //no selected item
+                    //try our best to guess one
+                    if (_lastSelectedIndex >= 0) {
+                        final int index = Math.min(items.size() - 1, _lastSelectedIndex);
+                        usuarioRolesList.setSelectedIndex(index);
+                        Events.sendEvent(new SelectEvent("onSelect", usuarioRolesList, usuarioRolesList.getSelectedItems()));
+                    }
+                }
+                usuarioRolesList.focus();
+            }
+        }
     }
 
     public RolesModel getUsuarioRolesModel() {
-        return usuariosRolesModel;
+        return rolesModel;
     }
 
     public void setUsuarioRolesModel(RolesModel rolesModel) {
-        this.usuariosRolesModel = rolesModel;
+        this.rolesModel = rolesModel;
     }
 
     public void refreshModel() {
@@ -101,7 +195,7 @@ public class AbmcUsuarioRolesController {
     }
 
     public boolean isNotSelected() {
-        return this.usuariosRolesModel.getSelected() == null;
+        return this.rolesModel.getSelected() == null;
     }
 
     private void switchMode() {
@@ -111,7 +205,7 @@ public class AbmcUsuarioRolesController {
 
     private void setFocus() {
         if (_editMode) {
-            usuarioRolNombre.focus();
+            usuarioRolId.focus();
         } else {
             if (((Collection) usuarioRolesList.getModel()).isEmpty()) {
                 //no result in list, focus on new button
@@ -126,71 +220,91 @@ public class AbmcUsuarioRolesController {
         }
     }
 
-    //-- Initialization --//
-    //@On("abmcUsuarioRolesWin.onCreate")
-    public void init() {
-        binder = (DataBinder) abmcUsuarioRolesWin.getVariable("binder", true);
-        final List usersListModel = (List) usersList.getModel();
-        if (!usersListModel.isEmpty()) {
-            websiteUserModel.setSelected((WebsiteUserEntity) usersListModel.get(0));
-//            binder.loadComponent(usuarioRolesDetail);
-        }
-
-        final List model = (List) usuarioRolesList.getModel();
-        if (!model.isEmpty()) {
-            usuariosRolesModel.setSelected((RolesEntity) model.get(0));
-            binder.loadComponent(usuarioRolesDetail);
-        }
-        binder.loadComponent(usuarioRolesList);
-        setFocus();
-    }
-
-    //-- view mode control --//
-    //@On("abmcUsuarioRolesWin.onCtrlKey")
-    public void doCtrlKey(Event event) {
-        final List items = usuarioRolesList.getItems();
-        if (!items.isEmpty() && (!_editMode || !_create)) {
-            final int keycode = ((KeyEvent) event).getKeyCode();
-            if (keycode == KeyEvent.DOWN || keycode == KeyEvent.UP) {
-                //handle no selected item case
-                if (usuarioRolesList.getSelectedIndex() < 0) { //no selected item
-                    //try our best to guess one
-                    if (_lastSelectedIndex >= 0) {
-                        final int index = Math.min(items.size() - 1, _lastSelectedIndex);
-                        usuarioRolesList.setSelectedIndex(index);
-                        Events.sendEvent(new SelectEvent("onSelect", usuarioRolesList, usuarioRolesList.getSelectedItems()));
-                    }
-                }
-                usuarioRolesList.focus();
-            }
-        }
-    }
-
-    //@On("usuarioRolesList.onSelect")
-    public void doSelect(Event event) {
-        final int index = usuarioRolesList.getSelectedIndex();
-        if (index >= 0) {
-            _lastSelectedIndex = index;
-            _create = false;
-        }
-    }
-
+  
     //@On("usuarioRolCreate.onClick")
-    public void doCreate(Event event) {
+    public void onClick$usuarioRolCreate(Event event) {
         if (isViewMode()) {
-            //prepare a new RolesEntity
-            _tmpSelected = usuariosRolesModel.getSelected();
+            //prepare a new UsuarioRolesEntity
+            _tmpSelected = websiteUserModel.getRolSelected();
             _create = true;
-            usuariosRolesModel.setSelected(new RolesEntity());
+            usuarioRolesModel.setSelected(new UsuarioRolesEntity());
             //switch to edit mode
             setEditMode(true);
         }
     }
 
+    //-- edit mode control --//
+    //@On("usuarioRolSave.onClick,abmcUsuarioRolesWin.onOK")
+    public void onClick$usuarioRolSave(Event event) {
+        if (isEditMode()) {
+            //validate
+            validate();
+
+            //save into bean
+            binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
+
+            //store into db
+            if (_create) {
+                try {
+                    this.usuarioRolesModel.persist();
+                } catch (PreexistingEntityException ex) {
+                    Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    try {
+                        this.usuarioRolesModel.merge();
+                    } catch (IllegalOrphanException ex) {
+                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (NonexistentEntityException ex) {
+                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
+                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } catch (EntityNotFoundException e1) {
+                    try {
+                        Messagebox.show(getUpdateDeletedMessage());
+                    } catch (InterruptedException e2) {
+                        //ignore
+                    }
+                }
+            }
+
+            //refresh the usuarioRolesList
+            refreshModel();
+            //switch to view mode
+            setEditMode(false);
+        }
+    }
+
+    public void onOK$abmUsuarioRolesWin(Event event) {
+        onClick$usuarioRolSave(event);
+    }
+
+    //On("usuarioRolCancel.onClick,abmcUsuarioRolesWin.onCancel")
+    public void onClick$usuarioRolCancel(Event event) {
+        if (isEditMode()) {
+            //restore to original selected RolesEntity if cancel from new
+            if (_create) {
+                websiteUserModel.setRolSelected(_tmpSelected);
+                _tmpSelected = null;
+            }
+
+            //switch to view mode
+            setEditMode(false);
+        }
+    }
+
+    public void onCancel$abmcUsuarioRolesWin(Event event){
+        onClick$usuarioRolCancel(event);
+    }
+
     //@On("usuarioRolUpdate.onClick")
-    public void doUpdate(Event event) {
+    public void onClick$usuarioRolUpdate(Event event) {
         if (isViewMode()) {
-            if (usuariosRolesModel.getSelected() != null) {
+            if (rolesModel.getSelected() != null) {
 
                 _create = false;
 
@@ -207,7 +321,7 @@ public class AbmcUsuarioRolesController {
     //@On("usuarioRolDelete.onClick")
     public void doDelete(Event event) {
         if (isViewMode()) {
-            if (usuariosRolesModel.getSelected() != null) {
+            if (rolesModel.getSelected() != null) {
                 _create = false;
 
                 newConfirmDelete().show();
@@ -235,66 +349,13 @@ public class AbmcUsuarioRolesController {
     }
     }*/
 
-    //-- edit mode control --//
-    //@On("usuarioRolSave.onClick,abmcUsuarioRolesWin.onOK")
-    public void doSave(Event event) {
-        if (isEditMode()) {
-            //validate
-            validate();
-
-            //save into bean
-            binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
-
-            //store into db
-            if (_create) {
-                this.usuariosRolesModel.persist();
-            } else {
-                try {
-                    try {
-                        this.usuariosRolesModel.merge();
-                    } catch (IllegalOrphanException ex) {
-                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (NonexistentEntityException ex) {
-                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } catch (EntityNotFoundException e1) {
-                    try {
-                        Messagebox.show(getUpdateDeletedMessage());
-                    } catch (InterruptedException e2) {
-                        //ignore
-                    }
-                }
-            }
-
-            //refresh the usuarioRolesList
-            refreshModel();
-            //switch to view mode
-            setEditMode(false);
-        }
-    }
-
-    //On("usuarioRolCancel.onClick,abmcUsuarioRolesWin.onCancel")
-    public void doCancel(Event event) {
-        if (isEditMode()) {
-            //restore to original selected RolesEntity if cancel from new
-            if (_create) {
-                usuariosRolesModel.setSelected(_tmpSelected);
-                _tmpSelected = null;
-            }
-
-            //switch to view mode
-            setEditMode(false);
-        }
-    }
-
+    
     //--To be override--//
     /** Validate the input field */
     protected void validate() {
-        usuarioRolNombre.getValue();
-        usuarioRolDescripcion.getValue();
-        usuarioRolObservaciones.getValue();
+        usuarioRolId.getValue();
+        usuarioRolDesde.getValue();
+        usuarioRolHasta.getValue();
     }
 
     /** The info message when end user trying to update a "deleted" entity. */
@@ -333,7 +394,7 @@ public class AbmcUsuarioRolesController {
         /** Operation when end user click Yes button in confirm delete Messagebox*/
         public void doYes() {
             try {
-                usuariosRolesModel.delete();
+                rolesModel.delete();
                 usuarioRolCreate.focus();
             } catch (IllegalOrphanException ex) {
                 Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
@@ -342,7 +403,7 @@ public class AbmcUsuarioRolesController {
             } catch (EntityNotFoundException e) {
                 System.out.println("HOLAAAAAAAAA1");
             }
-            usuariosRolesModel.setSelected(null);
+            rolesModel.setSelected(null);
             //refresh the usuarioRolesList
             refreshModel();
             //update the usuarioRolesDetail
