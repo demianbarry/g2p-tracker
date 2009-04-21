@@ -37,10 +37,8 @@ public class WebsiteUserEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "login_name")
     private String loginName;
-    @Basic(optional = false)
     @Column(name = "login_password")
     private String loginPassword;
-    @Basic(optional = false)
     @Column(name = "nivel_visibilidad")
     private String nivelVisibilidad;
     @Column(name = "nombre_completo")
