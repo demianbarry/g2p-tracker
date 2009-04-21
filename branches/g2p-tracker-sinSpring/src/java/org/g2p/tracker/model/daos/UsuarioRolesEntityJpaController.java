@@ -34,36 +34,17 @@ public class UsuarioRolesEntityJpaController {
     }
 
     public void create(UsuarioRolesEntity usuarioRolesEntity) throws PreexistingEntityException, Exception {
-        if (usuarioRolesEntity.getUsuarioRolesEntityPK() == null) {
-            usuarioRolesEntity.setUsuarioRolesEntityPK(new UsuarioRolesEntityPK());
-        }
-        usuarioRolesEntity.getUsuarioRolesEntityPK().setRolId(usuarioRolesEntity.getRolesEntity().getRolId());
-        usuarioRolesEntity.getUsuarioRolesEntityPK().setUserId(usuarioRolesEntity.getWebsiteUserEntity().getUserId());
+
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
-            RolesEntity rolesEntity = usuarioRolesEntity.getRolesEntity();
-            if (rolesEntity != null) {
-                rolesEntity = em.getReference(rolesEntity.getClass(), rolesEntity.getRolId());
-                usuarioRolesEntity.setRolesEntity(rolesEntity);
-            }
-            WebsiteUserEntity websiteUserEntity = usuarioRolesEntity.getWebsiteUserEntity();
-            if (websiteUserEntity != null) {
-                websiteUserEntity = em.getReference(websiteUserEntity.getClass(), websiteUserEntity.getUserId());
-                usuarioRolesEntity.setWebsiteUserEntity(websiteUserEntity);
-            }
+            em.getTransaction().begin();            
+            
             em.persist(usuarioRolesEntity);
-            if (rolesEntity != null) {
-                rolesEntity.getUsuarioRolesEntityCollection().add(usuarioRolesEntity);
-                rolesEntity = em.merge(rolesEntity);
-            }
-            if (websiteUserEntity != null) {
-                websiteUserEntity.getUsuarioRolesEntityCollection().add(usuarioRolesEntity);
-                websiteUserEntity = em.merge(websiteUserEntity);
-            }
+            
             em.getTransaction().commit();
         } catch (Exception ex) {
+            em.getTransaction().rollback();
             if (findUsuarioRolesEntity(usuarioRolesEntity.getUsuarioRolesEntityPK()) != null) {
                 throw new PreexistingEntityException("UsuarioRolesEntity " + usuarioRolesEntity + " already exists.", ex);
             }

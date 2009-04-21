@@ -119,7 +119,7 @@
                                                     <!--<textbox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde,save-when=none}"/>-->
                                                 </row>
                                                 <row>Hasta:
-                                                    <datebox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta,save-when=none}"/>
+                                                    <datebox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta,save-when=none}" format="dd/MM/yyyy"/>
                                                     <!--<textbox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta,save-when=none}"/>-->
                                                 </row>
                                             </rows>
