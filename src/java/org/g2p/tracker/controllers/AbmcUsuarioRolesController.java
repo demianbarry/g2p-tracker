@@ -144,7 +144,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         }
     }
 
-           //-- view mode control --//
+    //-- view mode control --//
     //@On("abmcUsuarioRolesWin.onCtrlKey")
     public void onCtrlKey$abmcUsuarioRolesWin(Event event) {
         final List items = usuarioRolesList.getItems();
@@ -174,6 +174,9 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     }
 
     public void refreshModel() {
+        binder.loadAll();
+        usersList.selectItem(usersList.getSelectedItem());
+        binder.loadComponent(usuarioRolesList);
         binder.loadAttribute(usuarioRolesList, "model"); //reload model to force refresh
     }
 
@@ -200,6 +203,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     }
 
     private void switchMode() {
+        refreshModel();
         binder.loadComponent(usuarioRolesDetail); //reload visible to force refresh
         setFocus();
     }
@@ -258,7 +262,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             } else {
                 try {
                     try {
-                        this.usuarioRolesModel.merge();
+                        this.websiteUserModel.mergeRol();
                     } catch (IllegalOrphanException ex) {
                         Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (NonexistentEntityException ex) {
@@ -306,8 +310,9 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
 
     //@On("usuarioRolUpdate.onClick")
     public void onClick$usuarioRolUpdate(Event event) {
+
         if (isViewMode()) {
-            if (rolesModel.getSelected() != null) {
+            if (websiteUserModel.getRolSelected() != null) {
 
                 _create = false;
 
@@ -322,9 +327,9 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     }
 
     //@On("usuarioRolDelete.onClick")
-    public void doDelete(Event event) {
+    public void onClick$usuarioRolDelete(Event event) {
         if (isViewMode()) {
-            if (rolesModel.getSelected() != null) {
+            if (websiteUserModel.getRolSelected() != null) {
                 _create = false;
 
                 newConfirmDelete().show();
@@ -397,7 +402,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         /** Operation when end user click Yes button in confirm delete Messagebox*/
         public void doYes() {
             try {
-                rolesModel.delete();
+                websiteUserModel.deleteRol();
                 usuarioRolCreate.focus();
             } catch (IllegalOrphanException ex) {
                 Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
@@ -406,7 +411,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             } catch (EntityNotFoundException e) {
                 System.out.println("HOLAAAAAAAAA1");
             }
-            rolesModel.setSelected(null);
+            websiteUserModel.setRolSelected(null);
             //refresh the usuarioRolesList
             refreshModel();
             //update the usuarioRolesDetail

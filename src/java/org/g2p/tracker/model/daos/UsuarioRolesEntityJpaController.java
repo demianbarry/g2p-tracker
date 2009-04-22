@@ -57,42 +57,14 @@ public class UsuarioRolesEntityJpaController {
     }
 
     public void edit(UsuarioRolesEntity usuarioRolesEntity) throws NonexistentEntityException, Exception {
-        usuarioRolesEntity.getUsuarioRolesEntityPK().setRolId(usuarioRolesEntity.getRolesEntity().getRolId());
-        usuarioRolesEntity.getUsuarioRolesEntityPK().setUserId(usuarioRolesEntity.getWebsiteUserEntity().getUserId());
+
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            UsuarioRolesEntity persistentUsuarioRolesEntity = em.find(UsuarioRolesEntity.class, usuarioRolesEntity.getUsuarioRolesEntityPK());
-            RolesEntity rolesEntityOld = persistentUsuarioRolesEntity.getRolesEntity();
-            RolesEntity rolesEntityNew = usuarioRolesEntity.getRolesEntity();
-            WebsiteUserEntity websiteUserEntityOld = persistentUsuarioRolesEntity.getWebsiteUserEntity();
-            WebsiteUserEntity websiteUserEntityNew = usuarioRolesEntity.getWebsiteUserEntity();
-            if (rolesEntityNew != null) {
-                rolesEntityNew = em.getReference(rolesEntityNew.getClass(), rolesEntityNew.getRolId());
-                usuarioRolesEntity.setRolesEntity(rolesEntityNew);
-            }
-            if (websiteUserEntityNew != null) {
-                websiteUserEntityNew = em.getReference(websiteUserEntityNew.getClass(), websiteUserEntityNew.getUserId());
-                usuarioRolesEntity.setWebsiteUserEntity(websiteUserEntityNew);
-            }
-            usuarioRolesEntity = em.merge(usuarioRolesEntity);
-            if (rolesEntityOld != null && !rolesEntityOld.equals(rolesEntityNew)) {
-                rolesEntityOld.getUsuarioRolesEntityCollection().remove(usuarioRolesEntity);
-                rolesEntityOld = em.merge(rolesEntityOld);
-            }
-            if (rolesEntityNew != null && !rolesEntityNew.equals(rolesEntityOld)) {
-                rolesEntityNew.getUsuarioRolesEntityCollection().add(usuarioRolesEntity);
-                rolesEntityNew = em.merge(rolesEntityNew);
-            }
-            if (websiteUserEntityOld != null && !websiteUserEntityOld.equals(websiteUserEntityNew)) {
-                websiteUserEntityOld.getUsuarioRolesEntityCollection().remove(usuarioRolesEntity);
-                websiteUserEntityOld = em.merge(websiteUserEntityOld);
-            }
-            if (websiteUserEntityNew != null && !websiteUserEntityNew.equals(websiteUserEntityOld)) {
-                websiteUserEntityNew.getUsuarioRolesEntityCollection().add(usuarioRolesEntity);
-                websiteUserEntityNew = em.merge(websiteUserEntityNew);
-            }
+
+            em.merge(usuarioRolesEntity);
+
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();

@@ -119,8 +119,16 @@ public class WebsiteUserModel {
         websiteUserDAO.edit(selected);
     }
 
+    public void mergeRol() throws IllegalOrphanException, NonexistentEntityException, Exception {
+        usuarioRolesDAO.edit(rolSelected);
+    }
+
     public void delete() throws IllegalOrphanException, NonexistentEntityException {
         websiteUserDAO.destroy(selected.getUserId());
+    }
+
+    public void deleteRol() throws IllegalOrphanException, NonexistentEntityException {
+        usuarioRolesDAO.destroy(rolSelected.getUsuarioRolesEntityPK());
     }
 
     public List<WebsiteUserEntity> getAll() {
