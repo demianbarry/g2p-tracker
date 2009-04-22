@@ -5,6 +5,7 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,13 +19,17 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  *
  * @author Administrador
  */
 @Entity
-@org.hibernate.annotations.Entity(optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL , dynamicUpdate=true)
+@org.hibernate.annotations.Entity(
+    optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL,
+    dynamicUpdate=true,
+    dynamicInsert=true)
 @Table(name = "roles")
 @NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r"), @NamedQuery(name = "RolesEntity.findByRolId", query = "SELECT r FROM RolesEntity r WHERE r.rolId = :rolId"), @NamedQuery(name = "RolesEntity.findByNombre", query = "SELECT r FROM RolesEntity r WHERE r.nombre = :nombre"), @NamedQuery(name = "RolesEntity.findByDescripcion", query = "SELECT r FROM RolesEntity r WHERE r.descripcion = :descripcion"), @NamedQuery(name = "RolesEntity.findByObservaciones", query = "SELECT r FROM RolesEntity r WHERE r.observaciones = :observaciones")})
 public class RolesEntity implements Serializable {
@@ -46,6 +51,17 @@ public class RolesEntity implements Serializable {
     private Set<UsuarioRolesEntity> usuarioRolesEntityCollection;
     @OneToMany(mappedBy = "rolId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private Timestamp version;
+
+    public Timestamp getVersion() {
+        return version;
+    }
+
+    public void setVersion(Timestamp version) {
+        this.version = version;
+    }
 
     public RolesEntity() {
     }

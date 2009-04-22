@@ -48,23 +48,23 @@
                         <div id="rolesDetail">
 		<!-- view mode -->
                             <div id="rolesView" visible="@{abmcRolesWin.viewMode}" width="100%">
-                                <grid width="100%" >
+                                <grid width="100%">
                                     <columns>
                                         <column align="right" width="80px"/>
                                         <column align="left"/>
                                     </columns>
                                     <rows>
                                         <row>Rol ID:
-                                            <label value="@{abmcRolesWin.rolesModel.selected.rolId}"/>
+                                            <label value="@{abmcRolesWin.rolesModel.selected.rolId,load-when='rolesList.onSelect'}"/>
                                         </row>
                                         <row>Nombre:
-                                            <label value="@{abmcRolesWin.rolesModel.selected.nombre}"/>
+                                            <label value="@{abmcRolesWin.rolesModel.selected.nombre,load-when='rolesList.onSelect'}"/>
                                         </row>
                                         <row>Descripcion:
-                                            <label value="@{abmcRolesWin.rolesModel.selected.descripcion}"/>
+                                            <label value="@{abmcRolesWin.rolesModel.selected.descripcion,load-when='rolesList.onSelect'}"/>
                                         </row>
                                         <row>Observaciones:
-                                            <label value="@{abmcRolesWin.rolesModel.selected.observaciones}"/>
+                                            <label value="@{abmcRolesWin.rolesModel.selected.observaciones,load-when='rolesList.onSelect'}"/>
                                         </row>
                                     </rows>
                                 </grid>
@@ -90,13 +90,13 @@
                                             <label id="rolId" width="99%" value="@{abmcRolesWin.rolesModel.selected.rolId}"/>
                                         </row>
                                         <row>Nombre:
-                                            <textbox id="rolNombre" width="99%" constraint="no empty" value="@{abmcRolesWin.rolesModel.selected.nombre,save-when=none}"/>
+                                            <textbox id="rolNombre" width="99%" constraint="no empty" value="@{abmcRolesWin.rolesModel.selected.nombre}"/>
                                         </row>
                                         <row>Descripción:
-                                            <textbox id="rolDescripcion" constraint="no empty" value="@{abmcRolesWin.rolesModel.selected.descripcion,save-when=none}"/>
+                                            <textbox id="rolDescripcion" constraint="no empty" value="@{abmcRolesWin.rolesModel.selected.descripcion}"/>
                                         </row>
                                         <row>Observaciones:
-                                            <textbox id="rolObservaciones" rows="3" value="@{abmcRolesWin.rolesModel.selected.observaciones,save-when=none}"/>
+                                            <textbox id="rolObservaciones" rows="3" value="@{abmcRolesWin.rolesModel.selected.observaciones}"/>
                                         </row>
                                     </rows>
                                 </grid>

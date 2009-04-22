@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Created by ZK Studio
+-->
+<zk>
+ <session-config>
+     <session-timeout>1800</session-timeout>
+     <timer-keep-alive>false</timer-keep-alive>
+     <max-desktops-per-session>3</max-desktops-per-session>
+     <max-requests-per-session>5</max-requests-per-session>
+     <max-pushes-per-session>3</max-pushes-per-session>
+ </session-config>
+</zk>

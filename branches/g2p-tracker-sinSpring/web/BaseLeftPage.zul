@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul">
-    <div>
+   <div apply="org.g2p.tracker.composers.BaseLeftPageComposer">
         <panel width="100%" border="normal" title="Navigation">
             <panelchildren style="padding:5px;">
-                <vbox>
-                    <toolbarbutton label="Home"/>
-                    <toolbarbutton label="Sitemap"/>
-                    <toolbarbutton label="Statement of Direction"/>
-                    <toolbarbutton label="ZK Team"/>
-                    <toolbarbutton label="Releases"/>
-                    <toolbarbutton label="Calender"/>
+                <vbox id="navBar">
                 </vbox>
             </panelchildren>
         </panel>
         <panel width="100%" border="normal" style="margin-top:20px;" title="Project Goals">
             <panelchildren>
-                <html>
-					&lt;ul&gt;
-					&lt;li&gt;Simple and Rich&lt;/li&gt;
-					&lt;li&gt;Power and Flexible&lt;/li&gt;
-					&lt;li&gt;Direct RIA&lt;/li&gt;
-					&lt;/ul&gt;
-                </html>
+                <vbox id="navBar1">
+                    <label value="${sessionScope.User}"/>
+                </vbox>
             </panelchildren>
         </panel>
     </div>

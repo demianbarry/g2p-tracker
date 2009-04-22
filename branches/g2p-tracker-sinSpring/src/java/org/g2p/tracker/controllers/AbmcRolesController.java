@@ -7,10 +7,6 @@ package org.g2p.tracker.controllers;
 import java.util.List;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.EntityNotFoundException;
-import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.models.RolesModel;
@@ -99,7 +95,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
     }
 
     public void refreshModel() {
-        binder.loadAttribute(rolesList, "model"); //reload model to force refresh
+        binder.loadAttribute(rolesList, "model"); //reload model to force refresh        
     }
 
     //-- view/edit mode --//
@@ -166,6 +162,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
                 rolesList.focus();
             }
         }
+
     }
 
     public void onSelect$rolesList(Event event) {
@@ -204,7 +201,6 @@ public class AbmcRolesController extends Window implements AfterCompose {
         if (isViewMode()) {
             if (rolesModel.getSelected() != null) {
                 _create = false;
-
                 newConfirmDelete().show();
             }
         }
@@ -227,34 +223,40 @@ public class AbmcRolesController extends Window implements AfterCompose {
             //save into bean
             binder.saveComponent(rolesEdit); //reload model to force refresh
 
-            //store into db
-            if (_create) {
-                this.rolesModel.persist();
-            } else {
-                try {
-                    try {
-                        this.rolesModel.merge();
-                    } catch (IllegalOrphanException ex) {
-                        Logger.getLogger(AbmcRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (NonexistentEntityException ex) {
-                        Logger.getLogger(AbmcRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(AbmcRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } catch (EntityNotFoundException e1) {
-                    try {
-                        Messagebox.show(getUpdateDeletedMessage());
-                    } catch (InterruptedException e2) {
-                        //ignore
-                    }
-                }
-            }
+            try {
+                //store into db
+                rolesModel.getDAO().getUtx().begin();
 
-            //refresh the rolesList
-            refreshModel();
-            //switch to view mode
-            setEditMode(false);
+                if (_create) {
+                    this.rolesModel.persist();
+                } else {
+                    this.rolesModel.merge();
+                }
+
+                rolesModel.getDAO().getUtx().commit();
+            } catch (Exception ex) {
+                try {
+                    if (ex instanceof javax.persistence.OptimisticLockException) {
+                        Messagebox.show("El item que intentó modificar había sido modificado por otro usuario antes.");
+                    } else if (ex instanceof NonexistentEntityException) {
+                        Messagebox.show(ex.getMessage());
+                    } else {
+                        Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
+                    }
+                    rolesModel.getDAO().getUtx().rollback();
+                    rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
+                } catch (Exception ex1) {
+                    System.out.println("ERROR: " + ex1.getMessage());
+                }
+            } finally {
+                //refresh the rolesList
+                refreshModel();
+            }
         }
+
+        //switch to view mode
+        setEditMode(false);
+
     }
 
     public void onClick$rolCancel(Event event) {
@@ -270,12 +272,14 @@ public class AbmcRolesController extends Window implements AfterCompose {
             //restore to original selected RolesEntity if cancel from new
             if (_create) {
                 rolesModel.setSelected(_tmpSelected);
-                _tmpSelected = null;
+                _tmpSelected =
+                        null;
             }
 
-            //switch to view mode
+//switch to view mode
             setEditMode(false);
         }
+
     }
 
     //--To be override--//
@@ -322,20 +326,29 @@ public class AbmcRolesController extends Window implements AfterCompose {
         /** Operation when end user click Yes button in confirm delete Messagebox*/
         public void doYes() {
             try {
+                rolesModel.getDAO().getUtx().begin();
                 rolesModel.delete();
-                rolCreate.focus();
-            } catch (IllegalOrphanException ex) {
-                Logger.getLogger(AbmcRolesController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(AbmcRolesController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (EntityNotFoundException e) {
-                //ignore, already deleted by others
+                rolesModel.getDAO().getUtx().commit();
+            } catch (Exception ex) {
+                try {
+                    if (ex instanceof javax.persistence.OptimisticLockException) {
+                        Messagebox.show("El item que intentó modificar había sido eliminado por otro usuario antes.");
+                    } else {
+                        Messagebox.show("Ocurrió un error mientras se intentaban guardar los cambios: " + ex.getMessage() + " - " + ex.toString());
+                        ex.printStackTrace();
+                    }
+                    rolesModel.getDAO().getUtx().rollback();
+                    rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
+                } catch (Exception ex1) {
+                    System.out.println("ERROR: " + ex1.getMessage());
+                }
+            } finally {
+                //refresh the rolesList
+                refreshModel();
             }
-            rolesModel.setSelected(null);
-            //refresh the rolesList
-            refreshModel();
             //update the rolesDetail
             switchMode();
+            rolCreate.focus();
         }
 
         /** Returns title of confirm deleting Messagebox */
