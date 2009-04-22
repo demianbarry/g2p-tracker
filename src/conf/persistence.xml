@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
-  <persistence-unit name="g2p-tracker-sinSpringPU" transaction-type="RESOURCE_LOCAL">
+  <persistence-unit name="g2p-tracker-sinSpringPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>g2p-tracker-datasource</jta-data-source>
     <class>org.g2p.tracker.model.entities.AccesoMenuEntity</class>
@@ -36,7 +36,9 @@
       <property name="hibernate.connection.password" value="tracker"/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/g2p_tracker"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>      
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.SunONETransactionManagerLookup"/>
+      <property name="hibernate.show_sql" value="true" />
     </properties>
   </persistence-unit>
 </persistence>

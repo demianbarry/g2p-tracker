@@ -8,7 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.daos.RolesEntityJpaController;
-import org.g2p.tracker.model.entities.BaseEntity;
+import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.zkoss.lang.Strings;
 
@@ -80,16 +80,16 @@ public class RolesModel {
     }
 
     //-- DB access on the selected bean --//
-    public void persist() {
+    public void persist() throws RollbackFailureException, Exception {
         rolesDAO.create(selected);
     }
 
     public void merge() throws EntityNotFoundException, IllegalOrphanException, NonexistentEntityException, Exception {
-            rolesDAO.edit(selected);
+        rolesDAO.edit(selected);
     }
 
-    public void delete() throws EntityNotFoundException, IllegalOrphanException, NonexistentEntityException {
-        rolesDAO.destroy(selected.getRolId());
+    public void delete() throws EntityNotFoundException, IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+        rolesDAO.destroy(selected);
     }
 
     public void setAll(List<RolesEntity> allEntities) {

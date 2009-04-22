@@ -502,6 +502,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.MySQLDriver.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.MySQLDriver.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.hibernate-persistence.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.hibernate-persistence.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.hibernate-support.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.hibernate-support.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.exceptionhandler-runtime.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
             <attribute name="Class-Path" value="${manifest.libs.ZK3.6.0.classpath} ${manifest.libs.MySQLDriver.classpath} ${manifest.libs.hibernate-persistence.classpath} ${manifest.libs.hibernate-support.classpath} "/>
@@ -512,6 +513,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.MySQLDriver.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.hibernate-persistence.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.hibernate-support.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.exceptionhandler-runtime.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
