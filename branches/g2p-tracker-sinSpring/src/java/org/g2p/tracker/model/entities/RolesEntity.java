@@ -32,7 +32,7 @@ import javax.persistence.Version;
     dynamicInsert=true)
 @Table(name = "roles")
 @NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r"), @NamedQuery(name = "RolesEntity.findByRolId", query = "SELECT r FROM RolesEntity r WHERE r.rolId = :rolId"), @NamedQuery(name = "RolesEntity.findByNombre", query = "SELECT r FROM RolesEntity r WHERE r.nombre = :nombre"), @NamedQuery(name = "RolesEntity.findByDescripcion", query = "SELECT r FROM RolesEntity r WHERE r.descripcion = :descripcion"), @NamedQuery(name = "RolesEntity.findByObservaciones", query = "SELECT r FROM RolesEntity r WHERE r.observaciones = :observaciones")})
-public class RolesEntity implements Serializable {
+public class RolesEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -146,5 +146,10 @@ public class RolesEntity implements Serializable {
     @Override
     public String toString() {
         return "org.g2p.tracker.entities.RolesEntity[rolId=" + rolId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return getRolId();
     }
 }
