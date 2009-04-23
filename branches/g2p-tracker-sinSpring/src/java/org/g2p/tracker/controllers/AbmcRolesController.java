@@ -8,6 +8,7 @@ import java.util.List;
 
 
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
+import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.models.RolesModel;
 import org.zkoss.zk.ui.Component;
@@ -52,7 +53,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
     protected Button rolCancel; //cancel button
 
     //operation transient state
-    protected RolesEntity _tmpSelected; //store original selected entity
+    protected BaseEntity _tmpSelected; //store original selected entity
     protected boolean _create; //when new a entity
     protected boolean _editMode; //switch to edit mode when doing editing(new/update)
     protected int _lastSelectedIndex = -1; //last selectedIndex before delete
@@ -225,15 +226,15 @@ public class AbmcRolesController extends Window implements AfterCompose {
 
             try {
                 //store into db
-                rolesModel.getDAO().getUtx().begin();
+                rolesModel.getUtx().begin();
 
                 if (_create) {
-                    this.rolesModel.persist();
+                    this.rolesModel.persist(false);
                 } else {
-                    this.rolesModel.merge();
+                    this.rolesModel.merge(false);
                 }
 
-                rolesModel.getDAO().getUtx().commit();
+                rolesModel.getUtx().commit();
             } catch (Exception ex) {
                 try {
                     if (ex instanceof javax.persistence.OptimisticLockException) {
@@ -243,7 +244,8 @@ public class AbmcRolesController extends Window implements AfterCompose {
                     } else {
                         Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
                     }
-                    rolesModel.getDAO().getUtx().rollback();
+                    ex.printStackTrace();
+                    rolesModel.getUtx().rollback();
                     rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
                     System.out.println("ERROR: " + ex1.getMessage());
@@ -326,9 +328,9 @@ public class AbmcRolesController extends Window implements AfterCompose {
         /** Operation when end user click Yes button in confirm delete Messagebox*/
         public void doYes() {
             try {
-                rolesModel.getDAO().getUtx().begin();
-                rolesModel.delete();
-                rolesModel.getDAO().getUtx().commit();
+                rolesModel.getUtx().begin();
+                rolesModel.delete(false);
+                rolesModel.getUtx().commit();
             } catch (Exception ex) {
                 try {
                     if (ex instanceof javax.persistence.OptimisticLockException) {
@@ -337,7 +339,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
                         Messagebox.show("Ocurrió un error mientras se intentaban guardar los cambios: " + ex.getMessage() + " - " + ex.toString());
                         ex.printStackTrace();
                     }
-                    rolesModel.getDAO().getUtx().rollback();
+                    rolesModel.getUtx().rollback();
                     rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
                     System.out.println("ERROR: " + ex1.getMessage());
