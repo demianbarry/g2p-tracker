@@ -4,36 +4,51 @@
  */
 package org.g2p.tracker.model.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
-import org.g2p.tracker.model.daos.UsuarioRolesEntityJpaController;
+import javax.naming.NamingException;
+import javax.transaction.SystemException;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
-import org.g2p.tracker.model.daos.WebsiteUserEntityJpaController;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUserEntity;
-import org.zkoss.lang.Strings;
 
 /**
  *
  * @author nacho
  */
-public class WebsiteUserModel {
+public class WebsiteUserModel extends BaseModel {
 
-    protected WebsiteUserEntityJpaController websiteUserDAO = new WebsiteUserEntityJpaController();
-    protected UsuarioRolesEntityJpaController usuarioRolesDAO = new UsuarioRolesEntityJpaController();
-    protected WebsiteUserEntity selected;
+    protected UsuarioRolesModel usuarioRolesModel = new UsuarioRolesModel();
     protected UsuarioRolesEntity rolSelected;
-    protected static List<WebsiteUserEntity> all;
-    protected String queryString;
-    protected String where;
-    protected String orderBy;
-    protected int offset;
-    protected int maxResults;
-    protected Map<String, ?> parameters;
+
+    public WebsiteUserModel() {
+        super(WebsiteUserEntity.class);
+    }
+
+    public void persistRol(boolean ownTx) throws Exception {
+        usuarioRolesModel.create(rolSelected, ownTx);
+    }
+
+    public void mergeRol(boolean ownTx) throws IllegalOrphanException, NonexistentEntityException, Exception {
+        usuarioRolesModel.edit(rolSelected, ownTx);
+    }
+
+    public void deleteRol(boolean ownTx) throws IllegalOrphanException, NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        usuarioRolesModel.destroy(rolSelected, ownTx);
+    }
+
+    public void persistRol() throws Exception {
+        usuarioRolesModel.create(rolSelected);
+    }
+
+    public void mergeRol() throws IllegalOrphanException, NonexistentEntityException, Exception {
+        usuarioRolesModel.edit(rolSelected);
+    }
+
+    public void deleteRol() throws IllegalOrphanException, NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        usuarioRolesModel.destroy(rolSelected);
+    }
 
     public void setRolSelected(UsuarioRolesEntity rolSelected) {
         this.rolSelected = rolSelected;
@@ -45,107 +60,9 @@ public class WebsiteUserModel {
 
     public Collection<UsuarioRolesEntity> getUsuariosRoles() {
         if (selected != null) {
-            return selected.getUsuarioRolesEntityCollection();
+            return ((WebsiteUserEntity) selected).getUsuarioRolesEntityCollection();
         }
 
         return null;
-    }
-
-    public WebsiteUserModel() {
-        all = new ArrayList<WebsiteUserEntity>(websiteUserDAO.findWebsiteUserEntityEntities());
-    }
-
-    public WebsiteUserEntityJpaController getDAO() {
-        return websiteUserDAO;
-    }
-
-    public void setDAO(WebsiteUserEntityJpaController websiteUserDAO) {
-        this.websiteUserDAO = websiteUserDAO;
-    }
-
-    public WebsiteUserEntity getSelected() {
-        return this.selected;
-    }
-
-    public void setSelected(WebsiteUserEntity todo) {
-        this.selected = todo;
-    }
-
-    public void setWhere(String where) {
-        this.where = where;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public void setMaxResults(int maxResults) {
-        this.maxResults = maxResults;
-    }
-
-    public String getQueryString() {
-        if (queryString != null) {
-            return this.queryString;
-        }
-        return generateQueryString(this.where, this.orderBy);
-    }
-
-    public void setQueryString(String queryString) {
-        this.queryString = queryString;
-    }
-
-    public Map<String, ?> getParameters() {
-        return this.parameters;
-    }
-
-    public void setParameters(Map<String, ?> params) {
-        this.parameters = params;
-    }
-
-    //-- DB access on the selected bean --//
-    public void persist() {
-        websiteUserDAO.create(selected);
-    }
-
-    public void persistRol() throws Exception {
-        usuarioRolesDAO.create(rolSelected);
-    }
-
-    public void merge() throws IllegalOrphanException, NonexistentEntityException, Exception {
-        websiteUserDAO.edit(selected);
-    }
-
-    public void mergeRol() throws IllegalOrphanException, NonexistentEntityException, Exception {
-        usuarioRolesDAO.edit(rolSelected);
-    }
-
-    public void delete() throws IllegalOrphanException, NonexistentEntityException {
-        websiteUserDAO.destroy(selected.getUserId());
-    }
-
-    public void deleteRol() throws IllegalOrphanException, NonexistentEntityException {
-        usuarioRolesDAO.destroy(rolSelected.getUsuarioRolesEntityPK());
-    }
-
-    public List<WebsiteUserEntity> getAll() {
-        return websiteUserDAO.findWebsiteUserEntityEntities();
-    }
-
-    //-- overridable --//
-    /** Generate query string */
-    protected String generateQueryString(String where, String orderBy) {
-        final StringBuffer sb = new StringBuffer(256);
-        sb.append("FROM " + WebsiteUserEntity.class.getName());
-        if (!Strings.isBlank(where)) {
-            sb.append(" WHERE " + where);
-        }
-        if (!Strings.isBlank(orderBy)) {
-            sb.append(" ORDER BY " + orderBy);
-        }
-        return sb.toString();
     }
 }

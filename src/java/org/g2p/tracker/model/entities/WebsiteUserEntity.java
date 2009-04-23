@@ -6,6 +6,7 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,15 +20,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  *
  * @author Administrador
  */
 @Entity
+@org.hibernate.annotations.Entity(
+    optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL,
+    dynamicUpdate=true,
+    dynamicInsert=true)
 @Table(name = "website_user")
 @NamedQueries({@NamedQuery(name = "WebsiteUserEntity.findAll", query = "SELECT w FROM WebsiteUserEntity w"), @NamedQuery(name = "WebsiteUserEntity.findByUserId", query = "SELECT w FROM WebsiteUserEntity w WHERE w.userId = :userId"), @NamedQuery(name = "WebsiteUserEntity.findByLoginName", query = "SELECT w FROM WebsiteUserEntity w WHERE w.loginName = :loginName"), @NamedQuery(name = "WebsiteUserEntity.findByLoginPassword", query = "SELECT w FROM WebsiteUserEntity w WHERE w.loginPassword = :loginPassword"), @NamedQuery(name = "WebsiteUserEntity.findByNivelVisibilidad", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nivelVisibilidad = :nivelVisibilidad"), @NamedQuery(name = "WebsiteUserEntity.findByNombreCompleto", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nombreCompleto = :nombreCompleto"), @NamedQuery(name = "WebsiteUserEntity.findByEmail", query = "SELECT w FROM WebsiteUserEntity w WHERE w.email = :email"), @NamedQuery(name = "WebsiteUserEntity.findByNroLegajo", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nroLegajo = :nroLegajo"), @NamedQuery(name = "WebsiteUserEntity.findByNroComprador", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nroComprador = :nroComprador")})
-public class WebsiteUserEntity implements Serializable {
+public class WebsiteUserEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +63,9 @@ public class WebsiteUserEntity implements Serializable {
     private Set<UsuarioRolesEntity> usuarioRolesEntityCollection;
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private Timestamp version;
 
     public WebsiteUserEntity() {
     }
@@ -191,6 +200,11 @@ public class WebsiteUserEntity implements Serializable {
     @Override
     public String toString() {
         return "org.g2p.tracker.entities.WebsiteUserEntity[userId=" + userId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return getUserId();
     }
 
 }

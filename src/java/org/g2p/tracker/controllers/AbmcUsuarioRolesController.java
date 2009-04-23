@@ -7,12 +7,7 @@ package org.g2p.tracker.controllers;
 import java.util.Collection;
 import java.util.List;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.EntityNotFoundException;
-import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
-import org.g2p.tracker.model.daos.exceptions.PreexistingEntityException;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
@@ -89,7 +84,6 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     protected boolean _create; //when new a entity
     protected boolean _editMode; //switch to edit mode when doing editing(new/update)
     protected int _lastSelectedIndex = -1; //last selectedIndex before delete
-
 
     public AbmcUsuarioRolesController() {
         websiteUserModel = new WebsiteUserModel();
@@ -225,7 +219,6 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         }
     }
 
-  
     //@On("usuarioRolCreate.onClick")
     public void onClick$usuarioRolCreate(Event event) {
         if (isViewMode()) {
@@ -234,7 +227,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             _create = true;
             websiteUserModel.setRolSelected(new UsuarioRolesEntity());
             websiteUserModel.getRolSelected().setUsuarioRolesEntityPK(new UsuarioRolesEntityPK());
-            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(websiteUserModel.getSelected().getUserId());
+            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(((WebsiteUserEntity) websiteUserModel.getSelected()).getUserId());
             //switch to edit mode
             setEditMode(true);
         }
@@ -250,32 +243,29 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             //save into bean
             binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
 
+            try {
             //store into db
             if (_create) {
-                try {
+                
                     this.websiteUserModel.persistRol();
-                } catch (PreexistingEntityException ex) {
-                    Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+               
             } else {
+               
+                    this.websiteUserModel.mergeRol();
+            }
+            } catch (Exception ex) {
                 try {
-                    try {
-                        this.websiteUserModel.mergeRol();
-                    } catch (IllegalOrphanException ex) {
-                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (NonexistentEntityException ex) {
-                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
+                    if (ex instanceof javax.persistence.OptimisticLockException) {
+                        Messagebox.show("El item que intentó modificar había sido modificado por otro usuario antes.");
+                    } else if (ex instanceof NonexistentEntityException) {
+                        Messagebox.show(ex.getMessage());
+                    } else {
+                        Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
                     }
-                } catch (EntityNotFoundException e1) {
-                    try {
-                        Messagebox.show(getUpdateDeletedMessage());
-                    } catch (InterruptedException e2) {
-                        //ignore
-                    }
+                    ex.printStackTrace();
+                    websiteUserModel.setSelected((WebsiteUserEntity) usuarioRolesList.getModel().getElementAt(0));
+                } catch (Exception ex1) {
+                    System.out.println("ERROR: " + ex1.getMessage());
                 }
             }
 
@@ -304,7 +294,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         }
     }
 
-    public void onCancel$abmcUsuarioRolesWin(Event event){
+    public void onCancel$abmcUsuarioRolesWin(Event event) {
         onClick$usuarioRolCancel(event);
     }
 
@@ -356,8 +346,6 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     }
     }
     }*/
-
-    
     //--To be override--//
     /** Validate the input field */
     protected void validate() {
@@ -402,14 +390,23 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         /** Operation when end user click Yes button in confirm delete Messagebox*/
         public void doYes() {
             try {
-                websiteUserModel.deleteRol();
+                websiteUserModel.deleteRol(false);
                 usuarioRolCreate.focus();
-            } catch (IllegalOrphanException ex) {
-                Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(AbmcUsuarioRolesController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (EntityNotFoundException e) {
-                System.out.println("HOLAAAAAAAAA1");
+            } catch (Exception ex) {
+                try {
+                    if (ex instanceof javax.persistence.OptimisticLockException) {
+                        Messagebox.show("El item que intentó modificar había sido modificado por otro usuario antes.");
+                    } else if (ex instanceof NonexistentEntityException) {
+                        Messagebox.show(ex.getMessage());
+                    } else {
+                        Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
+                    }
+                    ex.printStackTrace();
+                    websiteUserModel.setSelected((WebsiteUserEntity) usuarioRolesList.getModel().getElementAt(0));
+                } catch (Exception ex1) {
+                    System.out.println("ERROR: " + ex1.getMessage()+" --- "+ex1.getCause());
+                    ex1.printStackTrace();
+                }
             }
             websiteUserModel.setRolSelected(null);
             //refresh the usuarioRolesList

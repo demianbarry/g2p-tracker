@@ -129,6 +129,7 @@ public class BaseModel {
     public void setEntity(Class entity) {
         this.entity = entity;
     }
+
     private UserTransaction utx = null;
 
     public UserTransaction getUtx() throws NamingException {
@@ -137,6 +138,7 @@ public class BaseModel {
         }
         return utx;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -219,6 +221,7 @@ public class BaseModel {
             }
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             if (ownTx) {
                 getUtx().rollback();
             }
@@ -241,7 +244,7 @@ public class BaseModel {
     private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            Query q = em.createQuery("select object(o) from RolesEntity as o");
+            Query q = em.createQuery("select object(o) from "+this.entity.getName()+" as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -268,5 +271,17 @@ public class BaseModel {
         } finally {
             em.close();
         }
+    }
+
+    public void create(BaseEntity entity) throws RollbackFailureException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        create(entity, true);
+    }
+
+    public void edit(BaseEntity entity) throws NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        edit(entity, true);
+    }
+
+    public void destroy(BaseEntity entity) throws NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        destroy(entity, true);
     }
 }

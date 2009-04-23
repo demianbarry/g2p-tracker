@@ -6,6 +6,7 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,15 +20,20 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 /**
  *
  * @author Administrador
  */
 @Entity
+@org.hibernate.annotations.Entity(
+    optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL,
+    dynamicUpdate=true,
+    dynamicInsert=true)
 @Table(name = "usuario_roles")
 @NamedQueries({@NamedQuery(name = "UsuarioRolesEntity.findAll", query = "SELECT u FROM UsuarioRolesEntity u"), @NamedQuery(name = "UsuarioRolesEntity.findByUserId", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId"), @NamedQuery(name = "UsuarioRolesEntity.findByRolId", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.rolId = :rolId"), @NamedQuery(name = "UsuarioRolesEntity.findByDesde", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.desde = :desde"), @NamedQuery(name = "UsuarioRolesEntity.findByHasta", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.hasta = :hasta"), @NamedQuery(name = "UsuarioRolesEntity.findByAnulado", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.anulado = :anulado")})
-public class UsuarioRolesEntity implements Serializable {
+public class UsuarioRolesEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected UsuarioRolesEntityPK usuarioRolesEntityPK;
@@ -47,6 +53,9 @@ public class UsuarioRolesEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUserEntity websiteUserEntity;
+    @Version
+    @Column(name = "OBJ_VERSION")
+    private Timestamp version;
 
     public UsuarioRolesEntity() {
     }
@@ -136,6 +145,11 @@ public class UsuarioRolesEntity implements Serializable {
     @Override
     public String toString() {
         return "org.g2p.tracker.entities.UsuarioRolesEntity[usuarioRolesEntityPK=" + usuarioRolesEntityPK + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return getUsuarioRolesEntityPK();
     }
 
 }

@@ -343,6 +343,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
                     rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
                     System.out.println("ERROR: " + ex1.getMessage());
+                    ex1.printStackTrace();
                 }
             } finally {
                 //refresh the rolesList
