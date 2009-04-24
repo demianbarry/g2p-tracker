@@ -4,12 +4,14 @@
  */
 package org.g2p.tracker.model.models;
 
-import java.util.Collection;
-
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
+import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUserEntity;
 
@@ -21,6 +23,7 @@ public class WebsiteUserModel extends BaseModel {
 
     protected UsuarioRolesModel usuarioRolesModel = new UsuarioRolesModel();
     protected UsuarioRolesEntity rolSelected;
+    protected RolesModel rolesModel = new RolesModel();
 
     public WebsiteUserModel() {
         super(WebsiteUserEntity.class);
@@ -58,9 +61,21 @@ public class WebsiteUserModel extends BaseModel {
         return rolSelected;
     }
 
-    public Collection<UsuarioRolesEntity> getUsuariosRoles() {
+    public List<BaseEntity> getUsuariosRoles() {
         if (selected != null) {
-            return ((WebsiteUserEntity) selected).getUsuarioRolesEntityCollection();
+            Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
+            queryParameters.put("userId", (Integer) selected.getPK());
+            return usuarioRolesModel.findEntities("UsuarioRolesEntity.findByUserId", queryParameters);
+        }
+
+        return null;
+    }
+
+    public List<BaseEntity> getRolesDisponibles() {
+        if (selected != null) {
+            Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
+            queryParameters.put("userId", (Integer) selected.getPK());
+            return usuarioRolesModel.findEntities("RolesEntity.findByRolIdComplement", queryParameters);
         }
 
         return null;

@@ -14,5 +14,5 @@ public class UsuarioRolesModel extends BaseModel {
 
     public UsuarioRolesModel() {
         super(UsuarioRolesEntity.class);
-    }
+    }   
 }

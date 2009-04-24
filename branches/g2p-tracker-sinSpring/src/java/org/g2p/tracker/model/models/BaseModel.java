@@ -5,6 +5,8 @@
 package org.g2p.tracker.model.models;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import javax.naming.InitialContext;
@@ -139,7 +141,7 @@ public class BaseModel {
         return utx;
     }
 
-    private EntityManagerFactory emf = null;
+    protected EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         if (emf == null) {
@@ -216,10 +218,11 @@ public class BaseModel {
             em = getEntityManager();
             em.remove(em.getReference(this.entity, entity.getPK()));
 
+            System.out.println("-------------> STATUS: "+getUtx().getStatus());
+
             if (ownTx) {
                 getUtx().commit();
-            }
-
+            }            
         } catch (Exception ex) {
             ex.printStackTrace();
             if (ownTx) {
@@ -253,6 +256,23 @@ public class BaseModel {
         } finally {
             em.close();
         }
+    }
+
+    public List<BaseEntity> findEntities(String namedQuery, Hashtable parameters){
+        EntityManager em = getEntityManager();
+        Query query =  em.createNamedQuery(namedQuery);
+
+         Enumeration keys = parameters.keys();
+
+         while(keys.hasMoreElements()) {
+             String param = (String)keys.nextElement();
+             Object value = parameters.get(param);
+             System.out.println(param+" --- "+value);
+             query.setParameter(param, value);
+
+         }
+
+         return query.getResultList();
     }
 
     public BaseEntity findEntity(Object pk) {
