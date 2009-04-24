@@ -5,7 +5,6 @@
     <!-- ZK -->
     <listener>
         <description>Used to cleanup when a session is destroyed</description>
-        <display-name>ZK Session Cleaner</display-name>
         <listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
     </listener>
     <servlet>

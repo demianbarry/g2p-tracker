@@ -27,8 +27,8 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 public class AbmcUsuarioRolesController extends Window implements AfterCompose {
@@ -65,7 +65,8 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     //edit mode
     protected Component usuarioRolesEdit; //edit panel
     protected Label userId;
-    protected Textbox usuarioRolId;
+    protected Listbox usuarioRolId;
+    protected Listitem usuarioRolIdValue;
     protected Datebox usuarioRolDesde;
     protected Datebox usuarioRolHasta;
 
@@ -168,9 +169,6 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     }
 
     public void refreshModel() {
-        binder.loadAll();
-        usersList.selectItem(usersList.getSelectedItem());
-        binder.loadComponent(usuarioRolesList);
         binder.loadAttribute(usuarioRolesList, "model"); //reload model to force refresh
     }
 
@@ -244,15 +242,15 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
 
             try {
-            //store into db
-            if (_create) {
-                
+                //store into db
+                if (_create) {
+
                     this.websiteUserModel.persistRol();
-               
-            } else {
-               
+
+                } else {
+
                     this.websiteUserModel.mergeRol();
-            }
+                }
             } catch (Exception ex) {
                 try {
                     if (ex instanceof javax.persistence.OptimisticLockException) {
@@ -349,7 +347,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     //--To be override--//
     /** Validate the input field */
     protected void validate() {
-        usuarioRolId.getValue();
+        usuarioRolIdValue.getValue();
         usuarioRolDesde.getValue();
         usuarioRolHasta.getValue();
     }
@@ -390,7 +388,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         /** Operation when end user click Yes button in confirm delete Messagebox*/
         public void doYes() {
             try {
-                websiteUserModel.deleteRol(false);
+                websiteUserModel.deleteRol();
                 usuarioRolCreate.focus();
             } catch (Exception ex) {
                 try {
@@ -402,9 +400,9 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
                         Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
                     }
                     ex.printStackTrace();
-                    websiteUserModel.setSelected((WebsiteUserEntity) usuarioRolesList.getModel().getElementAt(0));
+                    usuarioRolesModel.setSelected((UsuarioRolesEntity) usuarioRolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
-                    System.out.println("ERROR: " + ex1.getMessage()+" --- "+ex1.getCause());
+                    System.out.println("ERROR: " + ex1.getMessage() + " --- " + ex1.getCause());
                     ex1.printStackTrace();
                 }
             }

@@ -48,10 +48,10 @@ public class UsuarioRolesEntity extends BaseEntity implements Serializable {
     @Column(name = "anulado")
     private char anulado;
     @JoinColumn(name = "rol_id", referencedColumnName = "rol_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private RolesEntity rolesEntity;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private WebsiteUserEntity websiteUserEntity;
     @Version
     @Column(name = "OBJ_VERSION")

@@ -112,14 +112,18 @@
                                                     <label id="userId" width="99%" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.userId}"/>
                                                 </row>
                                                 <row>Rol ID:
-                                                    <textbox id="usuarioRolId" width="99%" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId,save-when=none}"/>
+                                                    <listbox id="usuarioRolId" width="99%" model="@{abmcUsuarioRolesWin.websiteUserModel.rolesDisponibles}" mold="select">
+                                                        <listitem id="usuarioRolIdValue" self="@{each=x0}" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId}">
+                                                            <listcell label="@{x0.rolId}"/>
+                                                        </listitem>
+                                                    </listbox>
                                                 </row>
                                                 <row>Desde:
-                                                    <datebox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde,save-when=none}"/>
+                                                    <datebox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde}"/>
                                                     <!--<textbox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde,save-when=none}"/>-->
                                                 </row>
                                                 <row>Hasta:
-                                                    <datebox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta,save-when=none}" format="dd/MM/yyyy"/>
+                                                    <datebox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta}" format="dd/MM/yyyy"/>
                                                     <!--<textbox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta,save-when=none}"/>-->
                                                 </row>
                                             </rows>
