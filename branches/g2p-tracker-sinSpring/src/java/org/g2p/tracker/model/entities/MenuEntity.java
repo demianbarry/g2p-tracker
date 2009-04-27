@@ -26,7 +26,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "menu")
-@NamedQueries({@NamedQuery(name = "MenuEntity.findAll", query = "SELECT m FROM MenuEntity m")})
+@NamedQueries({
+    @NamedQuery(name = "MenuEntity.findAll", query = "SELECT m FROM MenuEntity m"),
+    @NamedQuery(name = "MenuEntity.findByGroup", query = "SELECT m FROM MenuEntity m WHERE m.grupo = :GroupName")})
 public class MenuEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

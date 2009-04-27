@@ -28,9 +28,8 @@
                 <include src="BaseRightPage.zul" />
             </east>
 	<!-- Content -->
-
             <center flex="true">
-                <include id="include" src="WelcomePage.zul"  />
+                <include id="include" src="HomePage.zul"  />
             </center>
             <south size="20%" border="0" style="background:#c5e6ef;">
                 <include src="BaseAfterPage.zul" />

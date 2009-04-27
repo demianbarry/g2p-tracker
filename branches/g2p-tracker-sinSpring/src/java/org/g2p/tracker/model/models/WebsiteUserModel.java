@@ -65,7 +65,7 @@ public class WebsiteUserModel extends BaseModel {
         if (selected != null) {
             Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
             queryParameters.put("userId", (Integer) selected.getPK());
-            return usuarioRolesModel.findEntities("UsuarioRolesEntity.findByUserId", queryParameters);
+            return findEntities("UsuarioRolesEntity.findByUserId", queryParameters);
         }
 
         return null;
