@@ -40,7 +40,7 @@ public class BasePageController extends BaseController implements EventListener 
 
         session.setAttribute("User", 1);
 
-        setNavBarItem("HomePage");
+        setNavBarItem("HomePage.zul");
     }
 
     public void setNavBarItem(String groupName) {
