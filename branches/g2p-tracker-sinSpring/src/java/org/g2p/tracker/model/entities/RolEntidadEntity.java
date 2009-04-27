@@ -27,7 +27,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "rol_entidad")
-@NamedQueries({@NamedQuery(name = "RolEntidadEntity.findAll", query = "SELECT r FROM RolEntidadEntity r"), @NamedQuery(name = "RolEntidadEntity.findByRol", query = "SELECT r FROM RolEntidadEntity r WHERE r.rol = :rol"), @NamedQuery(name = "RolEntidadEntity.findByNombre", query = "SELECT r FROM RolEntidadEntity r WHERE r.nombre = :nombre"), @NamedQuery(name = "RolEntidadEntity.findByDescripcion", query = "SELECT r FROM RolEntidadEntity r WHERE r.descripcion = :descripcion"), @NamedQuery(name = "RolEntidadEntity.findByObservaciones", query = "SELECT r FROM RolEntidadEntity r WHERE r.observaciones = :observaciones"), @NamedQuery(name = "RolEntidadEntity.findByDesde", query = "SELECT r FROM RolEntidadEntity r WHERE r.desde = :desde"), @NamedQuery(name = "RolEntidadEntity.findByHasta", query = "SELECT r FROM RolEntidadEntity r WHERE r.hasta = :hasta"), @NamedQuery(name = "RolEntidadEntity.findByAnulado", query = "SELECT r FROM RolEntidadEntity r WHERE r.anulado = :anulado")})
+@NamedQueries({@NamedQuery(name = "RolEntidadEntity.findAll", query = "SELECT r FROM RolEntidadEntity r")})
 public class RolEntidadEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -164,7 +164,7 @@ public class RolEntidadEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.RolEntidadEntity[rol=" + rol + "]";
+        return "org.g2p.tracker.model.entities.RolEntidadEntity[rol=" + rol + "]";
     }
 
 }

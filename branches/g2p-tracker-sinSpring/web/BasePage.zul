@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./baseWin"?>
+    <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController">        
+        <borderlayout height="100%" style="background:#c5e6ef;">
+            <north size="10%" border="0" style="background:#c5e6ef;">
+                <include src="BaseBeforePage.zul"/>
+            </north>
+	<!-- Sidebar -->
+            <west width="10%" title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
+                <div apply="org.g2p.tracker.composers.BaseLeftPageComposer">
+                    <panel width="100%" border="normal" title="Navigation">
+                        <panelchildren style="padding:5px;">
+                            <vbox id="navBar">
+                            </vbox>
+                        </panelchildren>
+                    </panel>
+                    <panel width="100%" border="normal" style="margin-top:20px;" title="Project Goals">
+                        <panelchildren>
+                            <vbox id="navBar1">
+                                <label value="${sessionScope.User}"/>
+                            </vbox>
+                        </panelchildren>
+                    </panel>
+                </div>
+            </west>
+            <east width="15%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
+                <include src="BaseRightPage.zul" />
+            </east>
+	<!-- Content -->
+
+            <center flex="true">
+                <include id="include" src="WelcomePage.zul"  />
+            </center>
+            <south size="20%" border="0" style="background:#c5e6ef;">
+                <include src="BaseAfterPage.zul" />
+            </south>
+        </borderlayout>
+    </window>
+</zk>

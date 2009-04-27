@@ -7,7 +7,6 @@ package org.g2p.tracker.controllers;
 import java.util.Collection;
 import java.util.List;
 
-import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
@@ -16,46 +15,24 @@ import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.UsuarioRolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Window;
 
-public class AbmcUsuarioRolesController extends Window implements AfterCompose {
-
-    //ZK databinder
-    protected DataBinder binder;
+public class AbmcUsuarioRolesController extends BaseController {
 
     //Roles Model
     protected WebsiteUserModel websiteUserModel = null;
     protected RolesModel rolesModel = null;
     protected UsuarioRolesModel usuarioRolesModel = null;
-
-    public RolesModel getRolesModel() {
-        return rolesModel;
-    }
-
-    public void setRolesModel(RolesModel rolesModel) {
-        this.rolesModel = rolesModel;
-    }
-
-    public WebsiteUserModel getWebsiteUserModel() {
-        return websiteUserModel;
-    }
-
-    public void setWebsiteUserModel(WebsiteUserModel websiteUserModel) {
-        this.websiteUserModel = websiteUserModel;
-    }
 
     //main control window
     protected Listbox usersList; //domain object summary list
@@ -65,8 +42,7 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     //edit mode
     protected Component usuarioRolesEdit; //edit panel
     protected Label userId;
-    protected Listbox usuarioRolId;
-    protected Listitem usuarioRolIdValue;
+    protected Combobox usuarioRolIdCombobox;
     protected Datebox usuarioRolDesde;
     protected Datebox usuarioRolHasta;
 
@@ -77,34 +53,15 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
     protected Button usuarioRolSave; //save button
     protected Button usuarioRolCancel; //cancel button
 
-    //@Resource
-    //protected Vbox navBar;
-
-    //operation transient state
-    protected UsuarioRolesEntity _tmpSelected; //store original selected entity
-    protected boolean _create; //when new a entity
-    protected boolean _editMode; //switch to edit mode when doing editing(new/update)
-    protected int _lastSelectedIndex = -1; //last selectedIndex before delete
-
     public AbmcUsuarioRolesController() {
         websiteUserModel = new WebsiteUserModel();
         rolesModel = new RolesModel();
         usuarioRolesModel = new UsuarioRolesModel();
     }
 
-    @Override
-    public void afterCompose() {
-
-        //wire variables
-        Components.wireVariables(this, this);
-
-        //auto forward
-        Components.addForwards(this, this);
-
-    }
+    
 
     //-- Initialization --//
-    //@On("abmcUsuarioRolesWin.onCreate")
     public void onCreate$abmcUsuarioRolesWin(Event event) {
         // Obtengo el DataBinder que instancia la página
         binder = (DataBinder) getVariable("binder", true);
@@ -137,13 +94,15 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             _lastSelectedIndex = index;
             _create = false;
         }
+
+        editMode = (editMode == true ? false : editMode);
+        binder.loadComponent(usuarioRolesDetail); //reload visible to force refresh
     }
 
     //-- view mode control --//
-    //@On("abmcUsuarioRolesWin.onCtrlKey")
     public void onCtrlKey$abmcUsuarioRolesWin(Event event) {
         final List items = usuarioRolesList.getItems();
-        if (!items.isEmpty() && (!_editMode || !_create)) {
+        if (!items.isEmpty() && (!editMode || !_create)) {
             final int keycode = ((KeyEvent) event).getKeyCode();
             if (keycode == KeyEvent.DOWN || keycode == KeyEvent.UP) {
                 //handle no selected item case
@@ -172,37 +131,17 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         binder.loadAttribute(usuarioRolesList, "model"); //reload model to force refresh
     }
 
-    //-- view/edit mode --//
-    public void setEditMode(boolean b) {
-        _editMode = b;
-        switchMode();
-    }
-
     public boolean isViewMode() {
-        return !_editMode;
-    }
-
-    public boolean isEditMode() {
-        return _editMode;
-    }
-
-    public boolean isCreate() {
-        return _create;
+        return !editMode;
     }
 
     public boolean isNotSelected() {
         return this.rolesModel.getSelected() == null;
     }
 
-    private void switchMode() {
-        refreshModel();
-        binder.loadComponent(usuarioRolesDetail); //reload visible to force refresh
-        setFocus();
-    }
-
     private void setFocus() {
-        if (_editMode) {
-            usuarioRolId.focus();
+        if (editMode) {
+            usuarioRolIdCombobox.focus();
         } else {
             if (((Collection) usuarioRolesList.getModel()).isEmpty()) {
                 //no result in list, focus on new button
@@ -217,7 +156,6 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         }
     }
 
-    //@On("usuarioRolCreate.onClick")
     public void onClick$usuarioRolCreate(Event event) {
         if (isViewMode()) {
             //prepare a new UsuarioRolesEntity
@@ -227,12 +165,11 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             websiteUserModel.getRolSelected().setUsuarioRolesEntityPK(new UsuarioRolesEntityPK());
             websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(((WebsiteUserEntity) websiteUserModel.getSelected()).getUserId());
             //switch to edit mode
-            setEditMode(true);
+            setEditMode(true);            
         }
     }
 
     //-- edit mode control --//
-    //@On("usuarioRolSave.onClick,abmcUsuarioRolesWin.onOK")
     public void onClick$usuarioRolSave(Event event) {
         if (isEditMode()) {
             //validate
@@ -241,6 +178,8 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
             //save into bean
             binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
 
+            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setRolId(websiteUserModel.getRolSelected().getRolesEntity().getRolId());
+
             try {
                 //store into db
                 if (_create) {
@@ -248,23 +187,11 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
                     this.websiteUserModel.persistRol();
 
                 } else {
-
                     this.websiteUserModel.mergeRol();
                 }
             } catch (Exception ex) {
-                try {
-                    if (ex instanceof javax.persistence.OptimisticLockException) {
-                        Messagebox.show("El item que intentó modificar había sido modificado por otro usuario antes.");
-                    } else if (ex instanceof NonexistentEntityException) {
-                        Messagebox.show(ex.getMessage());
-                    } else {
-                        Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
-                    }
-                    ex.printStackTrace();
-                    websiteUserModel.setSelected((WebsiteUserEntity) usuarioRolesList.getModel().getElementAt(0));
-                } catch (Exception ex1) {
-                    System.out.println("ERROR: " + ex1.getMessage());
-                }
+                    showMessage("Ocurrió un error mientras intentaba modificar un ítem: ", ex);
+                    websiteUserModel.setRolSelected((UsuarioRolesEntity) usuarioRolesList.getModel().getElementAt(0));
             }
 
             //refresh the usuarioRolesList
@@ -278,12 +205,11 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         onClick$usuarioRolSave(event);
     }
 
-    //On("usuarioRolCancel.onClick,abmcUsuarioRolesWin.onCancel")
     public void onClick$usuarioRolCancel(Event event) {
         if (isEditMode()) {
             //restore to original selected RolesEntity if cancel from new
             if (_create) {
-                websiteUserModel.setRolSelected(_tmpSelected);
+                websiteUserModel.setRolSelected((UsuarioRolesEntity)_tmpSelected);
                 _tmpSelected = null;
             }
 
@@ -296,25 +222,17 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         onClick$usuarioRolCancel(event);
     }
 
-    //@On("usuarioRolUpdate.onClick")
     public void onClick$usuarioRolUpdate(Event event) {
-
         if (isViewMode()) {
             if (websiteUserModel.getRolSelected() != null) {
-
                 _create = false;
-
                 //switch to edit mode
                 setEditMode(true);
-
             }
         }
-//        Toolbarbutton button = new Toolbarbutton("Hola");
-//        button.setHref("/AbmcRoles.zul");
-//        navBar.appendChild(button);
+        
     }
 
-    //@On("usuarioRolDelete.onClick")
     public void onClick$usuarioRolDelete(Event event) {
         if (isViewMode()) {
             if (websiteUserModel.getRolSelected() != null) {
@@ -325,41 +243,39 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
         }
     }
 
-    //-- sorting --//
-    /*@On("rolNameSort.onSort,rolDateSort.onSort,rolPrioritySort.onSort")
-    public void doSort(Event event) {
-    final Listheader lh = (Listheader) event.getTarget();
-    final String sortDirection = lh.getSortDirection(); //original direction
-    if ("ascending".equals(sortDirection)) {
-    final Comparator cmpr = lh.getSortDescending();
-    if (cmpr instanceof FieldComparator) {
-    final String orderBy = ((FieldComparator) cmpr).getOrderBy();
-    usuariosRolesModel.setOrderBy(orderBy); //update query string
-    }
-    } else if ("descending".equals(sortDirection) || "natural".equals(sortDirection) || Strings.isBlank(sortDirection)) {
-    final Comparator cmpr = lh.getSortAscending();
-    if (cmpr instanceof FieldComparator) {
-    final String orderBy = ((FieldComparator) cmpr).getOrderBy();
-    usuariosRolesModel.setOrderBy(orderBy); //update query string
-    }
-    }
-    }*/
     //--To be override--//
     /** Validate the input field */
     protected void validate() {
-        usuarioRolIdValue.getValue();
+        usuarioRolIdCombobox.getValue();
         usuarioRolDesde.getValue();
         usuarioRolHasta.getValue();
-    }
-
-    /** The info message when end user trying to update a "deleted" entity. */
-    protected String getUpdateDeletedMessage() {
-        return "Cannot find the selected item, might have been deleted by others.";
     }
 
     /** Get a instance of ConfirmDelete class */
     protected ConfirmDelete newConfirmDelete() {
         return new ConfirmDelete();
+    }
+
+    public RolesModel getRolesModel() {
+        return rolesModel;
+    }
+
+    public void setRolesModel(RolesModel rolesModel) {
+        this.rolesModel = rolesModel;
+    }
+
+    public WebsiteUserModel getWebsiteUserModel() {
+        return websiteUserModel;
+    }
+
+    public void setWebsiteUserModel(WebsiteUserModel websiteUserModel) {
+        this.websiteUserModel = websiteUserModel;
+    }
+
+    @Override
+    public void setEditMode(boolean _editMode) {
+        super.setEditMode(_editMode);
+        binder.loadComponent(usuarioRolesDetail); //reload visible to force refresh
     }
 
     /** Delete Confirmation */
@@ -391,26 +307,15 @@ public class AbmcUsuarioRolesController extends Window implements AfterCompose {
                 websiteUserModel.deleteRol();
                 usuarioRolCreate.focus();
             } catch (Exception ex) {
-                try {
-                    if (ex instanceof javax.persistence.OptimisticLockException) {
-                        Messagebox.show("El item que intentó modificar había sido modificado por otro usuario antes.");
-                    } else if (ex instanceof NonexistentEntityException) {
-                        Messagebox.show(ex.getMessage());
-                    } else {
-                        Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
-                    }
-                    ex.printStackTrace();
+                    showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
                     usuarioRolesModel.setSelected((UsuarioRolesEntity) usuarioRolesList.getModel().getElementAt(0));
-                } catch (Exception ex1) {
-                    System.out.println("ERROR: " + ex1.getMessage() + " --- " + ex1.getCause());
-                    ex1.printStackTrace();
-                }
             }
             websiteUserModel.setRolSelected(null);
             //refresh the usuarioRolesList
             refreshModel();
             //update the usuarioRolesDetail
-            switchMode();
+            binder.loadComponent(usuarioRolesDetail); //reload visible to force refresh
+            setFocus();
         }
 
         /** Returns title of confirm deleting Messagebox */

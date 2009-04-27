@@ -23,9 +23,6 @@ public class UsuarioPreferenciasEntityPK implements Serializable {
     @Column(name = "preferencia_id")
     private int preferenciaId;
 
-    public UsuarioPreferenciasEntityPK() {
-    }
-
     public UsuarioPreferenciasEntityPK(int userId, int preferenciaId) {
         this.userId = userId;
         this.preferenciaId = preferenciaId;
@@ -73,7 +70,7 @@ public class UsuarioPreferenciasEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.UsuarioPreferenciasEntityPK[userId=" + userId + ", preferenciaId=" + preferenciaId + "]";
+        return "org.g2p.tracker.model.entities.UsuarioPreferenciasEntityPK[userId=" + userId + ", preferenciaId=" + preferenciaId + "]";
     }
 
 }

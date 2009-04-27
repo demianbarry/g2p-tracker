@@ -25,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "clase_atributo_rol")
-@NamedQueries({@NamedQuery(name = "ClaseAtributoRolEntity.findAll", query = "SELECT c FROM ClaseAtributoRolEntity c"), @NamedQuery(name = "ClaseAtributoRolEntity.findByClaseAtributoRolId", query = "SELECT c FROM ClaseAtributoRolEntity c WHERE c.claseAtributoRolId = :claseAtributoRolId"), @NamedQuery(name = "ClaseAtributoRolEntity.findByEtiqueta", query = "SELECT c FROM ClaseAtributoRolEntity c WHERE c.etiqueta = :etiqueta")})
+@NamedQueries({@NamedQuery(name = "ClaseAtributoRolEntity.findAll", query = "SELECT c FROM ClaseAtributoRolEntity c")})
 public class ClaseAtributoRolEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -97,7 +97,7 @@ public class ClaseAtributoRolEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.ClaseAtributoRolEntity[claseAtributoRolId=" + claseAtributoRolId + "]";
+        return "org.g2p.tracker.model.entities.ClaseAtributoRolEntity[claseAtributoRolId=" + claseAtributoRolId + "]";
     }
 
 }

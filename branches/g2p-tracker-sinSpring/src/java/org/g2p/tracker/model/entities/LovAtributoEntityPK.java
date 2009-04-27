@@ -23,9 +23,6 @@ public class LovAtributoEntityPK implements Serializable {
     @Column(name = "valor")
     private String valor;
 
-    public LovAtributoEntityPK() {
-    }
-
     public LovAtributoEntityPK(int claseLovAtributoId, String valor) {
         this.claseLovAtributoId = claseLovAtributoId;
         this.valor = valor;
@@ -73,7 +70,7 @@ public class LovAtributoEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.LovAtributoEntityPK[claseLovAtributoId=" + claseLovAtributoId + ", valor=" + valor + "]";
+        return "org.g2p.tracker.model.entities.LovAtributoEntityPK[claseLovAtributoId=" + claseLovAtributoId + ", valor=" + valor + "]";
     }
 
 }

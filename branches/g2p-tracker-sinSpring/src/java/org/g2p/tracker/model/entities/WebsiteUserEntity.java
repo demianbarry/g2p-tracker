@@ -27,12 +27,8 @@ import javax.persistence.Version;
  * @author Administrador
  */
 @Entity
-@org.hibernate.annotations.Entity(
-    optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL,
-    dynamicUpdate=true,
-    dynamicInsert=true)
 @Table(name = "website_user")
-@NamedQueries({@NamedQuery(name = "WebsiteUserEntity.findAll", query = "SELECT w FROM WebsiteUserEntity w"), @NamedQuery(name = "WebsiteUserEntity.findByUserId", query = "SELECT w FROM WebsiteUserEntity w WHERE w.userId = :userId"), @NamedQuery(name = "WebsiteUserEntity.findByLoginName", query = "SELECT w FROM WebsiteUserEntity w WHERE w.loginName = :loginName"), @NamedQuery(name = "WebsiteUserEntity.findByLoginPassword", query = "SELECT w FROM WebsiteUserEntity w WHERE w.loginPassword = :loginPassword"), @NamedQuery(name = "WebsiteUserEntity.findByNivelVisibilidad", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nivelVisibilidad = :nivelVisibilidad"), @NamedQuery(name = "WebsiteUserEntity.findByNombreCompleto", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nombreCompleto = :nombreCompleto"), @NamedQuery(name = "WebsiteUserEntity.findByEmail", query = "SELECT w FROM WebsiteUserEntity w WHERE w.email = :email"), @NamedQuery(name = "WebsiteUserEntity.findByNroLegajo", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nroLegajo = :nroLegajo"), @NamedQuery(name = "WebsiteUserEntity.findByNroComprador", query = "SELECT w FROM WebsiteUserEntity w WHERE w.nroComprador = :nroComprador")})
+@NamedQueries({})
 public class WebsiteUserEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

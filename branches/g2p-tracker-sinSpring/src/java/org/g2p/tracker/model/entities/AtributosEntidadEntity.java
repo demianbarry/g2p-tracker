@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "atributos_entidad")
-@NamedQueries({@NamedQuery(name = "AtributosEntidadEntity.findAll", query = "SELECT a FROM AtributosEntidadEntity a"), @NamedQuery(name = "AtributosEntidadEntity.findByValor", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.valor = :valor"), @NamedQuery(name = "AtributosEntidadEntity.findByValorEntero", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.valorEntero = :valorEntero"), @NamedQuery(name = "AtributosEntidadEntity.findByValorReal", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.valorReal = :valorReal"), @NamedQuery(name = "AtributosEntidadEntity.findByValorFecha", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.valorFecha = :valorFecha"), @NamedQuery(name = "AtributosEntidadEntity.findByValorLogico", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.valorLogico = :valorLogico"), @NamedQuery(name = "AtributosEntidadEntity.findByAtributoEntidadId", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.atributoEntidadId = :atributoEntidadId"), @NamedQuery(name = "AtributosEntidadEntity.findByObjetoId", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.objetoId = :objetoId"), @NamedQuery(name = "AtributosEntidadEntity.findByTipoObjeto", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.tipoObjeto = :tipoObjeto"), @NamedQuery(name = "AtributosEntidadEntity.findByNombreObjeto", query = "SELECT a FROM AtributosEntidadEntity a WHERE a.nombreObjeto = :nombreObjeto")})
+@NamedQueries({@NamedQuery(name = "AtributosEntidadEntity.findAll", query = "SELECT a FROM AtributosEntidadEntity a")})
 public class AtributosEntidadEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "valor")
@@ -177,7 +177,7 @@ public class AtributosEntidadEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AtributosEntidadEntity[atributoEntidadId=" + atributoEntidadId + "]";
+        return "org.g2p.tracker.model.entities.AtributosEntidadEntity[atributoEntidadId=" + atributoEntidadId + "]";
     }
 
 }

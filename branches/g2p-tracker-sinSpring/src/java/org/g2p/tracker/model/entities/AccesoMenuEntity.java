@@ -25,7 +25,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "acceso_menu")
-@NamedQueries({@NamedQuery(name = "AccesoMenuEntity.findAll", query = "SELECT a FROM AccesoMenuEntity a"), @NamedQuery(name = "AccesoMenuEntity.findByAccesoMenuId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.accesoMenuId = :accesoMenuId")})
+@NamedQueries({
+    @NamedQuery(name = "AccesoMenuEntity.findAll", query = "SELECT a FROM AccesoMenuEntity a"),
+    @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.userId.userId = :userId")})
 public class AccesoMenuEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -104,7 +106,7 @@ public class AccesoMenuEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AccesoMenuEntity[accesoMenuId=" + accesoMenuId + "]";
+        return "org.g2p.tracker.model.entities.AccesoMenuEntity[accesoMenuId=" + accesoMenuId + "]";
     }
 
 }

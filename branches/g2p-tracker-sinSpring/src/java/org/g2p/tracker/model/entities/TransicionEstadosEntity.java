@@ -22,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "transicion_estados")
-@NamedQueries({@NamedQuery(name = "TransicionEstadosEntity.findAll", query = "SELECT t FROM TransicionEstadosEntity t"), @NamedQuery(name = "TransicionEstadosEntity.findByEstadoOrigen", query = "SELECT t FROM TransicionEstadosEntity t WHERE t.transicionEstadosEntityPK.estadoOrigen = :estadoOrigen"), @NamedQuery(name = "TransicionEstadosEntity.findByAccion", query = "SELECT t FROM TransicionEstadosEntity t WHERE t.transicionEstadosEntityPK.accion = :accion"), @NamedQuery(name = "TransicionEstadosEntity.findByPromptAccion", query = "SELECT t FROM TransicionEstadosEntity t WHERE t.promptAccion = :promptAccion"), @NamedQuery(name = "TransicionEstadosEntity.findByValidador", query = "SELECT t FROM TransicionEstadosEntity t WHERE t.validador = :validador")})
+@NamedQueries({@NamedQuery(name = "TransicionEstadosEntity.findAll", query = "SELECT t FROM TransicionEstadosEntity t")})
 public class TransicionEstadosEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -122,7 +122,7 @@ public class TransicionEstadosEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.TransicionEstadosEntity[transicionEstadosEntityPK=" + transicionEstadosEntityPK + "]";
+        return "org.g2p.tracker.model.entities.TransicionEstadosEntity[transicionEstadosEntityPK=" + transicionEstadosEntityPK + "]";
     }
 
 }

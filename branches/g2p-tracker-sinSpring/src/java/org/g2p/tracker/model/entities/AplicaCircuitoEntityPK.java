@@ -29,9 +29,6 @@ public class AplicaCircuitoEntityPK implements Serializable {
     @Column(name = "nombre_detalle")
     private String nombreDetalle;
 
-    public AplicaCircuitoEntityPK() {
-    }
-
     public AplicaCircuitoEntityPK(String tipoObjeto, String nombreObjeto, String tipoDetalle, String nombreDetalle) {
         this.tipoObjeto = tipoObjeto;
         this.nombreObjeto = nombreObjeto;
@@ -105,7 +102,7 @@ public class AplicaCircuitoEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AplicaCircuitoEntityPK[tipoObjeto=" + tipoObjeto + ", nombreObjeto=" + nombreObjeto + ", tipoDetalle=" + tipoDetalle + ", nombreDetalle=" + nombreDetalle + "]";
+        return "org.g2p.tracker.model.entities.AplicaCircuitoEntityPK[tipoObjeto=" + tipoObjeto + ", nombreObjeto=" + nombreObjeto + ", tipoDetalle=" + tipoDetalle + ", nombreDetalle=" + nombreDetalle + "]";
     }
 
 }

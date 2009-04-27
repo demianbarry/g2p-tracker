@@ -24,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "circuitos_estados")
-@NamedQueries({@NamedQuery(name = "CircuitosEstadosEntity.findAll", query = "SELECT c FROM CircuitosEstadosEntity c"), @NamedQuery(name = "CircuitosEstadosEntity.findByCircuito", query = "SELECT c FROM CircuitosEstadosEntity c WHERE c.circuito = :circuito"), @NamedQuery(name = "CircuitosEstadosEntity.findByNombre", query = "SELECT c FROM CircuitosEstadosEntity c WHERE c.nombre = :nombre"), @NamedQuery(name = "CircuitosEstadosEntity.findByDescripcion", query = "SELECT c FROM CircuitosEstadosEntity c WHERE c.descripcion = :descripcion"), @NamedQuery(name = "CircuitosEstadosEntity.findByObservaciones", query = "SELECT c FROM CircuitosEstadosEntity c WHERE c.observaciones = :observaciones")})
+@NamedQueries({@NamedQuery(name = "CircuitosEstadosEntity.findAll", query = "SELECT c FROM CircuitosEstadosEntity c")})
 public class CircuitosEstadosEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -145,7 +145,7 @@ public class CircuitosEstadosEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.CircuitosEstadosEntity[circuito=" + circuito + "]";
+        return "org.g2p.tracker.model.entities.CircuitosEstadosEntity[circuito=" + circuito + "]";
     }
 
 }

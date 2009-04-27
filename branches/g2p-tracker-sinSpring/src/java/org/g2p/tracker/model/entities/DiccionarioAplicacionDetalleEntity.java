@@ -22,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "diccionario_aplicacion_detalle")
-@NamedQueries({@NamedQuery(name = "DiccionarioAplicacionDetalleEntity.findAll", query = "SELECT d FROM DiccionarioAplicacionDetalleEntity d"), @NamedQuery(name = "DiccionarioAplicacionDetalleEntity.findByTipoObjeto", query = "SELECT d FROM DiccionarioAplicacionDetalleEntity d WHERE d.diccionarioAplicacionDetalleEntityPK.tipoObjeto = :tipoObjeto"), @NamedQuery(name = "DiccionarioAplicacionDetalleEntity.findByNombreObjeto", query = "SELECT d FROM DiccionarioAplicacionDetalleEntity d WHERE d.diccionarioAplicacionDetalleEntityPK.nombreObjeto = :nombreObjeto"), @NamedQuery(name = "DiccionarioAplicacionDetalleEntity.findByTipoDetalle", query = "SELECT d FROM DiccionarioAplicacionDetalleEntity d WHERE d.diccionarioAplicacionDetalleEntityPK.tipoDetalle = :tipoDetalle"), @NamedQuery(name = "DiccionarioAplicacionDetalleEntity.findByNombreDetalle", query = "SELECT d FROM DiccionarioAplicacionDetalleEntity d WHERE d.diccionarioAplicacionDetalleEntityPK.nombreDetalle = :nombreDetalle")})
+@NamedQueries({@NamedQuery(name = "DiccionarioAplicacionDetalleEntity.findAll", query = "SELECT d FROM DiccionarioAplicacionDetalleEntity d")})
 public class DiccionarioAplicacionDetalleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -80,7 +80,7 @@ public class DiccionarioAplicacionDetalleEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.DiccionarioAplicacionDetalleEntity[diccionarioAplicacionDetalleEntityPK=" + diccionarioAplicacionDetalleEntityPK + "]";
+        return "org.g2p.tracker.model.entities.DiccionarioAplicacionDetalleEntity[diccionarioAplicacionDetalleEntityPK=" + diccionarioAplicacionDetalleEntityPK + "]";
     }
 
 }

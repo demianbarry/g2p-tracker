@@ -23,9 +23,6 @@ public class AtributosConfiguracionEntityPK implements Serializable {
     @Column(name = "atributo_id")
     private int atributoId;
 
-    public AtributosConfiguracionEntityPK() {
-    }
-
     public AtributosConfiguracionEntityPK(int configuracionId, int atributoId) {
         this.configuracionId = configuracionId;
         this.atributoId = atributoId;
@@ -73,7 +70,7 @@ public class AtributosConfiguracionEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AtributosConfiguracionEntityPK[configuracionId=" + configuracionId + ", atributoId=" + atributoId + "]";
+        return "org.g2p.tracker.model.entities.AtributosConfiguracionEntityPK[configuracionId=" + configuracionId + ", atributoId=" + atributoId + "]";
     }
 
 }

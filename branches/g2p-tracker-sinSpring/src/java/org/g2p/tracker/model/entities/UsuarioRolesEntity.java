@@ -27,12 +27,11 @@ import javax.persistence.Version;
  * @author Administrador
  */
 @Entity
-@org.hibernate.annotations.Entity(
-    optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL,
-    dynamicUpdate=true,
-    dynamicInsert=true)
 @Table(name = "usuario_roles")
-@NamedQueries({@NamedQuery(name = "UsuarioRolesEntity.findAll", query = "SELECT u FROM UsuarioRolesEntity u"), @NamedQuery(name = "UsuarioRolesEntity.findByUserId", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId"), @NamedQuery(name = "UsuarioRolesEntity.findByRolId", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.rolId = :rolId"), @NamedQuery(name = "UsuarioRolesEntity.findByDesde", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.desde = :desde"), @NamedQuery(name = "UsuarioRolesEntity.findByHasta", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.hasta = :hasta"), @NamedQuery(name = "UsuarioRolesEntity.findByAnulado", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.anulado = :anulado")})
+@NamedQueries({    
+    @NamedQuery(name = "UsuarioRolesEntity.findByUserId", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId"),    
+    @NamedQuery(name = "UsuarioRolesEntity.findByRolIdComplement", query = "SELECT r FROM RolesEntity r WHERE r.rolId NOT IN (SELECT u.usuarioRolesEntityPK.rolId FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId) OR r.rolId = :rolId")})
+
 public class UsuarioRolesEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

@@ -1,150 +1,134 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="abmcUsuarioRolesWin"?>
-<zk xmlns="http://www.zkoss.org/2005/zul">    
-    <window id="abmcUsuarioRolesWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcUsuarioRolesController">
-        <borderlayout height="100%" style="background:#c5e6ef;">
-            <north size="10%" border="0" style="background:#c5e6ef;">
-                <include src="BaseBeforePage.zul"/>
-            </north>
-	<!-- Sidebar -->
-            <west width="10%" title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
-                <include src="BaseLeftPage.zul" />
-            </west>
-            <east width="15%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
-                <include src="BaseRightPage.zul" />
-            </east>
-	<!-- Content -->
-            <center flex="true">
-                <borderlayout>
-                    <north size="60px">
-                        <borderlayout>
-                            <center border="none" style="background-color:#B1CBD5">
-                                <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Vinculacion de UsuarioRoles con Usuarios</h2>]]>
-                                </html>
-                            </center>
-                        </borderlayout>
-                    </north>
-                    <south style="background-color:#B1CBD5">
-                        <span style="font-size:small">Copyright © 2009 Potix Corporation. All rights reserved.</span>
-                    </south>
-                    <west size="300px">
-                        <borderlayout>
-                            <north title="Usuarios">
-                            </north>
-                            <center>
-                                <listbox id="usersList" multiple="true" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.all}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.selected}">
-                                    <listhead sizable="true">
-                                        <listheader id="userLoginName" label="Login Name" width="90px"  sort="auto(loginName)"/>
-                                        <listheader id="userNombreCompleto" label="Nombre completo" width="120px"  sort="auto(nombreCompleto)"/>
-                                    </listhead>
-                                    <listitem self="@{each=x0}">
-                                        <listcell label="@{x0.loginName}"/>
-                                        <listcell label="@{x0.nombreCompleto}"/>
-                                    </listitem>
-                                </listbox>
-                            </center>
-                        </borderlayout>
-                    </west>
-                    <center>
-                        <borderlayout>
-                            <north title="Roles del Usuario">
-                            </north>
-                            <center>
-                                <listbox id="usuarioRolesList" multiple="true" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.usuariosRoles}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected}">
-                                    <listhead sizable="true">
-                                        <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
-                                        <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
-                                    </listhead>
-                                    <listitem self="@{each=x1}">
-                                        <listcell label="@{x1.rolesEntity.nombre}"/>
-                                        <listcell label="@{x1.rolesEntity.descripcion}"/>
-                                    </listitem>
-                                </listbox>
-                            </center>
-                        </borderlayout>
-                    </center>
-                    <east size="300px">
-                        <borderlayout>
-                            <north title="Asignaciones de Roles a Usuarios">
-                            </north>
-                            <center>
-                                <div id="usuarioRolesDetail">
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcUsuarioRolesWin"?>
+<window id="abmcUsuarioRolesWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcUsuarioRolesController">
+    <borderlayout>
+        <north size="60px">
+            <borderlayout>
+                <center border="none" style="background-color:#B1CBD5">
+                    <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Vinculacion de UsuarioRoles con Usuarios</h2>]]>
+                    </html>
+                </center>
+            </borderlayout>
+        </north>
+        <south style="background-color:#B1CBD5">
+            <span style="font-size:small">Copyright © 2009 Potix Corporation. All rights reserved.</span>
+        </south>
+        <west size="300px">
+            <borderlayout>
+                <north title="Usuarios">
+                </north>
+                <center>
+                    <listbox id="usersList" multiple="true" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.all}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.selected}">
+                        <listhead sizable="true">
+                            <listheader id="userLoginName" label="Login Name" width="90px"  sort="auto(loginName)"/>
+                            <listheader id="userNombreCompleto" label="Nombre completo" width="120px"  sort="auto(nombreCompleto)"/>
+                        </listhead>
+                        <listitem self="@{each=x0}">
+                            <listcell label="@{x0.loginName}"/>
+                            <listcell label="@{x0.nombreCompleto}"/>
+                        </listitem>
+                    </listbox>
+                </center>
+            </borderlayout>
+        </west>
+        <center>
+            <borderlayout>
+                <north title="Roles del Usuario">
+                </north>
+                <center>
+                    <listbox id="usuarioRolesList" multiple="true" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.usuariosRoles}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected}">
+                        <listhead sizable="true">
+                            <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
+                            <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
+                        </listhead>
+                        <listitem self="@{each=x1}">
+                            <listcell label="@{x1.rolesEntity.nombre}"/>
+                            <listcell label="@{x1.rolesEntity.descripcion}"/>
+                        </listitem>
+                    </listbox>
+                </center>
+            </borderlayout>
+        </center>
+        <east size="300px">
+            <borderlayout>
+                <north title="Asignaciones de Roles a Usuarios">
+                </north>
+                <center>
+                    <div id="usuarioRolesDetail">
                                     <!--View Mode-->
-                                    <div id="usuarioRolesView" visible="@{abmcUsuarioRolesWin.viewMode}" width="100%">
-                                        <grid width="100%" >
-                                            <columns>
-                                                <column align="right" width="80px"/>
-                                                <column align="left"/>
-                                            </columns>
-                                            <rows>
-                                                <row>User ID:
-                                                    <label value="@{abmcUsuarioRolesWin.websiteUserModel.selected.userId}"/>
-                                                </row>
-                                                <row>Rol ID:
-                                                    <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId}"/>
-                                                </row>
-                                                <row>Desde:
-                                                    <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde}"/>
-                                                </row>
-                                                <row>Hasta:
-                                                    <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta}"/>
-                                                </row>
-                                            </rows>
-                                        </grid>
-                                        <separator/>
-                                        <div align="right">
-                                            <hbox>
-                                                <button id="usuarioRolCreate" label="Nuevo"/>
-                                                <button id="usuarioRolUpdate" label="Editar"/> <!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
-                                                <button id="usuarioRolDelete" label="Borrar"/><!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
-                                            </hbox>
-                                        </div>
-                                    </div>
+                        <div id="usuarioRolesView" visible="@{abmcUsuarioRolesWin.viewMode}" width="100%">
+                            <grid width="100%" >
+                                <columns>
+                                    <column align="right" width="80px"/>
+                                    <column align="left"/>
+                                </columns>
+                                <rows>
+                                    <row>User ID:
+                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.selected.nombreCompleto}"/>
+                                    </row>
+                                    <row>Rol ID:
+                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.rolesEntity.nombre}"/>
+                                    </row>
+                                    <row>Desde:
+                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde}"/>
+                                    </row>
+                                    <row>Hasta:
+                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta}"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                            <separator/>
+                            <div align="right">
+                                <hbox>
+                                    <button id="usuarioRolCreate" label="Nuevo"/>
+                                    <button id="usuarioRolUpdate" label="Editar"/> <!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
+                                    <button id="usuarioRolDelete" label="Borrar"/><!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
+                                </hbox>
+                            </div>
+                        </div>
                                     <!--Edit Mode-->
-                                    <div id="usuarioRolesEdit" visible="@{abmcUsuarioRolesWin.editMode}">
-                                        <grid width="100%" fixedLayout="true">
-                                            <columns>
-                                                <column align="right" style="width:80px"/>
-                                                <column align="left"/>
-                                            </columns>
-                                            <rows>
-                                                <row>User ID:
-                                                    <label id="userId" width="99%" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.userId}"/>
-                                                </row>
-                                                <row>Rol ID:
-                                                    <listbox id="usuarioRolId" width="99%" model="@{abmcUsuarioRolesWin.websiteUserModel.rolesDisponibles}" mold="select">
-                                                        <listitem id="usuarioRolIdValue" self="@{each=x0}" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId}">
-                                                            <listcell label="@{x0.rolId}"/>
-                                                        </listitem>
-                                                    </listbox>
-                                                </row>
-                                                <row>Desde:
-                                                    <datebox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde}"/>
-                                                    <!--<textbox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde,save-when=none}"/>-->
-                                                </row>
-                                                <row>Hasta:
-                                                    <datebox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta}" format="dd/MM/yyyy"/>
-                                                    <!--<textbox id="usuarioRolHasta" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta,save-when=none}"/>-->
-                                                </row>
-                                            </rows>
-                                        </grid>
-                                        <separator/>
-                                        <div align="right">
-                                            <hbox>
-                                                <button id="usuarioRolSave" label="Save"/>
-                                                <button id="usuarioRolCancel" label="Cancel"/>
-                                            </hbox>
-                                        </div>
-                                    </div>
-                                </div>
-                            </center>
-                        </borderlayout>
-                    </east>
-                </borderlayout>
-            </center>
-            <south size="20%" border="0" style="background:#c5e6ef;">
-                <include src="BaseAfterPage.zul" />
-            </south>
-        </borderlayout>
-    </window>
-</zk>
+                        <div id="usuarioRolesEdit" visible="@{abmcUsuarioRolesWin.editMode}">
+                            <grid width="100%" >
+                                <columns>
+                                    <column align="right" style="width:80px"/>
+                                    <column align="left"/>
+                                </columns>
+                                <rows>
+                                    <row>User ID:
+                                        <label id="userId" value="@{abmcUsuarioRolesWin.websiteUserModel.selected.nombreCompleto}"/>
+                                    </row>
+                                    <row>Rol ID:
+                                        <combobox id="usuarioRolIdCombobox"
+                                                        model="@{abmcUsuarioRolesWin.websiteUserModel.rolesDisponibles}"
+                                                        autodrop="true"
+                                                        selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.rolesEntity}"
+                                                        disabled="@{abmcUsuarioRolesWin._edit}">
+                                            <comboitem
+                                                            self="@{each=rol}"
+                                                            label="@{rol.nombre}"
+                                                            value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId}"
+                                                            description="@{rol.rolId}" />
+                                        </combobox>
+                                    </row>
+                                    <row>Desde:
+                                        <datebox id="usuarioRolDesde" constraint="no empty" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde}"/>
+                                    </row>
+                                    <row>Hasta:
+                                        <datebox id="usuarioRolHasta" value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.hasta}" format="dd/MM/yyyy"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                            <separator/>
+                            <div align="right">
+                                <hbox>
+                                    <button id="usuarioRolSave" label="Save"/>
+                                    <button id="usuarioRolCancel" label="Cancel"/>
+                                </hbox>
+                            </div>
+                        </div>
+                    </div>
+                </center>
+            </borderlayout>
+        </east>
+    </borderlayout>
+</window>

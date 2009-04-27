@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "atributos_configuracion")
-@NamedQueries({@NamedQuery(name = "AtributosConfiguracionEntity.findAll", query = "SELECT a FROM AtributosConfiguracionEntity a"), @NamedQuery(name = "AtributosConfiguracionEntity.findByConfiguracionId", query = "SELECT a FROM AtributosConfiguracionEntity a WHERE a.atributosConfiguracionEntityPK.configuracionId = :configuracionId"), @NamedQuery(name = "AtributosConfiguracionEntity.findByAtributoId", query = "SELECT a FROM AtributosConfiguracionEntity a WHERE a.atributosConfiguracionEntityPK.atributoId = :atributoId"), @NamedQuery(name = "AtributosConfiguracionEntity.findByValor", query = "SELECT a FROM AtributosConfiguracionEntity a WHERE a.valor = :valor"), @NamedQuery(name = "AtributosConfiguracionEntity.findByValorHasta", query = "SELECT a FROM AtributosConfiguracionEntity a WHERE a.valorHasta = :valorHasta")})
+@NamedQueries({@NamedQuery(name = "AtributosConfiguracionEntity.findAll", query = "SELECT a FROM AtributosConfiguracionEntity a")})
 public class AtributosConfiguracionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -120,7 +120,7 @@ public class AtributosConfiguracionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AtributosConfiguracionEntity[atributosConfiguracionEntityPK=" + atributosConfiguracionEntityPK + "]";
+        return "org.g2p.tracker.model.entities.AtributosConfiguracionEntity[atributosConfiguracionEntityPK=" + atributosConfiguracionEntityPK + "]";
     }
 
 }

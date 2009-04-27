@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "usuario_preferencias")
-@NamedQueries({@NamedQuery(name = "UsuarioPreferenciasEntity.findAll", query = "SELECT u FROM UsuarioPreferenciasEntity u"), @NamedQuery(name = "UsuarioPreferenciasEntity.findByUserId", query = "SELECT u FROM UsuarioPreferenciasEntity u WHERE u.usuarioPreferenciasEntityPK.userId = :userId"), @NamedQuery(name = "UsuarioPreferenciasEntity.findByPreferenciaId", query = "SELECT u FROM UsuarioPreferenciasEntity u WHERE u.usuarioPreferenciasEntityPK.preferenciaId = :preferenciaId"), @NamedQuery(name = "UsuarioPreferenciasEntity.findByValor", query = "SELECT u FROM UsuarioPreferenciasEntity u WHERE u.valor = :valor")})
+@NamedQueries({@NamedQuery(name = "UsuarioPreferenciasEntity.findAll", query = "SELECT u FROM UsuarioPreferenciasEntity u")})
 public class UsuarioPreferenciasEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -108,7 +108,7 @@ public class UsuarioPreferenciasEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.UsuarioPreferenciasEntity[usuarioPreferenciasEntityPK=" + usuarioPreferenciasEntityPK + "]";
+        return "org.g2p.tracker.model.entities.UsuarioPreferenciasEntity[usuarioPreferenciasEntityPK=" + usuarioPreferenciasEntityPK + "]";
     }
 
 }

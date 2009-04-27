@@ -141,7 +141,7 @@ public class BaseModel {
         return utx;
     }
 
-    protected EntityManagerFactory emf = null;
+    protected static EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         if (emf == null) {
@@ -193,6 +193,7 @@ public class BaseModel {
 
             entity = em.merge(entity);
 
+            System.out.println("ENTITY"+entity.getPK());
             if (ownTx) {
                 getUtx().commit();
             }
@@ -267,7 +268,6 @@ public class BaseModel {
          while(keys.hasMoreElements()) {
              String param = (String)keys.nextElement();
              Object value = parameters.get(param);
-             System.out.println(param+" --- "+value);
              query.setParameter(param, value);
 
          }

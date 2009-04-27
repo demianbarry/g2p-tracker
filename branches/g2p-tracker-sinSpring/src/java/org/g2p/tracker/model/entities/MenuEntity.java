@@ -26,7 +26,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "menu")
-@NamedQueries({@NamedQuery(name = "MenuEntity.findAll", query = "SELECT m FROM MenuEntity m"), @NamedQuery(name = "MenuEntity.findByMenuId", query = "SELECT m FROM MenuEntity m WHERE m.menuId = :menuId"), @NamedQuery(name = "MenuEntity.findByNombre", query = "SELECT m FROM MenuEntity m WHERE m.nombre = :nombre"), @NamedQuery(name = "MenuEntity.findByDescripcion", query = "SELECT m FROM MenuEntity m WHERE m.descripcion = :descripcion"), @NamedQuery(name = "MenuEntity.findByUrl", query = "SELECT m FROM MenuEntity m WHERE m.url = :url"), @NamedQuery(name = "MenuEntity.findByGrupo", query = "SELECT m FROM MenuEntity m WHERE m.grupo = :grupo")})
+@NamedQueries({@NamedQuery(name = "MenuEntity.findAll", query = "SELECT m FROM MenuEntity m")})
 public class MenuEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -130,7 +130,7 @@ public class MenuEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.Menu[menuId=" + menuId + "]";
+        return "org.g2p.tracker.model.entities.MenuEntity[menuId=" + menuId + "]";
     }
 
 }

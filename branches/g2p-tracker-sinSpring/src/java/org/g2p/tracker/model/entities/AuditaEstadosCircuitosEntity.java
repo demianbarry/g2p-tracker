@@ -29,7 +29,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "audita_estados_circuitos")
-@NamedQueries({@NamedQuery(name = "AuditaEstadosCircuitosEntity.findAll", query = "SELECT a FROM AuditaEstadosCircuitosEntity a"), @NamedQuery(name = "AuditaEstadosCircuitosEntity.findByAuditaId", query = "SELECT a FROM AuditaEstadosCircuitosEntity a WHERE a.auditaId = :auditaId"), @NamedQuery(name = "AuditaEstadosCircuitosEntity.findByFecha", query = "SELECT a FROM AuditaEstadosCircuitosEntity a WHERE a.fecha = :fecha"), @NamedQuery(name = "AuditaEstadosCircuitosEntity.findByNombreTabla", query = "SELECT a FROM AuditaEstadosCircuitosEntity a WHERE a.nombreTabla = :nombreTabla"), @NamedQuery(name = "AuditaEstadosCircuitosEntity.findByRegistroId", query = "SELECT a FROM AuditaEstadosCircuitosEntity a WHERE a.registroId = :registroId"), @NamedQuery(name = "AuditaEstadosCircuitosEntity.findByHost", query = "SELECT a FROM AuditaEstadosCircuitosEntity a WHERE a.host = :host")})
+@NamedQueries({@NamedQuery(name = "AuditaEstadosCircuitosEntity.findAll", query = "SELECT a FROM AuditaEstadosCircuitosEntity a")})
 public class AuditaEstadosCircuitosEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,6 +49,7 @@ public class AuditaEstadosCircuitosEntity implements Serializable {
     private int registroId;
     @Column(name = "host")
     private String host;
+    @Lob
     @Column(name = "observaciones")
     private String observaciones;
     @JoinColumn(name = "circuito", referencedColumnName = "circuito")
@@ -191,7 +192,7 @@ public class AuditaEstadosCircuitosEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AuditaEstadosCircuitosEntity[auditaId=" + auditaId + "]";
+        return "org.g2p.tracker.model.entities.AuditaEstadosCircuitosEntity[auditaId=" + auditaId + "]";
     }
 
 }

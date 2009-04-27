@@ -26,7 +26,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "clase_lov_atributo")
-@NamedQueries({@NamedQuery(name = "ClaseLovAtributoEntity.findAll", query = "SELECT c FROM ClaseLovAtributoEntity c"), @NamedQuery(name = "ClaseLovAtributoEntity.findByClaseLovAtributoId", query = "SELECT c FROM ClaseLovAtributoEntity c WHERE c.claseLovAtributoId = :claseLovAtributoId"), @NamedQuery(name = "ClaseLovAtributoEntity.findByNombre", query = "SELECT c FROM ClaseLovAtributoEntity c WHERE c.nombre = :nombre"), @NamedQuery(name = "ClaseLovAtributoEntity.findByDescripcion", query = "SELECT c FROM ClaseLovAtributoEntity c WHERE c.descripcion = :descripcion"), @NamedQuery(name = "ClaseLovAtributoEntity.findByObservaciones", query = "SELECT c FROM ClaseLovAtributoEntity c WHERE c.observaciones = :observaciones")})
+@NamedQueries({@NamedQuery(name = "ClaseLovAtributoEntity.findAll", query = "SELECT c FROM ClaseLovAtributoEntity c")})
 public class ClaseLovAtributoEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -118,7 +118,7 @@ public class ClaseLovAtributoEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.ClaseLovAtributoEntity[claseLovAtributoId=" + claseLovAtributoId + "]";
+        return "org.g2p.tracker.model.entities.ClaseLovAtributoEntity[claseLovAtributoId=" + claseLovAtributoId + "]";
     }
 
 }

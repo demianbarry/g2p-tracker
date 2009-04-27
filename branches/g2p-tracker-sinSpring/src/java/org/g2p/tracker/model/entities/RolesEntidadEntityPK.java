@@ -23,9 +23,6 @@ public class RolesEntidadEntityPK implements Serializable {
     @Column(name = "rol")
     private String rol;
 
-    public RolesEntidadEntityPK() {
-    }
-
     public RolesEntidadEntityPK(int entidadId, String rol) {
         this.entidadId = entidadId;
         this.rol = rol;
@@ -73,7 +70,7 @@ public class RolesEntidadEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.RolesEntidadEntityPK[entidadId=" + entidadId + ", rol=" + rol + "]";
+        return "org.g2p.tracker.model.entities.RolesEntidadEntityPK[entidadId=" + entidadId + ", rol=" + rol + "]";
     }
 
 }

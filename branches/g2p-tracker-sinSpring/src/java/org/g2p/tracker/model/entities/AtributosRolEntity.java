@@ -32,7 +32,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "atributos_rol")
-@NamedQueries({@NamedQuery(name = "AtributosRolEntity.findAll", query = "SELECT a FROM AtributosRolEntity a"), @NamedQuery(name = "AtributosRolEntity.findByAtributoId", query = "SELECT a FROM AtributosRolEntity a WHERE a.atributoId = :atributoId"), @NamedQuery(name = "AtributosRolEntity.findByNombre", query = "SELECT a FROM AtributosRolEntity a WHERE a.nombre = :nombre"), @NamedQuery(name = "AtributosRolEntity.findByDescripcion", query = "SELECT a FROM AtributosRolEntity a WHERE a.descripcion = :descripcion"), @NamedQuery(name = "AtributosRolEntity.findByObservaciones", query = "SELECT a FROM AtributosRolEntity a WHERE a.observaciones = :observaciones"), @NamedQuery(name = "AtributosRolEntity.findByDesde", query = "SELECT a FROM AtributosRolEntity a WHERE a.desde = :desde"), @NamedQuery(name = "AtributosRolEntity.findByHasta", query = "SELECT a FROM AtributosRolEntity a WHERE a.hasta = :hasta"), @NamedQuery(name = "AtributosRolEntity.findByAnulado", query = "SELECT a FROM AtributosRolEntity a WHERE a.anulado = :anulado"), @NamedQuery(name = "AtributosRolEntity.findByClave", query = "SELECT a FROM AtributosRolEntity a WHERE a.clave = :clave"), @NamedQuery(name = "AtributosRolEntity.findByObligatorio", query = "SELECT a FROM AtributosRolEntity a WHERE a.obligatorio = :obligatorio"), @NamedQuery(name = "AtributosRolEntity.findByTipoDato", query = "SELECT a FROM AtributosRolEntity a WHERE a.tipoDato = :tipoDato"), @NamedQuery(name = "AtributosRolEntity.findByLov", query = "SELECT a FROM AtributosRolEntity a WHERE a.lov = :lov"), @NamedQuery(name = "AtributosRolEntity.findByValidador", query = "SELECT a FROM AtributosRolEntity a WHERE a.validador = :validador"), @NamedQuery(name = "AtributosRolEntity.findByClaseLovAtributoId", query = "SELECT a FROM AtributosRolEntity a WHERE a.claseLovAtributoId = :claseLovAtributoId")})
+@NamedQueries({@NamedQuery(name = "AtributosRolEntity.findAll", query = "SELECT a FROM AtributosRolEntity a")})
 public class AtributosRolEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -267,7 +267,7 @@ public class AtributosRolEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AtributosRolEntity[atributoId=" + atributoId + "]";
+        return "org.g2p.tracker.model.entities.AtributosRolEntity[atributoId=" + atributoId + "]";
     }
 
 }

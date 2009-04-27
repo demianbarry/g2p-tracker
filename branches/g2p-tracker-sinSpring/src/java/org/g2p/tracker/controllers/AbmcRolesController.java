@@ -26,10 +26,7 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-public class AbmcRolesController extends Window implements AfterCompose {
-
-    //ZK databinder
-    protected DataBinder binder;
+public class AbmcRolesController extends BaseController implements AfterCompose {
 
     //Roles Model
     protected RolesModel rolesModel = null;
@@ -52,26 +49,9 @@ public class AbmcRolesController extends Window implements AfterCompose {
     protected Button rolSave; //save button
     protected Button rolCancel; //cancel button
 
-    //operation transient state
-    protected BaseEntity _tmpSelected; //store original selected entity
-    protected boolean _create; //when new a entity
-    protected boolean _editMode; //switch to edit mode when doing editing(new/update)
-    protected int _lastSelectedIndex = -1; //last selectedIndex before delete
-
     public AbmcRolesController() {
         rolesModel = new RolesModel();
-    }
-
-    @Override
-    public void afterCompose() {
-
-        //wire variables
-        Components.wireVariables(this, this);
-
-        //auto forward
-        Components.addForwards(this, this);
-
-    }
+    }   
 
     public void onCreate$abmcRolesWin(Event event) {
         // Obtengo el DataBinder que instancia la página
@@ -95,27 +75,19 @@ public class AbmcRolesController extends Window implements AfterCompose {
         this.rolesModel = rolesModel;
     }
 
-    public void refreshModel() {
-        binder.loadAttribute(rolesList, "model"); //reload model to force refresh        
-    }
-
-    //-- view/edit mode --//
+        //-- view/edit mode --//
     public void setEditMode(boolean b) {
-        _editMode = b;
+        editMode = b;
         switchMode();
     }
 
     public boolean isViewMode() {
-        return !_editMode;
+        return !editMode;
     }
 
-    public boolean isEditMode() {
-        return _editMode;
-    }
-
-    public boolean isCreate() {
-        return _create;
-    }
+    public void refreshModel() {
+        binder.loadAttribute(rolesList, "model"); //reload model to force refresh        
+    }   
 
     public boolean isNotSelected() {
         return this.rolesModel.getSelected() == null;
@@ -127,7 +99,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
     }
 
     private void setFocus() {
-        if (_editMode) {
+        if (editMode) {
             rolNombre.focus();
         } else {
             if ((rolesList.getModel()).getSize() == 0) {
@@ -148,7 +120,7 @@ public class AbmcRolesController extends Window implements AfterCompose {
     //-- view mode control --//
     public void onCtrlKey$abmcRolesWin(Event event) {
         final List items = rolesList.getItems();
-        if (!items.isEmpty() && (!_editMode || !_create)) {
+        if (!items.isEmpty() && (!editMode || !_create)) {
             final int keycode = ((KeyEvent) event).getKeyCode();
             if (keycode == KeyEvent.DOWN || keycode == KeyEvent.UP) {
                 //handle no selected item case
@@ -237,18 +209,11 @@ public class AbmcRolesController extends Window implements AfterCompose {
                 rolesModel.getUtx().commit();
             } catch (Exception ex) {
                 try {
-                    if (ex instanceof javax.persistence.OptimisticLockException) {
-                        Messagebox.show("El item que intentó modificar había sido modificado por otro usuario antes.");
-                    } else if (ex instanceof NonexistentEntityException) {
-                        Messagebox.show(ex.getMessage());
-                    } else {
-                        Messagebox.show("Ocurrio un error mientras se intentaban guardar los cambios.");
-                    }
-                    ex.printStackTrace();
+                    showMessage("Ocurrió un error mientras se intentaba actualizar un rol: ", ex);
                     rolesModel.getUtx().rollback();
                     rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
-                    System.out.println("ERROR: " + ex1.getMessage());
+                    showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex);
                 }
             } finally {
                 //refresh the rolesList
@@ -333,17 +298,11 @@ public class AbmcRolesController extends Window implements AfterCompose {
                 rolesModel.getUtx().commit();
             } catch (Exception ex) {
                 try {
-                    if (ex instanceof javax.persistence.OptimisticLockException) {
-                        Messagebox.show("El item que intentó modificar había sido eliminado por otro usuario antes.");
-                    } else {
-                        Messagebox.show("Ocurrió un error mientras se intentaban guardar los cambios: " + ex.getMessage() + " - " + ex.toString());
-                        ex.printStackTrace();
-                    }
+                    showMessage("Ocurrió un error mientras se intentaba eliminar un rol: ", ex);
                     rolesModel.getUtx().rollback();
                     rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
-                    System.out.println("ERROR: " + ex1.getMessage());
-                    ex1.printStackTrace();
+                    showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex);
                 }
             } finally {
                 //refresh the rolesList
