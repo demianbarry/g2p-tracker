@@ -22,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "diccionario_aplicacion")
-@NamedQueries({@NamedQuery(name = "DiccionarioAplicacionEntity.findAll", query = "SELECT d FROM DiccionarioAplicacionEntity d"), @NamedQuery(name = "DiccionarioAplicacionEntity.findByTipoObjeto", query = "SELECT d FROM DiccionarioAplicacionEntity d WHERE d.diccionarioAplicacionEntityPK.tipoObjeto = :tipoObjeto"), @NamedQuery(name = "DiccionarioAplicacionEntity.findByNombreObjeto", query = "SELECT d FROM DiccionarioAplicacionEntity d WHERE d.diccionarioAplicacionEntityPK.nombreObjeto = :nombreObjeto")})
+@NamedQueries({@NamedQuery(name = "DiccionarioAplicacionEntity.findAll", query = "SELECT d FROM DiccionarioAplicacionEntity d")})
 public class DiccionarioAplicacionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -99,7 +99,7 @@ public class DiccionarioAplicacionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.DiccionarioAplicacionEntity[diccionarioAplicacionEntityPK=" + diccionarioAplicacionEntityPK + "]";
+        return "org.g2p.tracker.model.entities.DiccionarioAplicacionEntity[diccionarioAplicacionEntityPK=" + diccionarioAplicacionEntityPK + "]";
     }
 
 }

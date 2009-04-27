@@ -30,15 +30,9 @@ public class BaseLeftPageComposer implements Composer {
     public void doAfterCompose(Component div) throws Exception {
                         navBar = (Vbox) div.getFellow("navBar");
 
-                        Toolbarbutton button;
-
-                        Session session = Sessions.getCurrent();
-                        session.setAttribute("User", "Juan");
-                       
-                        button = new Toolbarbutton("Home");
-                        button.setHref("/AbmcRoles.zul");
-                        navBar.appendChild(button);
+                        
     }
+
 
 }
 

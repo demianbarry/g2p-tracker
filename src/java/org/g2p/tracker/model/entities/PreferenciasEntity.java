@@ -24,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "preferencias")
-@NamedQueries({@NamedQuery(name = "PreferenciasEntity.findAll", query = "SELECT p FROM PreferenciasEntity p"), @NamedQuery(name = "PreferenciasEntity.findByPreferenciaId", query = "SELECT p FROM PreferenciasEntity p WHERE p.preferenciaId = :preferenciaId"), @NamedQuery(name = "PreferenciasEntity.findByNombre", query = "SELECT p FROM PreferenciasEntity p WHERE p.nombre = :nombre"), @NamedQuery(name = "PreferenciasEntity.findByDescripcion", query = "SELECT p FROM PreferenciasEntity p WHERE p.descripcion = :descripcion"), @NamedQuery(name = "PreferenciasEntity.findByObservaciones", query = "SELECT p FROM PreferenciasEntity p WHERE p.observaciones = :observaciones"), @NamedQuery(name = "PreferenciasEntity.findByDefault1", query = "SELECT p FROM PreferenciasEntity p WHERE p.default1 = :default1")})
+@NamedQueries({@NamedQuery(name = "PreferenciasEntity.findAll", query = "SELECT p FROM PreferenciasEntity p")})
 public class PreferenciasEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -127,7 +127,7 @@ public class PreferenciasEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.PreferenciasEntity[preferenciaId=" + preferenciaId + "]";
+        return "org.g2p.tracker.model.entities.PreferenciasEntity[preferenciaId=" + preferenciaId + "]";
     }
 
 }

@@ -5,7 +5,6 @@
 package org.g2p.tracker.model.models;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
@@ -13,6 +12,7 @@ import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
+import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
 import org.g2p.tracker.model.entities.WebsiteUserEntity;
 
 /**
@@ -72,10 +72,11 @@ public class WebsiteUserModel extends BaseModel {
     }
 
     public List<BaseEntity> getRolesDisponibles() {
-        if (selected != null) {
+        if (selected != null && rolSelected != null) {
             Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
             queryParameters.put("userId", (Integer) selected.getPK());
-            return usuarioRolesModel.findEntities("RolesEntity.findByRolIdComplement", queryParameters);
+            queryParameters.put("rolId", ((UsuarioRolesEntityPK) rolSelected.getPK()).getRolId());
+            return findEntities("UsuarioRolesEntity.findByRolIdComplement", queryParameters);
         }
 
         return null;

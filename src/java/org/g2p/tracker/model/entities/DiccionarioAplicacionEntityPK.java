@@ -23,9 +23,6 @@ public class DiccionarioAplicacionEntityPK implements Serializable {
     @Column(name = "nombre_objeto")
     private String nombreObjeto;
 
-    public DiccionarioAplicacionEntityPK() {
-    }
-
     public DiccionarioAplicacionEntityPK(String tipoObjeto, String nombreObjeto) {
         this.tipoObjeto = tipoObjeto;
         this.nombreObjeto = nombreObjeto;
@@ -73,7 +70,7 @@ public class DiccionarioAplicacionEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.DiccionarioAplicacionEntityPK[tipoObjeto=" + tipoObjeto + ", nombreObjeto=" + nombreObjeto + "]";
+        return "org.g2p.tracker.model.entities.DiccionarioAplicacionEntityPK[tipoObjeto=" + tipoObjeto + ", nombreObjeto=" + nombreObjeto + "]";
     }
 
 }

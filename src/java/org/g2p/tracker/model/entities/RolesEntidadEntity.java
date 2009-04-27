@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "roles_entidad")
-@NamedQueries({@NamedQuery(name = "RolesEntidadEntity.findAll", query = "SELECT r FROM RolesEntidadEntity r"), @NamedQuery(name = "RolesEntidadEntity.findByDesde", query = "SELECT r FROM RolesEntidadEntity r WHERE r.desde = :desde"), @NamedQuery(name = "RolesEntidadEntity.findByHasta", query = "SELECT r FROM RolesEntidadEntity r WHERE r.hasta = :hasta"), @NamedQuery(name = "RolesEntidadEntity.findByActivo", query = "SELECT r FROM RolesEntidadEntity r WHERE r.activo = :activo"), @NamedQuery(name = "RolesEntidadEntity.findByAnulado", query = "SELECT r FROM RolesEntidadEntity r WHERE r.anulado = :anulado"), @NamedQuery(name = "RolesEntidadEntity.findByEntidadId", query = "SELECT r FROM RolesEntidadEntity r WHERE r.rolesEntidadEntityPK.entidadId = :entidadId"), @NamedQuery(name = "RolesEntidadEntity.findByRol", query = "SELECT r FROM RolesEntidadEntity r WHERE r.rolesEntidadEntityPK.rol = :rol")})
+@NamedQueries({@NamedQuery(name = "RolesEntidadEntity.findAll", query = "SELECT r FROM RolesEntidadEntity r")})
 public class RolesEntidadEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -147,7 +147,7 @@ public class RolesEntidadEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.RolesEntidadEntity[rolesEntidadEntityPK=" + rolesEntidadEntityPK + "]";
+        return "org.g2p.tracker.model.entities.RolesEntidadEntity[rolesEntidadEntityPK=" + rolesEntidadEntityPK + "]";
     }
 
 }

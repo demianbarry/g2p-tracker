@@ -26,12 +26,8 @@ import javax.persistence.Version;
  * @author Administrador
  */
 @Entity
-@org.hibernate.annotations.Entity(
-    optimisticLock = org.hibernate.annotations.OptimisticLockType.ALL,
-    dynamicUpdate=true,
-    dynamicInsert=true)
 @Table(name = "roles")
-@NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r"), @NamedQuery(name = "RolesEntity.findByRolId", query = "SELECT r FROM RolesEntity r WHERE r.rolId = :rolId"), @NamedQuery(name = "RolesEntity.findByNombre", query = "SELECT r FROM RolesEntity r WHERE r.nombre = :nombre"), @NamedQuery(name = "RolesEntity.findByDescripcion", query = "SELECT r FROM RolesEntity r WHERE r.descripcion = :descripcion"), @NamedQuery(name = "RolesEntity.findByObservaciones", query = "SELECT r FROM RolesEntity r WHERE r.observaciones = :observaciones"), @NamedQuery(name = "RolesEntity.findByRolIdComplement", query = "SELECT r FROM RolesEntity r WHERE r.rolId NOT IN (SELECT u.usuarioRolesEntityPK.rolId FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId)")})
+@NamedQueries({@NamedQuery(name = "RolesEntity.findByObservaciones", query = "SELECT r FROM RolesEntity r WHERE r.observaciones = :observaciones")})
 public class RolesEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

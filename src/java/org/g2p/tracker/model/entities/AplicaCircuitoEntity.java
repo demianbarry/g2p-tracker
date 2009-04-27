@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "aplica_circuito")
-@NamedQueries({@NamedQuery(name = "AplicaCircuitoEntity.findAll", query = "SELECT a FROM AplicaCircuitoEntity a"), @NamedQuery(name = "AplicaCircuitoEntity.findByTipoObjeto", query = "SELECT a FROM AplicaCircuitoEntity a WHERE a.aplicaCircuitoEntityPK.tipoObjeto = :tipoObjeto"), @NamedQuery(name = "AplicaCircuitoEntity.findByNombreObjeto", query = "SELECT a FROM AplicaCircuitoEntity a WHERE a.aplicaCircuitoEntityPK.nombreObjeto = :nombreObjeto"), @NamedQuery(name = "AplicaCircuitoEntity.findByTipoDetalle", query = "SELECT a FROM AplicaCircuitoEntity a WHERE a.aplicaCircuitoEntityPK.tipoDetalle = :tipoDetalle"), @NamedQuery(name = "AplicaCircuitoEntity.findByNombreDetalle", query = "SELECT a FROM AplicaCircuitoEntity a WHERE a.aplicaCircuitoEntityPK.nombreDetalle = :nombreDetalle")})
+@NamedQueries({@NamedQuery(name = "AplicaCircuitoEntity.findAll", query = "SELECT a FROM AplicaCircuitoEntity a")})
 public class AplicaCircuitoEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -79,7 +79,7 @@ public class AplicaCircuitoEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AplicaCircuitoEntity[aplicaCircuitoEntityPK=" + aplicaCircuitoEntityPK + "]";
+        return "org.g2p.tracker.model.entities.AplicaCircuitoEntity[aplicaCircuitoEntityPK=" + aplicaCircuitoEntityPK + "]";
     }
 
 }

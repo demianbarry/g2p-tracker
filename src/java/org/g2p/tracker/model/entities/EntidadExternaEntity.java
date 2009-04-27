@@ -26,7 +26,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "entidad_externa")
-@NamedQueries({@NamedQuery(name = "EntidadExternaEntity.findAll", query = "SELECT e FROM EntidadExternaEntity e"), @NamedQuery(name = "EntidadExternaEntity.findByEntidadId", query = "SELECT e FROM EntidadExternaEntity e WHERE e.entidadId = :entidadId"), @NamedQuery(name = "EntidadExternaEntity.findByCodigo", query = "SELECT e FROM EntidadExternaEntity e WHERE e.codigo = :codigo"), @NamedQuery(name = "EntidadExternaEntity.findByNombre", query = "SELECT e FROM EntidadExternaEntity e WHERE e.nombre = :nombre"), @NamedQuery(name = "EntidadExternaEntity.findByDescripcion", query = "SELECT e FROM EntidadExternaEntity e WHERE e.descripcion = :descripcion"), @NamedQuery(name = "EntidadExternaEntity.findByObservaciones", query = "SELECT e FROM EntidadExternaEntity e WHERE e.observaciones = :observaciones"), @NamedQuery(name = "EntidadExternaEntity.findByActivo", query = "SELECT e FROM EntidadExternaEntity e WHERE e.activo = :activo"), @NamedQuery(name = "EntidadExternaEntity.findByAnulado", query = "SELECT e FROM EntidadExternaEntity e WHERE e.anulado = :anulado")})
+@NamedQueries({@NamedQuery(name = "EntidadExternaEntity.findAll", query = "SELECT e FROM EntidadExternaEntity e")})
 public class EntidadExternaEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -162,7 +162,7 @@ public class EntidadExternaEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.EntidadExternaEntity[entidadId=" + entidadId + "]";
+        return "org.g2p.tracker.model.entities.EntidadExternaEntity[entidadId=" + entidadId + "]";
     }
 
 }

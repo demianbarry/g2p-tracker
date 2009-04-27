@@ -28,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "acciones_apps")
-@NamedQueries({@NamedQuery(name = "AccionesAppsEntity.findAll", query = "SELECT a FROM AccionesAppsEntity a"), @NamedQuery(name = "AccionesAppsEntity.findByAccion", query = "SELECT a FROM AccionesAppsEntity a WHERE a.accion = :accion"), @NamedQuery(name = "AccionesAppsEntity.findByNombre", query = "SELECT a FROM AccionesAppsEntity a WHERE a.nombre = :nombre"), @NamedQuery(name = "AccionesAppsEntity.findByDescripcion", query = "SELECT a FROM AccionesAppsEntity a WHERE a.descripcion = :descripcion"), @NamedQuery(name = "AccionesAppsEntity.findByObservaciones", query = "SELECT a FROM AccionesAppsEntity a WHERE a.observaciones = :observaciones"), @NamedQuery(name = "AccionesAppsEntity.findByManual", query = "SELECT a FROM AccionesAppsEntity a WHERE a.manual = :manual")})
+@NamedQueries({@NamedQuery(name = "AccionesAppsEntity.findAll", query = "SELECT a FROM AccionesAppsEntity a")})
 public class AccionesAppsEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -153,7 +153,7 @@ public class AccionesAppsEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.AccionesAppsEntity[accion=" + accion + "]";
+        return "org.g2p.tracker.model.entities.AccionesAppsEntity[accion=" + accion + "]";
     }
 
 }

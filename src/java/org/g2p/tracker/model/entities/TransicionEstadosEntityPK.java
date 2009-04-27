@@ -23,9 +23,6 @@ public class TransicionEstadosEntityPK implements Serializable {
     @Column(name = "accion")
     private int accion;
 
-    public TransicionEstadosEntityPK() {
-    }
-
     public TransicionEstadosEntityPK(String estadoOrigen, int accion) {
         this.estadoOrigen = estadoOrigen;
         this.accion = accion;
@@ -73,7 +70,7 @@ public class TransicionEstadosEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.TransicionEstadosEntityPK[estadoOrigen=" + estadoOrigen + ", accion=" + accion + "]";
+        return "org.g2p.tracker.model.entities.TransicionEstadosEntityPK[estadoOrigen=" + estadoOrigen + ", accion=" + accion + "]";
     }
 
 }
