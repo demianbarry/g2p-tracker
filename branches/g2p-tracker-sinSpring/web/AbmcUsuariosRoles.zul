@@ -10,15 +10,12 @@
                 </center>
             </borderlayout>
         </north>
-        <south style="background-color:#B1CBD5">
-            <span style="font-size:small">Copyright © 2009 Potix Corporation. All rights reserved.</span>
-        </south>
-        <west size="300px">
+        <west size="300px" splittable="true" flex="true">
             <borderlayout>
                 <north title="Usuarios">
                 </north>
-                <center>
-                    <listbox id="usersList" multiple="true" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.all}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.selected}">
+                <center style="background-color:#B1CBD5">
+                    <listbox id="usersList" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.all}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.selected}">
                         <listhead sizable="true">
                             <listheader id="userLoginName" label="Login Name" width="90px"  sort="auto(loginName)"/>
                             <listheader id="userNombreCompleto" label="Nombre completo" width="120px"  sort="auto(nombreCompleto)"/>
@@ -35,11 +32,11 @@
             <borderlayout>
                 <north title="Roles del Usuario">
                 </north>
-                <center>
-                    <listbox id="usuarioRolesList" multiple="true" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.usuariosRoles}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected}">
+                <center style="background-color:#B1CBD5">
+                    <listbox id="usuarioRolesList" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.usuariosRoles}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected}">
                         <listhead sizable="true">
-                            <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
-                            <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
+                            <listheader id="rolNombreSort" label="Nombre" sort="auto(nombre)"/>
+                            <listheader id="rolDescripcionSort" label="Descripcion" sort="auto(descripcion)"/>
                         </listhead>
                         <listitem self="@{each=x1}">
                             <listcell label="@{x1.rolesEntity.nombre}"/>
@@ -49,11 +46,11 @@
                 </center>
             </borderlayout>
         </center>
-        <east size="300px">
+        <east size="30%" splittable="true" flex="true">
             <borderlayout>
                 <north title="Asignaciones de Roles a Usuarios">
                 </north>
-                <center>
+                <center style="background-color:#B1CBD5">
                     <div id="usuarioRolesDetail">
                                     <!--View Mode-->
                         <div id="usuarioRolesView" visible="@{abmcUsuarioRolesWin.viewMode}" width="100%">
