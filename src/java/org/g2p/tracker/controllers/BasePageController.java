@@ -1,15 +1,14 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.g2p.tracker.controllers;
 
-import java.util.Hashtable;
-import java.util.Iterator;
+//~--- non-JDK imports --------------------------------------------------------
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
-import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.models.AccesoMenuModel;
-import org.g2p.tracker.model.models.WebsiteUserModel;
+
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
@@ -20,47 +19,59 @@ import org.zkoss.zul.Separator;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Vbox;
 
-public class BasePageController extends BaseController {
+//~--- JDK imports ------------------------------------------------------------
 
+import java.util.Hashtable;
+import java.util.Iterator;
+
+public class BasePageController extends BaseController implements EventListener {
+
+    private static final long serialVersionUID = 144203921841206801L;
     protected Include include;
-    protected Button switchButton;
     private Vbox navBar;
-    private AccesoMenuModel accesoMenuModel;
+    protected Button switchButton;
+    Session session;
 
     public BasePageController() {
-        accesoMenuModel = new AccesoMenuModel();
     }
 
     public void onCreate$baseWin(Event event) {
+        session = Sessions.getCurrent();
 
-        Session session = Sessions.getCurrent();
-        session.setAttribute("User", "Juan");
+        session.setAttribute("User", 1);
 
-        setNavBarItem();
-
+        setNavBarItem("HomePage");
     }
 
-    public void setNavBarItem() {
+    public void setNavBarItem(String groupName) {
         Toolbarbutton button;
-        Hashtable<String, Integer> parameters = new Hashtable<String, Integer>();
-        parameters.put("userId", 1);
-        Iterator menues = accesoMenuModel.findEntities("AccesoMenuEntity.findByUsuarioId", parameters).iterator();
+        Hashtable parameters = new Hashtable();
 
+        parameters.put("userId", session.getAttribute("User"));
+        parameters.put("GroupName", groupName);
+
+        Iterator menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByUsuarioId", parameters).iterator();
+
+        navBar.getChildren().clear();
         while (menues.hasNext()) {
-
             navBar.appendChild(new Separator());
 
             AccesoMenuEntity menu = (AccesoMenuEntity) menues.next();
+
             button = new Toolbarbutton(menu.getMenuId().getNombre());
             button.setAttribute("page", menu.getMenuId().getUrl());
+            button.setAttribute("groupName", menu.getMenuId().getNombre());
             navBar.appendChild(button);
-            button.addEventListener("onClick", new EventListener() {
-
-                @Override
-                public void onEvent(Event arg0) throws Exception {
-                    include.setSrc(arg0.getTarget().getAttribute("page").toString());
-                }
-            });
+            button.addEventListener("onClick", this);
         }
     }
+
+    @Override
+    public void onEvent(Event arg0) throws Exception {
+        include.setSrc(arg0.getTarget().getAttribute("page").toString());
+        setNavBarItem(arg0.getTarget().getAttribute("groupName").toString());
+    }
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com

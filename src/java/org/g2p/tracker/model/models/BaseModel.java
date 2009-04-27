@@ -131,7 +131,6 @@ public class BaseModel {
     public void setEntity(Class entity) {
         this.entity = entity;
     }
-
     private UserTransaction utx = null;
 
     public UserTransaction getUtx() throws NamingException {
@@ -140,10 +139,9 @@ public class BaseModel {
         }
         return utx;
     }
-
     protected static EntityManagerFactory emf = null;
 
-    public EntityManager getEntityManager() {
+    public static EntityManager getEntityManager() {
         if (emf == null) {
             emf = Persistence.createEntityManagerFactory("g2p-tracker-sinSpringPU");
         }
@@ -193,7 +191,7 @@ public class BaseModel {
 
             entity = em.merge(entity);
 
-            System.out.println("ENTITY"+entity.getPK());
+            System.out.println("ENTITY" + entity.getPK());
             if (ownTx) {
                 getUtx().commit();
             }
@@ -219,11 +217,11 @@ public class BaseModel {
             em = getEntityManager();
             em.remove(em.getReference(this.entity, entity.getPK()));
 
-            System.out.println("-------------> STATUS: "+getUtx().getStatus());
+            System.out.println("-------------> STATUS: " + getUtx().getStatus());
 
             if (ownTx) {
                 getUtx().commit();
-            }            
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             if (ownTx) {
@@ -248,7 +246,7 @@ public class BaseModel {
     private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            Query q = em.createQuery("select object(o) from "+this.entity.getName()+" as o");
+            Query q = em.createQuery("select object(o) from " + this.entity.getName() + " as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -259,20 +257,20 @@ public class BaseModel {
         }
     }
 
-    public List<BaseEntity> findEntities(String namedQuery, Hashtable parameters){
+    public static List<BaseEntity> findEntities(String namedQuery, Hashtable parameters) {
         EntityManager em = getEntityManager();
-        Query query =  em.createNamedQuery(namedQuery);
+        Query query = em.createNamedQuery(namedQuery);
 
-         Enumeration keys = parameters.keys();
+        Enumeration keys = parameters.keys();
 
-         while(keys.hasMoreElements()) {
-             String param = (String)keys.nextElement();
-             Object value = parameters.get(param);
-             query.setParameter(param, value);
+        while (keys.hasMoreElements()) {
+            String param = (String) keys.nextElement();
+            Object value = parameters.get(param);
+            query.setParameter(param, value);
 
-         }
+        }
 
-         return query.getResultList();
+        return query.getResultList();
     }
 
     public BaseEntity findEntity(Object pk) {

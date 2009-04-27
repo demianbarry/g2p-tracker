@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -27,8 +26,9 @@ import javax.persistence.Table;
 @Table(name = "acceso_menu")
 @NamedQueries({
     @NamedQuery(name = "AccesoMenuEntity.findAll", query = "SELECT a FROM AccesoMenuEntity a"),
-    @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.userId.userId = :userId")})
+    @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.userId.userId = :userId AND a.menuId.grupo = :GroupName")})
 public class AccesoMenuEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,5 +108,4 @@ public class AccesoMenuEntity implements Serializable {
     public String toString() {
         return "org.g2p.tracker.model.entities.AccesoMenuEntity[accesoMenuId=" + accesoMenuId + "]";
     }
-
 }
