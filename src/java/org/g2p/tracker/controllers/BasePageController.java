@@ -1,4 +1,3 @@
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -7,7 +6,6 @@ package org.g2p.tracker.controllers;
 
 //~--- non-JDK imports --------------------------------------------------------
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
-import org.g2p.tracker.model.models.AccesoMenuModel;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -23,6 +21,8 @@ import org.zkoss.zul.Vbox;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import org.g2p.tracker.model.entities.MenuEntity;
+import org.g2p.tracker.model.models.BaseModel;
 
 public class BasePageController extends BaseController implements EventListener {
 
@@ -50,26 +50,47 @@ public class BasePageController extends BaseController implements EventListener 
         parameters.put("userId", session.getAttribute("User"));
         parameters.put("GroupName", groupName);
 
-        Iterator menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByUsuarioId", parameters).iterator();
+        Iterator menues = BaseModel.findEntities("AccesoMenuEntity.findByUsuarioId", parameters).iterator();
 
+        if (!menues.hasNext()) {
+            parameters.clear();
+            parameters.put("url", groupName);
+            menues = BaseModel.findEntities("MenuEntity.findUrl", parameters).iterator();
+            MenuEntity menu = (MenuEntity) menues.next();
+
+            parameters.clear();
+            parameters.put("GroupName", menu.getGrupo());
+            parameters.put("userId", session.getAttribute("User"));
+
+            menues = BaseModel.findEntities("AccesoMenuEntity.findByUsuarioId", parameters).iterator();
+        }
+
+
+        System.out.println("------>" + groupName);
         navBar.getChildren().clear();
-        while (menues.hasNext()) {
-            navBar.appendChild(new Separator());
 
+        button = new Toolbarbutton("Home Page");
+        button.setAttribute("page", "HomePage.zul");
+        navBar.appendChild(button);
+        button.addEventListener("onClick", this);
+        while (menues.hasNext()) {
             AccesoMenuEntity menu = (AccesoMenuEntity) menues.next();
+
+
+            navBar.appendChild(new Separator());
 
             button = new Toolbarbutton(menu.getMenuId().getNombre());
             button.setAttribute("page", menu.getMenuId().getUrl());
-            button.setAttribute("groupName", menu.getMenuId().getNombre());
-            navBar.appendChild(button);
             button.addEventListener("onClick", this);
+            navBar.appendChild(button);
+
         }
     }
 
     @Override
     public void onEvent(Event arg0) throws Exception {
         include.setSrc(arg0.getTarget().getAttribute("page").toString());
-        setNavBarItem(arg0.getTarget().getAttribute("groupName").toString());
+        setNavBarItem(arg0.getTarget().getAttribute("page").toString());
     }
 }
 
