@@ -70,12 +70,12 @@ public class AbmcUsuarioRolesController extends BaseController {
 
         if (!usersListModel.isEmpty()) {
             websiteUserModel.setSelected((WebsiteUserEntity) usersListModel.get(0));
-            binder.loadComponent(usuarioRolesDetail);
+            binder.loadComponent(usuarioRolesList);
         }
 
         final List model = (List) usuarioRolesList.getModel();
         if (!model.isEmpty()) {
-            rolesModel.setSelected((RolesEntity) model.get(0));
+            websiteUserModel.setRolSelected((UsuarioRolesEntity) model.get(0));
             binder.loadComponent(usuarioRolesDetail);
         }
         binder.loadComponent(usuarioRolesList);
@@ -136,7 +136,7 @@ public class AbmcUsuarioRolesController extends BaseController {
     }
 
     public boolean isNotSelected() {
-        return this.rolesModel.getSelected() == null;
+        return this.websiteUserModel.getRolSelected() == null;
     }
 
     private void setFocus() {
@@ -297,7 +297,7 @@ public class AbmcUsuarioRolesController extends BaseController {
                             }
                         });
             } catch (InterruptedException ex) {
-                System.out.println("HOLAAAAAAAAA");
+                showMessage("Ocurrió un error mostrando mensaje: ", ex);
             }
         }
 

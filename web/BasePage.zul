@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns="http://www.zkoss.org/2005/zul">
     <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./baseWin"?>
-    <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController">        
+    <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController">
         <borderlayout height="100%" style="background:#c5e6ef;">
             <north size="10%" border="0" style="background:#c5e6ef;">
                 <include src="BaseBeforePage.zul"/>
             </north>
 	<!-- Sidebar -->
-            <west width="10%" title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
-                <div apply="org.g2p.tracker.composers.BaseLeftPageComposer">
-                    <panel width="100%" border="normal" title="Navigation">
-                        <panelchildren style="padding:5px;">
+            <west title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
+                <div >
+                    <panel collapsible="true" title="Barra de navegación">
+                        <panelchildren style="padding:5px;background:#A9D0F5;background-image:url('http://tbn1.google.com/images?q=tbn:9mYpD__91Sb0sM:http://www.imagineargentina.com/images/Blue_Background_Large_Web_view4.jpg')" id="panelChildren">
                             <vbox id="navBar">
                             </vbox>
-                        </panelchildren>
-                    </panel>
-                    <panel width="100%" border="normal" style="margin-top:20px;" title="Project Goals">
-                        <panelchildren>
-                            <vbox id="navBar1">
-                                <label value="${sessionScope.User}"/>
-                            </vbox>
-                        </panelchildren>
+                        </panelchildren>                        
                     </panel>
                 </div>
             </west>
-            <east width="15%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
+            <east width="20%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
                 <include src="BaseRightPage.zul" />
             </east>
 	<!-- Content -->

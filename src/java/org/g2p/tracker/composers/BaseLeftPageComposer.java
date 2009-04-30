@@ -6,10 +6,7 @@
 package org.g2p.tracker.composers;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Vbox;
 
 /**
@@ -28,7 +25,7 @@ public class BaseLeftPageComposer implements Composer {
 
     @Override
     public void doAfterCompose(Component div) throws Exception {
-                        navBar = (Vbox) div.getFellow("navBar");
+                        //navBar = (Vbox) div.getFellow("navBar");
 
                         
     }

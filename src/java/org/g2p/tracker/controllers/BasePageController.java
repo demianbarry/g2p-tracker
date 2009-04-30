@@ -10,22 +10,23 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Include;
-import org.zkoss.zul.Separator;
-import org.zkoss.zul.Toolbarbutton;
-import org.zkoss.zul.Vbox;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import org.g2p.tracker.model.models.BaseModel;
+//import org.zkoss.zul.Menu;
+import org.zkoss.zul.Panelchildren;
+import org.zkoss.zul.Separator;
+import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zul.Vbox;
 
 public class BasePageController extends BaseController implements EventListener {
 
     private static final long serialVersionUID = 144203921841206801L;
     protected Include include;
     private Vbox navBar;
-    protected Button switchButton;
+    private Panelchildren panelChildren;
     Session session;
 
     public BasePageController() {
@@ -61,7 +62,10 @@ public class BasePageController extends BaseController implements EventListener 
         // Si el menu actual tiene "hijos", re-armo el menu
         if (menues.hasNext()) {
             // Limpio la barra de navegación
-            navBar.getChildren().clear();
+            while (navBar.getChildren().size() != 0) {
+                navBar.removeChild(navBar.getLastChild());
+            }
+
 
             // Agrego la referencia a la HomePage, si no estoy en la HomePage
             if (!"HomePage.zul".equalsIgnoreCase(groupName)) {
@@ -74,15 +78,22 @@ public class BasePageController extends BaseController implements EventListener 
 
             // Por cada resultado recuperado, creo la referencia en la NavBar
             while (menues.hasNext()) {
-                AccesoMenuEntity menu = (AccesoMenuEntity) menues.next();
 
-                navBar.appendChild(new Separator());
+                if (navBar.getChildren().size() > 0) {
+                    Separator separator = new Separator();
+                    separator.setBar(true);
+                    navBar.appendChild(separator);
+                }
+
+                AccesoMenuEntity menu = (AccesoMenuEntity) menues.next();
 
                 button = new Toolbarbutton(menu.getMenuId().getNombre());
                 // agrego un atributo al botón para obtener luego en el listener
                 // del evento la página a la cual tengo que redirigir el "include"
                 button.setAttribute("page", menu.getMenuId().getUrl());
                 button.addEventListener("onClick", this);
+                button.setTooltiptext(menu.getMenuId().getDescripcion());
+                //button.setOrient("vertical");
                 navBar.appendChild(button);
             }
         }
@@ -95,6 +106,3 @@ public class BasePageController extends BaseController implements EventListener 
         setNavBarItem(arg0.getTarget().getAttribute("page").toString());
     }
 }
-
-
-//~ Formatted by Jindent --- http://www.jindent.com
