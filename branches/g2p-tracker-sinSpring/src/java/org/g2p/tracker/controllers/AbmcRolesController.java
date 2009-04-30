@@ -7,12 +7,10 @@ package org.g2p.tracker.controllers;
 import java.util.List;
 
 
-import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
-import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.models.RolesModel;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
@@ -24,7 +22,6 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
 
 public class AbmcRolesController extends BaseController implements AfterCompose {
 
@@ -302,7 +299,7 @@ public class AbmcRolesController extends BaseController implements AfterCompose 
                     rolesModel.getUtx().rollback();
                     rolesModel.setSelected((RolesEntity) rolesList.getModel().getElementAt(0));
                 } catch (Exception ex1) {
-                    showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex);
+                    showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex1);
                 }
             } finally {
                 //refresh the rolesList
@@ -315,12 +312,12 @@ public class AbmcRolesController extends BaseController implements AfterCompose 
 
         /** Returns title of confirm deleting Messagebox */
         public String getTitle() {
-            return "Are you sure?";
+            return Labels.getLabel("app.delete.confirm.title");
         }
 
         /** Returns message for confirm deleting Messagbox */
         public String getMessage() {
-            return "Are you sure you want to delete the selected item?";
+            return Labels.getLabel("app.delete.confirm.message");
         }
     }
 }

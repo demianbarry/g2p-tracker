@@ -1,3 +1,4 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcRolesWin"?>
 <window id="abmcRolesWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcRolesController">
@@ -10,26 +11,25 @@
                 </center>
             </borderlayout>
         </north>
-        <south style="background-color:#B1CBD5">
-            <span style="font-size:small">Copyright © 2009 Potix Corporation. All rights reserved.</span>
-        </south>
-        <west size="640px" splittable="true" flex="true">
-            <listbox id="rolesList" multiple="true" width="100%" model="@{abmcRolesWin.rolesModel.all}" selectedItem="@{abmcRolesWin.rolesModel.selected}">
+        <west width="70%" splittable="true" style="background-color:#B1CBD5">
+            <listbox id="rolesList" multiple="true" width="100%" model="@{abmcRolesWin.rolesModel.all}" selectedItem="@{abmcRolesWin.rolesModel.selected}" >
                 <listhead sizable="true">
-                    <listheader id="rolIdSort" label="Rol" sort="auto(rolId)" width="10px"/>
-                    <listheader id="rolNombreSort" label="Nombre" width="90px" sort="auto(nombre)"/>
-                    <listheader id="rolDescripcionSort" label="Descripcion" width="120px" sort="auto(descripcion)"/>
-                    <listheader id="rolObservacionesSort" label="Observaciones" width="80px" sort="auto(observaciones)"/>
+                    <listheader id="rolIdSort" label="Rol" width="10%" sort="auto(rolId)" />
+                    <listheader id="rolNombreSort" label="Nombre" width="20%" sort="auto(nombre)" />
+                    <listheader id="rolDescripcionSort" label="Descripcion" width="30%" sort="auto(descripcion)"/>
+                    <listheader id="rolObservacionesSort" label="Observaciones" width="40%" sort="auto(observaciones)"/>
                 </listhead>
                 <listitem self="@{each=x0}">
                     <listcell label="@{x0.rolId}"/>
                     <listcell label="@{x0.nombre}"/>
                     <listcell label="@{x0.descripcion}"/>
-                    <listcell label="@{x0.observaciones}"/>
+                    <listcell>
+                        <textbox rows="3" value="@{x0.observaciones}" readonly="true" width="100%" style="background:transparent;border:none;"/>
+                    </listcell>
                 </listitem>
             </listbox>
         </west>
-        <center>
+        <center style="background-color:#B1CBD5">
             <div id="rolesDetail">
 		<!-- view mode -->
                 <div id="rolesView" visible="@{abmcRolesWin.viewMode}" width="100%">
@@ -56,9 +56,9 @@
                     <separator/>
                     <div align="right">
                         <hbox>
-                            <button id="rolCreate" label="New"/>
-                            <button id="rolUpdate" label="Edit" disabled="@{abmcRolesWin.notSelected,load-when='rolesList.onSelect'}"/>
-                            <button id="rolDelete" label="Delete" disabled="@{abmcRolesWin.notSelected,load-when='rolesList.onSelect'}"/>
+                            <button id="rolCreate" label="${c:l('app.viewbox.new')}"/>
+                            <button id="rolUpdate" label="${c:l('app.viewbox.edit')}" disabled="@{abmcRolesWin.notSelected,load-when='rolesList.onSelect'}"/>
+                            <button id="rolDelete" label="${c:l('app.viewbox.delete')}" disabled="@{abmcRolesWin.notSelected,load-when='rolesList.onSelect'}"/>
                         </hbox>
                     </div>
                 </div>
@@ -88,8 +88,8 @@
                     <separator/>
                     <div align="right">
                         <hbox>
-                            <button id="rolSave" label="Save"/>
-                            <button id="rolCancel" label="Cancel"/>
+                            <button id="rolSave" label="${c:l('app.editbox.save')}"/>
+                            <button id="rolCancel" label="${c:l('app.editbox.cancel')}"/>
                         </hbox>
                     </div>
                 </div>
