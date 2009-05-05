@@ -34,10 +34,7 @@ public class BasePageController extends BaseController implements EventListener 
 
     public void onCreate$baseWin(Event event) {
         session = Sessions.getCurrent();
-
-        // Seteo
-        session.setAttribute("User", 1);
-
+        
         // Arranco en la HomePage
         setNavBarItem("HomePage.zul");
     }
@@ -51,8 +48,10 @@ public class BasePageController extends BaseController implements EventListener 
         Toolbarbutton button;
         Hashtable parameters = new Hashtable();
 
+        System.out.println("------------> "+session.getAttribute("User"));
+
         // Obtengo el userId de la sesión
-        parameters.put("userId", session.getAttribute("User"));
+        parameters.put("userId", session.getAttribute("User") != null ? session.getAttribute("User") : 0);
 
         parameters.put("GroupName", groupName);
 

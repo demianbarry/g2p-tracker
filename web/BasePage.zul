@@ -4,7 +4,7 @@
     <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./baseWin"?>
     <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController">
         <borderlayout height="100%" style="background:#c5e6ef;">
-            <north size="10%" border="0" style="background:#c5e6ef;">
+            <north border="0" style="background:#c5e6ef;">
                 <include src="BaseBeforePage.zul"/>
             </north>
 	<!-- Sidebar -->

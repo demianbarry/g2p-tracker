@@ -8,6 +8,6 @@
         <toolbarbutton label="Report Abuse"/>
         <toolbarbutton label="Print"/>
         <separator orient="vertical" bar="true"/>
-        <toolbarbutton src="/img/zkpowered_s.png" href="http://www.zkoss.org"/>
+        <toolbarbutton src="/img/Logo1.JPG"/>
     </toolbar>
 </zk>

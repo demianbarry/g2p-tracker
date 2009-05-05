@@ -1,3 +1,4 @@
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcUsuarioRolesWin"?>
@@ -5,6 +6,7 @@
     <borderlayout>
         <north size="60px">
             <borderlayout>
+                <!-- Título -->
                 <center border="none" style="background-color:#B1CBD5">
                     <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Asignación de roles a usuarios</h2>]]>
                     </html>
@@ -16,6 +18,7 @@
                 <north title="Usuarios">
                 </north>
                 <center style="background-color:#B1CBD5">
+                    <!-- Lista de usuarios -->
                     <listbox id="usersList" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.all}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.selected}">
                         <listhead sizable="true">
                             <listheader id="userLoginName" label="Login Name" width="40%"  sort="auto(loginName)"/>
@@ -34,6 +37,7 @@
                 <north title="Roles del Usuario">
                 </north>
                 <center style="background-color:#B1CBD5">
+                    <!-- Lista de roles -->
                     <listbox id="usuarioRolesList" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.usuariosRoles}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected}">
                         <listhead sizable="true">
                             <listheader id="rolNombreSort" label="Nombre" sort="auto(nombre)" width="40%"/>
@@ -53,7 +57,7 @@
                 </north>
                 <center style="background-color:#B1CBD5">
                     <div id="usuarioRolesDetail">
-                                    <!--View Mode-->
+                        <!--View Mode-->
                         <div id="usuarioRolesView" visible="@{abmcUsuarioRolesWin.viewMode}" width="100%">
                             <grid width="100%" >
                                 <columns>
@@ -78,13 +82,14 @@
                             <separator/>
                             <div align="right">
                                 <hbox>
+                                    <!-- Botones de Nuevo, Editar y Borrar -->
                                     <button id="usuarioRolCreate" label="${c:l('app.viewbox.new')}" />
                                     <button id="usuarioRolUpdate" label="${c:l('app.viewbox.edit')}" disabled="@{abmcUsuarioRolesWin.notSelected}"  /> <!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
                                     <button id="usuarioRolDelete" label="${c:l('app.viewbox.delete')}" disabled="@{abmcUsuarioRolesWin.notSelected}" /><!--disabled="@{abmcUsuarioRolesWin.notSelected,load-when='usuarioRolesList.onSelect'}"-->
                                 </hbox>
                             </div>
                         </div>
-                                    <!--Edit Mode-->
+                        <!--Edit Mode-->
                         <div id="usuarioRolesEdit" visible="@{abmcUsuarioRolesWin.editMode}">
                             <grid width="100%" >
                                 <columns>
@@ -119,6 +124,7 @@
                             <separator/>
                             <div align="right">
                                 <hbox>
+                                    <!-- Botones de Guardar y Cancelar -->
                                     <button id="usuarioRolSave" label="${c:l('app.editbox.save')}"/>
                                     <button id="usuarioRolCancel" label="${c:l('app.editbox.cancel')}"/>
                                 </hbox>

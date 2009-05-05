@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul">
-    <div>
-        <div style="float:right">
-            <textbox sclass="demo-search-inp"/>
-            <separator orient="vertical"/>
-            <button label="Search Site"/>
-        </div>
-        <image style="padding:0 10px;" src="/img/ZK-Logo.gif"/>
-        <label style="position:relative; top:-30px;padding-left: 50px; font-size:24px;color:#008BB6;font-weight:bold;"
-					value="Project ZK"/>
+<zk>
+    <div height="100%" >
+        <borderlayout height="100px" >
+            <west size="80%" style="background:#c5e6ef;">
+                    <html style="font-size:400%;color:black;">
+                        G2P Tracker
+                    </html>
+            </west>
+            <east size="20%">
+                <borderlayout style="background:#c5e6ef;">
+                    <north size="30%" style="background:#c5e6ef;">
+                        <hbox>
+                            <textbox sclass="demo-search-inp"/>
+                            <button label="Search Site"/>
+                        </hbox>
+                    </north>
+                    <center style="background:#c5e6ef;">
+                        <vbox id="loginBox" apply="org.g2p.tracker.composers.LoginBoxComposer">
+                            <toolbarbutton id="loginLabel" onClick="loginWin.doModal();" label="Login" style="float:bottom right"/>
+                            <toolbarbutton id="logoutLabel" label="Logout" style="float:bottom right" />
+                        </vbox>
+                    </center>
+                    <south>
+                        <window id="loginWin" title="ZK Login" border="normal" visible="false" apply="org.g2p.tracker.composers.LoginWindowComposer">
+                            <div align="center">
+                                <label style="color:red" value="Login failed. Please try again." if="${!empty arg.login_error}"/>
+                            </div>
+                            <grid>
+                                <rows>
+                                    <row>Username:
+                                        <textbox id="username"/>
+                                    </row>
+                                    <row>Password:
+                                        <textbox id="password" type="password"/>
+                                    </row>
+                                    <row spans="2">
+                                        <checkbox id="remember" label=" Remember me on this computer"/>
+                                    </row>
+                                    <row spans="2">
+                                        <div align="center">
+                                            <button width="76px" id="okButton" label="OK" forward="onClick=onClick$okButton" />
+                                            <space/>
+                                            <button width="76px" id="cancelButton" label="Cancel" onClick="loginWin.setVisible(false)"/>
+                                        </div>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </window>
+                    </south>
+                </borderlayout>
+            </east>
+        </borderlayout>
     </div>
 </zk>
