@@ -6,8 +6,12 @@ package org.g2p.tracker.controllers;
 
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zkplus.databind.DataBinder;
+import org.zkoss.zul.Include;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -15,10 +19,23 @@ import org.zkoss.zul.Window;
  *
  * @author Administrador
  */
-public class BaseController extends Window implements AfterCompose {
+public class BaseController extends Window implements AfterCompose, Constants {
+
+    private static final long serialVersionUID = -6524216859170169468L;
 
     //ZK databinder
     protected DataBinder binder;
+    protected Session session;
+    protected boolean pageProtected;
+
+    public BaseController(boolean pageProtected) {
+        this.pageProtected = pageProtected;
+
+        if (this.pageProtected && getSession().getAttribute(USER_ID) == null) {
+            Executions.sendRedirect("/");
+        }
+
+    }
 
     //operation transient state
     protected BaseEntity _tmpSelected; //store original selected entity
@@ -82,4 +99,33 @@ public class BaseController extends Window implements AfterCompose {
             ex1.printStackTrace();
         }
     }
+
+    public Session getSession() {
+        if (session == null) {
+            session = Sessions.getCurrent();
+        }
+        return session;
+    }
+
+    public boolean isPageProtected() {
+        return pageProtected;
+    }
+
+    public Integer getUserIdFromSession() {
+        return (Integer)getSession().getAttribute(USER_ID);
+    }
+
+    public String getUserNameFromSession() {
+        return (String)getSession().getAttribute(USER_NAME);
+    }
+    
+    public void setUserIdInSession(Integer userId) {
+        getSession().setAttribute(USER_ID, userId);
+    }
+
+    public void setUserNameInSession(String userName) {
+        getSession().setAttribute(USER_NAME, userName);
+    }
+
+
 }

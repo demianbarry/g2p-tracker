@@ -47,6 +47,7 @@ public class AbmcRolesController extends BaseController implements AfterCompose 
     protected Button rolCancel; //cancel button
 
     public AbmcRolesController() {
+        super(true);
         rolesModel = new RolesModel();
     }   
 
