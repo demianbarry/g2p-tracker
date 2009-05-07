@@ -2,10 +2,34 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns="http://www.zkoss.org/2005/zul">
     <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./baseWin"?>
-    <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController">
+    <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController" style="">
         <borderlayout height="100%" style="background:#c5e6ef;">
             <north border="0" style="background:#c5e6ef;">
-                <include src="BaseBeforePage.zul"/>
+                <div height="100%" >
+                    <borderlayout height="100px" >
+                        <west size="80%" style="background:#c5e6ef;">
+                            <html style="font-size:400%;color:black;">
+                        G2P Tracker
+                            </html>
+                        </west>
+                        <east size="20%">
+                            <borderlayout style="background:#c5e6ef;">
+                                <north size="30%" style="background:#c5e6ef;">
+                                    <hbox>
+                                        <textbox sclass="demo-search-inp"/>
+                                        <button label="Search Site"/>
+                                    </hbox>
+                                </north>
+                                <center style="background:#c5e6ef;">
+                                    <vbox id="loginBox">
+                                        <toolbarbutton id="loginLabel" label="Login" style="float:bottom right" />
+                                        <toolbarbutton id="logoutLabel" label="Logout" style="float:bottom right" />
+                                    </vbox>
+                                </center>
+                            </borderlayout>
+                        </east>
+                    </borderlayout>
+                </div>
             </north>
 	<!-- Sidebar -->
             <west title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
@@ -14,7 +38,7 @@
                         <panelchildren style="padding:5px;background:#A9D0F5;background-image:url('http://tbn1.google.com/images?q=tbn:9mYpD__91Sb0sM:http://www.imagineargentina.com/images/Blue_Background_Large_Web_view4.jpg')" id="panelChildren">
                             <vbox id="navBar">
                             </vbox>
-                        </panelchildren>                        
+                        </panelchildren>
                     </panel>
                 </div>
             </west>

@@ -1,5 +1,4 @@
-<div id="login" >
-<window title="ZK Login" border="normal" width="320px" onOK="doOK(self)" closable="true">
+<window id="LoginPage" use="org.g2p.tracker.controllers.LoginPageController">
     <div align="center">
         <label style="color:red" value="Login failed. Please try again." if="${!empty arg.login_error}"/>
     </div>
@@ -17,9 +16,9 @@
             </row>
             <row spans="2">
                 <div align="center">
-                    <button width="76px" label="OK" onClick="doOK(spaceOwner)"/>
+                    <button id="okButton" width="76px" label="OK"/>
                     <space/>
-                    <button width="76px" label="Cancel" onClick="spaceOwner.detach()"/>
+                    <button id="cancelButton" width="76px" label="Cancel"/>
                 </div>
             </row>
         </rows>
@@ -35,4 +34,3 @@
   }
         </zscript>-->
 </window>
-</div>

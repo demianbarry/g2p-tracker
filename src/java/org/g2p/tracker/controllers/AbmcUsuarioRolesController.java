@@ -54,6 +54,7 @@ public class AbmcUsuarioRolesController extends BaseController {
     protected Button usuarioRolCancel; //cancel button
 
     public AbmcUsuarioRolesController() {
+        super(true);
         websiteUserModel = new WebsiteUserModel();
         rolesModel = new RolesModel();
         usuarioRolesModel = new UsuarioRolesModel();
