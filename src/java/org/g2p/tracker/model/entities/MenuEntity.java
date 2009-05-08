@@ -12,8 +12,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,17 +20,14 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "menu")
-@NamedQueries({
-    @NamedQuery(name = "MenuEntity.findAll", query = "SELECT m FROM MenuEntity m"),
-    @NamedQuery(name = "MenuEntity.findUrl", query = "SELECT m FROM MenuEntity m WHERE m.url = :url")})
-public class MenuEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")})
+public class MenuEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "menu_id")
     private Integer menuId;
@@ -43,11 +38,12 @@ public class MenuEntity implements Serializable {
     private String descripcion;
     @Column(name = "url")
     private String url;
-    @Basic(optional = false)
     @Column(name = "grupo")
     private String grupo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.EAGER)
-    private Set<AccesoMenuEntity> accesoMenuEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.LAZY)
+    private Set<AccesoMenuEntity> accesoMenuCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId1", fetch = FetchType.LAZY)
+    private Set<AccesoMenuEntity> accesoMenuCollection1;
 
     public MenuEntity() {
     }
@@ -56,10 +52,9 @@ public class MenuEntity implements Serializable {
         this.menuId = menuId;
     }
 
-    public MenuEntity(Integer menuId, String nombre, String grupo) {
+    public MenuEntity(Integer menuId, String nombre) {
         this.menuId = menuId;
         this.nombre = nombre;
-        this.grupo = grupo;
     }
 
     public Integer getMenuId() {
@@ -102,12 +97,20 @@ public class MenuEntity implements Serializable {
         this.grupo = grupo;
     }
 
-    public Set<AccesoMenuEntity> getAccesoMenuEntityCollection() {
-        return accesoMenuEntityCollection;
+    public Set<AccesoMenuEntity> getAccesoMenuCollection() {
+        return accesoMenuCollection;
     }
 
-    public void setAccesoMenuEntityCollection(Set<AccesoMenuEntity> accesoMenuEntityCollection) {
-        this.accesoMenuEntityCollection = accesoMenuEntityCollection;
+    public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
+        this.accesoMenuCollection = accesoMenuCollection;
+    }
+
+    public Set<AccesoMenuEntity> getAccesoMenuCollection1() {
+        return accesoMenuCollection1;
+    }
+
+    public void setAccesoMenuCollection1(Set<AccesoMenuEntity> accesoMenuCollection1) {
+        this.accesoMenuCollection1 = accesoMenuCollection1;
     }
 
     @Override
@@ -132,7 +135,12 @@ public class MenuEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.MenuEntity[menuId=" + menuId + "]";
+        return "org.g2p.tracker.model.entities.Menu[menuId=" + menuId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return menuId;
     }
 
 }

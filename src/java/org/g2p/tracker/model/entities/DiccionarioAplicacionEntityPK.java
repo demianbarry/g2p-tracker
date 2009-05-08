@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Embeddable
 public class DiccionarioAplicacionEntityPK implements Serializable {
@@ -22,6 +22,9 @@ public class DiccionarioAplicacionEntityPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombre_objeto")
     private String nombreObjeto;
+
+    public DiccionarioAplicacionEntityPK() {
+    }
 
     public DiccionarioAplicacionEntityPK(String tipoObjeto, String nombreObjeto) {
         this.tipoObjeto = tipoObjeto;
@@ -70,7 +73,7 @@ public class DiccionarioAplicacionEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.DiccionarioAplicacionEntityPK[tipoObjeto=" + tipoObjeto + ", nombreObjeto=" + nombreObjeto + "]";
+        return "org.g2p.tracker.model.entities.DiccionarioAplicacionPK[tipoObjeto=" + tipoObjeto + ", nombreObjeto=" + nombreObjeto + "]";
     }
 
 }

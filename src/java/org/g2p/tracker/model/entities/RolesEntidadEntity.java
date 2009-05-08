@@ -22,15 +22,15 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "roles_entidad")
-@NamedQueries({@NamedQuery(name = "RolesEntidadEntity.findAll", query = "SELECT r FROM RolesEntidadEntity r")})
-public class RolesEntidadEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "RolesEntidad.findAll", query = "SELECT r FROM RolesEntidad r")})
+public class RolesEntidadEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected RolesEntidadEntityPK rolesEntidadEntityPK;
+    protected RolesEntidadEntityPK rolesEntidadPK;
     @Basic(optional = false)
     @Column(name = "desde")
     @Temporal(TemporalType.DATE)
@@ -44,37 +44,45 @@ public class RolesEntidadEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "anulado")
     private char anulado;
+    @Column(name = "rol")
+    private String rol;
     @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EntidadExternaEntity entidadExternaEntity;
-    @JoinColumn(name = "rol", referencedColumnName = "rol", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private RolEntidadEntity rolEntidadEntity;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EntidadExternaEntity entidadExterna;
+    @JoinColumn(name = "rol_id", referencedColumnName = "rol", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private RolEntidadEntity rolEntidad;
+    @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EntidadExternaEntity entidadExterna1;
+    @JoinColumn(name = "rol_id", referencedColumnName = "rol", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private RolEntidadEntity rolEntidad1;
 
     public RolesEntidadEntity() {
     }
 
-    public RolesEntidadEntity(RolesEntidadEntityPK rolesEntidadEntityPK) {
-        this.rolesEntidadEntityPK = rolesEntidadEntityPK;
+    public RolesEntidadEntity(RolesEntidadEntityPK rolesEntidadPK) {
+        this.rolesEntidadPK = rolesEntidadPK;
     }
 
-    public RolesEntidadEntity(RolesEntidadEntityPK rolesEntidadEntityPK, Date desde, char activo, char anulado) {
-        this.rolesEntidadEntityPK = rolesEntidadEntityPK;
+    public RolesEntidadEntity(RolesEntidadEntityPK rolesEntidadPK, Date desde, char activo, char anulado) {
+        this.rolesEntidadPK = rolesEntidadPK;
         this.desde = desde;
         this.activo = activo;
         this.anulado = anulado;
     }
 
-    public RolesEntidadEntity(int entidadId, String rol) {
-        this.rolesEntidadEntityPK = new RolesEntidadEntityPK(entidadId, rol);
+    public RolesEntidadEntity(int entidadId, String rolId) {
+        this.rolesEntidadPK = new RolesEntidadEntityPK(entidadId, rolId);
     }
 
-    public RolesEntidadEntityPK getRolesEntidadEntityPK() {
-        return rolesEntidadEntityPK;
+    public RolesEntidadEntityPK getRolesEntidadPK() {
+        return rolesEntidadPK;
     }
 
-    public void setRolesEntidadEntityPK(RolesEntidadEntityPK rolesEntidadEntityPK) {
-        this.rolesEntidadEntityPK = rolesEntidadEntityPK;
+    public void setRolesEntidadPK(RolesEntidadEntityPK rolesEntidadPK) {
+        this.rolesEntidadPK = rolesEntidadPK;
     }
 
     public Date getDesde() {
@@ -109,26 +117,50 @@ public class RolesEntidadEntity implements Serializable {
         this.anulado = anulado;
     }
 
-    public EntidadExternaEntity getEntidadExternaEntity() {
-        return entidadExternaEntity;
+    public String getRol() {
+        return rol;
     }
 
-    public void setEntidadExternaEntity(EntidadExternaEntity entidadExternaEntity) {
-        this.entidadExternaEntity = entidadExternaEntity;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
-    public RolEntidadEntity getRolEntidadEntity() {
-        return rolEntidadEntity;
+    public EntidadExternaEntity getEntidadExterna() {
+        return entidadExterna;
     }
 
-    public void setRolEntidadEntity(RolEntidadEntity rolEntidadEntity) {
-        this.rolEntidadEntity = rolEntidadEntity;
+    public void setEntidadExterna(EntidadExternaEntity entidadExterna) {
+        this.entidadExterna = entidadExterna;
+    }
+
+    public RolEntidadEntity getRolEntidad() {
+        return rolEntidad;
+    }
+
+    public void setRolEntidad(RolEntidadEntity rolEntidad) {
+        this.rolEntidad = rolEntidad;
+    }
+
+    public EntidadExternaEntity getEntidadExterna1() {
+        return entidadExterna1;
+    }
+
+    public void setEntidadExterna1(EntidadExternaEntity entidadExterna1) {
+        this.entidadExterna1 = entidadExterna1;
+    }
+
+    public RolEntidadEntity getRolEntidad1() {
+        return rolEntidad1;
+    }
+
+    public void setRolEntidad1(RolEntidadEntity rolEntidad1) {
+        this.rolEntidad1 = rolEntidad1;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (rolesEntidadEntityPK != null ? rolesEntidadEntityPK.hashCode() : 0);
+        hash += (rolesEntidadPK != null ? rolesEntidadPK.hashCode() : 0);
         return hash;
     }
 
@@ -139,7 +171,7 @@ public class RolesEntidadEntity implements Serializable {
             return false;
         }
         RolesEntidadEntity other = (RolesEntidadEntity) object;
-        if ((this.rolesEntidadEntityPK == null && other.rolesEntidadEntityPK != null) || (this.rolesEntidadEntityPK != null && !this.rolesEntidadEntityPK.equals(other.rolesEntidadEntityPK))) {
+        if ((this.rolesEntidadPK == null && other.rolesEntidadPK != null) || (this.rolesEntidadPK != null && !this.rolesEntidadPK.equals(other.rolesEntidadPK))) {
             return false;
         }
         return true;
@@ -147,7 +179,12 @@ public class RolesEntidadEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.RolesEntidadEntity[rolesEntidadEntityPK=" + rolesEntidadEntityPK + "]";
+        return "org.g2p.tracker.model.entities.RolesEntidad[rolesEntidadPK=" + rolesEntidadPK + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return rolesEntidadPK;
     }
 
 }

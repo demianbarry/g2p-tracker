@@ -21,14 +21,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "acceso_menu")
-@NamedQueries({
-    @NamedQuery(name = "AccesoMenuEntity.findAll", query = "SELECT a FROM AccesoMenuEntity a"),
-    @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.userId.userId = :userId AND a.menuId.grupo = :GroupName")})
-public class AccesoMenuEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "AccesoMenu.findAll", query = "SELECT a FROM AccesoMenu a")})
+public class AccesoMenuEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +34,23 @@ public class AccesoMenuEntity implements Serializable {
     @Column(name = "acceso_menu_id")
     private Integer accesoMenuId;
     @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private MenuEntity menuId;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private WebsiteUserEntity userId;
     @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RolesEntity rolId;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private WebsiteUsersEntity userId;
+    @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private MenuEntity menuId1;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private WebsiteUsersEntity userId1;
+    @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RolesEntity rolId1;
 
     public AccesoMenuEntity() {
     }
@@ -68,20 +75,44 @@ public class AccesoMenuEntity implements Serializable {
         this.menuId = menuId;
     }
 
-    public WebsiteUserEntity getUserId() {
-        return userId;
-    }
-
-    public void setUserId(WebsiteUserEntity userId) {
-        this.userId = userId;
-    }
-
     public RolesEntity getRolId() {
         return rolId;
     }
 
     public void setRolId(RolesEntity rolId) {
         this.rolId = rolId;
+    }
+
+    public WebsiteUsersEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(WebsiteUsersEntity userId) {
+        this.userId = userId;
+    }
+
+    public MenuEntity getMenuId1() {
+        return menuId1;
+    }
+
+    public void setMenuId1(MenuEntity menuId1) {
+        this.menuId1 = menuId1;
+    }
+
+    public WebsiteUsersEntity getUserId1() {
+        return userId1;
+    }
+
+    public void setUserId1(WebsiteUsersEntity userId1) {
+        this.userId1 = userId1;
+    }
+
+    public RolesEntity getRolId1() {
+        return rolId1;
+    }
+
+    public void setRolId1(RolesEntity rolId1) {
+        this.rolId1 = rolId1;
     }
 
     @Override
@@ -106,7 +137,12 @@ public class AccesoMenuEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AccesoMenuEntity[accesoMenuId=" + accesoMenuId + "]";
+        return "org.g2p.tracker.model.entities.AccesoMenu[accesoMenuId=" + accesoMenuId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return accesoMenuId;
     }
 
 }

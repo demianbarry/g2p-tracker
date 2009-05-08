@@ -15,20 +15,20 @@ import javax.persistence.Embeddable;
  * @author nacho
  */
 @Embeddable
-public class UsuarioPreferenciasEntityPK implements Serializable {
+public class WebsiteUsersPerProveedoresOpenidEntityPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private int userId;
     @Basic(optional = false)
-    @Column(name = "preferencia_id")
-    private int preferenciaId;
+    @Column(name = "proveedor_sso_id")
+    private int proveedorSsoId;
 
-    public UsuarioPreferenciasEntityPK() {
+    public WebsiteUsersPerProveedoresOpenidEntityPK() {
     }
 
-    public UsuarioPreferenciasEntityPK(int userId, int preferenciaId) {
+    public WebsiteUsersPerProveedoresOpenidEntityPK(int userId, int proveedorSsoId) {
         this.userId = userId;
-        this.preferenciaId = preferenciaId;
+        this.proveedorSsoId = proveedorSsoId;
     }
 
     public int getUserId() {
@@ -39,33 +39,33 @@ public class UsuarioPreferenciasEntityPK implements Serializable {
         this.userId = userId;
     }
 
-    public int getPreferenciaId() {
-        return preferenciaId;
+    public int getProveedorSsoId() {
+        return proveedorSsoId;
     }
 
-    public void setPreferenciaId(int preferenciaId) {
-        this.preferenciaId = preferenciaId;
+    public void setProveedorSsoId(int proveedorSsoId) {
+        this.proveedorSsoId = proveedorSsoId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) userId;
-        hash += (int) preferenciaId;
+        hash += (int) proveedorSsoId;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UsuarioPreferenciasEntityPK)) {
+        if (!(object instanceof WebsiteUsersPerProveedoresOpenidEntityPK)) {
             return false;
         }
-        UsuarioPreferenciasEntityPK other = (UsuarioPreferenciasEntityPK) object;
+        WebsiteUsersPerProveedoresOpenidEntityPK other = (WebsiteUsersPerProveedoresOpenidEntityPK) object;
         if (this.userId != other.userId) {
             return false;
         }
-        if (this.preferenciaId != other.preferenciaId) {
+        if (this.proveedorSsoId != other.proveedorSsoId) {
             return false;
         }
         return true;
@@ -73,7 +73,7 @@ public class UsuarioPreferenciasEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.UsuarioPreferenciasPK[userId=" + userId + ", preferenciaId=" + preferenciaId + "]";
+        return "org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidPK[userId=" + userId + ", proveedorSsoId=" + proveedorSsoId + "]";
     }
 
 }

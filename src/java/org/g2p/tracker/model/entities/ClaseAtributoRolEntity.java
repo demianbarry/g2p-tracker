@@ -21,12 +21,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "clase_atributo_rol")
-@NamedQueries({@NamedQuery(name = "ClaseAtributoRolEntity.findAll", query = "SELECT c FROM ClaseAtributoRolEntity c")})
-public class ClaseAtributoRolEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "ClaseAtributoRol.findAll", query = "SELECT c FROM ClaseAtributoRol c")})
+public class ClaseAtributoRolEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +36,10 @@ public class ClaseAtributoRolEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "etiqueta")
     private String etiqueta;
-    @OneToMany(mappedBy = "claseAtributoRolId", fetch = FetchType.EAGER)
-    private Set<AtributosRolEntity> atributosRolEntityCollection;
+    @OneToMany(mappedBy = "claseAtributoRolId", fetch = FetchType.LAZY)
+    private Set<AtributosRolEntity> atributosRolCollection;
+    @OneToMany(mappedBy = "claseAtributoRolId1", fetch = FetchType.LAZY)
+    private Set<AtributosRolEntity> atributosRolCollection1;
 
     public ClaseAtributoRolEntity() {
     }
@@ -67,12 +69,20 @@ public class ClaseAtributoRolEntity implements Serializable {
         this.etiqueta = etiqueta;
     }
 
-    public Set<AtributosRolEntity> getAtributosRolEntityCollection() {
-        return atributosRolEntityCollection;
+    public Set<AtributosRolEntity> getAtributosRolCollection() {
+        return atributosRolCollection;
     }
 
-    public void setAtributosRolEntityCollection(Set<AtributosRolEntity> atributosRolEntityCollection) {
-        this.atributosRolEntityCollection = atributosRolEntityCollection;
+    public void setAtributosRolCollection(Set<AtributosRolEntity> atributosRolCollection) {
+        this.atributosRolCollection = atributosRolCollection;
+    }
+
+    public Set<AtributosRolEntity> getAtributosRolCollection1() {
+        return atributosRolCollection1;
+    }
+
+    public void setAtributosRolCollection1(Set<AtributosRolEntity> atributosRolCollection1) {
+        this.atributosRolCollection1 = atributosRolCollection1;
     }
 
     @Override
@@ -97,7 +107,12 @@ public class ClaseAtributoRolEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.ClaseAtributoRolEntity[claseAtributoRolId=" + claseAtributoRolId + "]";
+        return "org.g2p.tracker.model.entities.ClaseAtributoRol[claseAtributoRolId=" + claseAtributoRolId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return claseAtributoRolId;
     }
 
 }

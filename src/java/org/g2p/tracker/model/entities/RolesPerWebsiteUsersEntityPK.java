@@ -15,20 +15,20 @@ import javax.persistence.Embeddable;
  * @author nacho
  */
 @Embeddable
-public class UsuarioPreferenciasEntityPK implements Serializable {
+public class RolesPerWebsiteUsersEntityPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private int userId;
     @Basic(optional = false)
-    @Column(name = "preferencia_id")
-    private int preferenciaId;
+    @Column(name = "rol_id")
+    private int rolId;
 
-    public UsuarioPreferenciasEntityPK() {
+    public RolesPerWebsiteUsersEntityPK() {
     }
 
-    public UsuarioPreferenciasEntityPK(int userId, int preferenciaId) {
+    public RolesPerWebsiteUsersEntityPK(int userId, int rolId) {
         this.userId = userId;
-        this.preferenciaId = preferenciaId;
+        this.rolId = rolId;
     }
 
     public int getUserId() {
@@ -39,33 +39,33 @@ public class UsuarioPreferenciasEntityPK implements Serializable {
         this.userId = userId;
     }
 
-    public int getPreferenciaId() {
-        return preferenciaId;
+    public int getRolId() {
+        return rolId;
     }
 
-    public void setPreferenciaId(int preferenciaId) {
-        this.preferenciaId = preferenciaId;
+    public void setRolId(int rolId) {
+        this.rolId = rolId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) userId;
-        hash += (int) preferenciaId;
+        hash += (int) rolId;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UsuarioPreferenciasEntityPK)) {
+        if (!(object instanceof RolesPerWebsiteUsersEntityPK)) {
             return false;
         }
-        UsuarioPreferenciasEntityPK other = (UsuarioPreferenciasEntityPK) object;
+        RolesPerWebsiteUsersEntityPK other = (RolesPerWebsiteUsersEntityPK) object;
         if (this.userId != other.userId) {
             return false;
         }
-        if (this.preferenciaId != other.preferenciaId) {
+        if (this.rolId != other.rolId) {
             return false;
         }
         return true;
@@ -73,7 +73,7 @@ public class UsuarioPreferenciasEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.UsuarioPreferenciasPK[userId=" + userId + ", preferenciaId=" + preferenciaId + "]";
+        return "org.g2p.tracker.model.entities.RolesPerWebsiteUsersPK[userId=" + userId + ", rolId=" + rolId + "]";
     }
 
 }

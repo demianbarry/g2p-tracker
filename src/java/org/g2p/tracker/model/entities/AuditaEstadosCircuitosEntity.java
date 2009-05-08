@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,12 +24,12 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "audita_estados_circuitos")
-@NamedQueries({@NamedQuery(name = "AuditaEstadosCircuitosEntity.findAll", query = "SELECT a FROM AuditaEstadosCircuitosEntity a")})
-public class AuditaEstadosCircuitosEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "AuditaEstadosCircuitos.findAll", query = "SELECT a FROM AuditaEstadosCircuitos a")})
+public class AuditaEstadosCircuitosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,24 +48,31 @@ public class AuditaEstadosCircuitosEntity implements Serializable {
     private int registroId;
     @Column(name = "host")
     private String host;
-    @Lob
     @Column(name = "observaciones")
     private String observaciones;
-    @JoinColumn(name = "circuito", referencedColumnName = "circuito")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private CircuitosEstadosEntity circuito;
-    @JoinColumn(name = "de_estado", referencedColumnName = "estado")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EstadosEntity deEstado;
-    @JoinColumn(name = "a_estado", referencedColumnName = "estado")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EstadosEntity aEstado;
+    @Column(name = "a_estado")
+    private String aEstado;
+    @Column(name = "accion")
+    private Integer accion;
+    @Column(name = "circuito")
+    private String circuito;
+    @Column(name = "de_estado")
+    private String deEstado;
+    @JoinColumn(name = "accion_id", referencedColumnName = "accion_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private AccionesAppsEntity accionId;
+    @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private CircuitosEstadosEntity circuitoId;
+    @JoinColumn(name = "estado_id_a", referencedColumnName = "estado_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EstadosEntity estadoIdA;
+    @JoinColumn(name = "estado_id_de", referencedColumnName = "estado_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EstadosEntity estadoIdDe;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private WebsiteUserEntity userId;
-    @JoinColumn(name = "accion", referencedColumnName = "accion")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private AccionesAppsEntity accion;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private WebsiteUsersEntity userId;
 
     public AuditaEstadosCircuitosEntity() {
     }
@@ -130,44 +136,76 @@ public class AuditaEstadosCircuitosEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public CircuitosEstadosEntity getCircuito() {
-        return circuito;
-    }
-
-    public void setCircuito(CircuitosEstadosEntity circuito) {
-        this.circuito = circuito;
-    }
-
-    public EstadosEntity getDeEstado() {
-        return deEstado;
-    }
-
-    public void setDeEstado(EstadosEntity deEstado) {
-        this.deEstado = deEstado;
-    }
-
-    public EstadosEntity getAEstado() {
+    public String getAEstado() {
         return aEstado;
     }
 
-    public void setAEstado(EstadosEntity aEstado) {
+    public void setAEstado(String aEstado) {
         this.aEstado = aEstado;
     }
 
-    public WebsiteUserEntity getUserId() {
-        return userId;
-    }
-
-    public void setUserId(WebsiteUserEntity userId) {
-        this.userId = userId;
-    }
-
-    public AccionesAppsEntity getAccion() {
+    public Integer getAccion() {
         return accion;
     }
 
-    public void setAccion(AccionesAppsEntity accion) {
+    public void setAccion(Integer accion) {
         this.accion = accion;
+    }
+
+    public String getCircuito() {
+        return circuito;
+    }
+
+    public void setCircuito(String circuito) {
+        this.circuito = circuito;
+    }
+
+    public String getDeEstado() {
+        return deEstado;
+    }
+
+    public void setDeEstado(String deEstado) {
+        this.deEstado = deEstado;
+    }
+
+    public AccionesAppsEntity getAccionId() {
+        return accionId;
+    }
+
+    public void setAccionId(AccionesAppsEntity accionId) {
+        this.accionId = accionId;
+    }
+
+    public CircuitosEstadosEntity getCircuitoId() {
+        return circuitoId;
+    }
+
+    public void setCircuitoId(CircuitosEstadosEntity circuitoId) {
+        this.circuitoId = circuitoId;
+    }
+
+    public EstadosEntity getEstadoIdA() {
+        return estadoIdA;
+    }
+
+    public void setEstadoIdA(EstadosEntity estadoIdA) {
+        this.estadoIdA = estadoIdA;
+    }
+
+    public EstadosEntity getEstadoIdDe() {
+        return estadoIdDe;
+    }
+
+    public void setEstadoIdDe(EstadosEntity estadoIdDe) {
+        this.estadoIdDe = estadoIdDe;
+    }
+
+    public WebsiteUsersEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(WebsiteUsersEntity userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -192,7 +230,12 @@ public class AuditaEstadosCircuitosEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AuditaEstadosCircuitosEntity[auditaId=" + auditaId + "]";
+        return "org.g2p.tracker.model.entities.AuditaEstadosCircuitos[auditaId=" + auditaId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return auditaId;
     }
 
 }

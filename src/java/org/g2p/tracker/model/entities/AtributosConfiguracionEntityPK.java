@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Embeddable
 public class AtributosConfiguracionEntityPK implements Serializable {
@@ -22,6 +22,9 @@ public class AtributosConfiguracionEntityPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "atributo_id")
     private int atributoId;
+
+    public AtributosConfiguracionEntityPK() {
+    }
 
     public AtributosConfiguracionEntityPK(int configuracionId, int atributoId) {
         this.configuracionId = configuracionId;
@@ -70,7 +73,7 @@ public class AtributosConfiguracionEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AtributosConfiguracionEntityPK[configuracionId=" + configuracionId + ", atributoId=" + atributoId + "]";
+        return "org.g2p.tracker.model.entities.AtributosConfiguracionPK[configuracionId=" + configuracionId + ", atributoId=" + atributoId + "]";
     }
 
 }

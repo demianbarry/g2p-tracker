@@ -6,10 +6,11 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -18,46 +19,50 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "transicion_estados")
-@NamedQueries({@NamedQuery(name = "TransicionEstadosEntity.findAll", query = "SELECT t FROM TransicionEstadosEntity t")})
-public class TransicionEstadosEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "TransicionEstados.findAll", query = "SELECT t FROM TransicionEstados t")})
+public class TransicionEstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected TransicionEstadosEntityPK transicionEstadosEntityPK;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "transicion_id")
+    private Integer transicionId;
     @Column(name = "prompt_accion")
     private String promptAccion;
     @Column(name = "validador")
     private String validador;
-    @JoinColumn(name = "accion", referencedColumnName = "accion", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private AccionesAppsEntity accionesAppsEntity;
-    @JoinColumn(name = "estado_destino", referencedColumnName = "estado")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EstadosEntity estadoDestino;
-    @JoinColumn(name = "estado_origen", referencedColumnName = "estado", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EstadosEntity estadosEntity;
+    @Column(name = "accion")
+    private Integer accion;
+    @Column(name = "estado_origen")
+    private String estadoOrigen;
+    @Column(name = "estado_destino")
+    private String estadoDestino;
+    @JoinColumn(name = "accion_id", referencedColumnName = "accion_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private AccionesAppsEntity accionId;
+    @JoinColumn(name = "estado_id_destino", referencedColumnName = "estado_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EstadosEntity estadoIdDestino;
+    @JoinColumn(name = "estado_id_origen", referencedColumnName = "estado_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EstadosEntity estadoIdOrigen;
 
     public TransicionEstadosEntity() {
     }
 
-    public TransicionEstadosEntity(TransicionEstadosEntityPK transicionEstadosEntityPK) {
-        this.transicionEstadosEntityPK = transicionEstadosEntityPK;
+    public TransicionEstadosEntity(Integer transicionId) {
+        this.transicionId = transicionId;
     }
 
-    public TransicionEstadosEntity(String estadoOrigen, int accion) {
-        this.transicionEstadosEntityPK = new TransicionEstadosEntityPK(estadoOrigen, accion);
+    public Integer getTransicionId() {
+        return transicionId;
     }
 
-    public TransicionEstadosEntityPK getTransicionEstadosEntityPK() {
-        return transicionEstadosEntityPK;
-    }
-
-    public void setTransicionEstadosEntityPK(TransicionEstadosEntityPK transicionEstadosEntityPK) {
-        this.transicionEstadosEntityPK = transicionEstadosEntityPK;
+    public void setTransicionId(Integer transicionId) {
+        this.transicionId = transicionId;
     }
 
     public String getPromptAccion() {
@@ -76,34 +81,58 @@ public class TransicionEstadosEntity implements Serializable {
         this.validador = validador;
     }
 
-    public AccionesAppsEntity getAccionesAppsEntity() {
-        return accionesAppsEntity;
+    public Integer getAccion() {
+        return accion;
     }
 
-    public void setAccionesAppsEntity(AccionesAppsEntity accionesAppsEntity) {
-        this.accionesAppsEntity = accionesAppsEntity;
+    public void setAccion(Integer accion) {
+        this.accion = accion;
     }
 
-    public EstadosEntity getEstadoDestino() {
+    public String getEstadoOrigen() {
+        return estadoOrigen;
+    }
+
+    public void setEstadoOrigen(String estadoOrigen) {
+        this.estadoOrigen = estadoOrigen;
+    }
+
+    public String getEstadoDestino() {
         return estadoDestino;
     }
 
-    public void setEstadoDestino(EstadosEntity estadoDestino) {
+    public void setEstadoDestino(String estadoDestino) {
         this.estadoDestino = estadoDestino;
     }
 
-    public EstadosEntity getEstadosEntity() {
-        return estadosEntity;
+    public AccionesAppsEntity getAccionId() {
+        return accionId;
     }
 
-    public void setEstadosEntity(EstadosEntity estadosEntity) {
-        this.estadosEntity = estadosEntity;
+    public void setAccionId(AccionesAppsEntity accionId) {
+        this.accionId = accionId;
+    }
+
+    public EstadosEntity getEstadoIdDestino() {
+        return estadoIdDestino;
+    }
+
+    public void setEstadoIdDestino(EstadosEntity estadoIdDestino) {
+        this.estadoIdDestino = estadoIdDestino;
+    }
+
+    public EstadosEntity getEstadoIdOrigen() {
+        return estadoIdOrigen;
+    }
+
+    public void setEstadoIdOrigen(EstadosEntity estadoIdOrigen) {
+        this.estadoIdOrigen = estadoIdOrigen;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (transicionEstadosEntityPK != null ? transicionEstadosEntityPK.hashCode() : 0);
+        hash += (transicionId != null ? transicionId.hashCode() : 0);
         return hash;
     }
 
@@ -114,7 +143,7 @@ public class TransicionEstadosEntity implements Serializable {
             return false;
         }
         TransicionEstadosEntity other = (TransicionEstadosEntity) object;
-        if ((this.transicionEstadosEntityPK == null && other.transicionEstadosEntityPK != null) || (this.transicionEstadosEntityPK != null && !this.transicionEstadosEntityPK.equals(other.transicionEstadosEntityPK))) {
+        if ((this.transicionId == null && other.transicionId != null) || (this.transicionId != null && !this.transicionId.equals(other.transicionId))) {
             return false;
         }
         return true;
@@ -122,7 +151,12 @@ public class TransicionEstadosEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.TransicionEstadosEntity[transicionEstadosEntityPK=" + transicionEstadosEntityPK + "]";
+        return "org.g2p.tracker.model.entities.TransicionEstados[transicionId=" + transicionId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return transicionId;
     }
 
 }
