@@ -24,18 +24,18 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "acciones_apps")
-@NamedQueries({@NamedQuery(name = "AccionesAppsEntity.findAll", query = "SELECT a FROM AccionesAppsEntity a")})
-public class AccionesAppsEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "AccionesApps.findAll", query = "SELECT a FROM AccionesApps a")})
+public class AccionesAppsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "accion")
-    private Integer accion;
+    @Column(name = "accion_id")
+    private Integer accionId;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
@@ -46,33 +46,37 @@ public class AccionesAppsEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "manual")
     private char manual;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accion", fetch = FetchType.EAGER)
-    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionesAppsEntity", fetch = FetchType.EAGER)
-    private Set<TransicionEstadosEntity> transicionEstadosEntityCollection;
-    @JoinColumn(name = "circuito", referencedColumnName = "circuito")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private CircuitosEstadosEntity circuito;
+    @Column(name = "accion")
+    private Integer accion;
+    @Column(name = "circuito")
+    private String circuito;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.LAZY)
+    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.LAZY)
+    private Set<TransicionEstadosEntity> transicionEstadosCollection;
+    @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private CircuitosEstadosEntity circuitoId;
 
     public AccionesAppsEntity() {
     }
 
-    public AccionesAppsEntity(Integer accion) {
-        this.accion = accion;
+    public AccionesAppsEntity(Integer accionId) {
+        this.accionId = accionId;
     }
 
-    public AccionesAppsEntity(Integer accion, String nombre, char manual) {
-        this.accion = accion;
+    public AccionesAppsEntity(Integer accionId, String nombre, char manual) {
+        this.accionId = accionId;
         this.nombre = nombre;
         this.manual = manual;
     }
 
-    public Integer getAccion() {
-        return accion;
+    public Integer getAccionId() {
+        return accionId;
     }
 
-    public void setAccion(Integer accion) {
-        this.accion = accion;
+    public void setAccionId(Integer accionId) {
+        this.accionId = accionId;
     }
 
     public String getNombre() {
@@ -107,34 +111,50 @@ public class AccionesAppsEntity implements Serializable {
         this.manual = manual;
     }
 
-    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosEntityCollection() {
-        return auditaEstadosCircuitosEntityCollection;
+    public Integer getAccion() {
+        return accion;
     }
 
-    public void setAuditaEstadosCircuitosEntityCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection) {
-        this.auditaEstadosCircuitosEntityCollection = auditaEstadosCircuitosEntityCollection;
+    public void setAccion(Integer accion) {
+        this.accion = accion;
     }
 
-    public Set<TransicionEstadosEntity> getTransicionEstadosEntityCollection() {
-        return transicionEstadosEntityCollection;
-    }
-
-    public void setTransicionEstadosEntityCollection(Set<TransicionEstadosEntity> transicionEstadosEntityCollection) {
-        this.transicionEstadosEntityCollection = transicionEstadosEntityCollection;
-    }
-
-    public CircuitosEstadosEntity getCircuito() {
+    public String getCircuito() {
         return circuito;
     }
 
-    public void setCircuito(CircuitosEstadosEntity circuito) {
+    public void setCircuito(String circuito) {
         this.circuito = circuito;
+    }
+
+    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosCollection() {
+        return auditaEstadosCircuitosCollection;
+    }
+
+    public void setAuditaEstadosCircuitosCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection) {
+        this.auditaEstadosCircuitosCollection = auditaEstadosCircuitosCollection;
+    }
+
+    public Set<TransicionEstadosEntity> getTransicionEstadosCollection() {
+        return transicionEstadosCollection;
+    }
+
+    public void setTransicionEstadosCollection(Set<TransicionEstadosEntity> transicionEstadosCollection) {
+        this.transicionEstadosCollection = transicionEstadosCollection;
+    }
+
+    public CircuitosEstadosEntity getCircuitoId() {
+        return circuitoId;
+    }
+
+    public void setCircuitoId(CircuitosEstadosEntity circuitoId) {
+        this.circuitoId = circuitoId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (accion != null ? accion.hashCode() : 0);
+        hash += (accionId != null ? accionId.hashCode() : 0);
         return hash;
     }
 
@@ -145,7 +165,7 @@ public class AccionesAppsEntity implements Serializable {
             return false;
         }
         AccionesAppsEntity other = (AccionesAppsEntity) object;
-        if ((this.accion == null && other.accion != null) || (this.accion != null && !this.accion.equals(other.accion))) {
+        if ((this.accionId == null && other.accionId != null) || (this.accionId != null && !this.accionId.equals(other.accionId))) {
             return false;
         }
         return true;
@@ -153,7 +173,12 @@ public class AccionesAppsEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AccionesAppsEntity[accion=" + accion + "]";
+        return "org.g2p.tracker.model.entities.AccionesApps[accionId=" + accionId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return accionId;
     }
 
 }

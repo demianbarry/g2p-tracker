@@ -18,69 +18,69 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "diccionario_aplicacion")
-@NamedQueries({@NamedQuery(name = "DiccionarioAplicacionEntity.findAll", query = "SELECT d FROM DiccionarioAplicacionEntity d")})
-public class DiccionarioAplicacionEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "DiccionarioAplicacion.findAll", query = "SELECT d FROM DiccionarioAplicacion d")})
+public class DiccionarioAplicacionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DiccionarioAplicacionEntityPK diccionarioAplicacionEntityPK;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacionEntity", fetch = FetchType.EAGER)
-    private Set<EsquemaConfiguracionEntity> esquemaConfiguracionEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacionEntity", fetch = FetchType.EAGER)
-    private Set<DiccionarioAplicacionDetalleEntity> diccionarioAplicacionDetalleEntityCollection;
-    @OneToMany(mappedBy = "diccionarioAplicacionEntity", fetch = FetchType.EAGER)
-    private Set<AtributosRolEntity> atributosRolEntityCollection;
+    protected DiccionarioAplicacionEntityPK diccionarioAplicacionPK;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
+    private Set<EsquemaConfiguracionEntity> esquemaConfiguracionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
+    private Set<DiccionarioAplicacionDetalle> diccionarioAplicacionDetalleCollection;
+    @OneToMany(mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
+    private Set<AtributosRolEntity> atributosRolCollection;
 
     public DiccionarioAplicacionEntity() {
     }
 
-    public DiccionarioAplicacionEntity(DiccionarioAplicacionEntityPK diccionarioAplicacionEntityPK) {
-        this.diccionarioAplicacionEntityPK = diccionarioAplicacionEntityPK;
+    public DiccionarioAplicacionEntity(DiccionarioAplicacionEntityPK diccionarioAplicacionPK) {
+        this.diccionarioAplicacionPK = diccionarioAplicacionPK;
     }
 
     public DiccionarioAplicacionEntity(String tipoObjeto, String nombreObjeto) {
-        this.diccionarioAplicacionEntityPK = new DiccionarioAplicacionEntityPK(tipoObjeto, nombreObjeto);
+        this.diccionarioAplicacionPK = new DiccionarioAplicacionEntityPK(tipoObjeto, nombreObjeto);
     }
 
-    public DiccionarioAplicacionEntityPK getDiccionarioAplicacionEntityPK() {
-        return diccionarioAplicacionEntityPK;
+    public DiccionarioAplicacionEntityPK getDiccionarioAplicacionPK() {
+        return diccionarioAplicacionPK;
     }
 
-    public void setDiccionarioAplicacionEntityPK(DiccionarioAplicacionEntityPK diccionarioAplicacionEntityPK) {
-        this.diccionarioAplicacionEntityPK = diccionarioAplicacionEntityPK;
+    public void setDiccionarioAplicacionPK(DiccionarioAplicacionEntityPK diccionarioAplicacionPK) {
+        this.diccionarioAplicacionPK = diccionarioAplicacionPK;
     }
 
-    public Set<EsquemaConfiguracionEntity> getEsquemaConfiguracionEntityCollection() {
-        return esquemaConfiguracionEntityCollection;
+    public Set<EsquemaConfiguracionEntity> getEsquemaConfiguracionCollection() {
+        return esquemaConfiguracionCollection;
     }
 
-    public void setEsquemaConfiguracionEntityCollection(Set<EsquemaConfiguracionEntity> esquemaConfiguracionEntityCollection) {
-        this.esquemaConfiguracionEntityCollection = esquemaConfiguracionEntityCollection;
+    public void setEsquemaConfiguracionCollection(Set<EsquemaConfiguracionEntity> esquemaConfiguracionCollection) {
+        this.esquemaConfiguracionCollection = esquemaConfiguracionCollection;
     }
 
-    public Set<DiccionarioAplicacionDetalleEntity> getDiccionarioAplicacionDetalleEntityCollection() {
-        return diccionarioAplicacionDetalleEntityCollection;
+    public Set<DiccionarioAplicacionDetalle> getDiccionarioAplicacionDetalleCollection() {
+        return diccionarioAplicacionDetalleCollection;
     }
 
-    public void setDiccionarioAplicacionDetalleEntityCollection(Set<DiccionarioAplicacionDetalleEntity> diccionarioAplicacionDetalleEntityCollection) {
-        this.diccionarioAplicacionDetalleEntityCollection = diccionarioAplicacionDetalleEntityCollection;
+    public void setDiccionarioAplicacionDetalleCollection(Set<DiccionarioAplicacionDetalle> diccionarioAplicacionDetalleCollection) {
+        this.diccionarioAplicacionDetalleCollection = diccionarioAplicacionDetalleCollection;
     }
 
-    public Set<AtributosRolEntity> getAtributosRolEntityCollection() {
-        return atributosRolEntityCollection;
+    public Set<AtributosRolEntity> getAtributosRolCollection() {
+        return atributosRolCollection;
     }
 
-    public void setAtributosRolEntityCollection(Set<AtributosRolEntity> atributosRolEntityCollection) {
-        this.atributosRolEntityCollection = atributosRolEntityCollection;
+    public void setAtributosRolCollection(Set<AtributosRolEntity> atributosRolCollection) {
+        this.atributosRolCollection = atributosRolCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (diccionarioAplicacionEntityPK != null ? diccionarioAplicacionEntityPK.hashCode() : 0);
+        hash += (diccionarioAplicacionPK != null ? diccionarioAplicacionPK.hashCode() : 0);
         return hash;
     }
 
@@ -91,7 +91,7 @@ public class DiccionarioAplicacionEntity implements Serializable {
             return false;
         }
         DiccionarioAplicacionEntity other = (DiccionarioAplicacionEntity) object;
-        if ((this.diccionarioAplicacionEntityPK == null && other.diccionarioAplicacionEntityPK != null) || (this.diccionarioAplicacionEntityPK != null && !this.diccionarioAplicacionEntityPK.equals(other.diccionarioAplicacionEntityPK))) {
+        if ((this.diccionarioAplicacionPK == null && other.diccionarioAplicacionPK != null) || (this.diccionarioAplicacionPK != null && !this.diccionarioAplicacionPK.equals(other.diccionarioAplicacionPK))) {
             return false;
         }
         return true;
@@ -99,7 +99,12 @@ public class DiccionarioAplicacionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.DiccionarioAplicacionEntity[diccionarioAplicacionEntityPK=" + diccionarioAplicacionEntityPK + "]";
+        return "org.g2p.tracker.model.entities.DiccionarioAplicacion[diccionarioAplicacionPK=" + diccionarioAplicacionPK + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return diccionarioAplicacionPK;
     }
 
 }

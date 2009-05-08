@@ -25,12 +25,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "esquema_configuracion")
-@NamedQueries({@NamedQuery(name = "EsquemaConfiguracionEntity.findAll", query = "SELECT e FROM EsquemaConfiguracionEntity e")})
-public class EsquemaConfiguracionEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "EsquemaConfiguracion.findAll", query = "SELECT e FROM EsquemaConfiguracion e")})
+public class EsquemaConfiguracionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +44,13 @@ public class EsquemaConfiguracionEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId", fetch = FetchType.EAGER)
-    private Set<ConfiguracionEntity> configuracionEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId", fetch = FetchType.LAZY)
+    private Set<ConfiguracionEntity> configuracionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId1", fetch = FetchType.LAZY)
+    private Set<ConfiguracionEntity> configuracionCollection1;
     @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private DiccionarioAplicacionEntity diccionarioAplicacionEntity;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private DiccionarioAplicacionEntity diccionarioAplicacion;
 
     public EsquemaConfiguracionEntity() {
     }
@@ -94,20 +96,28 @@ public class EsquemaConfiguracionEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public Set<ConfiguracionEntity> getConfiguracionEntityCollection() {
-        return configuracionEntityCollection;
+    public Set<ConfiguracionEntity> getConfiguracionCollection() {
+        return configuracionCollection;
     }
 
-    public void setConfiguracionEntityCollection(Set<ConfiguracionEntity> configuracionEntityCollection) {
-        this.configuracionEntityCollection = configuracionEntityCollection;
+    public void setConfiguracionCollection(Set<ConfiguracionEntity> configuracionCollection) {
+        this.configuracionCollection = configuracionCollection;
     }
 
-    public DiccionarioAplicacionEntity getDiccionarioAplicacionEntity() {
-        return diccionarioAplicacionEntity;
+    public Set<ConfiguracionEntity> getConfiguracionCollection1() {
+        return configuracionCollection1;
     }
 
-    public void setDiccionarioAplicacionEntity(DiccionarioAplicacionEntity diccionarioAplicacionEntity) {
-        this.diccionarioAplicacionEntity = diccionarioAplicacionEntity;
+    public void setConfiguracionCollection1(Set<ConfiguracionEntity> configuracionCollection1) {
+        this.configuracionCollection1 = configuracionCollection1;
+    }
+
+    public DiccionarioAplicacionEntity getDiccionarioAplicacion() {
+        return diccionarioAplicacion;
+    }
+
+    public void setDiccionarioAplicacion(DiccionarioAplicacionEntity diccionarioAplicacion) {
+        this.diccionarioAplicacion = diccionarioAplicacion;
     }
 
     @Override
@@ -132,7 +142,12 @@ public class EsquemaConfiguracionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.EsquemaConfiguracionEntity[esquemaConfiguracionId=" + esquemaConfiguracionId + "]";
+        return "org.g2p.tracker.model.entities.EsquemaConfiguracion[esquemaConfiguracionId=" + esquemaConfiguracionId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return esquemaConfiguracionId;
     }
 
 }

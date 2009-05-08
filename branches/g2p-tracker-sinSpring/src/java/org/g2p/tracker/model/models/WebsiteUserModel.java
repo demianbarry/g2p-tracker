@@ -13,7 +13,7 @@ import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
-import org.g2p.tracker.model.entities.WebsiteUserEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 
 /**
  *
@@ -26,7 +26,7 @@ public class WebsiteUserModel extends BaseModel {
     protected RolesModel rolesModel = new RolesModel();
 
     public WebsiteUserModel() {
-        super(WebsiteUserEntity.class);
+        super(WebsiteUsersEntity.class);
     }
 
     public void persistRol(boolean ownTx) throws Exception {

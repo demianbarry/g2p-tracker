@@ -22,12 +22,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "entidad_externa")
-@NamedQueries({@NamedQuery(name = "EntidadExternaEntity.findAll", query = "SELECT e FROM EntidadExternaEntity e")})
-public class EntidadExternaEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "EntidadExterna.findAll", query = "SELECT e FROM EntidadExterna e")})
+public class EntidadExternaEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,10 +49,14 @@ public class EntidadExternaEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "anulado")
     private char anulado;
-    @OneToMany(mappedBy = "entidadId", fetch = FetchType.EAGER)
-    private Set<AtributosEntidadEntity> atributosEntidadEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExternaEntity", fetch = FetchType.EAGER)
-    private Set<RolesEntidadEntity> rolesEntidadEntityCollection;
+    @OneToMany(mappedBy = "entidadId", fetch = FetchType.LAZY)
+    private Set<AtributosEntidadEntity> atributosEntidadCollection;
+    @OneToMany(mappedBy = "entidadId1", fetch = FetchType.LAZY)
+    private Set<AtributosEntidadEntity> atributosEntidadCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna", fetch = FetchType.LAZY)
+    private Set<RolesEntidadEntity> rolesEntidadCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna1", fetch = FetchType.LAZY)
+    private Set<RolesEntidadEntity> rolesEntidadCollection1;
 
     public EntidadExternaEntity() {
     }
@@ -124,20 +128,36 @@ public class EntidadExternaEntity implements Serializable {
         this.anulado = anulado;
     }
 
-    public Set<AtributosEntidadEntity> getAtributosEntidadEntityCollection() {
-        return atributosEntidadEntityCollection;
+    public Set<AtributosEntidadEntity> getAtributosEntidadCollection() {
+        return atributosEntidadCollection;
     }
 
-    public void setAtributosEntidadEntityCollection(Set<AtributosEntidadEntity> atributosEntidadEntityCollection) {
-        this.atributosEntidadEntityCollection = atributosEntidadEntityCollection;
+    public void setAtributosEntidadCollection(Set<AtributosEntidadEntity> atributosEntidadCollection) {
+        this.atributosEntidadCollection = atributosEntidadCollection;
     }
 
-    public Set<RolesEntidadEntity> getRolesEntidadEntityCollection() {
-        return rolesEntidadEntityCollection;
+    public Set<AtributosEntidadEntity> getAtributosEntidadCollection1() {
+        return atributosEntidadCollection1;
     }
 
-    public void setRolesEntidadEntityCollection(Set<RolesEntidadEntity> rolesEntidadEntityCollection) {
-        this.rolesEntidadEntityCollection = rolesEntidadEntityCollection;
+    public void setAtributosEntidadCollection1(Set<AtributosEntidadEntity> atributosEntidadCollection1) {
+        this.atributosEntidadCollection1 = atributosEntidadCollection1;
+    }
+
+    public Set<RolesEntidadEntity> getRolesEntidadCollection() {
+        return rolesEntidadCollection;
+    }
+
+    public void setRolesEntidadCollection(Set<RolesEntidadEntity> rolesEntidadCollection) {
+        this.rolesEntidadCollection = rolesEntidadCollection;
+    }
+
+    public Set<RolesEntidadEntity> getRolesEntidadCollection1() {
+        return rolesEntidadCollection1;
+    }
+
+    public void setRolesEntidadCollection1(Set<RolesEntidadEntity> rolesEntidadCollection1) {
+        this.rolesEntidadCollection1 = rolesEntidadCollection1;
     }
 
     @Override
@@ -162,7 +182,12 @@ public class EntidadExternaEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.EntidadExternaEntity[entidadId=" + entidadId + "]";
+        return "org.g2p.tracker.model.entities.EntidadExterna[entidadId=" + entidadId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return entidadId;
     }
 
 }

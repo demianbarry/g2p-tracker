@@ -20,12 +20,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "preferencias")
-@NamedQueries({@NamedQuery(name = "PreferenciasEntity.findAll", query = "SELECT p FROM PreferenciasEntity p")})
-public class PreferenciasEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "Preferencias.findAll", query = "SELECT p FROM Preferencias p")})
+public class PreferenciasEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -41,8 +41,10 @@ public class PreferenciasEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "default")
     private String default1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferenciasEntity", fetch = FetchType.EAGER)
-    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias", fetch = FetchType.LAZY)
+    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias1", fetch = FetchType.LAZY)
+    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection1;
 
     public PreferenciasEntity() {
     }
@@ -97,12 +99,20 @@ public class PreferenciasEntity implements Serializable {
         this.default1 = default1;
     }
 
-    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasEntityCollection() {
-        return usuarioPreferenciasEntityCollection;
+    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasCollection() {
+        return usuarioPreferenciasCollection;
     }
 
-    public void setUsuarioPreferenciasEntityCollection(Set<UsuarioPreferenciasEntity> usuarioPreferenciasEntityCollection) {
-        this.usuarioPreferenciasEntityCollection = usuarioPreferenciasEntityCollection;
+    public void setUsuarioPreferenciasCollection(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection) {
+        this.usuarioPreferenciasCollection = usuarioPreferenciasCollection;
+    }
+
+    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasCollection1() {
+        return usuarioPreferenciasCollection1;
+    }
+
+    public void setUsuarioPreferenciasCollection1(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection1) {
+        this.usuarioPreferenciasCollection1 = usuarioPreferenciasCollection1;
     }
 
     @Override
@@ -127,7 +137,12 @@ public class PreferenciasEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.PreferenciasEntity[preferenciaId=" + preferenciaId + "]";
+        return "org.g2p.tracker.model.entities.Preferencias[preferenciaId=" + preferenciaId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return preferenciaId;
     }
 
 }

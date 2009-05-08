@@ -20,17 +20,17 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "circuitos_estados")
-@NamedQueries({@NamedQuery(name = "CircuitosEstadosEntity.findAll", query = "SELECT c FROM CircuitosEstadosEntity c")})
-public class CircuitosEstadosEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "CircuitosEstados.findAll", query = "SELECT c FROM CircuitosEstados c")})
+public class CircuitosEstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "circuito")
-    private String circuito;
+    @Column(name = "circuito_id")
+    private Integer circuitoId;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
@@ -38,33 +38,35 @@ public class CircuitosEstadosEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuito", fetch = FetchType.EAGER)
-    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuito", fetch = FetchType.EAGER)
-    private Set<EstadosEntity> estadosEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuito", fetch = FetchType.EAGER)
-    private Set<AplicaCircuitoEntity> aplicaCircuitoEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuito", fetch = FetchType.EAGER)
-    private Set<AccionesAppsEntity> accionesAppsEntityCollection;
+    @Column(name = "circuito")
+    private String circuito;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    private Set<EstadosEntity> estadosCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    private Set<AplicaCircuitoEntity> aplicaCircuitoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    private Set<AccionesAppsEntity> accionesAppsCollection;
 
     public CircuitosEstadosEntity() {
     }
 
-    public CircuitosEstadosEntity(String circuito) {
-        this.circuito = circuito;
+    public CircuitosEstadosEntity(Integer circuitoId) {
+        this.circuitoId = circuitoId;
     }
 
-    public CircuitosEstadosEntity(String circuito, String nombre) {
-        this.circuito = circuito;
+    public CircuitosEstadosEntity(Integer circuitoId, String nombre) {
+        this.circuitoId = circuitoId;
         this.nombre = nombre;
     }
 
-    public String getCircuito() {
-        return circuito;
+    public Integer getCircuitoId() {
+        return circuitoId;
     }
 
-    public void setCircuito(String circuito) {
-        this.circuito = circuito;
+    public void setCircuitoId(Integer circuitoId) {
+        this.circuitoId = circuitoId;
     }
 
     public String getNombre() {
@@ -91,42 +93,50 @@ public class CircuitosEstadosEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosEntityCollection() {
-        return auditaEstadosCircuitosEntityCollection;
+    public String getCircuito() {
+        return circuito;
     }
 
-    public void setAuditaEstadosCircuitosEntityCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection) {
-        this.auditaEstadosCircuitosEntityCollection = auditaEstadosCircuitosEntityCollection;
+    public void setCircuito(String circuito) {
+        this.circuito = circuito;
     }
 
-    public Set<EstadosEntity> getEstadosEntityCollection() {
-        return estadosEntityCollection;
+    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosCollection() {
+        return auditaEstadosCircuitosCollection;
     }
 
-    public void setEstadosEntityCollection(Set<EstadosEntity> estadosEntityCollection) {
-        this.estadosEntityCollection = estadosEntityCollection;
+    public void setAuditaEstadosCircuitosCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection) {
+        this.auditaEstadosCircuitosCollection = auditaEstadosCircuitosCollection;
     }
 
-    public Set<AplicaCircuitoEntity> getAplicaCircuitoEntityCollection() {
-        return aplicaCircuitoEntityCollection;
+    public Set<EstadosEntity> getEstadosCollection() {
+        return estadosCollection;
     }
 
-    public void setAplicaCircuitoEntityCollection(Set<AplicaCircuitoEntity> aplicaCircuitoEntityCollection) {
-        this.aplicaCircuitoEntityCollection = aplicaCircuitoEntityCollection;
+    public void setEstadosCollection(Set<EstadosEntity> estadosCollection) {
+        this.estadosCollection = estadosCollection;
     }
 
-    public Set<AccionesAppsEntity> getAccionesAppsEntityCollection() {
-        return accionesAppsEntityCollection;
+    public Set<AplicaCircuitoEntity> getAplicaCircuitoCollection() {
+        return aplicaCircuitoCollection;
     }
 
-    public void setAccionesAppsEntityCollection(Set<AccionesAppsEntity> accionesAppsEntityCollection) {
-        this.accionesAppsEntityCollection = accionesAppsEntityCollection;
+    public void setAplicaCircuitoCollection(Set<AplicaCircuitoEntity> aplicaCircuitoCollection) {
+        this.aplicaCircuitoCollection = aplicaCircuitoCollection;
+    }
+
+    public Set<AccionesAppsEntity> getAccionesAppsCollection() {
+        return accionesAppsCollection;
+    }
+
+    public void setAccionesAppsCollection(Set<AccionesAppsEntity> accionesAppsCollection) {
+        this.accionesAppsCollection = accionesAppsCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (circuito != null ? circuito.hashCode() : 0);
+        hash += (circuitoId != null ? circuitoId.hashCode() : 0);
         return hash;
     }
 
@@ -137,7 +147,7 @@ public class CircuitosEstadosEntity implements Serializable {
             return false;
         }
         CircuitosEstadosEntity other = (CircuitosEstadosEntity) object;
-        if ((this.circuito == null && other.circuito != null) || (this.circuito != null && !this.circuito.equals(other.circuito))) {
+        if ((this.circuitoId == null && other.circuitoId != null) || (this.circuitoId != null && !this.circuitoId.equals(other.circuitoId))) {
             return false;
         }
         return true;
@@ -145,7 +155,12 @@ public class CircuitosEstadosEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.CircuitosEstadosEntity[circuito=" + circuito + "]";
+        return "org.g2p.tracker.model.entities.CircuitosEstados[circuitoId=" + circuitoId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return circuitoId;
     }
 
 }

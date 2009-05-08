@@ -19,15 +19,15 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "atributos_configuracion")
-@NamedQueries({@NamedQuery(name = "AtributosConfiguracionEntity.findAll", query = "SELECT a FROM AtributosConfiguracionEntity a")})
-public class AtributosConfiguracionEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "AtributosConfiguracion.findAll", query = "SELECT a FROM AtributosConfiguracion a")})
+public class AtributosConfiguracionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected AtributosConfiguracionEntityPK atributosConfiguracionEntityPK;
+    protected AtributosConfiguracionEntityPK atributosConfiguracionPK;
     @Basic(optional = false)
     @Column(name = "valor")
     private String valor;
@@ -35,35 +35,41 @@ public class AtributosConfiguracionEntity implements Serializable {
     @Column(name = "valor_hasta")
     private String valorHasta;
     @JoinColumn(name = "configuracion_id", referencedColumnName = "configuracion_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private ConfiguracionEntity configuracionEntity;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ConfiguracionEntity configuracion;
     @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private AtributosRolEntity atributosRolEntity;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private AtributosRolEntity atributosRol;
+    @JoinColumn(name = "configuracion_id", referencedColumnName = "configuracion_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ConfiguracionEntity configuracion1;
+    @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private AtributosRolEntity atributosRol1;
 
     public AtributosConfiguracionEntity() {
     }
 
-    public AtributosConfiguracionEntity(AtributosConfiguracionEntityPK atributosConfiguracionEntityPK) {
-        this.atributosConfiguracionEntityPK = atributosConfiguracionEntityPK;
+    public AtributosConfiguracionEntity(AtributosConfiguracionEntityPK atributosConfiguracionPK) {
+        this.atributosConfiguracionPK = atributosConfiguracionPK;
     }
 
-    public AtributosConfiguracionEntity(AtributosConfiguracionEntityPK atributosConfiguracionEntityPK, String valor, String valorHasta) {
-        this.atributosConfiguracionEntityPK = atributosConfiguracionEntityPK;
+    public AtributosConfiguracionEntity(AtributosConfiguracionEntityPK atributosConfiguracionPK, String valor, String valorHasta) {
+        this.atributosConfiguracionPK = atributosConfiguracionPK;
         this.valor = valor;
         this.valorHasta = valorHasta;
     }
 
     public AtributosConfiguracionEntity(int configuracionId, int atributoId) {
-        this.atributosConfiguracionEntityPK = new AtributosConfiguracionEntityPK(configuracionId, atributoId);
+        this.atributosConfiguracionPK = new AtributosConfiguracionEntityPK(configuracionId, atributoId);
     }
 
-    public AtributosConfiguracionEntityPK getAtributosConfiguracionEntityPK() {
-        return atributosConfiguracionEntityPK;
+    public AtributosConfiguracionEntityPK getAtributosConfiguracionPK() {
+        return atributosConfiguracionPK;
     }
 
-    public void setAtributosConfiguracionEntityPK(AtributosConfiguracionEntityPK atributosConfiguracionEntityPK) {
-        this.atributosConfiguracionEntityPK = atributosConfiguracionEntityPK;
+    public void setAtributosConfiguracionPK(AtributosConfiguracionEntityPK atributosConfiguracionPK) {
+        this.atributosConfiguracionPK = atributosConfiguracionPK;
     }
 
     public String getValor() {
@@ -82,26 +88,42 @@ public class AtributosConfiguracionEntity implements Serializable {
         this.valorHasta = valorHasta;
     }
 
-    public ConfiguracionEntity getConfiguracionEntity() {
-        return configuracionEntity;
+    public ConfiguracionEntity getConfiguracion() {
+        return configuracion;
     }
 
-    public void setConfiguracionEntity(ConfiguracionEntity configuracionEntity) {
-        this.configuracionEntity = configuracionEntity;
+    public void setConfiguracion(ConfiguracionEntity configuracion) {
+        this.configuracion = configuracion;
     }
 
-    public AtributosRolEntity getAtributosRolEntity() {
-        return atributosRolEntity;
+    public AtributosRolEntity getAtributosRol() {
+        return atributosRol;
     }
 
-    public void setAtributosRolEntity(AtributosRolEntity atributosRolEntity) {
-        this.atributosRolEntity = atributosRolEntity;
+    public void setAtributosRol(AtributosRolEntity atributosRol) {
+        this.atributosRol = atributosRol;
+    }
+
+    public ConfiguracionEntity getConfiguracion1() {
+        return configuracion1;
+    }
+
+    public void setConfiguracion1(ConfiguracionEntity configuracion1) {
+        this.configuracion1 = configuracion1;
+    }
+
+    public AtributosRolEntity getAtributosRol1() {
+        return atributosRol1;
+    }
+
+    public void setAtributosRol1(AtributosRolEntity atributosRol1) {
+        this.atributosRol1 = atributosRol1;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (atributosConfiguracionEntityPK != null ? atributosConfiguracionEntityPK.hashCode() : 0);
+        hash += (atributosConfiguracionPK != null ? atributosConfiguracionPK.hashCode() : 0);
         return hash;
     }
 
@@ -112,7 +134,7 @@ public class AtributosConfiguracionEntity implements Serializable {
             return false;
         }
         AtributosConfiguracionEntity other = (AtributosConfiguracionEntity) object;
-        if ((this.atributosConfiguracionEntityPK == null && other.atributosConfiguracionEntityPK != null) || (this.atributosConfiguracionEntityPK != null && !this.atributosConfiguracionEntityPK.equals(other.atributosConfiguracionEntityPK))) {
+        if ((this.atributosConfiguracionPK == null && other.atributosConfiguracionPK != null) || (this.atributosConfiguracionPK != null && !this.atributosConfiguracionPK.equals(other.atributosConfiguracionPK))) {
             return false;
         }
         return true;
@@ -120,7 +142,12 @@ public class AtributosConfiguracionEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AtributosConfiguracionEntity[atributosConfiguracionEntityPK=" + atributosConfiguracionEntityPK + "]";
+        return "org.g2p.tracker.model.entities.AtributosConfiguracion[atributosConfiguracionPK=" + atributosConfiguracionPK + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return atributosConfiguracionPK;
     }
 
 }

@@ -15,28 +15,28 @@ import javax.persistence.Embeddable;
  * @author nacho
  */
 @Embeddable
-public class UsuarioRolesEntityPK implements Serializable {
+public class WorkersPerTracksEntityPK implements Serializable {
     @Basic(optional = false)
-    @Column(name = "rol_id")
-    private int rolId;
+    @Column(name = "track_id")
+    private int trackId;
     @Basic(optional = false)
     @Column(name = "user_id")
     private int userId;
 
-    public UsuarioRolesEntityPK() {
+    public WorkersPerTracksEntityPK() {
     }
 
-    public UsuarioRolesEntityPK(int rolId, int userId) {
-        this.rolId = rolId;
+    public WorkersPerTracksEntityPK(int trackId, int userId) {
+        this.trackId = trackId;
         this.userId = userId;
     }
 
-    public int getRolId() {
-        return rolId;
+    public int getTrackId() {
+        return trackId;
     }
 
-    public void setRolId(int rolId) {
-        this.rolId = rolId;
+    public void setTrackId(int trackId) {
+        this.trackId = trackId;
     }
 
     public int getUserId() {
@@ -50,7 +50,7 @@ public class UsuarioRolesEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) rolId;
+        hash += (int) trackId;
         hash += (int) userId;
         return hash;
     }
@@ -58,11 +58,11 @@ public class UsuarioRolesEntityPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UsuarioRolesEntityPK)) {
+        if (!(object instanceof WorkersPerTracksEntityPK)) {
             return false;
         }
-        UsuarioRolesEntityPK other = (UsuarioRolesEntityPK) object;
-        if (this.rolId != other.rolId) {
+        WorkersPerTracksEntityPK other = (WorkersPerTracksEntityPK) object;
+        if (this.trackId != other.trackId) {
             return false;
         }
         if (this.userId != other.userId) {
@@ -73,7 +73,7 @@ public class UsuarioRolesEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.UsuarioRolesPK[rolId=" + rolId + ", userId=" + userId + "]";
+        return "org.g2p.tracker.model.entities.WorkersPerTracksPK[trackId=" + trackId + ", userId=" + userId + "]";
     }
 
 }

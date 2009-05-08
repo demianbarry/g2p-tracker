@@ -6,7 +6,6 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,17 +16,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "clase_lov_atributo")
-@NamedQueries({@NamedQuery(name = "ClaseLovAtributoEntity.findAll", query = "SELECT c FROM ClaseLovAtributoEntity c")})
-public class ClaseLovAtributoEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "ClaseLovAtributo.findAll", query = "SELECT c FROM ClaseLovAtributo c")})
+public class ClaseLovAtributoEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +40,10 @@ public class ClaseLovAtributoEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "claseLovAtributoEntity", fetch = FetchType.EAGER)
-    private Set<LovAtributoEntity> lovAtributoEntityCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo", fetch = FetchType.LAZY)
+    private LovAtributoEntity lovAtributo;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo1", fetch = FetchType.LAZY)
+    private LovAtributoEntity lovAtributo1;
 
     public ClaseLovAtributoEntity() {
     }
@@ -88,12 +89,20 @@ public class ClaseLovAtributoEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public Set<LovAtributoEntity> getLovAtributoEntityCollection() {
-        return lovAtributoEntityCollection;
+    public LovAtributoEntity getLovAtributo() {
+        return lovAtributo;
     }
 
-    public void setLovAtributoEntityCollection(Set<LovAtributoEntity> lovAtributoEntityCollection) {
-        this.lovAtributoEntityCollection = lovAtributoEntityCollection;
+    public void setLovAtributo(LovAtributoEntity lovAtributo) {
+        this.lovAtributo = lovAtributo;
+    }
+
+    public LovAtributoEntity getLovAtributo1() {
+        return lovAtributo1;
+    }
+
+    public void setLovAtributo1(LovAtributoEntity lovAtributo1) {
+        this.lovAtributo1 = lovAtributo1;
     }
 
     @Override
@@ -118,7 +127,12 @@ public class ClaseLovAtributoEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.ClaseLovAtributoEntity[claseLovAtributoId=" + claseLovAtributoId + "]";
+        return "org.g2p.tracker.model.entities.ClaseLovAtributo[claseLovAtributoId=" + claseLovAtributoId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return claseLovAtributoId;
     }
 
 }

@@ -6,36 +6,31 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "usuario_roles")
-@NamedQueries({    
-    @NamedQuery(name = "UsuarioRolesEntity.findByUserId", query = "SELECT u FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId"),    
-    @NamedQuery(name = "UsuarioRolesEntity.findByRolIdComplement", query = "SELECT r FROM RolesEntity r WHERE r.rolId NOT IN (SELECT u.usuarioRolesEntityPK.rolId FROM UsuarioRolesEntity u WHERE u.usuarioRolesEntityPK.userId = :userId) OR r.rolId = :rolId")})
-
+@NamedQueries({@NamedQuery(name = "UsuarioRoles.findAll", query = "SELECT u FROM UsuarioRoles u")})
 public class UsuarioRolesEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected UsuarioRolesEntityPK usuarioRolesEntityPK;
+    protected UsuarioRolesEntityPK usuarioRolesPK;
+    @Basic(optional = false)
+    @Column(name = "anulado")
+    private char anulado;
     @Basic(optional = false)
     @Column(name = "desde")
     @Temporal(TemporalType.DATE)
@@ -43,42 +38,41 @@ public class UsuarioRolesEntity extends BaseEntity implements Serializable {
     @Column(name = "hasta")
     @Temporal(TemporalType.DATE)
     private Date hasta;
-    @Basic(optional = false)
-    @Column(name = "anulado")
-    private char anulado;
-    @JoinColumn(name = "rol_id", referencedColumnName = "rol_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private RolesEntity rolesEntity;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private WebsiteUserEntity websiteUserEntity;
-    @Version
     @Column(name = "OBJ_VERSION")
-    private Timestamp version;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date objVersion;
 
     public UsuarioRolesEntity() {
     }
 
-    public UsuarioRolesEntity(UsuarioRolesEntityPK usuarioRolesEntityPK) {
-        this.usuarioRolesEntityPK = usuarioRolesEntityPK;
+    public UsuarioRolesEntity(UsuarioRolesEntityPK usuarioRolesPK) {
+        this.usuarioRolesPK = usuarioRolesPK;
     }
 
-    public UsuarioRolesEntity(UsuarioRolesEntityPK usuarioRolesEntityPK, Date desde, char anulado) {
-        this.usuarioRolesEntityPK = usuarioRolesEntityPK;
-        this.desde = desde;
+    public UsuarioRolesEntity(UsuarioRolesEntityPK usuarioRolesPK, char anulado, Date desde) {
+        this.usuarioRolesPK = usuarioRolesPK;
         this.anulado = anulado;
+        this.desde = desde;
     }
 
-    public UsuarioRolesEntity(int userId, int rolId) {
-        this.usuarioRolesEntityPK = new UsuarioRolesEntityPK(userId, rolId);
+    public UsuarioRolesEntity(int rolId, int userId) {
+        this.usuarioRolesPK = new UsuarioRolesEntityPK(rolId, userId);
     }
 
     public UsuarioRolesEntityPK getUsuarioRolesEntityPK() {
-        return usuarioRolesEntityPK;
+        return usuarioRolesPK;
     }
 
-    public void setUsuarioRolesEntityPK(UsuarioRolesEntityPK usuarioRolesEntityPK) {
-        this.usuarioRolesEntityPK = usuarioRolesEntityPK;
+    public void setUsuarioRolesEntityPK(UsuarioRolesEntityPK usuarioRolesPK) {
+        this.usuarioRolesPK = usuarioRolesPK;
+    }
+
+    public char getAnulado() {
+        return anulado;
+    }
+
+    public void setAnulado(char anulado) {
+        this.anulado = anulado;
     }
 
     public Date getDesde() {
@@ -97,34 +91,18 @@ public class UsuarioRolesEntity extends BaseEntity implements Serializable {
         this.hasta = hasta;
     }
 
-    public char getAnulado() {
-        return anulado;
+    public Date getObjVersion() {
+        return objVersion;
     }
 
-    public void setAnulado(char anulado) {
-        this.anulado = anulado;
-    }
-
-    public RolesEntity getRolesEntity() {
-        return rolesEntity;
-    }
-
-    public void setRolesEntity(RolesEntity rolesEntity) {
-        this.rolesEntity = rolesEntity;
-    }
-
-    public WebsiteUserEntity getWebsiteUserEntity() {
-        return websiteUserEntity;
-    }
-
-    public void setWebsiteUserEntity(WebsiteUserEntity websiteUserEntity) {
-        this.websiteUserEntity = websiteUserEntity;
+    public void setObjVersion(Date objVersion) {
+        this.objVersion = objVersion;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (usuarioRolesEntityPK != null ? usuarioRolesEntityPK.hashCode() : 0);
+        hash += (usuarioRolesPK != null ? usuarioRolesPK.hashCode() : 0);
         return hash;
     }
 
@@ -135,7 +113,7 @@ public class UsuarioRolesEntity extends BaseEntity implements Serializable {
             return false;
         }
         UsuarioRolesEntity other = (UsuarioRolesEntity) object;
-        if ((this.usuarioRolesEntityPK == null && other.usuarioRolesEntityPK != null) || (this.usuarioRolesEntityPK != null && !this.usuarioRolesEntityPK.equals(other.usuarioRolesEntityPK))) {
+        if ((this.usuarioRolesPK == null && other.usuarioRolesPK != null) || (this.usuarioRolesPK != null && !this.usuarioRolesPK.equals(other.usuarioRolesPK))) {
             return false;
         }
         return true;
@@ -143,12 +121,12 @@ public class UsuarioRolesEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.entities.UsuarioRolesEntity[usuarioRolesEntityPK=" + usuarioRolesEntityPK + "]";
+        return "org.g2p.tracker.model.entities.UsuarioRoles[usuarioRolesPK=" + usuarioRolesPK + "]";
     }
 
     @Override
     public Object getPK() {
-        return getUsuarioRolesEntityPK();
+        return usuarioRolesPK;
     }
 
 }

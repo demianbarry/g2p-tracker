@@ -28,12 +28,12 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "atributos_rol")
-@NamedQueries({@NamedQuery(name = "AtributosRolEntity.findAll", query = "SELECT a FROM AtributosRolEntity a")})
-public class AtributosRolEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "AtributosRol.findAll", query = "SELECT a FROM AtributosRol a")})
+public class AtributosRolEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,19 +71,29 @@ public class AtributosRolEntity implements Serializable {
     private String validador;
     @Column(name = "clase_lov_atributo_id")
     private Integer claseLovAtributoId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId", fetch = FetchType.EAGER)
-    private Set<AtributosEntidadEntity> atributosEntidadEntityCollection;
-    @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(fetch = FetchType.EAGER)
-    private DiccionarioAplicacionEntity diccionarioAplicacionEntity;
-    @JoinColumn(name = "rol", referencedColumnName = "rol")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private RolEntidadEntity rol;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId", fetch = FetchType.LAZY)
+    private Set<AtributosEntidadEntity> atributosEntidadCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId1", fetch = FetchType.LAZY)
+    private Set<AtributosEntidadEntity> atributosEntidadCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol", fetch = FetchType.LAZY)
+    private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol1", fetch = FetchType.LAZY)
+    private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection1;
     @JoinColumn(name = "clase_atributo_rol_id", referencedColumnName = "clase_atributo_rol_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private ClaseAtributoRolEntity claseAtributoRolId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRolEntity", fetch = FetchType.EAGER)
-    private Set<AtributosConfiguracionEntity> atributosConfiguracionEntityCollection;
+    @JoinColumn(name = "rol", referencedColumnName = "rol")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RolEntidadEntity rol;
+    @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DiccionarioAplicacionEntity diccionarioAplicacion;
+    @JoinColumn(name = "rol", referencedColumnName = "rol")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RolEntidadEntity rol1;
+    @JoinColumn(name = "clase_atributo_rol_id", referencedColumnName = "clase_atributo_rol_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ClaseAtributoRolEntity claseAtributoRolId1;
 
     public AtributosRolEntity() {
     }
@@ -205,28 +215,36 @@ public class AtributosRolEntity implements Serializable {
         this.claseLovAtributoId = claseLovAtributoId;
     }
 
-    public Set<AtributosEntidadEntity> getAtributosEntidadEntityCollection() {
-        return atributosEntidadEntityCollection;
+    public Set<AtributosEntidadEntity> getAtributosEntidadCollection() {
+        return atributosEntidadCollection;
     }
 
-    public void setAtributosEntidadEntityCollection(Set<AtributosEntidadEntity> atributosEntidadEntityCollection) {
-        this.atributosEntidadEntityCollection = atributosEntidadEntityCollection;
+    public void setAtributosEntidadCollection(Set<AtributosEntidadEntity> atributosEntidadCollection) {
+        this.atributosEntidadCollection = atributosEntidadCollection;
     }
 
-    public DiccionarioAplicacionEntity getDiccionarioAplicacionEntity() {
-        return diccionarioAplicacionEntity;
+    public Set<AtributosEntidadEntity> getAtributosEntidadCollection1() {
+        return atributosEntidadCollection1;
     }
 
-    public void setDiccionarioAplicacionEntity(DiccionarioAplicacionEntity diccionarioAplicacionEntity) {
-        this.diccionarioAplicacionEntity = diccionarioAplicacionEntity;
+    public void setAtributosEntidadCollection1(Set<AtributosEntidadEntity> atributosEntidadCollection1) {
+        this.atributosEntidadCollection1 = atributosEntidadCollection1;
     }
 
-    public RolEntidadEntity getRol() {
-        return rol;
+    public Set<AtributosConfiguracionEntity> getAtributosConfiguracionCollection() {
+        return atributosConfiguracionCollection;
     }
 
-    public void setRol(RolEntidadEntity rol) {
-        this.rol = rol;
+    public void setAtributosConfiguracionCollection(Set<AtributosConfiguracionEntity> atributosConfiguracionCollection) {
+        this.atributosConfiguracionCollection = atributosConfiguracionCollection;
+    }
+
+    public Set<AtributosConfiguracionEntity> getAtributosConfiguracionCollection1() {
+        return atributosConfiguracionCollection1;
+    }
+
+    public void setAtributosConfiguracionCollection1(Set<AtributosConfiguracionEntity> atributosConfiguracionCollection1) {
+        this.atributosConfiguracionCollection1 = atributosConfiguracionCollection1;
     }
 
     public ClaseAtributoRolEntity getClaseAtributoRolId() {
@@ -237,12 +255,36 @@ public class AtributosRolEntity implements Serializable {
         this.claseAtributoRolId = claseAtributoRolId;
     }
 
-    public Set<AtributosConfiguracionEntity> getAtributosConfiguracionEntityCollection() {
-        return atributosConfiguracionEntityCollection;
+    public RolEntidadEntity getRol() {
+        return rol;
     }
 
-    public void setAtributosConfiguracionEntityCollection(Set<AtributosConfiguracionEntity> atributosConfiguracionEntityCollection) {
-        this.atributosConfiguracionEntityCollection = atributosConfiguracionEntityCollection;
+    public void setRol(RolEntidadEntity rol) {
+        this.rol = rol;
+    }
+
+    public DiccionarioAplicacionEntity getDiccionarioAplicacion() {
+        return diccionarioAplicacion;
+    }
+
+    public void setDiccionarioAplicacion(DiccionarioAplicacionEntity diccionarioAplicacion) {
+        this.diccionarioAplicacion = diccionarioAplicacion;
+    }
+
+    public RolEntidadEntity getRol1() {
+        return rol1;
+    }
+
+    public void setRol1(RolEntidadEntity rol1) {
+        this.rol1 = rol1;
+    }
+
+    public ClaseAtributoRolEntity getClaseAtributoRolId1() {
+        return claseAtributoRolId1;
+    }
+
+    public void setClaseAtributoRolId1(ClaseAtributoRolEntity claseAtributoRolId1) {
+        this.claseAtributoRolId1 = claseAtributoRolId1;
     }
 
     @Override
@@ -267,7 +309,12 @@ public class AtributosRolEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AtributosRolEntity[atributoId=" + atributoId + "]";
+        return "org.g2p.tracker.model.entities.AtributosRol[atributoId=" + atributoId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return atributoId;
     }
 
 }

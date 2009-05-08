@@ -24,13 +24,18 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Entity
 @Table(name = "atributos_entidad")
-@NamedQueries({@NamedQuery(name = "AtributosEntidadEntity.findAll", query = "SELECT a FROM AtributosEntidadEntity a")})
-public class AtributosEntidadEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "AtributosEntidad.findAll", query = "SELECT a FROM AtributosEntidad a")})
+public class AtributosEntidadEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "atributo_entidad_id")
+    private Integer atributoEntidadId;
     @Column(name = "valor")
     private String valor;
     @Column(name = "valor_entero")
@@ -42,28 +47,37 @@ public class AtributosEntidadEntity implements Serializable {
     private Date valorFecha;
     @Column(name = "valor_logico")
     private Character valorLogico;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "atributo_entidad_id")
-    private Integer atributoEntidadId;
     @Column(name = "objeto_id")
     private Integer objetoId;
     @Column(name = "tipo_objeto")
     private String tipoObjeto;
     @Column(name = "nombre_objeto")
     private String nombreObjeto;
-    @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private AtributosRolEntity atributoId;
     @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private EntidadExternaEntity entidadId;
+    @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private AtributosRolEntity atributoId;
+    @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private AtributosRolEntity atributoId1;
+    @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private EntidadExternaEntity entidadId1;
 
     public AtributosEntidadEntity() {
     }
 
     public AtributosEntidadEntity(Integer atributoEntidadId) {
+        this.atributoEntidadId = atributoEntidadId;
+    }
+
+    public Integer getAtributoEntidadId() {
+        return atributoEntidadId;
+    }
+
+    public void setAtributoEntidadId(Integer atributoEntidadId) {
         this.atributoEntidadId = atributoEntidadId;
     }
 
@@ -107,14 +121,6 @@ public class AtributosEntidadEntity implements Serializable {
         this.valorLogico = valorLogico;
     }
 
-    public Integer getAtributoEntidadId() {
-        return atributoEntidadId;
-    }
-
-    public void setAtributoEntidadId(Integer atributoEntidadId) {
-        this.atributoEntidadId = atributoEntidadId;
-    }
-
     public Integer getObjetoId() {
         return objetoId;
     }
@@ -139,6 +145,14 @@ public class AtributosEntidadEntity implements Serializable {
         this.nombreObjeto = nombreObjeto;
     }
 
+    public EntidadExternaEntity getEntidadId() {
+        return entidadId;
+    }
+
+    public void setEntidadId(EntidadExternaEntity entidadId) {
+        this.entidadId = entidadId;
+    }
+
     public AtributosRolEntity getAtributoId() {
         return atributoId;
     }
@@ -147,12 +161,20 @@ public class AtributosEntidadEntity implements Serializable {
         this.atributoId = atributoId;
     }
 
-    public EntidadExternaEntity getEntidadId() {
-        return entidadId;
+    public AtributosRolEntity getAtributoId1() {
+        return atributoId1;
     }
 
-    public void setEntidadId(EntidadExternaEntity entidadId) {
-        this.entidadId = entidadId;
+    public void setAtributoId1(AtributosRolEntity atributoId1) {
+        this.atributoId1 = atributoId1;
+    }
+
+    public EntidadExternaEntity getEntidadId1() {
+        return entidadId1;
+    }
+
+    public void setEntidadId1(EntidadExternaEntity entidadId1) {
+        this.entidadId1 = entidadId1;
     }
 
     @Override
@@ -177,7 +199,12 @@ public class AtributosEntidadEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AtributosEntidadEntity[atributoEntidadId=" + atributoEntidadId + "]";
+        return "org.g2p.tracker.model.entities.AtributosEntidad[atributoEntidadId=" + atributoEntidadId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return atributoEntidadId;
     }
 
 }

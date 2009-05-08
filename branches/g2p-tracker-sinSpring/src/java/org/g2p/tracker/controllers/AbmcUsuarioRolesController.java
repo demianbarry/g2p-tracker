@@ -7,10 +7,9 @@ package org.g2p.tracker.controllers;
 import java.util.Collection;
 import java.util.List;
 
-import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntity;
 import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
-import org.g2p.tracker.model.entities.WebsiteUserEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.UsuarioRolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
@@ -70,7 +69,7 @@ public class AbmcUsuarioRolesController extends BaseController {
         final List usersListModel = (List) usersList.getModel();
 
         if (!usersListModel.isEmpty()) {
-            websiteUserModel.setSelected((WebsiteUserEntity) usersListModel.get(0));
+            websiteUserModel.setSelected((WebsiteUsersEntity) usersListModel.get(0));
             binder.loadComponent(usuarioRolesList);
         }
 
@@ -164,7 +163,7 @@ public class AbmcUsuarioRolesController extends BaseController {
             _create = true;
             websiteUserModel.setRolSelected(new UsuarioRolesEntity());
             websiteUserModel.getRolSelected().setUsuarioRolesEntityPK(new UsuarioRolesEntityPK());
-            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(((WebsiteUserEntity) websiteUserModel.getSelected()).getUserId());
+            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(((WebsiteUsersEntity) websiteUserModel.getSelected()).getUserId());
             //switch to edit mode
             setEditMode(true);            
         }
@@ -179,7 +178,7 @@ public class AbmcUsuarioRolesController extends BaseController {
             //save into bean
             binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
 
-            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setRolId(websiteUserModel.getRolSelected().getRolesEntity().getRolId());
+            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setRolId(websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().getRolId());
 
             try {
                 //store into db

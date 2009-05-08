@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Administrador
+ * @author nacho
  */
 @Embeddable
 public class RolesEntidadEntityPK implements Serializable {
@@ -20,12 +20,15 @@ public class RolesEntidadEntityPK implements Serializable {
     @Column(name = "entidad_id")
     private int entidadId;
     @Basic(optional = false)
-    @Column(name = "rol")
-    private String rol;
+    @Column(name = "rol_id")
+    private String rolId;
 
-    public RolesEntidadEntityPK(int entidadId, String rol) {
+    public RolesEntidadEntityPK() {
+    }
+
+    public RolesEntidadEntityPK(int entidadId, String rolId) {
         this.entidadId = entidadId;
-        this.rol = rol;
+        this.rolId = rolId;
     }
 
     public int getEntidadId() {
@@ -36,19 +39,19 @@ public class RolesEntidadEntityPK implements Serializable {
         this.entidadId = entidadId;
     }
 
-    public String getRol() {
-        return rol;
+    public String getRolId() {
+        return rolId;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setRolId(String rolId) {
+        this.rolId = rolId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) entidadId;
-        hash += (rol != null ? rol.hashCode() : 0);
+        hash += (rolId != null ? rolId.hashCode() : 0);
         return hash;
     }
 
@@ -62,7 +65,7 @@ public class RolesEntidadEntityPK implements Serializable {
         if (this.entidadId != other.entidadId) {
             return false;
         }
-        if ((this.rol == null && other.rol != null) || (this.rol != null && !this.rol.equals(other.rol))) {
+        if ((this.rolId == null && other.rolId != null) || (this.rolId != null && !this.rolId.equals(other.rolId))) {
             return false;
         }
         return true;
@@ -70,7 +73,7 @@ public class RolesEntidadEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.RolesEntidadEntityPK[entidadId=" + entidadId + ", rol=" + rol + "]";
+        return "org.g2p.tracker.model.entities.RolesEntidadPK[entidadId=" + entidadId + ", rolId=" + rolId + "]";
     }
 
 }
