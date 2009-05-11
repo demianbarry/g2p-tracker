@@ -25,11 +25,11 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Entity
 @Table(name = "roles")
-@NamedQueries({@NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r")})
+@NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r")})
 public class RolesEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,12 +47,10 @@ public class RolesEntity extends BaseEntity implements Serializable {
     @Column(name = "OBJ_VERSION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date objVersion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection;
-    @OneToMany(mappedBy = "rolId", fetch = FetchType.LAZY)
-    private Set<AccesoMenuEntity> accesoMenuCollection;
-    @OneToMany(mappedBy = "rolId1", fetch = FetchType.LAZY)
-    private Set<AccesoMenuEntity> accesoMenuCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roles", fetch = FetchType.EAGER)
+    private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
+    @OneToMany(mappedBy = "rolId", fetch = FetchType.EAGER)
+    private Set<AccesoMenuEntity> accesoMenuEntityCollection;
 
     public RolesEntity() {
     }
@@ -106,28 +104,20 @@ public class RolesEntity extends BaseEntity implements Serializable {
         this.objVersion = objVersion;
     }
 
-    public Set<RolesPerWebsiteUsersEntity> getRolesPerWebsiteUsersCollection() {
-        return rolesPerWebsiteUsersCollection;
+    public Set<RolesPerWebsiteUsersEntity> getRolesPerWebsiteUsersEntityCollection() {
+        return rolesPerWebsiteUsersEntityCollection;
     }
 
-    public void setRolesPerWebsiteUsersCollection(Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection) {
-        this.rolesPerWebsiteUsersCollection = rolesPerWebsiteUsersCollection;
+    public void setRolesPerWebsiteUsersEntityCollection(Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection) {
+        this.rolesPerWebsiteUsersEntityCollection = rolesPerWebsiteUsersEntityCollection;
     }
 
-    public Set<AccesoMenuEntity> getAccesoMenuCollection() {
-        return accesoMenuCollection;
+    public Set<AccesoMenuEntity> getAccesoMenuEntityCollection() {
+        return accesoMenuEntityCollection;
     }
 
-    public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
-        this.accesoMenuCollection = accesoMenuCollection;
-    }
-
-    public Set<AccesoMenuEntity> getAccesoMenuCollection1() {
-        return accesoMenuCollection1;
-    }
-
-    public void setAccesoMenuCollection1(Set<AccesoMenuEntity> accesoMenuCollection1) {
-        this.accesoMenuCollection1 = accesoMenuCollection1;
+    public void setAccesoMenuEntityCollection(Set<AccesoMenuEntity> accesoMenuEntityCollection) {
+        this.accesoMenuEntityCollection = accesoMenuEntityCollection;
     }
 
     @Override
@@ -152,12 +142,13 @@ public class RolesEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.Roles[rolId=" + rolId + "]";
+        return "org.g2p.tracker.model.entities.RolesEntity[rolId=" + rolId + "]";
     }
 
     @Override
     public Object getPK() {
-        return rolId;
+        return getRolId();
     }
+
 
 }
