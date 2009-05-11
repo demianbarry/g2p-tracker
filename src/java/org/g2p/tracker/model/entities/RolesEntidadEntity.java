@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "roles_entidad")
-@NamedQueries({@NamedQuery(name = "RolesEntidad.findAll", query = "SELECT r FROM RolesEntidad r")})
+@NamedQueries({@NamedQuery(name = "RolesEntidadEntity.findAll", query = "SELECT r FROM RolesEntidadEntity r")})
 public class RolesEntidadEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -47,17 +47,11 @@ public class RolesEntidadEntity extends BaseEntity implements Serializable {
     @Column(name = "rol")
     private String rol;
     @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EntidadExternaEntity entidadExterna;
     @JoinColumn(name = "rol_id", referencedColumnName = "rol", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private RolEntidadEntity rolEntidad;
-    @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private EntidadExternaEntity entidadExterna1;
-    @JoinColumn(name = "rol_id", referencedColumnName = "rol", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private RolEntidadEntity rolEntidad1;
 
     public RolesEntidadEntity() {
     }
@@ -139,22 +133,6 @@ public class RolesEntidadEntity extends BaseEntity implements Serializable {
 
     public void setRolEntidad(RolEntidadEntity rolEntidad) {
         this.rolEntidad = rolEntidad;
-    }
-
-    public EntidadExternaEntity getEntidadExterna1() {
-        return entidadExterna1;
-    }
-
-    public void setEntidadExterna1(EntidadExternaEntity entidadExterna1) {
-        this.entidadExterna1 = entidadExterna1;
-    }
-
-    public RolEntidadEntity getRolEntidad1() {
-        return rolEntidad1;
-    }
-
-    public void setRolEntidad1(RolEntidadEntity rolEntidad1) {
-        this.rolEntidad1 = rolEntidad1;
     }
 
     @Override

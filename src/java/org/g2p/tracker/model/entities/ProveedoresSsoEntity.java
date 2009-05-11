@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "proveedores_sso")
-@NamedQueries({@NamedQuery(name = "ProveedoresSso.findAll", query = "SELECT p FROM ProveedoresSso p")})
+@NamedQueries({@NamedQuery(name = "ProveedoresSsoEntity.findAll", query = "SELECT p FROM ProveedoresSsoEntity p")})
 public class ProveedoresSsoEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
