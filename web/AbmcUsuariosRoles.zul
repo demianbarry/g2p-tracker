@@ -44,8 +44,8 @@
                             <listheader id="rolDescripcionSort" label="Descripcion" sort="auto(descripcion)" width="60%"/>
                         </listhead>
                         <listitem self="@{each=x1}">
-                            <listcell label="@{x1.rolesEntity.nombre}"/>
-                            <listcell label="@{x1.rolesEntity.descripcion}"/>
+                            <listcell label="@{x1.roles.nombre}"/>
+                            <listcell label="@{x1.roles.descripcion}"/>
                         </listitem>
                     </listbox>
                 </center>
@@ -69,7 +69,7 @@
                                         <label value="@{abmcUsuarioRolesWin.websiteUserModel.selected.nombreCompleto}"/>
                                     </row>
                                     <row>Rol ID:
-                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.rolesEntity.nombre}"/>
+                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.roles.nombre}"/>
                                     </row>
                                     <row>Desde:
                                         <datebox value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.desde}" readonly="true" buttonVisible="false" />
@@ -104,12 +104,12 @@
                                         <combobox id="usuarioRolIdCombobox"
                                                         model="@{abmcUsuarioRolesWin.websiteUserModel.rolesDisponibles}"
                                                         autodrop="true"
-                                                        selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.rolesEntity}"
+                                                        selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.roles}"
                                                         disabled="@{abmcUsuarioRolesWin._edit}">
                                             <comboitem
                                                             self="@{each=rol}"
                                                             label="@{rol.nombre}"
-                                                            value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.usuarioRolesEntityPK.rolId}"
+                                                            value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.rolesPerWebsiteUsersPK.rolId}"
                                                             description="@{rol.descripcion}" />
                                         </combobox>
                                     </row>

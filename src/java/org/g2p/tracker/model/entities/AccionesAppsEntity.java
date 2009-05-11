@@ -28,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "acciones_apps")
-@NamedQueries({@NamedQuery(name = "AccionesApps.findAll", query = "SELECT a FROM AccionesApps a")})
+@NamedQueries({@NamedQuery(name = "AccionesAppsEntity.findAll", query = "SELECT a FROM AccionesAppsEntity a")})
 public class AccionesAppsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,12 +50,12 @@ public class AccionesAppsEntity extends BaseEntity implements Serializable {
     private Integer accion;
     @Column(name = "circuito")
     private String circuito;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.EAGER)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.EAGER)
     private Set<TransicionEstadosEntity> transicionEstadosCollection;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CircuitosEstadosEntity circuitoId;
 
     public AccionesAppsEntity() {

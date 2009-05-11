@@ -7,12 +7,13 @@ package org.g2p.tracker.controllers;
 import java.util.Collection;
 import java.util.List;
 
-import org.g2p.tracker.model.entities.UsuarioRolesEntity;
-import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
+import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity;
+import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntityPK;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.RolesModel;
-import org.g2p.tracker.model.models.UsuarioRolesModel;
+import org.g2p.tracker.model.models.RolesPerWebsiteUsersModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -28,10 +29,12 @@ import org.zkoss.zul.Messagebox;
 
 public class AbmcUsuarioRolesController extends BaseController {
 
+    private static final long serialVersionUID = -484488349926570947L;
+
     //Roles Model
     protected WebsiteUserModel websiteUserModel = null;
     protected RolesModel rolesModel = null;
-    protected UsuarioRolesModel usuarioRolesModel = null;
+    protected RolesPerWebsiteUsersModel rolesPerWebsiteUsersModel = null;
 
     //main control window
     protected Listbox usersList; //domain object summary list
@@ -56,10 +59,8 @@ public class AbmcUsuarioRolesController extends BaseController {
         super(true);
         websiteUserModel = new WebsiteUserModel();
         rolesModel = new RolesModel();
-        usuarioRolesModel = new UsuarioRolesModel();
+        rolesPerWebsiteUsersModel = new RolesPerWebsiteUsersModel();
     }
-
-    
 
     //-- Initialization --//
     public void onCreate$abmcUsuarioRolesWin(Event event) {
@@ -75,7 +76,7 @@ public class AbmcUsuarioRolesController extends BaseController {
 
         final List model = (List) usuarioRolesList.getModel();
         if (!model.isEmpty()) {
-            websiteUserModel.setRolSelected((UsuarioRolesEntity) model.get(0));
+            websiteUserModel.setRolSelected((RolesPerWebsiteUsersEntity) model.get(0));
             binder.loadComponent(usuarioRolesDetail);
         }
         binder.loadComponent(usuarioRolesList);
@@ -119,7 +120,7 @@ public class AbmcUsuarioRolesController extends BaseController {
         }
     }
 
-    public RolesModel getUsuarioRolesModel() {
+    public RolesModel getRolesPerWebsiteUsersModel() {
         return rolesModel;
     }
 
@@ -161,11 +162,11 @@ public class AbmcUsuarioRolesController extends BaseController {
             //prepare a new UsuarioRolesEntity
             _tmpSelected = websiteUserModel.getRolSelected();
             _create = true;
-            websiteUserModel.setRolSelected(new UsuarioRolesEntity());
-            websiteUserModel.getRolSelected().setUsuarioRolesEntityPK(new UsuarioRolesEntityPK());
-            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setUserId(((WebsiteUsersEntity) websiteUserModel.getSelected()).getUserId());
+            websiteUserModel.setRolSelected(new RolesPerWebsiteUsersEntity());
+            websiteUserModel.getRolSelected().setRolesPerWebsiteUsersPK(new RolesPerWebsiteUsersEntityPK());
+            websiteUserModel.getRolSelected().getRolesPerWebsiteUsersPK().setUserId(((WebsiteUsersEntity) websiteUserModel.getSelected()).getUserId());
             //switch to edit mode
-            setEditMode(true);            
+            setEditMode(true);
         }
     }
 
@@ -178,11 +179,13 @@ public class AbmcUsuarioRolesController extends BaseController {
             //save into bean
             binder.saveComponent(usuarioRolesEdit); //reload model to force refresh
 
-            websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().setRolId(websiteUserModel.getRolSelected().getUsuarioRolesEntityPK().getRolId());
+            websiteUserModel.getRolSelected().getRolesPerWebsiteUsersPK().setRolId(websiteUserModel.getRolSelected().getRoles().getRolId());
 
             try {
                 //store into db
                 if (_create) {
+
+                    System.out.println(" ---> rolID: " + this.websiteUserModel.getRolSelected().getRolesPerWebsiteUsersPK().getRolId() + "--- rolNombre: " + this.websiteUserModel.getRolSelected().getRoles().getRolId());
 
                     this.websiteUserModel.persistRol();
 
@@ -190,8 +193,8 @@ public class AbmcUsuarioRolesController extends BaseController {
                     this.websiteUserModel.mergeRol();
                 }
             } catch (Exception ex) {
-                    showMessage("Ocurrió un error mientras intentaba modificar un ítem: ", ex);
-                    websiteUserModel.setRolSelected((UsuarioRolesEntity) usuarioRolesList.getModel().getElementAt(0));
+                showMessage("Ocurrió un error mientras intentaba modificar un ítem: ", ex);
+                websiteUserModel.setRolSelected((RolesPerWebsiteUsersEntity) usuarioRolesList.getModel().getElementAt(0));
             }
 
             //refresh the usuarioRolesList
@@ -209,7 +212,7 @@ public class AbmcUsuarioRolesController extends BaseController {
         if (isEditMode()) {
             //restore to original selected RolesEntity if cancel from new
             if (_create) {
-                websiteUserModel.setRolSelected((UsuarioRolesEntity)_tmpSelected);
+                websiteUserModel.setRolSelected((RolesPerWebsiteUsersEntity) _tmpSelected);
                 _tmpSelected = null;
             }
 
@@ -230,7 +233,7 @@ public class AbmcUsuarioRolesController extends BaseController {
                 setEditMode(true);
             }
         }
-        
+
     }
 
     public void onClick$usuarioRolDelete(Event event) {
@@ -307,8 +310,8 @@ public class AbmcUsuarioRolesController extends BaseController {
                 websiteUserModel.deleteRol();
                 usuarioRolCreate.focus();
             } catch (Exception ex) {
-                    showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
-                    usuarioRolesModel.setSelected((UsuarioRolesEntity) usuarioRolesList.getModel().getElementAt(0));
+                showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+                rolesPerWebsiteUsersModel.setSelected((RolesPerWebsiteUsersEntity) usuarioRolesList.getModel().getElementAt(0));
             }
             websiteUserModel.setRolSelected(null);
             //refresh the usuarioRolesList
@@ -320,12 +323,12 @@ public class AbmcUsuarioRolesController extends BaseController {
 
         /** Returns title of confirm deleting Messagebox */
         public String getTitle() {
-            return "Are you sure?";
+            return Labels.getLabel("app.delete.confirm.title");
         }
 
         /** Returns message for confirm deleting Messagbox */
         public String getMessage() {
-            return "Are you sure you want to delete the selected item?";
+            return Labels.getLabel("app.delete.confirm.message");
         }
     }
 }
