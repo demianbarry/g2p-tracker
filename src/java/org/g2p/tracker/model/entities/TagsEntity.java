@@ -25,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tags")
-@NamedQueries({@NamedQuery(name = "Tags.findAll", query = "SELECT t FROM Tags t")})
+@NamedQueries({@NamedQuery(name = "TagsEntity.findAll", query = "SELECT t FROM TagsEntity t")})
 public class TagsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,10 +39,10 @@ public class TagsEntity extends BaseEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(mappedBy = "tagIdGrupo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tagIdGrupo", fetch = FetchType.EAGER)
     private Set<TagsEntity> tagsCollection;
     @JoinColumn(name = "tag_id_grupo", referencedColumnName = "tag_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TagsEntity tagIdGrupo;
 
     public TagsEntity() {

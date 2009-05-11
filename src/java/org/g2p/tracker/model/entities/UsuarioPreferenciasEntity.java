@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "usuario_preferencias")
-@NamedQueries({@NamedQuery(name = "UsuarioPreferencias.findAll", query = "SELECT u FROM UsuarioPreferencias u")})
+@NamedQueries({@NamedQuery(name = "UsuarioPreferenciasEntity.findAll", query = "SELECT u FROM UsuarioPreferenciasEntity u")})
 public class UsuarioPreferenciasEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -32,17 +32,11 @@ public class UsuarioPreferenciasEntity extends BaseEntity implements Serializabl
     @Column(name = "valor")
     private String valor;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity websiteUsers;
     @JoinColumn(name = "preferencia_id", referencedColumnName = "preferencia_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private PreferenciasEntity preferencias;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private WebsiteUsersEntity websiteUsers1;
-    @JoinColumn(name = "preferencia_id", referencedColumnName = "preferencia_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private PreferenciasEntity preferencias1;
 
     public UsuarioPreferenciasEntity() {
     }
@@ -90,22 +84,6 @@ public class UsuarioPreferenciasEntity extends BaseEntity implements Serializabl
 
     public void setPreferencias(PreferenciasEntity preferencias) {
         this.preferencias = preferencias;
-    }
-
-    public WebsiteUsersEntity getWebsiteUsers1() {
-        return websiteUsers1;
-    }
-
-    public void setWebsiteUsers1(WebsiteUsersEntity websiteUsers1) {
-        this.websiteUsers1 = websiteUsers1;
-    }
-
-    public PreferenciasEntity getPreferencias1() {
-        return preferencias1;
-    }
-
-    public void setPreferencias1(PreferenciasEntity preferencias1) {
-        this.preferencias1 = preferencias1;
     }
 
     @Override

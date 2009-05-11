@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "website_users_per_proveedores_openid")
-@NamedQueries({@NamedQuery(name = "WebsiteUsersPerProveedoresOpenid.findAll", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenid w")})
+@NamedQueries({@NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findAll", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w")})
 public class WebsiteUsersPerProveedoresOpenidEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

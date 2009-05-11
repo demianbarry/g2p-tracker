@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tags_per_tracks")
-@NamedQueries({@NamedQuery(name = "TagsPerTracks.findAll", query = "SELECT t FROM TagsPerTracks t")})
+@NamedQueries({@NamedQuery(name = "TagsPerTracksEntity.findAll", query = "SELECT t FROM TagsPerTracksEntity t")})
 public class TagsPerTracksEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

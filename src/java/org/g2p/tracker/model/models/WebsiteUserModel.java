@@ -11,8 +11,8 @@ import javax.transaction.SystemException;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.entities.BaseEntity;
-import org.g2p.tracker.model.entities.UsuarioRolesEntity;
-import org.g2p.tracker.model.entities.UsuarioRolesEntityPK;
+import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity;
+import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntityPK;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 
 /**
@@ -21,8 +21,8 @@ import org.g2p.tracker.model.entities.WebsiteUsersEntity;
  */
 public class WebsiteUserModel extends BaseModel {
 
-    protected UsuarioRolesModel usuarioRolesModel = new UsuarioRolesModel();
-    protected UsuarioRolesEntity rolSelected;
+    protected RolesPerWebsiteUsersModel rolesPerWebsiteUsersModel = new RolesPerWebsiteUsersModel();
+    protected RolesPerWebsiteUsersEntity rolSelected;
     protected RolesModel rolesModel = new RolesModel();
 
     public WebsiteUserModel() {
@@ -30,34 +30,34 @@ public class WebsiteUserModel extends BaseModel {
     }
 
     public void persistRol(boolean ownTx) throws Exception {
-        usuarioRolesModel.create(rolSelected, ownTx);
+        rolesPerWebsiteUsersModel.create(rolSelected, ownTx);
     }
 
     public void mergeRol(boolean ownTx) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        usuarioRolesModel.edit(rolSelected, ownTx);
+        rolesPerWebsiteUsersModel.edit(rolSelected, ownTx);
     }
 
     public void deleteRol(boolean ownTx) throws IllegalOrphanException, NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
-        usuarioRolesModel.destroy(rolSelected, ownTx);
+        rolesPerWebsiteUsersModel.destroy(rolSelected, ownTx);
     }
 
     public void persistRol() throws Exception {
-        usuarioRolesModel.create(rolSelected);
+        rolesPerWebsiteUsersModel.create(rolSelected);
     }
 
     public void mergeRol() throws IllegalOrphanException, NonexistentEntityException, Exception {
-        usuarioRolesModel.edit(rolSelected);
+        rolesPerWebsiteUsersModel.edit(rolSelected);
     }
 
     public void deleteRol() throws IllegalOrphanException, NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
-        usuarioRolesModel.destroy(rolSelected);
+        rolesPerWebsiteUsersModel.destroy(rolSelected);
     }
 
-    public void setRolSelected(UsuarioRolesEntity rolSelected) {
+    public void setRolSelected(RolesPerWebsiteUsersEntity rolSelected) {
         this.rolSelected = rolSelected;
     }
 
-    public UsuarioRolesEntity getRolSelected() {
+    public RolesPerWebsiteUsersEntity getRolSelected() {
         return rolSelected;
     }
 
@@ -65,7 +65,7 @@ public class WebsiteUserModel extends BaseModel {
         if (selected != null) {
             Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
             queryParameters.put("userId", (Integer) selected.getPK());
-            return findEntities("UsuarioRolesEntity.findByUserId", queryParameters);
+            return findEntities("RolesPerWebsiteUsersEntity.findByUserId", queryParameters);
         }
 
         return null;
@@ -75,8 +75,8 @@ public class WebsiteUserModel extends BaseModel {
         if (selected != null && rolSelected != null) {
             Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
             queryParameters.put("userId", (Integer) selected.getPK());
-            queryParameters.put("rolId", ((UsuarioRolesEntityPK) rolSelected.getPK()).getRolId());
-            return findEntities("UsuarioRolesEntity.findByRolIdComplement", queryParameters);
+            queryParameters.put("rolId", ((RolesPerWebsiteUsersEntityPK) rolSelected.getPK()).getRolId());
+            return findEntities("RolesPerWebsiteUsersEntity.findByRolIdComplement", queryParameters);
         }
 
         return null;
