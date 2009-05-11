@@ -24,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sticky_notes")
-@NamedQueries({@NamedQuery(name = "StickyNotes.findAll", query = "SELECT s FROM StickyNotes s")})
+@NamedQueries({@NamedQuery(name = "StickyNotesEntity.findAll", query = "SELECT s FROM StickyNotesEntity s")})
 public class StickyNotesEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,7 +41,7 @@ public class StickyNotesEntity extends BaseEntity implements Serializable {
     @Column(name = "pegado")
     private boolean pegado;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TracksEntity trackId;
 
     public StickyNotesEntity() {
