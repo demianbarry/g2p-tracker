@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "aplica_circuito")
-@NamedQueries({@NamedQuery(name = "AplicaCircuito.findAll", query = "SELECT a FROM AplicaCircuito a")})
+@NamedQueries({@NamedQuery(name = "AplicaCircuitoEntity.findAll", query = "SELECT a FROM AplicaCircuitoEntity a")})
 public class AplicaCircuitoEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,7 +45,7 @@ public class AplicaCircuitoEntity extends BaseEntity implements Serializable {
     @Column(name = "circuito")
     private String circuito;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CircuitosEstadosEntity circuitoId;
 
     public AplicaCircuitoEntity() {

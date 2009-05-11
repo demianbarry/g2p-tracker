@@ -28,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "configuracion")
-@NamedQueries({@NamedQuery(name = "Configuracion.findAll", query = "SELECT c FROM Configuracion c")})
+@NamedQueries({@NamedQuery(name = "ConfiguracionEntity.findAll", query = "SELECT c FROM ConfiguracionEntity c")})
 public class ConfiguracionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,15 +50,10 @@ public class ConfiguracionEntity extends BaseEntity implements Serializable {
     @Column(name = "prioridad")
     private int prioridad;
     @JoinColumn(name = "esquema_configuracion_id", referencedColumnName = "esquema_configuracion_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EsquemaConfiguracionEntity esquemaConfiguracionId;
-    @JoinColumn(name = "esquema_configuracion_id", referencedColumnName = "esquema_configuracion_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private EsquemaConfiguracionEntity esquemaConfiguracionId1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "configuracion", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "configuracion", fetch = FetchType.EAGER)
     private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "configuracion1", fetch = FetchType.LAZY)
-    private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection1;
 
     public ConfiguracionEntity() {
     }
@@ -130,28 +125,12 @@ public class ConfiguracionEntity extends BaseEntity implements Serializable {
         this.esquemaConfiguracionId = esquemaConfiguracionId;
     }
 
-    public EsquemaConfiguracionEntity getEsquemaConfiguracionId1() {
-        return esquemaConfiguracionId1;
-    }
-
-    public void setEsquemaConfiguracionId1(EsquemaConfiguracionEntity esquemaConfiguracionId1) {
-        this.esquemaConfiguracionId1 = esquemaConfiguracionId1;
-    }
-
     public Set<AtributosConfiguracionEntity> getAtributosConfiguracionCollection() {
         return atributosConfiguracionCollection;
     }
 
     public void setAtributosConfiguracionCollection(Set<AtributosConfiguracionEntity> atributosConfiguracionCollection) {
         this.atributosConfiguracionCollection = atributosConfiguracionCollection;
-    }
-
-    public Set<AtributosConfiguracionEntity> getAtributosConfiguracionCollection1() {
-        return atributosConfiguracionCollection1;
-    }
-
-    public void setAtributosConfiguracionCollection1(Set<AtributosConfiguracionEntity> atributosConfiguracionCollection1) {
-        this.atributosConfiguracionCollection1 = atributosConfiguracionCollection1;
     }
 
     @Override

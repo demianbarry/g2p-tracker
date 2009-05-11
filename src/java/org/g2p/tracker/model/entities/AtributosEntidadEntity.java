@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "atributos_entidad")
-@NamedQueries({@NamedQuery(name = "AtributosEntidad.findAll", query = "SELECT a FROM AtributosEntidad a")})
+@NamedQueries({@NamedQuery(name = "AtributosEntidadEntity.findAll", query = "SELECT a FROM AtributosEntidadEntity a")})
 public class AtributosEntidadEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,17 +54,11 @@ public class AtributosEntidadEntity extends BaseEntity implements Serializable {
     @Column(name = "nombre_objeto")
     private String nombreObjeto;
     @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private EntidadExternaEntity entidadId;
     @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private AtributosRolEntity atributoId;
-    @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private AtributosRolEntity atributoId1;
-    @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private EntidadExternaEntity entidadId1;
 
     public AtributosEntidadEntity() {
     }
@@ -159,22 +153,6 @@ public class AtributosEntidadEntity extends BaseEntity implements Serializable {
 
     public void setAtributoId(AtributosRolEntity atributoId) {
         this.atributoId = atributoId;
-    }
-
-    public AtributosRolEntity getAtributoId1() {
-        return atributoId1;
-    }
-
-    public void setAtributoId1(AtributosRolEntity atributoId1) {
-        this.atributoId1 = atributoId1;
-    }
-
-    public EntidadExternaEntity getEntidadId1() {
-        return entidadId1;
-    }
-
-    public void setEntidadId1(EntidadExternaEntity entidadId1) {
-        this.entidadId1 = entidadId1;
     }
 
     @Override

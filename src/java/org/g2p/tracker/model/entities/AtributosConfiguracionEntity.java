@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "atributos_configuracion")
-@NamedQueries({@NamedQuery(name = "AtributosConfiguracion.findAll", query = "SELECT a FROM AtributosConfiguracion a")})
+@NamedQueries({@NamedQuery(name = "AtributosConfiguracionEntity.findAll", query = "SELECT a FROM AtributosConfiguracionEntity a")})
 public class AtributosConfiguracionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -35,17 +35,11 @@ public class AtributosConfiguracionEntity extends BaseEntity implements Serializ
     @Column(name = "valor_hasta")
     private String valorHasta;
     @JoinColumn(name = "configuracion_id", referencedColumnName = "configuracion_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ConfiguracionEntity configuracion;
     @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private AtributosRolEntity atributosRol;
-    @JoinColumn(name = "configuracion_id", referencedColumnName = "configuracion_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private ConfiguracionEntity configuracion1;
-    @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private AtributosRolEntity atributosRol1;
 
     public AtributosConfiguracionEntity() {
     }
@@ -103,23 +97,7 @@ public class AtributosConfiguracionEntity extends BaseEntity implements Serializ
     public void setAtributosRol(AtributosRolEntity atributosRol) {
         this.atributosRol = atributosRol;
     }
-
-    public ConfiguracionEntity getConfiguracion1() {
-        return configuracion1;
-    }
-
-    public void setConfiguracion1(ConfiguracionEntity configuracion1) {
-        this.configuracion1 = configuracion1;
-    }
-
-    public AtributosRolEntity getAtributosRol1() {
-        return atributosRol1;
-    }
-
-    public void setAtributosRol1(AtributosRolEntity atributosRol1) {
-        this.atributosRol1 = atributosRol1;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

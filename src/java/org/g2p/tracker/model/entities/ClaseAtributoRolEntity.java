@@ -25,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "clase_atributo_rol")
-@NamedQueries({@NamedQuery(name = "ClaseAtributoRol.findAll", query = "SELECT c FROM ClaseAtributoRol c")})
+@NamedQueries({@NamedQuery(name = "ClaseAtributoRolEntity.findAll", query = "SELECT c FROM ClaseAtributoRolEntity c")})
 public class ClaseAtributoRolEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,10 +36,8 @@ public class ClaseAtributoRolEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "etiqueta")
     private String etiqueta;
-    @OneToMany(mappedBy = "claseAtributoRolId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "claseAtributoRolId", fetch = FetchType.EAGER)
     private Set<AtributosRolEntity> atributosRolCollection;
-    @OneToMany(mappedBy = "claseAtributoRolId1", fetch = FetchType.LAZY)
-    private Set<AtributosRolEntity> atributosRolCollection1;
 
     public ClaseAtributoRolEntity() {
     }
@@ -75,14 +73,6 @@ public class ClaseAtributoRolEntity extends BaseEntity implements Serializable {
 
     public void setAtributosRolCollection(Set<AtributosRolEntity> atributosRolCollection) {
         this.atributosRolCollection = atributosRolCollection;
-    }
-
-    public Set<AtributosRolEntity> getAtributosRolCollection1() {
-        return atributosRolCollection1;
-    }
-
-    public void setAtributosRolCollection1(Set<AtributosRolEntity> atributosRolCollection1) {
-        this.atributosRolCollection1 = atributosRolCollection1;
     }
 
     @Override

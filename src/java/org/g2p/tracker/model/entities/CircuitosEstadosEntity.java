@@ -24,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "circuitos_estados")
-@NamedQueries({@NamedQuery(name = "CircuitosEstados.findAll", query = "SELECT c FROM CircuitosEstados c")})
+@NamedQueries({@NamedQuery(name = "CircuitosEstadosEntity.findAll", query = "SELECT c FROM CircuitosEstadosEntity c")})
 public class CircuitosEstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,13 +40,13 @@ public class CircuitosEstadosEntity extends BaseEntity implements Serializable {
     private String observaciones;
     @Column(name = "circuito")
     private String circuito;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
     private Set<EstadosEntity> estadosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
     private Set<AplicaCircuitoEntity> aplicaCircuitoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
     private Set<AccionesAppsEntity> accionesAppsCollection;
 
     public CircuitosEstadosEntity() {

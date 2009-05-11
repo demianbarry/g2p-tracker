@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "audita_estados_circuitos")
-@NamedQueries({@NamedQuery(name = "AuditaEstadosCircuitos.findAll", query = "SELECT a FROM AuditaEstadosCircuitos a")})
+@NamedQueries({@NamedQuery(name = "AuditaEstadosCircuitosEntity.findAll", query = "SELECT a FROM AuditaEstadosCircuitosEntity a")})
 public class AuditaEstadosCircuitosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,19 +59,19 @@ public class AuditaEstadosCircuitosEntity extends BaseEntity implements Serializ
     @Column(name = "de_estado")
     private String deEstado;
     @JoinColumn(name = "accion_id", referencedColumnName = "accion_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private AccionesAppsEntity accionId;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CircuitosEstadosEntity circuitoId;
     @JoinColumn(name = "estado_id_a", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoIdA;
     @JoinColumn(name = "estado_id_de", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoIdDe;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userId;
 
     public AuditaEstadosCircuitosEntity() {
