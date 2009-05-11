@@ -26,7 +26,9 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "roles_per_website_users")
-@NamedQueries({@NamedQuery(name = "RolesPerWebsiteUsers.findAll", query = "SELECT r FROM RolesPerWebsiteUsers r")})
+@NamedQueries({
+    @NamedQuery(name = "RolesPerWebsiteUsersEntity.findByUserId", query = "SELECT u FROM RolesPerWebsiteUsersEntity u WHERE u.rolesPerWebsiteUsersPK.userId = :userId"),
+    @NamedQuery(name = "RolesPerWebsiteUsersEntity.findByRolIdComplement", query = "SELECT r FROM RolesEntity r WHERE r.rolId NOT IN (SELECT u.rolesPerWebsiteUsersPK.rolId FROM RolesPerWebsiteUsersEntity u WHERE u.rolesPerWebsiteUsersPK.userId = :userId) OR r.rolId = :rolId")})
 public class RolesPerWebsiteUsersEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
