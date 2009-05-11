@@ -27,7 +27,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "rol_entidad")
-@NamedQueries({@NamedQuery(name = "RolEntidad.findAll", query = "SELECT r FROM RolEntidad r")})
+@NamedQueries({@NamedQuery(name = "RolEntidadEntity.findAll", query = "SELECT r FROM RolEntidadEntity r")})
 public class RolEntidadEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,14 +51,10 @@ public class RolEntidadEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "anulado")
     private char anulado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rolEntidad", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rolEntidad", fetch = FetchType.EAGER)
     private Set<RolesEntidadEntity> rolesEntidadCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rolEntidad1", fetch = FetchType.LAZY)
-    private Set<RolesEntidadEntity> rolesEntidadCollection1;
-    @OneToMany(mappedBy = "rol", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rol", fetch = FetchType.EAGER)
     private Set<AtributosRolEntity> atributosRolCollection;
-    @OneToMany(mappedBy = "rol1", fetch = FetchType.LAZY)
-    private Set<AtributosRolEntity> atributosRolCollection1;
 
     public RolEntidadEntity() {
     }
@@ -138,28 +134,12 @@ public class RolEntidadEntity extends BaseEntity implements Serializable {
         this.rolesEntidadCollection = rolesEntidadCollection;
     }
 
-    public Set<RolesEntidadEntity> getRolesEntidadCollection1() {
-        return rolesEntidadCollection1;
-    }
-
-    public void setRolesEntidadCollection1(Set<RolesEntidadEntity> rolesEntidadCollection1) {
-        this.rolesEntidadCollection1 = rolesEntidadCollection1;
-    }
-
     public Set<AtributosRolEntity> getAtributosRolCollection() {
         return atributosRolCollection;
     }
 
     public void setAtributosRolCollection(Set<AtributosRolEntity> atributosRolCollection) {
         this.atributosRolCollection = atributosRolCollection;
-    }
-
-    public Set<AtributosRolEntity> getAtributosRolCollection1() {
-        return atributosRolCollection1;
-    }
-
-    public void setAtributosRolCollection1(Set<AtributosRolEntity> atributosRolCollection1) {
-        this.atributosRolCollection1 = atributosRolCollection1;
     }
 
     @Override
