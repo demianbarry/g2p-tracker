@@ -268,10 +268,11 @@ public class BaseModel {
          while(keys.hasMoreElements()) {
              String param = (String)keys.nextElement();
              Object value = parameters.get(param);
+             System.out.println("---> PARAM: "+param+" - VALUE: "+value);
              query.setParameter(param, value);
 
          }
-
+         System.out.println("---> QUERY: "+query.getResultList().size());
          return query.getResultList();
     }
 

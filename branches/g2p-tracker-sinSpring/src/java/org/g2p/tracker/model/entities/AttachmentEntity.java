@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "attachment")
-@NamedQueries({@NamedQuery(name = "Attachment.findAll", query = "SELECT a FROM Attachment a")})
+@NamedQueries({@NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a")})
 public class AttachmentEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

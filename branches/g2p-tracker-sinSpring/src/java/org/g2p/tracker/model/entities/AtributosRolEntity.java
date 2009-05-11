@@ -32,7 +32,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "atributos_rol")
-@NamedQueries({@NamedQuery(name = "AtributosRol.findAll", query = "SELECT a FROM AtributosRol a")})
+@NamedQueries({@NamedQuery(name = "AtributosRolEntity.findAll", query = "SELECT a FROM AtributosRolEntity a")})
 public class AtributosRolEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -71,29 +71,19 @@ public class AtributosRolEntity extends BaseEntity implements Serializable {
     private String validador;
     @Column(name = "clase_lov_atributo_id")
     private Integer claseLovAtributoId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId", fetch = FetchType.EAGER)
     private Set<AtributosEntidadEntity> atributosEntidadCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId1", fetch = FetchType.LAZY)
-    private Set<AtributosEntidadEntity> atributosEntidadCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol", fetch = FetchType.EAGER)
     private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol1", fetch = FetchType.LAZY)
-    private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection1;
     @JoinColumn(name = "clase_atributo_rol_id", referencedColumnName = "clase_atributo_rol_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ClaseAtributoRolEntity claseAtributoRolId;
     @JoinColumn(name = "rol", referencedColumnName = "rol")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private RolEntidadEntity rol;
     @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private DiccionarioAplicacionEntity diccionarioAplicacion;
-    @JoinColumn(name = "rol", referencedColumnName = "rol")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private RolEntidadEntity rol1;
-    @JoinColumn(name = "clase_atributo_rol_id", referencedColumnName = "clase_atributo_rol_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ClaseAtributoRolEntity claseAtributoRolId1;
 
     public AtributosRolEntity() {
     }
@@ -223,28 +213,12 @@ public class AtributosRolEntity extends BaseEntity implements Serializable {
         this.atributosEntidadCollection = atributosEntidadCollection;
     }
 
-    public Set<AtributosEntidadEntity> getAtributosEntidadCollection1() {
-        return atributosEntidadCollection1;
-    }
-
-    public void setAtributosEntidadCollection1(Set<AtributosEntidadEntity> atributosEntidadCollection1) {
-        this.atributosEntidadCollection1 = atributosEntidadCollection1;
-    }
-
     public Set<AtributosConfiguracionEntity> getAtributosConfiguracionCollection() {
         return atributosConfiguracionCollection;
     }
 
     public void setAtributosConfiguracionCollection(Set<AtributosConfiguracionEntity> atributosConfiguracionCollection) {
         this.atributosConfiguracionCollection = atributosConfiguracionCollection;
-    }
-
-    public Set<AtributosConfiguracionEntity> getAtributosConfiguracionCollection1() {
-        return atributosConfiguracionCollection1;
-    }
-
-    public void setAtributosConfiguracionCollection1(Set<AtributosConfiguracionEntity> atributosConfiguracionCollection1) {
-        this.atributosConfiguracionCollection1 = atributosConfiguracionCollection1;
     }
 
     public ClaseAtributoRolEntity getClaseAtributoRolId() {
@@ -269,22 +243,6 @@ public class AtributosRolEntity extends BaseEntity implements Serializable {
 
     public void setDiccionarioAplicacion(DiccionarioAplicacionEntity diccionarioAplicacion) {
         this.diccionarioAplicacion = diccionarioAplicacion;
-    }
-
-    public RolEntidadEntity getRol1() {
-        return rol1;
-    }
-
-    public void setRol1(RolEntidadEntity rol1) {
-        this.rol1 = rol1;
-    }
-
-    public ClaseAtributoRolEntity getClaseAtributoRolId1() {
-        return claseAtributoRolId1;
-    }
-
-    public void setClaseAtributoRolId1(ClaseAtributoRolEntity claseAtributoRolId1) {
-        this.claseAtributoRolId1 = claseAtributoRolId1;
     }
 
     @Override

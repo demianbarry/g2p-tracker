@@ -12,6 +12,7 @@ import org.zkoss.zul.Include;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
 import org.zkoss.zul.Label;
@@ -19,7 +20,7 @@ import org.zkoss.zul.Separator;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Vbox;
 
-public class BasePageController extends BaseController implements EventListener {
+public class BasePageController extends BaseController {
 
     private static final long serialVersionUID = 144203921841206801L;
     protected Include include;
@@ -72,7 +73,14 @@ public class BasePageController extends BaseController implements EventListener 
             button.setAttribute("page", HOME_PAGE);
             navBar.appendChild(button);
             // Seteo el controlador como responsable de capturar el evento de click
-            button.addEventListener("onClick", this);
+            button.addEventListener("onClick", new EventListener() {
+
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    include.setSrc(arg0.getTarget().getAttribute("page").toString());
+                    setNavBarItem(arg0.getTarget().getAttribute("page").toString());
+                }
+            });
         }
 
         parameters = new Hashtable();
@@ -96,15 +104,20 @@ public class BasePageController extends BaseController implements EventListener 
             button.setAttribute("page", HOME_PAGE);
             navBar.appendChild(button);
             // Seteo el controlador como responsable de capturar el evento de click
-            button.addEventListener("onClick", this);
+            button.addEventListener("onClick", new EventListener() {
+
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    include.setSrc(arg0.getTarget().getAttribute("page").toString());
+                    setNavBarItem(arg0.getTarget().getAttribute("page").toString());
+                }
+            });
 
         }
 
-
-
         // Por cada resultado recuperado, creo la referencia en la NavBar
         while (menues.hasNext()) {
-
+            System.out.println("----->");
             if (navBar.getChildren().size() > 0) {
                 Separator separator = new Separator();
                 separator.setBar(true);
@@ -117,18 +130,16 @@ public class BasePageController extends BaseController implements EventListener 
             // agrego un atributo al botón para obtener luego en el listener
             // del evento la página a la cual tengo que redirigir el "include"
             button.setAttribute("page", menu.getMenuId().getUrl());
-            button.addEventListener("onClick", this);
+            button.addEventListener("onClick", new EventListener() {
+                @Override
+                public void onEvent(Event arg0) throws Exception {
+                    include.setSrc(arg0.getTarget().getAttribute("page").toString());
+                    setNavBarItem(arg0.getTarget().getAttribute("page").toString());
+                }
+            });
             button.setTooltiptext(menu.getMenuId().getDescripcion());
-            //button.setOrient("vertical");
             navBar.appendChild(button);
         }
-    }
-
-    @Override
-    public void onEvent(Event arg0) throws Exception {
-        // cambio el "include" recuperando el atributo "page" del botón
-        include.setSrc(arg0.getTarget().getAttribute("page").toString());
-        setNavBarItem(arg0.getTarget().getAttribute("page").toString());
     }
 
     public void onClick$loginLabel(Event event) {

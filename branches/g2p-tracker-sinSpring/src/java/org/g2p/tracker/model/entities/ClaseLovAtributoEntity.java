@@ -25,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "clase_lov_atributo")
-@NamedQueries({@NamedQuery(name = "ClaseLovAtributo.findAll", query = "SELECT c FROM ClaseLovAtributo c")})
+@NamedQueries({@NamedQuery(name = "ClaseLovAtributoEntity.findAll", query = "SELECT c FROM ClaseLovAtributoEntity c")})
 public class ClaseLovAtributoEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,10 +40,8 @@ public class ClaseLovAtributoEntity extends BaseEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo", fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo", fetch = FetchType.EAGER)
     private LovAtributoEntity lovAtributo;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo1", fetch = FetchType.LAZY)
-    private LovAtributoEntity lovAtributo1;
 
     public ClaseLovAtributoEntity() {
     }
@@ -95,14 +93,6 @@ public class ClaseLovAtributoEntity extends BaseEntity implements Serializable {
 
     public void setLovAtributo(LovAtributoEntity lovAtributo) {
         this.lovAtributo = lovAtributo;
-    }
-
-    public LovAtributoEntity getLovAtributo1() {
-        return lovAtributo1;
-    }
-
-    public void setLovAtributo1(LovAtributoEntity lovAtributo1) {
-        this.lovAtributo1 = lovAtributo1;
     }
 
     @Override
