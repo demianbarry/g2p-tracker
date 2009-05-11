@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "documentos")
-@NamedQueries({@NamedQuery(name = "Documentos.findAll", query = "SELECT d FROM Documentos d")})
+@NamedQueries({@NamedQuery(name = "DocumentosEntity.findAll", query = "SELECT d FROM DocumentosEntity d")})
 public class DocumentosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

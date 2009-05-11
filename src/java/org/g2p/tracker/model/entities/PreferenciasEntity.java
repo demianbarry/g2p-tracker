@@ -24,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "preferencias")
-@NamedQueries({@NamedQuery(name = "Preferencias.findAll", query = "SELECT p FROM Preferencias p")})
+@NamedQueries({@NamedQuery(name = "PreferenciasEntity.findAll", query = "SELECT p FROM PreferenciasEntity p")})
 public class PreferenciasEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,10 +41,8 @@ public class PreferenciasEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "default")
     private String default1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias", fetch = FetchType.EAGER)
     private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias1", fetch = FetchType.LAZY)
-    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection1;
 
     public PreferenciasEntity() {
     }
@@ -105,14 +103,6 @@ public class PreferenciasEntity extends BaseEntity implements Serializable {
 
     public void setUsuarioPreferenciasCollection(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection) {
         this.usuarioPreferenciasCollection = usuarioPreferenciasCollection;
-    }
-
-    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasCollection1() {
-        return usuarioPreferenciasCollection1;
-    }
-
-    public void setUsuarioPreferenciasCollection1(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection1) {
-        this.usuarioPreferenciasCollection1 = usuarioPreferenciasCollection1;
     }
 
     @Override
