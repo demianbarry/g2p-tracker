@@ -29,7 +29,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "website_users")
-@NamedQueries({@NamedQuery(name = "WebsiteUsers.findAll", query = "SELECT w FROM WebsiteUsers w")})
+@NamedQueries({@NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w")})
 public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,22 +61,18 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<PostsEntity> postsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
     private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers1", fetch = FetchType.LAZY)
-    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
     private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userIdOwner", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userIdOwner", fetch = FetchType.EAGER)
     private Set<TracksEntity> tracksCollection;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuCollection;
-    @OneToMany(mappedBy = "userId1", fetch = FetchType.LAZY)
-    private Set<AccesoMenuEntity> accesoMenuCollection1;
 
     public WebsiteUsersEntity() {
     }
@@ -197,14 +193,6 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
         this.usuarioPreferenciasCollection = usuarioPreferenciasCollection;
     }
 
-    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasCollection1() {
-        return usuarioPreferenciasCollection1;
-    }
-
-    public void setUsuarioPreferenciasCollection1(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection1) {
-        this.usuarioPreferenciasCollection1 = usuarioPreferenciasCollection1;
-    }
-
     public Set<RolesPerWebsiteUsersEntity> getRolesPerWebsiteUsersCollection() {
         return rolesPerWebsiteUsersCollection;
     }
@@ -227,14 +215,6 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
 
     public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
         this.accesoMenuCollection = accesoMenuCollection;
-    }
-
-    public Set<AccesoMenuEntity> getAccesoMenuCollection1() {
-        return accesoMenuCollection1;
-    }
-
-    public void setAccesoMenuCollection1(Set<AccesoMenuEntity> accesoMenuCollection1) {
-        this.accesoMenuCollection1 = accesoMenuCollection1;
     }
 
     @Override

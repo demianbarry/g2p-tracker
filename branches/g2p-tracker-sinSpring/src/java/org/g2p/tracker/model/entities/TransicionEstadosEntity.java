@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "transicion_estados")
-@NamedQueries({@NamedQuery(name = "TransicionEstados.findAll", query = "SELECT t FROM TransicionEstados t")})
+@NamedQueries({@NamedQuery(name = "TransicionEstadosEntity.findAll", query = "SELECT t FROM TransicionEstadosEntity t")})
 public class TransicionEstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,13 +41,13 @@ public class TransicionEstadosEntity extends BaseEntity implements Serializable 
     @Column(name = "estado_destino")
     private String estadoDestino;
     @JoinColumn(name = "accion_id", referencedColumnName = "accion_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private AccionesAppsEntity accionId;
     @JoinColumn(name = "estado_id_destino", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoIdDestino;
     @JoinColumn(name = "estado_id_origen", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoIdOrigen;
 
     public TransicionEstadosEntity() {

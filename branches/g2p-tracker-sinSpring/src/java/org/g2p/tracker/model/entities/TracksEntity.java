@@ -31,7 +31,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tracks")
-@NamedQueries({@NamedQuery(name = "Tracks.findAll", query = "SELECT t FROM Tracks t")})
+@NamedQueries({@NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t")})
 public class TracksEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,15 +63,15 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha_realizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizacion;
-    @OneToMany(mappedBy = "trackId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<StickyNotesEntity> stickyNotesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<PostsEntity> postsCollection;
     @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoId;
     @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userIdOwner;
 
     public TracksEntity() {
