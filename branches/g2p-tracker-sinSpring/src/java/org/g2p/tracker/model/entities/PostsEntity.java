@@ -27,7 +27,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "posts")
-@NamedQueries({@NamedQuery(name = "Posts.findAll", query = "SELECT p FROM Posts p")})
+@NamedQueries({@NamedQuery(name = "PostsEntity.findAll", query = "SELECT p FROM PostsEntity p")})
 public class PostsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,10 +43,10 @@ public class PostsEntity extends BaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userId;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TracksEntity trackId;
 
     public PostsEntity() {

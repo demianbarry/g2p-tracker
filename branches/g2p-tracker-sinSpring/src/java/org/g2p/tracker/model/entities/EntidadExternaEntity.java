@@ -26,7 +26,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "entidad_externa")
-@NamedQueries({@NamedQuery(name = "EntidadExterna.findAll", query = "SELECT e FROM EntidadExterna e")})
+@NamedQueries({@NamedQuery(name = "EntidadExternaEntity.findAll", query = "SELECT e FROM EntidadExternaEntity e")})
 public class EntidadExternaEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,14 +49,11 @@ public class EntidadExternaEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "anulado")
     private char anulado;
-    @OneToMany(mappedBy = "entidadId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "entidadId", fetch = FetchType.EAGER)
     private Set<AtributosEntidadEntity> atributosEntidadCollection;
-    @OneToMany(mappedBy = "entidadId1", fetch = FetchType.LAZY)
-    private Set<AtributosEntidadEntity> atributosEntidadCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna", fetch = FetchType.EAGER)
     private Set<RolesEntidadEntity> rolesEntidadCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna1", fetch = FetchType.LAZY)
-    private Set<RolesEntidadEntity> rolesEntidadCollection1;
+
 
     public EntidadExternaEntity() {
     }
@@ -136,28 +133,12 @@ public class EntidadExternaEntity extends BaseEntity implements Serializable {
         this.atributosEntidadCollection = atributosEntidadCollection;
     }
 
-    public Set<AtributosEntidadEntity> getAtributosEntidadCollection1() {
-        return atributosEntidadCollection1;
-    }
-
-    public void setAtributosEntidadCollection1(Set<AtributosEntidadEntity> atributosEntidadCollection1) {
-        this.atributosEntidadCollection1 = atributosEntidadCollection1;
-    }
-
     public Set<RolesEntidadEntity> getRolesEntidadCollection() {
         return rolesEntidadCollection;
     }
 
     public void setRolesEntidadCollection(Set<RolesEntidadEntity> rolesEntidadCollection) {
         this.rolesEntidadCollection = rolesEntidadCollection;
-    }
-
-    public Set<RolesEntidadEntity> getRolesEntidadCollection1() {
-        return rolesEntidadCollection1;
-    }
-
-    public void setRolesEntidadCollection1(Set<RolesEntidadEntity> rolesEntidadCollection1) {
-        this.rolesEntidadCollection1 = rolesEntidadCollection1;
     }
 
     @Override

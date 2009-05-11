@@ -4,7 +4,6 @@
  */
 package org.g2p.tracker.controllers;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.Include;
 
@@ -25,7 +24,7 @@ public class LoginPageController extends BaseController {
 
     public void onClick$okButton(Event event) {
         // Seteo el usuario y vuelvo a la HomePage
-        setUserIdInSession(1);
+        setUserIdInSession(4);
         setUserNameInSession("Juan Manuel");
         ((Include) getDesktop().getAttribute(INCLUDE)).setSrc(HOME_PAGE);
         ((BasePageController) getDesktop().getAttribute(BASE_PAGE_CONTROLLER)).setNavBarItem(HOME_PAGE);

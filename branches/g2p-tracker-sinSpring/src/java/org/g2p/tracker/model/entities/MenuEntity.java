@@ -20,11 +20,14 @@ import javax.persistence.Table;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Entity
 @Table(name = "menu")
-@NamedQueries({@NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")})
+@NamedQueries({
+    @NamedQuery(name = "MenuEntity.findAll", query = "SELECT m FROM MenuEntity m"),
+    @NamedQuery(name = "MenuEntity.findUrl", query = "SELECT m FROM MenuEntity m WHERE m.url = :url"),
+    @NamedQuery(name = "MenuEntity.findByGroup", query = "SELECT m FROM MenuEntity m WHERE m.grupo = :GroupName")})
 public class MenuEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,10 +43,8 @@ public class MenuEntity extends BaseEntity implements Serializable {
     private String url;
     @Column(name = "grupo")
     private String grupo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.LAZY)
-    private Set<AccesoMenuEntity> accesoMenuCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId1", fetch = FetchType.LAZY)
-    private Set<AccesoMenuEntity> accesoMenuCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.EAGER)
+    private Set<AccesoMenuEntity> accesoMenuEntityCollection;
 
     public MenuEntity() {
     }
@@ -97,20 +98,12 @@ public class MenuEntity extends BaseEntity implements Serializable {
         this.grupo = grupo;
     }
 
-    public Set<AccesoMenuEntity> getAccesoMenuCollection() {
-        return accesoMenuCollection;
+    public Set<AccesoMenuEntity> getAccesoMenuEntityCollection() {
+        return accesoMenuEntityCollection;
     }
 
-    public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
-        this.accesoMenuCollection = accesoMenuCollection;
-    }
-
-    public Set<AccesoMenuEntity> getAccesoMenuCollection1() {
-        return accesoMenuCollection1;
-    }
-
-    public void setAccesoMenuCollection1(Set<AccesoMenuEntity> accesoMenuCollection1) {
-        this.accesoMenuCollection1 = accesoMenuCollection1;
+    public void setAccesoMenuEntityCollection(Set<AccesoMenuEntity> accesoMenuEntityCollection) {
+        this.accesoMenuEntityCollection = accesoMenuEntityCollection;
     }
 
     @Override
@@ -135,12 +128,12 @@ public class MenuEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.Menu[menuId=" + menuId + "]";
+        return "org.g2p.tracker.model.entities.MenuEntity[menuId=" + menuId + "]";
     }
 
     @Override
     public Object getPK() {
-        return menuId;
+        return getMenuId();
     }
 
 }

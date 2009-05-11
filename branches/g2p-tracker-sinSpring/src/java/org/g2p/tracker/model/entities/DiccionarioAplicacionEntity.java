@@ -22,16 +22,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "diccionario_aplicacion")
-@NamedQueries({@NamedQuery(name = "DiccionarioAplicacion.findAll", query = "SELECT d FROM DiccionarioAplicacion d")})
+@NamedQueries({@NamedQuery(name = "DiccionarioAplicacionEntity.findAll", query = "SELECT d FROM DiccionarioAplicacionEntity d")})
 public class DiccionarioAplicacionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DiccionarioAplicacionEntityPK diccionarioAplicacionPK;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.EAGER)
     private Set<EsquemaConfiguracionEntity> esquemaConfiguracionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
-    private Set<DiccionarioAplicacionDetalle> diccionarioAplicacionDetalleCollection;
-    @OneToMany(mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.EAGER)
+    private Set<DiccionarioAplicacionDetalleEntity> diccionarioAplicacionDetalleCollection;
+    @OneToMany(mappedBy = "diccionarioAplicacion", fetch = FetchType.EAGER)
     private Set<AtributosRolEntity> atributosRolCollection;
 
     public DiccionarioAplicacionEntity() {
@@ -61,11 +61,11 @@ public class DiccionarioAplicacionEntity extends BaseEntity implements Serializa
         this.esquemaConfiguracionCollection = esquemaConfiguracionCollection;
     }
 
-    public Set<DiccionarioAplicacionDetalle> getDiccionarioAplicacionDetalleCollection() {
+    public Set<DiccionarioAplicacionDetalleEntity> getDiccionarioAplicacionDetalleCollection() {
         return diccionarioAplicacionDetalleCollection;
     }
 
-    public void setDiccionarioAplicacionDetalleCollection(Set<DiccionarioAplicacionDetalle> diccionarioAplicacionDetalleCollection) {
+    public void setDiccionarioAplicacionDetalleCollection(Set<DiccionarioAplicacionDetalleEntity> diccionarioAplicacionDetalleCollection) {
         this.diccionarioAplicacionDetalleCollection = diccionarioAplicacionDetalleCollection;
     }
 

@@ -9,26 +9,36 @@
     <class>org.g2p.tracker.model.entities.AtributosConfiguracionEntity</class>
     <class>org.g2p.tracker.model.entities.AtributosEntidadEntity</class>
     <class>org.g2p.tracker.model.entities.AtributosRolEntity</class>
+    <class>org.g2p.tracker.model.entities.AttachmentEntity</class>
     <class>org.g2p.tracker.model.entities.AuditaEstadosCircuitosEntity</class>
     <class>org.g2p.tracker.model.entities.CircuitosEstadosEntity</class>
     <class>org.g2p.tracker.model.entities.ClaseAtributoRolEntity</class>
     <class>org.g2p.tracker.model.entities.ClaseLovAtributoEntity</class>
     <class>org.g2p.tracker.model.entities.ConfiguracionEntity</class>
-    <class>org.g2p.tracker.model.entities.DiccionarioAplicacionDetalleEntity</class>
     <class>org.g2p.tracker.model.entities.DiccionarioAplicacionEntity</class>
+    <class>org.g2p.tracker.model.entities.DocumentosEntity</class>
     <class>org.g2p.tracker.model.entities.EntidadExternaEntity</class>
     <class>org.g2p.tracker.model.entities.EsquemaConfiguracionEntity</class>
     <class>org.g2p.tracker.model.entities.EstadosEntity</class>
     <class>org.g2p.tracker.model.entities.LovAtributoEntity</class>
     <class>org.g2p.tracker.model.entities.MenuEntity</class>
+    <class>org.g2p.tracker.model.entities.PostsEntity</class>
     <class>org.g2p.tracker.model.entities.PreferenciasEntity</class>
+    <class>org.g2p.tracker.model.entities.ProveedoresSsoEntity</class>
     <class>org.g2p.tracker.model.entities.RolEntidadEntity</class>
     <class>org.g2p.tracker.model.entities.RolesEntidadEntity</class>
     <class>org.g2p.tracker.model.entities.RolesEntity</class>
+    <class>org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity</class>
+    <class>org.g2p.tracker.model.entities.StickyNotesEntity</class>
+    <class>org.g2p.tracker.model.entities.TagsEntity</class>
+    <class>org.g2p.tracker.model.entities.TagsPerTracksEntity</class>
+    <class>org.g2p.tracker.model.entities.TracksEntity</class>
     <class>org.g2p.tracker.model.entities.TransicionEstadosEntity</class>
     <class>org.g2p.tracker.model.entities.UsuarioPreferenciasEntity</class>
-    <class>org.g2p.tracker.model.entities.UsuarioRolesEntity</class>
-    <class>org.g2p.tracker.model.entities.WebsiteUserEntity</class>
+    <class>org.g2p.tracker.model.entities.WebsiteUsersEntity</class>
+    <class>org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity</class>
+    <class>org.g2p.tracker.model.entities.WorkersPerTracksEntity</class>
+    <class>org.g2p.tracker.model.entities.DiccionarioAplicacionDetalleEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.connection.username" value="tracker"/>
@@ -38,7 +48,7 @@
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.SunONETransactionManagerLookup"/>
-      <property name="hibernate.show_sql" value="true" />
+      <property name="hibernate.show_sql" value="true"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -26,7 +26,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "estados")
-@NamedQueries({@NamedQuery(name = "Estados.findAll", query = "SELECT e FROM Estados e")})
+@NamedQueries({@NamedQuery(name = "EstadosEntity.findAll", query = "SELECT e FROM EstadosEntity e")})
 public class EstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,18 +44,15 @@ public class EstadosEntity extends BaseEntity implements Serializable {
     private String estado;
     @Column(name = "circuito")
     private String circuito;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoIdA", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoIdA", fetch = FetchType.EAGER)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoIdDe", fetch = FetchType.LAZY)
-    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection1;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CircuitosEstadosEntity circuitoId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoIdDestino", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoIdDestino", fetch = FetchType.EAGER)
     private Set<TransicionEstadosEntity> transicionEstadosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoIdOrigen", fetch = FetchType.LAZY)
-    private Set<TransicionEstadosEntity> transicionEstadosCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoId", fetch = FetchType.LAZY)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoId", fetch = FetchType.EAGER)
     private Set<TracksEntity> tracksCollection;
 
     public EstadosEntity() {
@@ -126,14 +123,6 @@ public class EstadosEntity extends BaseEntity implements Serializable {
         this.auditaEstadosCircuitosCollection = auditaEstadosCircuitosCollection;
     }
 
-    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosCollection1() {
-        return auditaEstadosCircuitosCollection1;
-    }
-
-    public void setAuditaEstadosCircuitosCollection1(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection1) {
-        this.auditaEstadosCircuitosCollection1 = auditaEstadosCircuitosCollection1;
-    }
-
     public CircuitosEstadosEntity getCircuitoId() {
         return circuitoId;
     }
@@ -148,14 +137,6 @@ public class EstadosEntity extends BaseEntity implements Serializable {
 
     public void setTransicionEstadosCollection(Set<TransicionEstadosEntity> transicionEstadosCollection) {
         this.transicionEstadosCollection = transicionEstadosCollection;
-    }
-
-    public Set<TransicionEstadosEntity> getTransicionEstadosCollection1() {
-        return transicionEstadosCollection1;
-    }
-
-    public void setTransicionEstadosCollection1(Set<TransicionEstadosEntity> transicionEstadosCollection1) {
-        this.transicionEstadosCollection1 = transicionEstadosCollection1;
     }
 
     public Set<TracksEntity> getTracksCollection() {

@@ -29,7 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "esquema_configuracion")
-@NamedQueries({@NamedQuery(name = "EsquemaConfiguracion.findAll", query = "SELECT e FROM EsquemaConfiguracion e")})
+@NamedQueries({@NamedQuery(name = "EsquemaConfiguracionEntity.findAll", query = "SELECT e FROM EsquemaConfiguracionEntity e")})
 public class EsquemaConfiguracionEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,12 +44,10 @@ public class EsquemaConfiguracionEntity extends BaseEntity implements Serializab
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId", fetch = FetchType.EAGER)
     private Set<ConfiguracionEntity> configuracionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId1", fetch = FetchType.LAZY)
-    private Set<ConfiguracionEntity> configuracionCollection1;
     @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private DiccionarioAplicacionEntity diccionarioAplicacion;
 
     public EsquemaConfiguracionEntity() {
@@ -103,15 +101,7 @@ public class EsquemaConfiguracionEntity extends BaseEntity implements Serializab
     public void setConfiguracionCollection(Set<ConfiguracionEntity> configuracionCollection) {
         this.configuracionCollection = configuracionCollection;
     }
-
-    public Set<ConfiguracionEntity> getConfiguracionCollection1() {
-        return configuracionCollection1;
-    }
-
-    public void setConfiguracionCollection1(Set<ConfiguracionEntity> configuracionCollection1) {
-        this.configuracionCollection1 = configuracionCollection1;
-    }
-
+    
     public DiccionarioAplicacionEntity getDiccionarioAplicacion() {
         return diccionarioAplicacion;
     }
