@@ -4,6 +4,7 @@
  */
 package org.g2p.tracker.controllers;
 
+import java.util.Enumeration;
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
 
 import org.zkoss.zk.ui.event.Event;
@@ -12,7 +13,7 @@ import org.zkoss.zul.Include;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity;
+import javax.servlet.http.HttpServletRequest;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
 import org.zkoss.zul.Label;
@@ -48,6 +49,9 @@ public class BasePageController extends BaseController {
 
         // Arranco en la HomePage
         setNavBarItem(HOME_PAGE);
+        Enumeration it = ((HttpServletRequest)getDesktop().getExecution().getNativeRequest()).getSession().getAttributeNames();
+        while(it.hasMoreElements())
+        System.out.println("--------->"+it.nextElement());
     }
 
     /**
@@ -173,5 +177,10 @@ public class BasePageController extends BaseController {
                 loginBox.removeChild(loginBox.getFellow("welcomeMessage"));
             }
         }
+
     }
+
+
+
+
 }

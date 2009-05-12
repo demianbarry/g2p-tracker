@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -23,8 +24,10 @@ import javax.persistence.Table;
 @Table(name = "proveedores_sso")
 @NamedQueries({@NamedQuery(name = "ProveedoresSsoEntity.findAll", query = "SELECT p FROM ProveedoresSsoEntity p")})
 public class ProveedoresSsoEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "proveedor_sso_id")
     private Integer proveedorSsoId;
@@ -133,5 +136,4 @@ public class ProveedoresSsoEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return proveedorSsoId;
     }
-
 }
