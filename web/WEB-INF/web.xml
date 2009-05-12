@@ -41,9 +41,18 @@
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>BasePage.zul</welcome-file>
-        </welcome-file-list>
+    </welcome-file-list>
     <persistence-unit-ref>
         <persistence-unit-ref-name>g2p-tracker-sinSpringPU</persistence-unit-ref-name>
         <persistence-unit-name>g2p-tracker-sinSpringPU</persistence-unit-name>
     </persistence-unit-ref>
+
+    <servlet>
+        <servlet-name>MainServ</servlet-name>
+        <servlet-class>org.g2p.tracker.openid.MainServ</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainServ</servlet-name>
+        <url-pattern>/MainServ</url-pattern>
+    </servlet-mapping>
 </web-app>

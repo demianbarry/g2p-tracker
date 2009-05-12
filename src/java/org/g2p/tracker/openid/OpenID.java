@@ -68,8 +68,8 @@ public class OpenID implements IOpenID{
         {
             // configure the return_to URL where your application will receive
             // the authentication responses from the OpenID provider
-            String returnToUrl = "http://localhost:8081/OpenID3.1/BienvenidoServ";
-            String dominioAplicacion = "http://localhost:8081/OpenOpenID3.1/";
+            String returnToUrl = "http://localhost:8081/g2p-tracker-sinSpring/";
+            String dominioAplicacion = "http://localhost:8081/g2p-tracker-sinSpring/";
 
             // --- Forward proxy setup (only if needed) ---
             // ProxyProperties proxyProps = new ProxyProperties();

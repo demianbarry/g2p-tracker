@@ -1,36 +1,52 @@
-<window id="LoginPage" use="org.g2p.tracker.controllers.LoginPageController">
-    <div align="center">
-        <label style="color:red" value="Login failed. Please try again." if="${!empty arg.login_error}"/>
-    </div>
-  <!--div align="center"><label style="color:red" value="Reason: ${sessionScope.ACEGI_SECURITY_LAST_EXCEPTION.message}" if="${!empty arg.login_error}"/></div-->
-    <grid>
-        <rows>
-            <row>Username:
-                <textbox id="username"/>
-            </row>
-            <row>Password:
-                <textbox id="password" type="password"/>
-            </row>
-            <row spans="2">
-                <checkbox id="remember" label=" Remember me on this computer"/>
-            </row>
-            <row spans="2">
-                <div align="center">
-                    <button id="okButton" width="76px" label="OK"/>
-                    <space/>
-                    <button id="cancelButton" width="76px" label="Cancel"/>
-                </div>
-            </row>
-        </rows>
-    </grid>
-        <!--<zscript>
-  void doOK(Window modalwin) {
-    Execution exec = Executions.getCurrent();
-    exec.setAttribute("j_loginurl", "/j_acegi_security_check");
-    exec.setAttribute("j_username", username.value);
-    exec.setAttribute("j_password", password.value);
-    exec.setAttribute("_acegi_security_remember_me", Boolean.valueOf(remember.checked));
-    modalwin.detach();
-  }
-        </zscript>-->
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./loginWin"?>
+<window id="loginWin" use="org.g2p.tracker.controllers.LoginPageController">
+    <borderlayout height="450px">
+        <north size="20%">
+            <div align="center">
+                <label style="color:red" value="Login failed. Please try again." if="${!empty arg.login_error}"/>
+            </div>
+        </north>
+        <east>
+        </east>
+        <west>
+        </west>
+        <center>
+            <listbox id="proveedoresList" width="100%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">
+                <listitem self="@{each=x0}">
+                    <listcell label="@{x0.nombre}"/>
+                    <listcell label="@{x0.descripcion}"/>
+                    <listcell>
+                        <image src="@{x0.urlIcono}" height="20%" width="20%"/>
+                    </listcell>
+                </listitem>
+            </listbox>
+        </center>
+        <south size="30%"> <div align="center">
+            <grid id="localLoginGrid">
+                <rows>
+                    <row>Username:
+                        <textbox id="username"/>
+                    </row>
+                    <row>Password:
+                        <textbox id="password" type="password"/>
+                    </row>
+                    <row spans="2">
+                        <checkbox id="remember" label=" Remember me on this computer"/>
+                    </row>
+                    <row spans="2">
+                        <div align="center">
+                            <button id="okButton" width="76px" label="OK"/>
+                            <space/>
+                            <button id="cancelButton" width="76px" label="Cancel"/>
+                        </div>
+                    </row>
+                </rows>
+            </grid>
+                <toolbarbutton id="localLoginButton" label="Usar cuenta local"/>
+            </div>
+        </south>
+    </borderlayout>
 </window>
