@@ -4,7 +4,8 @@
  */
 package org.g2p.tracker.controllers;
 
-import java.util.Enumeration;
+import java.io.IOException;
+import javax.servlet.ServletException;
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
 
 import org.zkoss.zk.ui.event.Event;
@@ -14,8 +15,10 @@ import org.zkoss.zul.Include;
 import java.util.Hashtable;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
+import org.g2p.tracker.openid.BienvenidoServ;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Separator;
 import org.zkoss.zul.Toolbarbutton;
@@ -35,23 +38,32 @@ public class BasePageController extends BaseController {
     }
 
     public void onCreate$baseWin(Event event) {
-        getDesktop().setAttribute(INCLUDE, include);
-        getDesktop().setAttribute(BASE_PAGE_CONTROLLER, this);
+        try {
+            getDesktop().setAttribute(INCLUDE, include);
+            getDesktop().setAttribute(BASE_PAGE_CONTROLLER, this);
+            // Muestro/oculto los links de login/logout según corresponda
+            if (getUserIdFromSession() == null) {
+                loginLabel.setVisible(true);
+                logoutLabel.setVisible(false);
+            } else {
+                logoutLabel.setVisible(true);
+                loginLabel.setVisible(false);
+            }
+            // Arranco en la HomePage
+            setNavBarItem(HOME_PAGE);
+            HttpServletRequest request = (HttpServletRequest) getDesktop().getExecution().getNativeRequest();
+            HttpServletResponse response = (HttpServletResponse) getDesktop().getExecution().getNativeResponse();
 
-        // Muestro/oculto los links de login/logout según corresponda
-        if (getUserIdFromSession() == null) {
-            loginLabel.setVisible(true);
-            logoutLabel.setVisible(false);
-        } else {
-            logoutLabel.setVisible(true);
-            loginLabel.setVisible(false);
+            BienvenidoServ.processRequest(request, response);
+
+        } catch (ServletException ex) {
+            showMessage("ServletException: ", ex);
+        } catch (IOException ex) {
+            showMessage("IOException: ", ex);
+        } catch (NullPointerException ex) {
+            showMessage("NullPointerException: ", ex);
         }
 
-        // Arranco en la HomePage
-        setNavBarItem(HOME_PAGE);
-        Enumeration it = ((HttpServletRequest)getDesktop().getExecution().getNativeRequest()).getSession().getAttributeNames();
-        while(it.hasMoreElements())
-        System.out.println("--------->"+it.nextElement());
     }
 
     /**
@@ -135,6 +147,7 @@ public class BasePageController extends BaseController {
             // del evento la página a la cual tengo que redirigir el "include"
             button.setAttribute("page", menu.getMenuId().getUrl());
             button.addEventListener("onClick", new EventListener() {
+
                 @Override
                 public void onEvent(Event arg0) throws Exception {
                     include.setSrc(arg0.getTarget().getAttribute("page").toString());
@@ -179,8 +192,4 @@ public class BasePageController extends BaseController {
         }
 
     }
-
-
-
-
 }
