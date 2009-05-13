@@ -28,7 +28,7 @@ public class BienvenidoServ extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    public static void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NullPointerException {
 
         try {
@@ -56,13 +56,13 @@ public class BienvenidoServ extends HttpServlet {
             // por seguridad
             Global.getInstance().unsetSso();
 
-            response.sendRedirect("http://localhost:8081/OpenID3.1/Bienvenido.jsp");
+            response.sendRedirect("http://localhost:8080/g2p-tracker-sinSpring/");
 
         } catch (NoAutentificadoException e) {
             // si el usuario no se registro correctamente
             // lo envia de vuelta a la pagina de autentificacion
 
-            response.sendRedirect("http://localhost:8081/OpenID3.1/MainServ"); // cambiar por la que corresponda
+            response.sendRedirect("http://localhost:8080/g2p-tracker-sinSpring/"); // cambiar por la que corresponda
 
         }
     }
@@ -117,7 +117,7 @@ public class BienvenidoServ extends HttpServlet {
     }// </editor-fold>
 
     // eliminar cuando corresponda
-    public void solicitarLogin(HttpServletResponse response) throws IOException {
+    public static void solicitarLogin(HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
