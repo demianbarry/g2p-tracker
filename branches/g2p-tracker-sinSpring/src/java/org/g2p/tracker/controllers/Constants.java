@@ -13,6 +13,8 @@ public interface Constants {
     public static final String USER_ID = "User";
     public static final String USER_NAME = "UserName";
 
+    public static final String SSO = "SSO";
+
     public static final String HOME_PAGE = "HomePage.zul";
     public static final String BASE_PAGE = "BasePage.zul";
     public static final String LOGIN_PAGE = "LoginPage.zul";
