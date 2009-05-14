@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Embeddable
 public class WebsiteUsersPerProveedoresOpenidEntityPK implements Serializable {
@@ -73,7 +73,7 @@ public class WebsiteUsersPerProveedoresOpenidEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidPK[userId=" + userId + ", proveedorSsoId=" + proveedorSsoId + "]";
+        return "org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntityPK[userId=" + userId + ", proveedorSsoId=" + proveedorSsoId + "]";
     }
 
 }
