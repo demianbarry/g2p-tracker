@@ -26,5 +26,4 @@ public class OpenIDFactory extends SSOFactory{
     public ISSO create() throws ConsumerException {
         return new OpenID();
     }
-
 }
