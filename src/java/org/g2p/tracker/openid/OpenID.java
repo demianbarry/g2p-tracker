@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.openid;
 
 // ----> imports de OpenID <-------
@@ -24,12 +23,16 @@ import org.openid4java.server.RealmVerifier;
 
 // ----> imports de Java <-------
 import java.io.IOException;
+import java.lang.Integer;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.g2p.tracker.controllers.Constants;
+import org.g2p.tracker.model.entities.WebsiteUsersEntity;
+import org.g2p.tracker.model.models.BaseModel;
 
 /**
  * Clase de autentificación
@@ -38,16 +41,15 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Cristian Pacheco
  */
-public class OpenID implements IOpenID{
+public class OpenID implements IOpenID, Constants {
 
     private ConsumerManager manager;
-    
+
     /**
      *
      * @throws org.openid4java.consumer.ConsumerException
      */
-    public OpenID() throws ConsumerException
-    {
+    public OpenID() throws ConsumerException {
         // instantiate a ConsumerManager object
         manager = new ConsumerManager();
 
@@ -60,17 +62,14 @@ public class OpenID implements IOpenID{
 
     // --- placing the authentication request ---
     private void authRequest(String userSuppliedString,
-                              HttpServletRequest httpReq,
-                              HttpServletResponse httpResp)
-            throws IOException, DiscoveryException
-    {
-        try
-        {
-            System.out.println("------>"+httpReq.getCookies());
+            HttpServletRequest httpReq,
+            HttpServletResponse httpResp)
+            throws IOException, DiscoveryException {
+        try {
             // configure the return_to URL where your application will receive
             // the authentication responses from the OpenID provider
-            String returnToUrl = "http://localhost:8080/g2p-tracker-sinSpring/";
-            String dominioAplicacion = "http://localhost:8080/g2p-tracker-sinSpring/";
+            String returnToUrl = "http://localhost:8081/g2p-tracker-sinSpring/";
+            String dominioAplicacion = "http://localhost:8081/g2p-tracker-sinSpring/";
 
             // --- Forward proxy setup (only if needed) ---
             // ProxyProperties proxyProps = new ProxyProperties();
@@ -93,21 +92,18 @@ public class OpenID implements IOpenID{
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             AuthRequest authReq;
-                authReq = manager.authenticate(discovered, returnToUrl, dominioAplicacion);
+            authReq = manager.authenticate(discovered, returnToUrl, dominioAplicacion);
 
 
             authReq.addExtension(crearSolicitudDatos());
 
 
             httpResp.sendRedirect(authReq.getDestinationUrl(true));
-        }
-        catch (MessageException ex) {
-                Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ConsumerException ex) {
-                Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        catch (OpenIDException e)
-        {
+        } catch (MessageException ex) {
+            Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ConsumerException ex) {
+            Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (OpenIDException e) {
             // present error to the user
             System.out.println("Ocurrio un error en authRequest");
 
@@ -116,9 +112,8 @@ public class OpenID implements IOpenID{
 
     }
 
-
-    private FetchRequest crearSolicitudDatos(){
-         // Attribute Exchange example: fetching the 'email' attribute
+    private FetchRequest crearSolicitudDatos() {
+        // Attribute Exchange example: fetching the 'email' attribute
         FetchRequest fetch = FetchRequest.createFetchRequest();
         try {
 
@@ -136,7 +131,7 @@ public class OpenID implements IOpenID{
         return fetch;
     }
 
-    private void setDatos(FetchResponse fetch,Usuario user){
+    private void setDatos(FetchResponse fetch, WebsiteUsersEntity user) {
         List emails = fetch.getAttributeValues("Email");
         String nombre = fetch.getAttributeValue("FirstName");
         String apellido = fetch.getAttributeValue("LasttName");
@@ -145,33 +140,28 @@ public class OpenID implements IOpenID{
 
         System.out.println("Email: " + email);
 
-        user = new Usuario();
-
-        user.setNombre(nombre);
-        user.setApellido(apellido);
-        user.setEmails(new Vector(emails).elements());
+        user.setNombreCompleto(nombre + " " + apellido);
+        user.setEmail((String) emails.get(0));
     }
 
     // --- processing the authentication response ---
     //public Identifier verifyResponse(HttpServletRequest httpReq)
-    private IUsuario verifyResponse(HttpServletRequest httpReq) throws NoAutentificadoException
-    {
-        try
-        {
+    private WebsiteUsersEntity verifyResponse(HttpServletRequest httpReq) throws NoAutentificadoException {
+        try {
             // extract the parameters from the authentication response
             // (which comes in as a HTTP request from the OpenID provider)
             ParameterList response =
                     new ParameterList(httpReq.getParameterMap());
 
             // retrieve the previously stored discovery information
-            DiscoveryInformation discovered = (DiscoveryInformation)
-                    httpReq.getSession().getAttribute("openid-disc");
+            DiscoveryInformation discovered = (DiscoveryInformation) httpReq.getSession().getAttribute("openid-disc");
 
             // extract the receiving URL from the HTTP request
             StringBuffer receivingURL = httpReq.getRequestURL();
             String queryString = httpReq.getQueryString();
-            if (queryString != null && queryString.length() > 0)
+            if (queryString != null && queryString.length() > 0) {
                 receivingURL.append("?").append(httpReq.getQueryString());
+            }
 
             // verify the response; ConsumerManager needs to be the same
             // (static) instance used to place the authentication request
@@ -182,35 +172,35 @@ public class OpenID implements IOpenID{
             // examine the verification result and extract the verified identifier
             Identifier verified = verification.getVerifiedId();
 
-            Usuario usuario = new Usuario();
+            Hashtable parameters = new Hashtable();
+            parameters.put("claimedId", verified.getIdentifier());
 
-            usuario.setID(verified.getIdentifier());
-            usuario.setSession(httpReq.getSession());
-            if (verified != null)
-            {
+            List users = BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters);
+
+            WebsiteUsersEntity usuario = null;
+            if (users.size() != 0) {
+                usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
+            }
+
+            if (verified != null) {
                 AuthSuccess authSuccess =
                         (AuthSuccess) verification.getAuthResponse();
 
 
 
-                if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX))
-                {
-                    FetchResponse fetchResp = (FetchResponse) authSuccess
-                            .getExtension(AxMessage.OPENID_NS_AX);
+                if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
+                    FetchResponse fetchResp = (FetchResponse) authSuccess.getExtension(AxMessage.OPENID_NS_AX);
 
 
-                    setDatos(fetchResp,usuario);
+                    setDatos(fetchResp, usuario);
                 }
 
                 //return verified;  // success
                 return usuario;  // success
-            }
-            else {
+            } else {
                 throw new NoAutentificadoException("No se ha podido identificar");
             }
-        }
-        catch (OpenIDException e)
-        {
+        } catch (OpenIDException e) {
             // present error to the user
             System.out.println("Ocurrio una excepcion en verifyResponse");
         }
@@ -225,8 +215,7 @@ public class OpenID implements IOpenID{
      * @return los datos del usuario
      * @throws modelo.NoAutentificadoException
      */
-    public IUsuario login(HttpServletRequest httpReq) throws NoAutentificadoException
-    {
+    public WebsiteUsersEntity login(HttpServletRequest httpReq) throws NoAutentificadoException {
         return verifyResponse(httpReq);
     }
 
@@ -240,10 +229,18 @@ public class OpenID implements IOpenID{
      * @throws org.openid4java.discovery.DiscoveryException
      */
     public void solicitarAutentificacion(String userSuppliedString,
-                              HttpServletRequest httpReq,
-                              HttpServletResponse httpResp)
-            throws IOException, DiscoveryException
-    {
+            HttpServletRequest httpReq,
+            HttpServletResponse httpResp)
+            throws IOException, DiscoveryException {
         authRequest(userSuppliedString, httpReq, httpResp);
+    }
+
+    @Override
+    public boolean isUserLogged(HttpServletRequest req, WebsiteUsersEntity user) {
+        if (user.getUserId().equals((Integer) req.getAttribute(USER_ID))) {
+            return true;
+        }
+
+        return false;
     }
 }
