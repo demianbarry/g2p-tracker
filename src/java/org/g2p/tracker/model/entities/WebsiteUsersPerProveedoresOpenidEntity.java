@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -19,42 +18,49 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Entity
 @Table(name = "website_users_per_proveedores_openid")
-@NamedQueries({@NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findAll", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w")})
-public class WebsiteUsersPerProveedoresOpenidEntity extends BaseEntity implements Serializable {
+@NamedQueries({@NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findAll", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w"),
+    @NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findByUserId", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w WHERE w.websiteUsersPerProveedoresOpenidEntityPK.userId = :userId"),
+    @NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w WHERE w.claimedId = :claimedId")})
+public class WebsiteUsersPerProveedoresOpenidEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidPK;
+    protected WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK;
     @Basic(optional = false)
     @Column(name = "fecha_asociacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAsociacion;
+    @Basic(optional = false)
+    @Column(name = "claimed_id")
+    private String claimedId;
 
     public WebsiteUsersPerProveedoresOpenidEntity() {
     }
 
-    public WebsiteUsersPerProveedoresOpenidEntity(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidPK) {
-        this.websiteUsersPerProveedoresOpenidPK = websiteUsersPerProveedoresOpenidPK;
+    public WebsiteUsersPerProveedoresOpenidEntity(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK) {
+        this.websiteUsersPerProveedoresOpenidEntityPK = websiteUsersPerProveedoresOpenidEntityPK;
     }
 
-    public WebsiteUsersPerProveedoresOpenidEntity(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidPK, Date fechaAsociacion) {
-        this.websiteUsersPerProveedoresOpenidPK = websiteUsersPerProveedoresOpenidPK;
+    public WebsiteUsersPerProveedoresOpenidEntity(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK, Date fechaAsociacion, String claimedId) {
+        this.websiteUsersPerProveedoresOpenidEntityPK = websiteUsersPerProveedoresOpenidEntityPK;
         this.fechaAsociacion = fechaAsociacion;
+        this.claimedId = claimedId;
     }
 
     public WebsiteUsersPerProveedoresOpenidEntity(int userId, int proveedorSsoId) {
-        this.websiteUsersPerProveedoresOpenidPK = new WebsiteUsersPerProveedoresOpenidEntityPK(userId, proveedorSsoId);
+        this.websiteUsersPerProveedoresOpenidEntityPK = new WebsiteUsersPerProveedoresOpenidEntityPK(userId, proveedorSsoId);
     }
 
-    public WebsiteUsersPerProveedoresOpenidEntityPK getWebsiteUsersPerProveedoresOpenidPK() {
-        return websiteUsersPerProveedoresOpenidPK;
+    public WebsiteUsersPerProveedoresOpenidEntityPK getWebsiteUsersPerProveedoresOpenidEntityPK() {
+        return websiteUsersPerProveedoresOpenidEntityPK;
     }
 
-    public void setWebsiteUsersPerProveedoresOpenidPK(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidPK) {
-        this.websiteUsersPerProveedoresOpenidPK = websiteUsersPerProveedoresOpenidPK;
+    public void setWebsiteUsersPerProveedoresOpenidEntityPK(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK) {
+        this.websiteUsersPerProveedoresOpenidEntityPK = websiteUsersPerProveedoresOpenidEntityPK;
     }
 
     public Date getFechaAsociacion() {
@@ -65,10 +71,18 @@ public class WebsiteUsersPerProveedoresOpenidEntity extends BaseEntity implement
         this.fechaAsociacion = fechaAsociacion;
     }
 
+    public String getClaimedId() {
+        return claimedId;
+    }
+
+    public void setClaimedId(String claimedId) {
+        this.claimedId = claimedId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (websiteUsersPerProveedoresOpenidPK != null ? websiteUsersPerProveedoresOpenidPK.hashCode() : 0);
+        hash += (websiteUsersPerProveedoresOpenidEntityPK != null ? websiteUsersPerProveedoresOpenidEntityPK.hashCode() : 0);
         return hash;
     }
 
@@ -79,7 +93,7 @@ public class WebsiteUsersPerProveedoresOpenidEntity extends BaseEntity implement
             return false;
         }
         WebsiteUsersPerProveedoresOpenidEntity other = (WebsiteUsersPerProveedoresOpenidEntity) object;
-        if ((this.websiteUsersPerProveedoresOpenidPK == null && other.websiteUsersPerProveedoresOpenidPK != null) || (this.websiteUsersPerProveedoresOpenidPK != null && !this.websiteUsersPerProveedoresOpenidPK.equals(other.websiteUsersPerProveedoresOpenidPK))) {
+        if ((this.websiteUsersPerProveedoresOpenidEntityPK == null && other.websiteUsersPerProveedoresOpenidEntityPK != null) || (this.websiteUsersPerProveedoresOpenidEntityPK != null && !this.websiteUsersPerProveedoresOpenidEntityPK.equals(other.websiteUsersPerProveedoresOpenidEntityPK))) {
             return false;
         }
         return true;
@@ -87,12 +101,6 @@ public class WebsiteUsersPerProveedoresOpenidEntity extends BaseEntity implement
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenid[websiteUsersPerProveedoresOpenidPK=" + websiteUsersPerProveedoresOpenidPK + "]";
+        return "org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity[websiteUsersPerProveedoresOpenidEntityPK=" + websiteUsersPerProveedoresOpenidEntityPK + "]";
     }
-
-    @Override
-    public Object getPK() {
-        return websiteUsersPerProveedoresOpenidPK;
-    }
-
 }
