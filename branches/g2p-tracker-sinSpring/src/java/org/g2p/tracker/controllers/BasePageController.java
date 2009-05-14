@@ -4,8 +4,6 @@
  */
 package org.g2p.tracker.controllers;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
 
 import org.zkoss.zk.ui.event.Event;
@@ -18,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
-import org.g2p.tracker.openid.BienvenidoServ;
+import org.g2p.tracker.openid.IOpenID;
+import org.g2p.tracker.openid.LoginPostProcessor;
+import org.g2p.tracker.openid.OpenIDFactory;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Separator;
 import org.zkoss.zul.Toolbarbutton;
@@ -51,17 +51,17 @@ public class BasePageController extends BaseController {
             }
             // Arranco en la HomePage
             setNavBarItem(HOME_PAGE);
+
+            IOpenID auth = (IOpenID) new OpenIDFactory().create();
+
+            getSession().setAttribute(SSO, auth);
+
             HttpServletRequest request = (HttpServletRequest) getDesktop().getExecution().getNativeRequest();
             HttpServletResponse response = (HttpServletResponse) getDesktop().getExecution().getNativeResponse();
+            LoginPostProcessor.processRequest(request, response);
 
-            BienvenidoServ.processRequest(request, response);
-
-        } catch (ServletException ex) {
-            showMessage("ServletException: ", ex);
-        } catch (IOException ex) {
-            showMessage("IOException: ", ex);
-        } catch (NullPointerException ex) {
-            showMessage("NullPointerException: ", ex);
+        } catch (Exception ex) {
+            showMessage("Error procesando login: ", ex);
         }
 
     }
