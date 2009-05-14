@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.g2p.tracker.controllers.Constants;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.discovery.DiscoveryException;
 
@@ -23,7 +24,7 @@ import org.openid4java.discovery.DiscoveryException;
  *
  * @author Cristian Pacheco
  */
-public class MainServ extends HttpServlet {
+public class MainServ extends HttpServlet implements Constants{
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,7 +38,7 @@ public class MainServ extends HttpServlet {
 
         IOpenID auth = (IOpenID) new OpenIDFactory().create();
 
-        Global.getInstance().setSso(auth);
+        request.getSession().setAttribute(SSO, auth);
 
         auth.solicitarAutentificacion(request.getParameter("DiscoveryURL"),
                 request,
