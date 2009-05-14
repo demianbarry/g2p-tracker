@@ -237,7 +237,8 @@ public class OpenID implements IOpenID, Constants {
 
     @Override
     public boolean isUserLogged(HttpServletRequest req, WebsiteUsersEntity user) {
-        if (user.getUserId().equals((Integer) req.getAttribute(USER_ID))) {
+        System.out.println(">>>>>>>>> "+user.getUserId() + " --- " +req.getSession().getAttribute(USER_ID));
+        if (user != null && user.getUserId().equals((Integer) req.getSession().getAttribute(USER_ID))) {
             return true;
         }
 

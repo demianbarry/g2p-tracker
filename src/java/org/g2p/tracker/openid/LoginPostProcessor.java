@@ -42,13 +42,20 @@ public class LoginPostProcessor implements Constants {
             // el usuario ingresa al sistema
             WebsiteUsersEntity usuario = sso.login(request);
 
+
+            /*if(usuario == null)
+            throw new NoAutentificadoException("");*/
+
+            // otro usuario conectado
+            if (usuario != null) {
+                request.getSession().setAttribute(USER_ID, usuario.getUserId());
+                request.getSession().setAttribute(USER_NAME, usuario.getNombreCompleto());
+            }
+
             if (!sso.isUserLogged(request, usuario)) {
                 solicitarLogin(response);
                 return;
             }
-
-            // otro usuario conectado
-            request.getSession().setAttribute(USER_ID, usuario);
 
             response.sendRedirect("http://localhost:8081/g2p-tracker-sinSpring/");
 
@@ -63,18 +70,6 @@ public class LoginPostProcessor implements Constants {
 
     // eliminar cuando corresponda
     public static void solicitarLogin(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>No Autorizado</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>Debe loguearse para ingresar al sistema</h1>");
-        out.println("</body>");
-        out.println("</html>");
-
-        out.close();
+        response.sendRedirect("http://localhost:8081/g2p-tracker-sinSpring/LoginPage.zul");
     }
 }
