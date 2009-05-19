@@ -5,6 +5,7 @@
 package org.g2p.tracker.openid;
 
 // ----> imports de OpenID <-------
+import java.io.FileNotFoundException;
 import org.openid4java.OpenIDException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
@@ -23,9 +24,10 @@ import org.openid4java.server.RealmVerifier;
 
 // ----> imports de Java <-------
 import java.io.IOException;
-import java.lang.Integer;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +46,7 @@ import org.g2p.tracker.model.models.BaseModel;
 public class OpenID implements IOpenID, Constants {
 
     private ConsumerManager manager;
+    private Properties properties;
 
     /**
      *
@@ -57,19 +60,24 @@ public class OpenID implements IOpenID, Constants {
         rv.setEnforceRpId(false);
         manager.setRealmVerifier(rv);
         manager.setConnectTimeout(4999);
-
     }
 
     // --- placing the authentication request ---
-    private void authRequest(String userSuppliedString,
+    private String authRequest(String userSuppliedString,
             HttpServletRequest httpReq,
             HttpServletResponse httpResp)
             throws IOException, DiscoveryException {
         try {
+
+            InputStream is = (httpReq.getSession().getServletContext().getResourceAsStream("/WEB-INF/openid.properties"));
+
+
+            properties = new Properties();
+            properties.load(is);
+
             // configure the return_to URL where your application will receive
             // the authentication responses from the OpenID provider
-            String returnToUrl = "http://localhost:8080/g2p-tracker-sinSpring/";
-            String dominioAplicacion = "http://localhost:8080/g2p-tracker-sinSpring/";
+            String returnToUrl = properties.getProperty("return_to_url");
 
             // --- Forward proxy setup (only if needed) ---
             // ProxyProperties proxyProps = new ProxyProperties();
@@ -92,23 +100,24 @@ public class OpenID implements IOpenID, Constants {
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             AuthRequest authReq;
-            authReq = manager.authenticate(discovered, returnToUrl, dominioAplicacion);
+            authReq = manager.authenticate(discovered, returnToUrl);
 
 
             authReq.addExtension(crearSolicitudDatos());
 
+            return authReq.getDestinationUrl(true);
 
-            httpResp.sendRedirect(authReq.getDestinationUrl(true));
         } catch (MessageException ex) {
-            Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("authRequest-MessageException: "+ex.getMessage());
         } catch (ConsumerException ex) {
-            Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (OpenIDException e) {
+            System.out.println("authRequest-ConsumerException: "+ex.getMessage());
+        } catch (OpenIDException ex) {
             // present error to the user
-            System.out.println("Ocurrio un error en authRequest");
+            System.out.println("authRequest-OpenIDException: "+ex.getMessage());
 
-            e.printStackTrace();
+            ex.printStackTrace();
         }
+        return null;
 
     }
 
@@ -140,7 +149,8 @@ public class OpenID implements IOpenID, Constants {
 
         System.out.println("Email: " + email);
 
-        user.setNombreCompleto(nombre + " " + apellido);
+        user.setNombre(nombre);
+        user.setApellido(apellido);
         user.setEmail((String) emails.get(0));
     }
 
@@ -180,6 +190,8 @@ public class OpenID implements IOpenID, Constants {
             WebsiteUsersEntity usuario = null;
             if (users.size() != 0) {
                 usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
+            } else {
+                httpReq.getSession().setAttribute(CLAIMED_ID, verified.getIdentifier());
             }
 
             if (verified != null) {
@@ -228,16 +240,16 @@ public class OpenID implements IOpenID, Constants {
      * @throws java.io.IOException
      * @throws org.openid4java.discovery.DiscoveryException
      */
-    public void solicitarAutentificacion(String userSuppliedString,
+    public String solicitarAutentificacion(String userSuppliedString,
             HttpServletRequest httpReq,
             HttpServletResponse httpResp)
             throws IOException, DiscoveryException {
-        authRequest(userSuppliedString, httpReq, httpResp);
+        return authRequest(userSuppliedString, httpReq, httpResp);
     }
 
     @Override
     public boolean isUserLogged(HttpServletRequest req, WebsiteUsersEntity user) {
-        System.out.println(">>>>>>>>> "+user.getUserId() + " --- " +req.getSession().getAttribute(USER_ID));
+        System.out.println(">>>>>>>>> " + user.getUserId() + " --- " + req.getSession().getAttribute(USER_ID));
         if (user != null && user.getUserId().equals((Integer) req.getSession().getAttribute(USER_ID))) {
             return true;
         }
