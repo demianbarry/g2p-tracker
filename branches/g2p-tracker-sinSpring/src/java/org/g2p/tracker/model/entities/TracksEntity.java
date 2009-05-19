@@ -73,6 +73,9 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userIdOwner;
+    @Basic(optional = false)
+    @Column(name = "titulo")
+    private String titulo;
 
     public TracksEntity() {
     }
@@ -81,12 +84,13 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.trackId = trackId;
     }
 
-    public TracksEntity(Integer trackId, String descripcion, int criticidad, int prioridad, Date fechaCreacion) {
+    public TracksEntity(Integer trackId, String descripcion, int criticidad, int prioridad, Date fechaCreacion, String titulo) {
         this.trackId = trackId;
         this.descripcion = descripcion;
         this.criticidad = criticidad;
         this.prioridad = prioridad;
         this.fechaCreacion = fechaCreacion;
+        this.titulo = titulo;
     }
 
     public Integer getTrackId() {
@@ -191,6 +195,14 @@ public class TracksEntity extends BaseEntity implements Serializable {
 
     public void setUserIdOwner(WebsiteUsersEntity userIdOwner) {
         this.userIdOwner = userIdOwner;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     @Override
