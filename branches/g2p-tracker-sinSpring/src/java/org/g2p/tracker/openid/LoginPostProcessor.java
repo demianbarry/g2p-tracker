@@ -5,7 +5,6 @@
 package org.g2p.tracker.openid;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,42 +29,25 @@ public class LoginPostProcessor implements Constants {
      * @throws IOException if an I/O error occurs
      */
     public static void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NullPointerException {
+            throws ServletException, IOException, NullPointerException, NoAutentificadoException {
 
-        try {
+        // obtiene el objeto de autentificacion
+        ISSO sso = (ISSO) request.getSession().getAttribute(SSO);
 
-            // obtiene el objeto de autentificacion
-            ISSO sso = (ISSO) request.getSession().getAttribute(SSO);
+        System.out.println("URL After " + request.getRequestURL().toString());
 
-            System.out.println("URL After " + request.getRequestURL().toString());
+        // el usuario ingresa al sistema
+        WebsiteUsersEntity usuario = sso.login(request);
 
-            // el usuario ingresa al sistema
-            WebsiteUsersEntity usuario = sso.login(request);
-
-
-            /*if(usuario == null)
-            throw new NoAutentificadoException("");*/
-
-            // otro usuario conectado
-            if (usuario != null) {
-                request.getSession().setAttribute(USER_ID, usuario.getUserId());
-                request.getSession().setAttribute(USER_NAME, usuario.getNombreCompleto());
-            }
-
-            if (!sso.isUserLogged(request, usuario)) {
-                solicitarLogin(response);
-                return;
-            }
-
-            response.sendRedirect("http://localhost:8081/g2p-tracker-sinSpring/");
-
-        } catch (NoAutentificadoException e) {
-            // si el usuario no se registro correctamente
-            // lo envia de vuelta a la pagina de autentificacion
-
-            response.sendRedirect("http://localhost:8081/g2p-tracker-sinSpring/LoginPage.zul"); // cambiar por la que corresponda
-
+        // otro usuario conectado
+        if (usuario != null) {
+            request.getSession().setAttribute(USER_ID, usuario.getUserId());
+            request.getSession().setAttribute(USER_NAME, usuario.getNombre()+" "+usuario.getApellido());
+        } else {
+            System.out.println("NULL");
         }
+        response.sendRedirect("http://localhost:8081/g2p-tracker-sinSpring/");
+        return;
     }
 
     // eliminar cuando corresponda
