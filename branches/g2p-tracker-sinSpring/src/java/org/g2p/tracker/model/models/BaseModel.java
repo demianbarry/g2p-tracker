@@ -131,7 +131,6 @@ public class BaseModel {
     public void setEntity(Class entity) {
         this.entity = entity;
     }
-
     private UserTransaction utx = null;
 
     public UserTransaction getUtx() throws NamingException {
@@ -140,7 +139,6 @@ public class BaseModel {
         }
         return utx;
     }
-
     protected static EntityManagerFactory emf = null;
 
     public static EntityManager getEntityManager() {
@@ -193,7 +191,7 @@ public class BaseModel {
 
             entity = em.merge(entity);
 
-            System.out.println("ENTITY"+entity.getPK());
+            System.out.println("ENTITY" + entity.getPK());
             if (ownTx) {
                 getUtx().commit();
             }
@@ -219,7 +217,7 @@ public class BaseModel {
             em = getEntityManager();
             em.remove(em.getReference(this.entity, entity.getPK()));
 
-            System.out.println("-------------> STATUS: "+getUtx().getStatus());
+            System.out.println("-------------> STATUS: " + getUtx().getStatus());
 
             if (ownTx) {
                 getUtx().commit();
@@ -248,7 +246,7 @@ public class BaseModel {
     private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            Query q = em.createQuery("select object(o) from "+this.entity.getName()+" as o");
+            Query q = em.createQuery("select object(o) from " + this.entity.getName() + " as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -259,21 +257,21 @@ public class BaseModel {
         }
     }
 
-    public static List<BaseEntity> findEntities(String namedQuery, Hashtable parameters){
+    public static List<BaseEntity> findEntities(String namedQuery, Hashtable parameters) {
         EntityManager em = getEntityManager();
-        Query query =  em.createNamedQuery(namedQuery);
+        Query query = em.createNamedQuery(namedQuery);
 
-         Enumeration keys = parameters.keys();
+        Enumeration keys = parameters.keys();
 
-         while(keys.hasMoreElements()) {
-             String param = (String)keys.nextElement();
-             Object value = parameters.get(param);
-             System.out.println("---> PARAM: "+param+" - VALUE: "+value);
-             query.setParameter(param, value);
+        while (keys.hasMoreElements()) {
+            String param = (String) keys.nextElement();
+            Object value = parameters.get(param);
+            System.out.println("---> PARAM: " + param + " - VALUE: " + value);
+            query.setParameter(param, value);
 
-         }
-         System.out.println("---> QUERY: "+query.getResultList().size());
-         return query.getResultList();
+        }
+        System.out.println("---> QUERY: " + query.getResultList().size());
+        return query.getResultList();
     }
 
     public BaseEntity findEntity(Object pk) {
@@ -304,5 +302,34 @@ public class BaseModel {
 
     public void destroy(BaseEntity entity) throws NamingException, IllegalStateException, SecurityException, SystemException, Exception {
         destroy(entity, true);
+    }
+
+    public static void createEntity(BaseEntity entity, boolean ownTx) throws RollbackFailureException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        EntityManager em = null;
+        UserTransaction utx = null;
+        try {
+            if (ownTx) {
+                utx = (UserTransaction) InitialContext.doLookup("UserTransaction");
+                utx.begin();
+            }
+
+            em = getEntityManager();
+            em.persist(entity);
+
+            if (ownTx) {
+                utx.commit();
+            }
+
+        } catch (Exception ex) {
+            System.out.println("STATE: "+utx.getStatus());
+            if (ownTx) {
+                utx.rollback();
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 }

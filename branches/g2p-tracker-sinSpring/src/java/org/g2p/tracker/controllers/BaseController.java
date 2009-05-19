@@ -4,6 +4,8 @@
  */
 package org.g2p.tracker.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
@@ -112,13 +114,13 @@ public class BaseController extends Window implements AfterCompose, Constants {
     }
 
     public Integer getUserIdFromSession() {
-        return (Integer)getSession().getAttribute(USER_ID);
+        return (Integer) getSession().getAttribute(USER_ID);
     }
 
     public String getUserNameFromSession() {
-        return (String)getSession().getAttribute(USER_NAME);
+        return (String) getSession().getAttribute(USER_NAME);
     }
-    
+
     public void setUserIdInSession(Integer userId) {
         getSession().setAttribute(USER_ID, userId);
     }
@@ -127,5 +129,16 @@ public class BaseController extends Window implements AfterCompose, Constants {
         getSession().setAttribute(USER_NAME, userName);
     }
 
+    public HttpServletRequest getHttpRequest() {
+        return (HttpServletRequest) getDesktop().getExecution().getNativeRequest();
+    }
 
+    public HttpServletResponse getHttpResponse() {
+        return (HttpServletResponse) getDesktop().getExecution().getNativeResponse();
+    }
+
+    public void gotoHome() {
+        ((Include) getDesktop().getAttribute(INCLUDE)).setSrc(HOME_PAGE);
+        ((BasePageController) getDesktop().getAttribute(BASE_PAGE_CONTROLLER)).setNavBarItem(HOME_PAGE);
+    }
 }

@@ -17,7 +17,7 @@ import org.openid4java.discovery.DiscoveryException;
  *
  * @author Cristian Pacheco
  */
-public interface IOpenID extends ISSO{
+public interface IOpenID extends ISSO {
     /**
      * Redirige al usuario al sitio de autentificacion del proveedor
      *
@@ -27,7 +27,7 @@ public interface IOpenID extends ISSO{
      * @throws java.io.IOException
      * @throws org.openid4java.discovery.DiscoveryException
      */
-    public void solicitarAutentificacion(String userSuppliedString,
+    public String solicitarAutentificacion(String userSuppliedString,
                               HttpServletRequest httpReq,
                               HttpServletResponse httpResp)
             throws IOException, DiscoveryException;

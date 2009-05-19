@@ -4,21 +4,20 @@
  */
 package org.g2p.tracker.controllers;
 
+import java.io.IOException;
+import javax.servlet.ServletException;
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
 
+import org.g2p.tracker.openid.NoAutentificadoException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Include;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
-import org.g2p.tracker.openid.IOpenID;
 import org.g2p.tracker.openid.LoginPostProcessor;
-import org.g2p.tracker.openid.OpenIDFactory;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Separator;
 import org.zkoss.zul.Toolbarbutton;
@@ -31,6 +30,7 @@ public class BasePageController extends BaseController {
     private Vbox navBar;
     private Toolbarbutton loginLabel;
     private Toolbarbutton logoutLabel;
+    private Toolbarbutton registerLabel;
     private Vbox loginBox;
 
     public BasePageController() {
@@ -45,25 +45,33 @@ public class BasePageController extends BaseController {
             if (getUserIdFromSession() == null) {
                 loginLabel.setVisible(true);
                 logoutLabel.setVisible(false);
+                registerLabel.setVisible(true);
             } else {
                 logoutLabel.setVisible(true);
                 loginLabel.setVisible(false);
+                registerLabel.setVisible(false);
             }
+
+            if (getUserIdFromSession() == null && getSession().getAttribute(CLAIMED_ID) == null) {
+                LoginPostProcessor.processRequest(getHttpRequest(), getHttpResponse());
+            } else {
+                if (getUserIdFromSession() == null && getSession().getAttribute(CLAIMED_ID) != null) {
+                    include.setSrc("AltaUsuario.zul");
+                }
+            }
+
+        } catch (NoAutentificadoException ex) {
+            System.out.println("NoAutentificadoException: " + ex.getMessage());
+        } catch (ServletException ex) {
+            System.out.println("ServletException: " + ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println("IOException: " + ex.getMessage());
+        } catch (NullPointerException ex) {
+            System.out.println("NullPointerException: " + ex.getMessage());
+        } finally {
             // Arranco en la HomePage
             setNavBarItem(HOME_PAGE);
-
-            IOpenID auth = (IOpenID) new OpenIDFactory().create();
-
-            getSession().setAttribute(SSO, auth);
-
-            HttpServletRequest request = (HttpServletRequest) getDesktop().getExecution().getNativeRequest();
-            HttpServletResponse response = (HttpServletResponse) getDesktop().getExecution().getNativeResponse();
-            LoginPostProcessor.processRequest(request, response);
-
-        } catch (Exception ex) {
-            showMessage("Error procesando login: ", ex);
         }
-
     }
 
     /**
@@ -86,15 +94,18 @@ public class BasePageController extends BaseController {
             }
             // Agrego la referencia a la HomePage,
             button = new Toolbarbutton("Página principal");
-            button.setAttribute("page", HOME_PAGE);
             navBar.appendChild(button);
             // Seteo el controlador como responsable de capturar el evento de click
             button.addEventListener("onClick", new EventListener() {
 
                 @Override
                 public void onEvent(Event arg0) throws Exception {
-                    include.setSrc(arg0.getTarget().getAttribute("page").toString());
-                    setNavBarItem(arg0.getTarget().getAttribute("page").toString());
+                    if (getUserIdFromSession() == null) {
+                        include.setSrc(LOGIN_PAGE);
+                    } else {
+                        include.setSrc(HOME_PAGE);
+                    }
+                    setNavBarItem(HOME_PAGE);
                 }
             });
         }
@@ -166,7 +177,12 @@ public class BasePageController extends BaseController {
 
     public void onClick$logoutLabel(Event event) {
         setUserIdInSession(null);
-        include.setSrc(HOME_PAGE);
+        include.setSrc(LOGIN_PAGE);
+        setNavBarItem(HOME_PAGE);
+    }
+
+    public void onClick$registerLabel(Event event) {
+        include.setSrc(REGISTER_PAGE);
         setNavBarItem(HOME_PAGE);
     }
 
@@ -176,6 +192,7 @@ public class BasePageController extends BaseController {
         if (userId != null && userId != 0) {
             logoutLabel.setVisible(true);
             loginLabel.setVisible(false);
+            registerLabel.setVisible(false);
             if (!loginBox.hasFellow("welcomeMessage")) {
                 String userName = getUserNameFromSession();
                 Label label = new Label("Bienvenido a la aplicación, " + userName);
@@ -185,6 +202,7 @@ public class BasePageController extends BaseController {
             }
         } else {
             logoutLabel.setVisible(false);
+            registerLabel.setVisible(true);
             loginLabel.setVisible(true);
             if (loginBox.hasFellow("welcomeMessage")) {
                 loginBox.removeChild(loginBox.getFellow("welcomeMessage"));

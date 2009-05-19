@@ -20,12 +20,15 @@
                                         <button label="Search Site"/>
                                     </hbox>
                                 </north>
-                                <center style="background:#c5e6ef;">
+                                <center style="background:#c5e6ef;" border="0">
                                     <vbox id="loginBox">
                                         <toolbarbutton id="loginLabel" label="Login" style="float:bottom right" />
                                         <toolbarbutton id="logoutLabel" label="Logout" style="float:bottom right" />
                                     </vbox>
                                 </center>
+                                <east style="background:#c5e6ef;" border="0">
+                                    <toolbarbutton id="registerLabel" label="Registrarse" style="float:bottom right" />
+                                </east>
                             </borderlayout>
                         </east>
                     </borderlayout>
