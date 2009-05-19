@@ -55,7 +55,7 @@ public class BasePageController extends BaseController {
             if (getUserIdFromSession() == null && getSession().getAttribute(CLAIMED_ID) == null) {
                 LoginPostProcessor.processRequest(getHttpRequest(), getHttpResponse());
             } else {
-                if (getUserIdFromSession() == null && getSession().getAttribute(CLAIMED_ID) != null) {
+                if (getUserIdFromSession() == null) {
                     include.setSrc("AltaUsuario.zul");
                 }
             }

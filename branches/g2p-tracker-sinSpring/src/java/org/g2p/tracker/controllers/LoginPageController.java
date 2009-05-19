@@ -97,6 +97,7 @@ public class LoginPageController extends BaseController {
     public void onSelect$proveedoresList(Event event) {
         try {
             String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getUrlDiscovery());
+            System.out.println("---------------->"+urlOpenidLogin);
             Executions.sendRedirect(urlOpenidLogin);
         } catch (Exception ex) {
             showMessage("Excepcion: ", ex);

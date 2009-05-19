@@ -5,7 +5,6 @@
 package org.g2p.tracker.openid;
 
 // ----> imports de OpenID <-------
-import java.io.FileNotFoundException;
 import org.openid4java.OpenIDException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
@@ -35,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.g2p.tracker.controllers.Constants;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.BaseModel;
+import org.openid4java.util.HttpClientFactory;
+import org.openid4java.util.ProxyProperties;
 
 /**
  * Clase de autentificación
@@ -79,11 +80,16 @@ public class OpenID implements IOpenID, Constants {
             // the authentication responses from the OpenID provider
             String returnToUrl = properties.getProperty("return_to_url");
 
+            System.out.println("_________________ "+properties.getProperty("is_proxy"));
+
             // --- Forward proxy setup (only if needed) ---
-            // ProxyProperties proxyProps = new ProxyProperties();
-            // proxyProps.setProxyName("proxy.example.com");
-            // proxyProps.setProxyPort(8080);
-            // HttpClientFactory.setProxyProperties(proxyProps);
+            if (Boolean.parseBoolean(properties.getProperty("is_proxy"))) {
+                ProxyProperties proxyProps = new ProxyProperties();
+                proxyProps.setProxyHostName("192.168.0.16");
+                proxyProps.setProxyPort(80);
+                HttpClientFactory.setProxyProperties(proxyProps);
+                System.out.println("-------------PROXYYYYYYYYYYYYY");
+            }
 
             manager.setMaxRedirects(3);
 
@@ -108,12 +114,12 @@ public class OpenID implements IOpenID, Constants {
             return authReq.getDestinationUrl(true);
 
         } catch (MessageException ex) {
-            System.out.println("authRequest-MessageException: "+ex.getMessage());
+            System.out.println("authRequest-MessageException: " + ex.getMessage());
         } catch (ConsumerException ex) {
-            System.out.println("authRequest-ConsumerException: "+ex.getMessage());
+            System.out.println("authRequest-ConsumerException: " + ex.getMessage());
         } catch (OpenIDException ex) {
             // present error to the user
-            System.out.println("authRequest-OpenIDException: "+ex.getMessage());
+            System.out.println("authRequest-OpenIDException: " + ex.getMessage());
 
             ex.printStackTrace();
         }
