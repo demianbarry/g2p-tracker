@@ -30,7 +30,9 @@ import javax.persistence.TemporalType;
 @Table(name = "website_users")
 @NamedQueries({
     @NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w"),
-    @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId)")
+    @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId)"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByNameAndBirthday", query = "SELECT w FROM WebsiteUsersEntity w WHERE CONCAT(w.nombre+w.apellido+w.fechaNacimiento) = :concat"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByLogin", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.loginName = :loginName AND w.loginPassword = :loginPassword")
 })
 public class WebsiteUsersEntity extends BaseEntity implements Serializable {
 
@@ -43,14 +45,16 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "login_name")
     private String loginName;
-    @Basic(optional = false)
     @Column(name = "login_password")
     private String loginPassword;
     @Column(name = "nivel_visibilidad")
     private String nivelVisibilidad;
     @Basic(optional = false)
-    @Column(name = "nombre_completo")
-    private String nombreCompleto;
+    @Column(name = "nombre")
+    private String nombre;
+    @Basic(optional = false)
+    @Column(name = "apellido")
+    private String apellido;
     @Column(name = "email")
     private String email;
     @Column(name = "nro_legajo")
@@ -88,7 +92,7 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
         this.userId = userId;
         this.loginName = loginName;
         this.loginPassword = loginPassword;
-        this.nombreCompleto = nombreCompleto;
+        this.apellido = nombreCompleto;
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -124,12 +128,20 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
         this.nivelVisibilidad = nivelVisibilidad;
     }
 
-    public String getNombreCompleto() {
-        return nombreCompleto;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getEmail() {
