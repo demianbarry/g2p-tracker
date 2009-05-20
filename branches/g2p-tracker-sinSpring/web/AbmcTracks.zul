@@ -12,13 +12,14 @@
                     </html>
                 </center>
                 <south>
-                <toolbar id="tracksToolbar" height="30px" >
-                    <toolbarbutton id="terminados" src="/img/button-track-terminado.png"/>
-                    <toolbarbutton id="enCurso" src="/img/button-track-encurso.png"/>
-                    <toolbarbutton id="pendientes" src="/img/button-track-pendiente.png"/>
-	    			<toolbarbutton id="congelados" src="/img/button-track-congelado.png"/>
-                    <toolbarbutton id="nuevoTrack" src="/img/button-track-nuevo.png"/>
-                </toolbar>
+                    <toolbar id="tracksToolbar" height="30px" >
+                        <toolbarbutton id="terminados" src="/img/button-track-terminado.png"/>
+                        <toolbarbutton id="enCurso" src="/img/button-track-encurso.png"/>
+                        <toolbarbutton id="pendientes" src="/img/button-track-pendiente.png"/>
+                        <toolbarbutton id="congelados" src="/img/button-track-congelado.png"/>
+                        <toolbarbutton id="nuevoTrack" src="/img/button-track-nuevo.png"/>
+                        <toolbarbutton id="guardarTrack" src="/img/button-track-guardar.png"/>
+                    </toolbar>
                 </south>
             </borderlayout>
         </north>
@@ -26,22 +27,56 @@
             <div id="trackDetail">
                 <!--ALTA DE TRACK-->
                 <div id="nuevoTrackView" visible="@{abmcTracksWin.nuevoTrackMode}" width="100%">
-                    <grid width="100%" >
-                        <rows>
-                            <row>
-                                <grid width="70%" >
-                                    <rows>
-                                        <row>Titulo:
-                                            <textbox value="" width="100%"/>
-                                        </row>
-                                        <row>Descripcion:
-                                            <textbox value="" rows="20" width="100%"/>
-                                        </row>
-                                    </rows>
-                                </grid>
-                            </row>
-                        </rows>
-                    </grid>
+                    <columnlayout>
+                        <columnchildren width="70%">
+                            <panel width="100%" border="normal">
+                                <panelchildren>
+                                    <grid width="100%" >
+                                        <rows>
+                                            <row>Titulo:
+                                                <textbox id="titulo" value="" width="100%"/>
+                                            </row>
+                                            <row>Descripcion:
+                                                <textbox id="descripcion" value="" rows="20" width="100%"/>
+                                            </row>
+                                            <row>Comentarios:
+                                                <textbox value="Funcionalidad a desarrollar" rows="5" width="100%"/>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </panelchildren>
+                            </panel>
+                        </columnchildren>
+                        <columnchildren width="30%">
+                            <panel width="100%" border="normal">
+                                <panelchildren>
+                                    <grid width="100%" >
+                                        <rows>
+                                            <row>Propietario:
+                                                <combobox id="propietario" width="100%"
+                                                    model="@{abmcTracksWin.websiteUserModel.all}"
+                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}">
+                                                    <comboitem self="@{each=x0}"
+                                                        label="@{x0.loginName}">
+                                                    </comboitem>
+                                                </combobox>
+                                            </row>
+                                            <row>Trabajadores:
+                                                <combobox id="trabajador1" width="100%"
+                                                    model="@{abmcTracksWin.websiteUserModel.all}"
+                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}">
+                                                    <comboitem self="@{each=x1}"
+                                                        label="@{x1.loginName}">
+                                                    </comboitem>
+                                                </combobox>
+                                                <button image="/img/user_add.png" onClick=""/>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </panelchildren>
+                            </panel>
+                        </columnchildren>
+                    </columnlayout>
                 </div>
                 <!--TRACKS TERMINADOS-->
                 <div id="termiandosTrackView" visible="@{abmcTracksWin.terminadosTrackMode}" width="100%">
@@ -61,5 +96,5 @@
                 </div>
             </div>
         </center>
- </borderlayout>
+    </borderlayout>
 </window>
