@@ -25,6 +25,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Toolbar;
 
 /**
  *
@@ -32,11 +33,15 @@ import org.zkoss.zul.Messagebox;
  */
 public class AbmcTracksController extends BaseController {
 
+    protected WebsiteUserModel websiteUserModel = null;
+
+    protected Toolbar trackToolbar;
     protected Toolbarbutton termiandos;
     protected Toolbarbutton enCurso;
     protected Toolbarbutton pendientes;
     protected Toolbarbutton congelados;
     protected Toolbarbutton nuevoTrack;
+    protected Toolbarbutton guardarTrack;
 
     protected Component trackDetail;
     protected Component terminadosTrackView;
@@ -54,6 +59,15 @@ public class AbmcTracksController extends BaseController {
 
     public AbmcTracksController() {
         super(true);
+        websiteUserModel = new WebsiteUserModel();
+    }
+
+    public WebsiteUserModel getWebsiteUserModel() {
+        return websiteUserModel;
+    }
+
+    public void setWebsiteUserModel(WebsiteUserModel websiteUserModel) {
+        this.websiteUserModel = websiteUserModel;
     }
 
     public void onCreate$abmcTracksWin(Event event) {
@@ -61,6 +75,7 @@ public class AbmcTracksController extends BaseController {
         binder = (DataBinder) getVariable("binder", true);
 
         setNuevoTrackMode();
+        refresh();
     }
 
     public boolean isNuevoTrackMode() {
