@@ -103,8 +103,27 @@ public class AltaUsuarioController extends BaseController implements AfterCompos
                 usuario.setLoginPassword(Crypt.encryptPass(usuario.getLoginPassword()));
             }
             BaseModel.createEntity(usuario, true);
+
+            if (getSession().getAttribute(CLAIMED_ID) != null) {
+                Hashtable parameters = new Hashtable();
+                parameters.put("userId", usuario.getUserId());
+
+                WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByUserId", parameters).get(0);
+
+                WebsiteUsersPerProveedoresOpenidEntity userPerProveedor = new WebsiteUsersPerProveedoresOpenidEntity();
+                userPerProveedor.setClaimedId((String) getSession().getAttribute(CLAIMED_ID));
+                userPerProveedor.setWebsiteUsersPerProveedoresOpenidEntityPK(new WebsiteUsersPerProveedoresOpenidEntityPK(user.getUserId(), (Integer) getSession().getAttribute(PROVEEDOR_SSO_ID)));
+                BaseModel.createEntity(userPerProveedor, true);
+
+                getSession().removeAttribute(PROVEEDOR_SSO_ID);
+                getSession().removeAttribute(CLAIMED_ID);
+
+                setUserIdInSession(usuario.getUserId());
+                setUserNameInSession(usuario.getNombre() + " " + usuario.getApellido());
+            }
+
             Messagebox.show("Ud se ha registrado correctamente.");
-            gotoHome();
+            Executions.sendRedirect("/");
         } catch (Exception ex) {
             showMessage("Ocurrió un error mientras se intentaba crear el usuario: ", ex);
         }
@@ -136,55 +155,55 @@ public class AltaUsuarioController extends BaseController implements AfterCompos
             } catch (Exception ex) {
                 showMessage("Exception: ", ex);
             }
-
-
-
         }
 
         String nombre = usuarioNombre.getValue();
         String apellido = usuarioApellido.getValue();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(usuarioFechaNacimiento.getValue());
+        if (getSession().getAttribute(CLAIMED_ID) != null) {
 
-        String date = String.format("%1$tY-%1$tm-%1$td 00:00:00", calendar);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(usuarioFechaNacimiento.getValue());
 
-        Hashtable parameters = new Hashtable();
-        parameters.put("concat", nombre + apellido + date);
+            String date = String.format("%1$tY-%1$tm-%1$td 00:00:00", calendar);
 
-        if (BaseModel.findEntities("WebsiteUsersEntity.findByNameAndBirthday", parameters).size() != 0) {
-            int option = Messagebox.show("Vaya! Sus datos están registrados en la Base de Datos. " +
-                    "¿Desea asociar la cuenta OpenID utilizada con su perfil? " +
-                    "Si acepta le será requerido que se identifique mediante otra de sus cuentas OpenId habilitadas, o mediante su cuenta local.", "Usuario ya registrado", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
+            Hashtable parameters = new Hashtable();
+            parameters.put("concat", nombre + apellido + date);
 
-            if (option == Messagebox.YES) {
-                WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByNameAndBirthday", parameters).get(0);
+            if (BaseModel.findEntities("WebsiteUsersEntity.findByNameAndBirthday", parameters).size() != 0) {
+                int option = Messagebox.show("Vaya! Sus datos están registrados en la Base de Datos. " +
+                        "¿Desea asociar la cuenta OpenID utilizada con su perfil? " +
+                        "Si acepta le será requerido que se identifique mediante otra de sus cuentas OpenId habilitadas, o mediante su cuenta local.", "Usuario ya registrado", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
 
-                WebsiteUsersPerProveedoresOpenidEntity userPerProveedor = new WebsiteUsersPerProveedoresOpenidEntity();
-                userPerProveedor.setClaimedId((String) getSession().getAttribute(CLAIMED_ID));
-                userPerProveedor.setWebsiteUsersPerProveedoresOpenidEntityPK(new WebsiteUsersPerProveedoresOpenidEntityPK(user.getUserId(), (Integer) getSession().getAttribute(PROVEEDOR_SSO_ID)));
-                BaseModel.createEntity(userPerProveedor, true);
+                if (option == Messagebox.YES) {
 
-                getSession().removeAttribute(PROVEEDOR_SSO_ID);
-                getSession().removeAttribute(CLAIMED_ID);
+                    WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByNameAndBirthday", parameters).get(0);
 
-                parameters.clear();
-                parameters.put("userId", user.getUserId());
-                List proveedoresSSO = BaseModel.findEntities("ProveedoresSsoEntity.findByUserId", parameters);
+                    WebsiteUsersPerProveedoresOpenidEntity userPerProveedor = new WebsiteUsersPerProveedoresOpenidEntity();
+                    userPerProveedor.setClaimedId((String) getSession().getAttribute(CLAIMED_ID));
+                    userPerProveedor.setWebsiteUsersPerProveedoresOpenidEntityPK(new WebsiteUsersPerProveedoresOpenidEntityPK(user.getUserId(), (Integer) getSession().getAttribute(PROVEEDOR_SSO_ID)));
+                    BaseModel.createEntity(userPerProveedor, true);
 
-                if (proveedoresSSO.size() != 0) {
-                    ProveedoresSsoEntity proveedorSSO = (ProveedoresSsoEntity) proveedoresSSO.get(0);
-                    try {
-                        String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), proveedorSSO.getUrlDiscovery());
-                        Executions.sendRedirect(urlOpenidLogin);
-                    } catch (Exception ex) {
-                        showMessage("Excepcion: ", ex);
+                    getSession().removeAttribute(PROVEEDOR_SSO_ID);
+                    getSession().removeAttribute(CLAIMED_ID);
+
+                    parameters.clear();
+                    parameters.put("userId", user.getUserId());
+                    List proveedoresSSO = BaseModel.findEntities("ProveedoresSsoEntity.findByUserId", parameters);
+
+                    if (proveedoresSSO.size() != 0) {
+                        ProveedoresSsoEntity proveedorSSO = (ProveedoresSsoEntity) proveedoresSSO.get(0);
+                        try {
+                            String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), proveedorSSO.getUrlDiscovery());
+                            Executions.sendRedirect(urlOpenidLogin);
+                        } catch (Exception ex) {
+                            showMessage("Excepcion: ", ex);
+                        }
+                    } else {
+                        ((Include) getDesktop().getAttribute(INCLUDE)).setSrc(LOGIN_PAGE);
                     }
-                } else {
-                    ((Include) getDesktop().getAttribute(INCLUDE)).setSrc(LOGIN_PAGE);
                 }
-
-
+            } else {
             }
         }
     }
