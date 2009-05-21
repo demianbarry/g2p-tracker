@@ -17,23 +17,23 @@
         <center>
             <div align="center">
                 <div id="proveedoresList">
-                <listbox width="80%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">
-                    <listhead sizable="false">
-                        <listheader width="30%" height="10%"/>
-                        <listheader width="50%" height="10%"/>
-                        <listheader width="20%" height="10%"/>
-                    </listhead>
-                    <listitem self="@{each=x0}">
-                        <listcell label="@{x0.nombre}" />
-                        <listcell label="@{x0.descripcion}" />
-                        <listcell>
-                            <image src="@{x0.urlIcono}" width="80%"/>
-                        </listcell>
-                    </listitem>
-                </listbox>
-                <hbox valign="middle" spacing="10%">
-                    <button id="cancelButton" label="Cancel" width="100px"/>
-                </hbox>
+                    <listbox id="proveedoresListbox" width="80%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">
+                        <listhead sizable="false">
+                            <listheader width="30%" height="10%"/>
+                            <listheader width="50%" height="10%"/>
+                            <listheader width="20%" height="10%"/>
+                        </listhead>
+                        <listitem self="@{each=x0}">
+                            <listcell label="@{x0.nombre}" />
+                            <listcell label="@{x0.descripcion}" />
+                            <listcell>
+                                <image src="@{x0.urlIcono}" width="80%"/>
+                            </listcell>
+                        </listitem>
+                    </listbox>
+                    <hbox valign="middle" spacing="10%">
+                        <button id="cancelButton" label="Cancel" width="100px"/>
+                    </hbox>
                 </div>
                 <grid id="localLoginGrid" width="80%">
                     <rows>
@@ -54,9 +54,9 @@
                             </div>
                         </row>
                     </rows>
-                    <space spacing="5%" orient="horizontal"/>
-                    <toolbarbutton id="openIdLoginButton" label="Usar cuenta OpenId"/>
                 </grid>
+                <space spacing="5%" orient="horizontal"/>
+                <toolbarbutton id="openIdLoginButton" label="Usar cuenta OpenId"/>
             </div>
         </center>
     </borderlayout>
