@@ -16,7 +16,8 @@
         </west>
         <center>
             <div align="center">
-                <listbox id="proveedoresList" width="80%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">
+                <div id="proveedoresList">
+                <listbox width="80%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">
                     <listhead sizable="false">
                         <listheader width="30%" height="10%"/>
                         <listheader width="50%" height="10%"/>
@@ -30,6 +31,10 @@
                         </listcell>
                     </listitem>
                 </listbox>
+                <hbox valign="middle" spacing="10%">
+                    <button id="cancelButton" label="Cancel" width="100px"/>
+                </hbox>
+                </div>
                 <grid id="localLoginGrid" width="80%">
                     <rows>
                         <row>Username:
@@ -45,14 +50,13 @@
                             <div align="center">
                                 <hbox valign="middle" spacing="10%">
                                     <button id="okButton" label="OK" width="100px"/>
-                                    <button id="cancelButton" label="Cancel" width="100px"/>
                                 </hbox>
                             </div>
                         </row>
                     </rows>
+                    <space spacing="5%" orient="horizontal"/>
+                    <toolbarbutton id="openIdLoginButton" label="Usar cuenta OpenId"/>
                 </grid>
-                <space spacing="5%" orient="horizontal"/>
-                <toolbarbutton id="localLoginButton" label="Usar cuenta local"/>
             </div>
         </center>
     </borderlayout>

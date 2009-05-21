@@ -12,12 +12,11 @@ import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.ProveedoresSSOModel;
 import org.g2p.tracker.openid.LoginPreProcessor;
 import org.g2p.tracker.utils.Crypt;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Grid;
-import org.zkoss.zul.Include;
-import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Toolbarbutton;
@@ -31,8 +30,8 @@ public class LoginPageController extends BaseController {
     private static final long serialVersionUID = -4738510223263568936L;
     protected ProveedoresSSOModel proveedoresSSOModel = null;
     private Grid localLoginGrid;
-    private Listbox proveedoresList;
-    private Toolbarbutton localLoginButton;
+    private Component proveedoresList;
+    private Toolbarbutton openIdLoginButton;
     private Textbox username;
     private Textbox password;
 
@@ -49,16 +48,15 @@ public class LoginPageController extends BaseController {
         this.proveedoresSSOModel = rolesModel;
     }
 
-    public void onClick$localLoginButton(Event event) {
-        localLoginButton.setVisible(false);
-        localLoginGrid.setVisible(true);
-        proveedoresList.setVisible(false);
+    public void onClick$openIdLoginButton(Event event) {
+        localLoginGrid.setVisible(false);
+        proveedoresList.setVisible(true);
     }
 
     public void onCreate$loginWin(Event event) {
         binder = (DataBinder) getVariable("binder", true);
 
-        localLoginGrid.setVisible(false);
+        proveedoresList.setVisible(false);
         username.setFocus(true);
     }
 
@@ -86,8 +84,8 @@ public class LoginPageController extends BaseController {
             setUserNameInSession(websiteUser.getNombre() + " " + websiteUser.getApellido());
 
             Executions.sendRedirect("/");
-            //((Include) getDesktop().getAttribute(INCLUDE)).setSrc(HOME_PAGE);
-            //((BasePageController) getDesktop().getAttribute(BASE_PAGE_CONTROLLER)).setNavBarItem(HOME_PAGE);
+        //((Include) getDesktop().getAttribute(INCLUDE)).setSrc(HOME_PAGE);
+        //((BasePageController) getDesktop().getAttribute(BASE_PAGE_CONTROLLER)).setNavBarItem(HOME_PAGE);
         } else {
             try {
                 Messagebox.show("El usuario y/o la clave ingresada no son válidos, intente de nuevo.");
@@ -104,9 +102,8 @@ public class LoginPageController extends BaseController {
 
     public void onClick$cancelButton(Event event) {
         // Vuelvo a la HomePage
-        proveedoresList.setVisible(true);
-        localLoginGrid.setVisible(false);
-        localLoginButton.setVisible(true);
+        proveedoresList.setVisible(false);
+        localLoginGrid.setVisible(true);
     }
 
     public void onSelect$proveedoresList(Event event) {
