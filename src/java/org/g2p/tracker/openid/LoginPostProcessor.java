@@ -6,12 +6,23 @@ package org.g2p.tracker.openid;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.SystemException;
 import org.g2p.tracker.controllers.Constants;
+import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
+import org.g2p.tracker.model.models.BaseModel;
 
 /**
  * Finaliza el proceso de autentificación
@@ -25,7 +36,6 @@ public class LoginPostProcessor implements Constants {
 
     public LoginPostProcessor() {
     }
-
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -33,11 +43,10 @@ public class LoginPostProcessor implements Constants {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     private static Properties properties;
 
     public static void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NullPointerException, NoAutentificadoException {
+            throws ServletException, IOException, NullPointerException, NoAutentificadoException, Exception {
 
         // obtiene el objeto de autentificacion
         ISSO sso = (ISSO) request.getSession().getAttribute(SSO);
@@ -52,8 +61,9 @@ public class LoginPostProcessor implements Constants {
             request.getSession().setAttribute(USER_ID, usuario.getUserId());
             request.getSession().setAttribute(USER_NAME, usuario.getNombre() + " " + usuario.getApellido());
         } else {
-            System.out.println("NULL");
-            return;
+            if (request.getSession().getAttribute(CLAIMED_ID) == null) {
+                return;
+            }
         }
 
         InputStream is = (request.getSession().getServletContext().getResourceAsStream("/WEB-INF/openid.properties"));

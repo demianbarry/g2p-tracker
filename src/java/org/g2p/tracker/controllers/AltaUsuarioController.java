@@ -4,12 +4,18 @@
  */
 package org.g2p.tracker.controllers;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.List;
+import org.g2p.tracker.model.entities.ProveedoresSsoEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntityPK;
 import org.g2p.tracker.model.models.BaseModel;
+import org.g2p.tracker.openid.LoginPreProcessor;
 import org.g2p.tracker.utils.Crypt;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 
 import org.zkoss.zk.ui.ext.AfterCompose;
@@ -89,11 +95,13 @@ public class AltaUsuarioController extends BaseController implements AfterCompos
     }
 
     public void doSave(Event event) {
-        //validate
-        validate();
         try {
+            //validate
+            validate();
             //store into db
-            usuario.setLoginPassword(Crypt.encryptPass(usuario.getLoginPassword()));
+            if (usuarioLoginPassRow.isVisible()) {
+                usuario.setLoginPassword(Crypt.encryptPass(usuario.getLoginPassword()));
+            }
             BaseModel.createEntity(usuario, true);
             Messagebox.show("Ud se ha registrado correctamente.");
             gotoHome();
@@ -116,7 +124,7 @@ public class AltaUsuarioController extends BaseController implements AfterCompos
 
     //--To be override--//
     /** Validate the input field */
-    protected void validate() {
+    protected void validate() throws Exception {
         String loginName = usuarioLoginName.getValue();
 
 
@@ -133,20 +141,51 @@ public class AltaUsuarioController extends BaseController implements AfterCompos
 
         }
 
-
-
         String nombre = usuarioNombre.getValue();
         String apellido = usuarioApellido.getValue();
 
-        Date fechaNacimiento = usuarioFechaNacimiento.getValue();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(usuarioFechaNacimiento.getValue());
+
+        String date = String.format("%1$tY-%1$tm-%1$td 00:00:00", calendar);
 
         Hashtable parameters = new Hashtable();
-        parameters.put("concat", nombre + apellido + fechaNacimiento);
+        parameters.put("concat", nombre + apellido + date);
 
         if (BaseModel.findEntities("WebsiteUsersEntity.findByNameAndBirthday", parameters).size() != 0) {
-            System.out.println("OUCH!");
+            int option = Messagebox.show("Vaya! Sus datos están registrados en la Base de Datos. " +
+                    "¿Desea asociar la cuenta OpenID utilizada con su perfil? " +
+                    "Si acepta le será requerido que se identifique mediante otra de sus cuentas OpenId habilitadas, o mediante su cuenta local.", "Usuario ya registrado", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
+
+            if (option == Messagebox.YES) {
+                WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByNameAndBirthday", parameters).get(0);
+
+                WebsiteUsersPerProveedoresOpenidEntity userPerProveedor = new WebsiteUsersPerProveedoresOpenidEntity();
+                userPerProveedor.setClaimedId((String) getSession().getAttribute(CLAIMED_ID));
+                userPerProveedor.setWebsiteUsersPerProveedoresOpenidEntityPK(new WebsiteUsersPerProveedoresOpenidEntityPK(user.getUserId(), (Integer) getSession().getAttribute(PROVEEDOR_SSO_ID)));
+                BaseModel.createEntity(userPerProveedor, true);
+
+                getSession().removeAttribute(PROVEEDOR_SSO_ID);
+                getSession().removeAttribute(CLAIMED_ID);
+
+                parameters.clear();
+                parameters.put("userId", user.getUserId());
+                List proveedoresSSO = BaseModel.findEntities("ProveedoresSsoEntity.findByUserId", parameters);
+
+                if (proveedoresSSO.size() != 0) {
+                    ProveedoresSsoEntity proveedorSSO = (ProveedoresSsoEntity) proveedoresSSO.get(0);
+                    try {
+                        String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), proveedorSSO.getUrlDiscovery());
+                        Executions.sendRedirect(urlOpenidLogin);
+                    } catch (Exception ex) {
+                        showMessage("Excepcion: ", ex);
+                    }
+                } else {
+                    ((Include) getDesktop().getAttribute(INCLUDE)).setSrc(LOGIN_PAGE);
+                }
+
+
+            }
         }
     }
-
-
 }

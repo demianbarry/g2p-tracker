@@ -191,7 +191,6 @@ public class BaseModel {
 
             entity = em.merge(entity);
 
-            System.out.println("ENTITY" + entity.getPK());
             if (ownTx) {
                 getUtx().commit();
             }
@@ -321,7 +320,62 @@ public class BaseModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("STATE: "+utx.getStatus());
+            if (ownTx) {
+                utx.rollback();
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public static void editEntity(BaseEntity entity, boolean ownTx) throws RollbackFailureException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        EntityManager em = null;
+        UserTransaction utx = null;
+        try {
+            if (ownTx) {
+                utx = (UserTransaction) InitialContext.doLookup("UserTransaction");
+                utx.begin();
+            }
+
+            em = getEntityManager();
+            em.merge(entity);
+
+            if (ownTx) {
+                utx.commit();
+            }
+
+        } catch (Exception ex) {
+            if (ownTx) {
+                utx.rollback();
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public static void deleteEntity(BaseEntity entity, boolean ownTx) throws RollbackFailureException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        EntityManager em = null;
+        UserTransaction utx = null;
+        try {
+            if (ownTx) {
+                utx = (UserTransaction) InitialContext.doLookup("UserTransaction");
+                utx.begin();
+            }
+
+            em = getEntityManager();
+            em.remove(em.getReference(entity.getClass(), entity.getPK()));
+
+            if (ownTx) {
+                utx.commit();
+            }
+
+        } catch (Exception ex) {
             if (ownTx) {
                 utx.rollback();
             }

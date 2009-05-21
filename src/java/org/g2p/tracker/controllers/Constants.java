@@ -14,6 +14,7 @@ public interface Constants {
     public static final String USER_NAME = "UserName";
 
     public static final String CLAIMED_ID = "ClaimedId";
+    public static final String PROVEEDOR_SSO_ID = "ProveedorSSOId";
 
     public static final String SSO = "SSO";
 

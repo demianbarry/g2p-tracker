@@ -6,8 +6,6 @@ package org.g2p.tracker.controllers;
 
 import java.util.Hashtable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.g2p.tracker.model.entities.ProveedoresSsoEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.BaseModel;
@@ -43,8 +41,23 @@ public class LoginPageController extends BaseController {
         proveedoresSSOModel = new ProveedoresSSOModel();
     }
 
+    public ProveedoresSSOModel getProveedoresSSOModel() {
+        return proveedoresSSOModel;
+    }
+
+    public void setProveedoresSSOModel(ProveedoresSSOModel rolesModel) {
+        this.proveedoresSSOModel = rolesModel;
+    }
+
+    public void onClick$localLoginButton(Event event) {
+        localLoginButton.setVisible(false);
+        localLoginGrid.setVisible(true);
+        proveedoresList.setVisible(false);
+    }
+
     public void onCreate$loginWin(Event event) {
         binder = (DataBinder) getVariable("binder", true);
+
         localLoginGrid.setVisible(false);
         username.setFocus(true);
     }
@@ -71,8 +84,10 @@ public class LoginPageController extends BaseController {
             WebsiteUsersEntity websiteUser = (WebsiteUsersEntity) websiteUsersList.get(0);
             setUserIdInSession(websiteUser.getUserId());
             setUserNameInSession(websiteUser.getNombre() + " " + websiteUser.getApellido());
-            ((Include) getDesktop().getAttribute(INCLUDE)).setSrc(HOME_PAGE);
-            ((BasePageController) getDesktop().getAttribute(BASE_PAGE_CONTROLLER)).setNavBarItem(HOME_PAGE);
+
+            Executions.sendRedirect("/");
+            //((Include) getDesktop().getAttribute(INCLUDE)).setSrc(HOME_PAGE);
+            //((BasePageController) getDesktop().getAttribute(BASE_PAGE_CONTROLLER)).setNavBarItem(HOME_PAGE);
         } else {
             try {
                 Messagebox.show("El usuario y/o la clave ingresada no son válidos, intente de nuevo.");
@@ -95,26 +110,12 @@ public class LoginPageController extends BaseController {
     }
 
     public void onSelect$proveedoresList(Event event) {
+        getSession().setAttribute(PROVEEDOR_SSO_ID, ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getProveedorSsoId());
         try {
             String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getUrlDiscovery());
-            System.out.println("---------------->"+urlOpenidLogin);
             Executions.sendRedirect(urlOpenidLogin);
         } catch (Exception ex) {
             showMessage("Excepcion: ", ex);
         }
-    }
-
-    public ProveedoresSSOModel getProveedoresSSOModel() {
-        return proveedoresSSOModel;
-    }
-
-    public void setProveedoresSSOModel(ProveedoresSSOModel rolesModel) {
-        this.proveedoresSSOModel = rolesModel;
-    }
-
-    public void onClick$localLoginButton(Event event) {
-        localLoginButton.setVisible(false);
-        localLoginGrid.setVisible(true);
-        proveedoresList.setVisible(false);
     }
 }

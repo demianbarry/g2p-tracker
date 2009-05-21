@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -24,18 +25,17 @@ import javax.persistence.TemporalType;
 @Table(name = "website_users_per_proveedores_openid")
 @NamedQueries({@NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findAll", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w"),
     @NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findByUserId", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w WHERE w.websiteUsersPerProveedoresOpenidEntityPK.userId = :userId"),
+    @NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findByUserIdAndFechaNull", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w WHERE w.websiteUsersPerProveedoresOpenidEntityPK.userId = :userId AND w.fechaAsociacion IS NULL"),
     @NamedQuery(name = "WebsiteUsersPerProveedoresOpenidEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersPerProveedoresOpenidEntity w WHERE w.claimedId = :claimedId")})
-public class WebsiteUsersPerProveedoresOpenidEntity implements Serializable {
-
+public class WebsiteUsersPerProveedoresOpenidEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK;
-    @Basic(optional = false)
     @Column(name = "fecha_asociacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAsociacion;
     @Basic(optional = false)
-    @Column(name = "claimed_id")
+    @Column(name = "claimed_id", nullable = false, length = 255)
     private String claimedId;
 
     public WebsiteUsersPerProveedoresOpenidEntity() {
@@ -45,9 +45,8 @@ public class WebsiteUsersPerProveedoresOpenidEntity implements Serializable {
         this.websiteUsersPerProveedoresOpenidEntityPK = websiteUsersPerProveedoresOpenidEntityPK;
     }
 
-    public WebsiteUsersPerProveedoresOpenidEntity(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK, Date fechaAsociacion, String claimedId) {
+    public WebsiteUsersPerProveedoresOpenidEntity(WebsiteUsersPerProveedoresOpenidEntityPK websiteUsersPerProveedoresOpenidEntityPK, String claimedId) {
         this.websiteUsersPerProveedoresOpenidEntityPK = websiteUsersPerProveedoresOpenidEntityPK;
-        this.fechaAsociacion = fechaAsociacion;
         this.claimedId = claimedId;
     }
 
@@ -103,4 +102,10 @@ public class WebsiteUsersPerProveedoresOpenidEntity implements Serializable {
     public String toString() {
         return "org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity[websiteUsersPerProveedoresOpenidEntityPK=" + websiteUsersPerProveedoresOpenidEntityPK + "]";
     }
+
+    @Override
+    public Object getPK() {
+        return getWebsiteUsersPerProveedoresOpenidEntityPK();
+    }
+
 }

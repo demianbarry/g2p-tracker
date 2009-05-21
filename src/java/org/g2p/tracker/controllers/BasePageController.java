@@ -5,6 +5,7 @@
 package org.g2p.tracker.controllers;
 
 import java.io.IOException;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import org.g2p.tracker.model.entities.AccesoMenuEntity;
 
@@ -15,10 +16,13 @@ import org.zkoss.zul.Include;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
 import org.g2p.tracker.openid.LoginPostProcessor;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Separator;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Vbox;
@@ -52,11 +56,48 @@ public class BasePageController extends BaseController {
                 registerLabel.setVisible(false);
             }
 
-            if (getUserIdFromSession() == null && getSession().getAttribute(CLAIMED_ID) == null) {
-                LoginPostProcessor.processRequest(getHttpRequest(), getHttpResponse());
+            if (getUserIdFromSession() == null) {
+                if (getSession().getAttribute(CLAIMED_ID) == null) {
+                    LoginPostProcessor.processRequest(getHttpRequest(), getHttpResponse());
+                } else {
+                    if (getUserIdFromSession() == null) {
+                        include.setSrc("AltaUsuario.zul");
+                    }
+                }
             } else {
-                if (getUserIdFromSession() == null) {
-                    include.setSrc("AltaUsuario.zul");
+                Hashtable parameters = new Hashtable();
+                parameters.put("userId", getUserIdFromSession());
+                List usersPerProveedor = BaseModel.findEntities("WebsiteUsersPerProveedoresOpenidEntity.findByUserIdAndFechaNull", parameters);
+                WebsiteUsersPerProveedoresOpenidEntity userPerProveedor;
+                if (usersPerProveedor != null && usersPerProveedor.size() != 0) {
+
+                    Iterator it = usersPerProveedor.iterator();
+                    String proveedores_claves = "";
+                    while (it.hasNext()) {
+                        userPerProveedor = (WebsiteUsersPerProveedoresOpenidEntity) it.next();
+                        proveedores_claves += userPerProveedor.getClaimedId();
+                        proveedores_claves += " \\n";
+
+                    }
+
+                    int option = Messagebox.show("¿Desea asociar los siguientes proveedores OpenId con las claves indicadas? "
+                            + proveedores_claves, "Usuario ya registrado", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
+
+                    if (option == Messagebox.YES) {
+                        it = usersPerProveedor.iterator();
+                        while (it.hasNext()) {
+                            userPerProveedor = (WebsiteUsersPerProveedoresOpenidEntity) it.next();
+                            userPerProveedor.setFechaAsociacion(Calendar.getInstance().getTime());
+                            BaseModel.editEntity(userPerProveedor, true);
+                        }
+                    } else {
+                        it = usersPerProveedor.iterator();
+                        while (it.hasNext()) {
+                            userPerProveedor = (WebsiteUsersPerProveedoresOpenidEntity) it.next();
+                            BaseModel.deleteEntity(userPerProveedor, true);
+                        }
+                    }
+
                 }
             }
 
@@ -68,6 +109,8 @@ public class BasePageController extends BaseController {
             System.out.println("IOException: " + ex.getMessage());
         } catch (NullPointerException ex) {
             System.out.println("NullPointerException: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
         } finally {
             // Arranco en la HomePage
             setNavBarItem(HOME_PAGE);

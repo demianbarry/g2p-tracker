@@ -30,8 +30,8 @@ import javax.persistence.TemporalType;
 @Table(name = "website_users")
 @NamedQueries({
     @NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w"),
-    @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId)"),
-    @NamedQuery(name = "WebsiteUsersEntity.findByNameAndBirthday", query = "SELECT w FROM WebsiteUsersEntity w WHERE CONCAT(w.nombre+w.apellido+w.fechaNacimiento) = :concat"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId AND wu.fechaAsociacion IS NOT NULL)"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByNameAndBirthday", query = "SELECT w FROM WebsiteUsersEntity w WHERE CONCAT(w.nombre,w.apellido,w.fechaNacimiento) = :concat"),
     @NamedQuery(name = "WebsiteUsersEntity.findByLogin", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.loginName = :loginName AND w.loginPassword = :loginPassword")
 })
 public class WebsiteUsersEntity extends BaseEntity implements Serializable {
