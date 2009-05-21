@@ -16,11 +16,12 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class WebsiteUsersPerProveedoresOpenidEntityPK implements Serializable {
+    private static final long serialVersionUID = 4133614297038866621L;
     @Basic(optional = false)
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private int userId;
     @Basic(optional = false)
-    @Column(name = "proveedor_sso_id")
+    @Column(name = "proveedor_sso_id", nullable = false)
     private int proveedorSsoId;
 
     public WebsiteUsersPerProveedoresOpenidEntityPK() {

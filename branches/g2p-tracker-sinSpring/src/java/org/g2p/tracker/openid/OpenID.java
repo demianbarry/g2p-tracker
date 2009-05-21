@@ -80,7 +80,6 @@ public class OpenID implements IOpenID, Constants {
             // the authentication responses from the OpenID provider
             String returnToUrl = properties.getProperty("return_to_url");
 
-            System.out.println("_________________ "+properties.getProperty("is_proxy"));
 
             // --- Forward proxy setup (only if needed) ---
             if (Boolean.parseBoolean(properties.getProperty("is_proxy"))) {
@@ -88,7 +87,6 @@ public class OpenID implements IOpenID, Constants {
                 proxyProps.setProxyHostName("192.168.0.16");
                 proxyProps.setProxyPort(80);
                 HttpClientFactory.setProxyProperties(proxyProps);
-                System.out.println("-------------PROXYYYYYYYYYYYYY");
             }
 
             manager.setMaxRedirects(3);
@@ -196,6 +194,7 @@ public class OpenID implements IOpenID, Constants {
             WebsiteUsersEntity usuario = null;
             if (users.size() != 0) {
                 usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
+                httpReq.getSession().removeAttribute(PROVEEDOR_SSO_ID);
             } else {
                 httpReq.getSession().setAttribute(CLAIMED_ID, verified.getIdentifier());
             }
@@ -255,7 +254,6 @@ public class OpenID implements IOpenID, Constants {
 
     @Override
     public boolean isUserLogged(HttpServletRequest req, WebsiteUsersEntity user) {
-        System.out.println(">>>>>>>>> " + user.getUserId() + " --- " + req.getSession().getAttribute(USER_ID));
         if (user != null && user.getUserId().equals((Integer) req.getSession().getAttribute(USER_ID))) {
             return true;
         }
