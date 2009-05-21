@@ -17,6 +17,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Toolbarbutton;
@@ -31,6 +32,7 @@ public class LoginPageController extends BaseController {
     protected ProveedoresSSOModel proveedoresSSOModel = null;
     private Grid localLoginGrid;
     private Component proveedoresList;
+    private Listbox proveedoresListbox;
     private Toolbarbutton openIdLoginButton;
     private Textbox username;
     private Textbox password;
@@ -51,6 +53,7 @@ public class LoginPageController extends BaseController {
     public void onClick$openIdLoginButton(Event event) {
         localLoginGrid.setVisible(false);
         proveedoresList.setVisible(true);
+        openIdLoginButton.setVisible(false);
     }
 
     public void onCreate$loginWin(Event event) {
@@ -104,10 +107,12 @@ public class LoginPageController extends BaseController {
         // Vuelvo a la HomePage
         proveedoresList.setVisible(false);
         localLoginGrid.setVisible(true);
+        openIdLoginButton.setVisible(true);
     }
 
-    public void onSelect$proveedoresList(Event event) {
+    public void onSelect$proveedoresListbox(Event event) {
         getSession().setAttribute(PROVEEDOR_SSO_ID, ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getProveedorSsoId());
+        System.out.println("------------------>" + ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getProveedorSsoId());
         try {
             String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getUrlDiscovery());
             Executions.sendRedirect(urlOpenidLogin);
