@@ -29,6 +29,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "website_users")
 @NamedQueries({
+    @NamedQuery(name = "WebsiteUsersEntity.findByUserId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = :userId"),
     @NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w"),
     @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId AND wu.fechaAsociacion IS NOT NULL)"),
     @NamedQuery(name = "WebsiteUsersEntity.findByNameAndBirthday", query = "SELECT w FROM WebsiteUsersEntity w WHERE CONCAT(w.nombre,w.apellido,w.fechaNacimiento) = :concat"),
