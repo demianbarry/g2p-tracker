@@ -34,6 +34,7 @@ import org.zkoss.zul.Toolbar;
 public class AbmcTracksController extends BaseController {
 
     protected WebsiteUserModel websiteUserModel = null;
+    protected WebsiteUserModel websiteUserModelTrabajador = null;
 
     protected Toolbar trackToolbar;
     protected Toolbarbutton termiandos;
@@ -68,6 +69,14 @@ public class AbmcTracksController extends BaseController {
 
     public void setWebsiteUserModel(WebsiteUserModel websiteUserModel) {
         this.websiteUserModel = websiteUserModel;
+    }
+
+    public WebsiteUserModel getWebsiteUserModelTrabajador() {
+        return websiteUserModelTrabajador;
+    }
+
+    public void setWebsiteUserModelTrabajador (WebsiteUserModel websiteUserModel) {
+        this.websiteUserModelTrabajador = websiteUserModel;
     }
 
     public void onCreate$abmcTracksWin(Event event) {

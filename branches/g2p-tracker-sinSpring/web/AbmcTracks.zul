@@ -13,17 +13,17 @@
                 </center>
                 <south>
                     <toolbar id="tracksToolbar" height="30px" >
-                        <toolbarbutton id="terminados" src="/img/button-track-terminado.png"/>
-                        <toolbarbutton id="enCurso" src="/img/button-track-encurso.png"/>
-                        <toolbarbutton id="pendientes" src="/img/button-track-pendiente.png"/>
-                        <toolbarbutton id="congelados" src="/img/button-track-congelado.png"/>
-                        <toolbarbutton id="nuevoTrack" src="/img/button-track-nuevo.png"/>
-                        <toolbarbutton id="guardarTrack" src="/img/button-track-guardar.png"/>
+                        <button id="terminados" label="Terminados"/>
+                        <button id="enCurso" label="En Curso"/>
+                        <button id="pendientes" label="Pendientes"/>
+                        <button id="congelados" label="Congelados"/>
+                        <button id="nuevoTrack" label="Nuevo Track"/>
+                        <button id="guardarTrack" label="Guardar Track"/>
                     </toolbar>
                 </south>
             </borderlayout>
         </north>
-        <center>
+        <center flex="true">
             <div id="trackDetail">
                 <!--ALTA DE TRACK-->
                 <div id="nuevoTrackView" visible="@{abmcTracksWin.nuevoTrackMode}" width="100%">
@@ -37,7 +37,10 @@
                                                 <textbox id="titulo" value="" width="100%"/>
                                             </row>
                                             <row>Descripcion:
-                                                <textbox id="descripcion" value="" rows="20" width="100%"/>
+                                                <textbox id="descripcion" value="" rows="12" width="100%"/>
+                                            </row>
+                                            <row>Observaciones:
+                                                <textbox id="observaciones" value="" rows="5" width="100%"/>
                                             </row>
                                             <row>Comentarios:
                                                 <textbox value="Funcionalidad a desarrollar" rows="5" width="100%"/>
@@ -50,29 +53,37 @@
                         <columnchildren width="30%">
                             <panel width="100%" border="normal">
                                 <panelchildren>
-                                    <grid width="100%" >
-                                        <rows>
-                                            <row>Propietario:
-                                                <combobox id="propietario" width="100%"
+                                    <vbox width="100%">
+                                        <grid>
+                                            <rows>
+                                                <row width="100%">Propietario:
+                                                    <combobox id="propietario"
                                                     model="@{abmcTracksWin.websiteUserModel.all}"
-                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}">
-                                                    <comboitem self="@{each=x0}"
-                                                        label="@{x0.loginName}">
-                                                    </comboitem>
-                                                </combobox>
-                                            </row>
-                                            <row>Trabajadores:
-                                                <combobox id="trabajador1" width="100%"
-                                                    model="@{abmcTracksWin.websiteUserModel.all}"
-                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}">
-                                                    <comboitem self="@{each=x1}"
-                                                        label="@{x1.loginName}">
-                                                    </comboitem>
-                                                </combobox>
-                                                <button image="/img/user_add.png" onClick=""/>
-                                            </row>
-                                        </rows>
-                                    </grid>
+                                                    autodrop="true"
+                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}" width="90%">
+                                                        <comboitem self="@{each=x0}"
+                                                        label="@{x0.apellidoNombre}"
+                                                        description="@{x0.loginName}"/>
+                                                    </combobox>
+                                                </row>
+                                                <row width="100%">Trabajadores:
+                                                    <hbox width="100%">
+                                                        <combobox id="trabajador1"
+                                                        model="@{abmcTracksWin.websiteUserModelTrabajador.all}"
+                                                        autodrop="true"
+                                                        selectedItem="@{abmcTracksWin.websiteUserModelTrabajador.selected}" width="80%">
+                                                            <comboitem
+                                                            self="@{each=x1}"
+                                                            label="@{x1.loginName}"/>
+                                                        </combobox>
+                                                        <button image="/img/user_add.png" onClick=""/>
+                                                    </hbox>
+                                                </row>
+                                                <row width="100%">
+                                                </row>
+                                            </rows>
+                                        </grid>
+                                    </vbox>
                                 </panelchildren>
                             </panel>
                         </columnchildren>
