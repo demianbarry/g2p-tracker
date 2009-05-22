@@ -185,6 +185,10 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public String getApellidoNombre() {
+        return getNombre() + " " + getApellido();
+    }
+
     public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosCollection() {
         return auditaEstadosCircuitosCollection;
     }
