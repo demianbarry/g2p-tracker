@@ -24,25 +24,25 @@
             </borderlayout>
         </north>
         <center flex="true">
-            <div id="trackDetail">
+            <div id="trackDetail" style="overflow:auto">
                 <!--ALTA DE TRACK-->
                 <div id="nuevoTrackView" visible="@{abmcTracksWin.nuevoTrackMode}" width="100%">
                     <columnlayout>
-                        <columnchildren width="70%">
+                        <columnchildren width="60%">
                             <panel width="100%" border="normal">
                                 <panelchildren>
                                     <grid width="100%" >
                                         <rows>
-                                            <row>Titulo:
+                                            <row width="100%">Titulo:
                                                 <textbox id="titulo" value="" width="100%"/>
                                             </row>
-                                            <row>Descripcion:
+                                            <row width="100%">Descripcion:
                                                 <textbox id="descripcion" value="" rows="12" width="100%"/>
                                             </row>
-                                            <row>Observaciones:
+                                            <row width="100%">Observaciones:
                                                 <textbox id="observaciones" value="" rows="5" width="100%"/>
                                             </row>
-                                            <row>Comentarios:
+                                            <row width="100%">Comentarios:
                                                 <textbox value="Funcionalidad a desarrollar" rows="5" width="100%"/>
                                             </row>
                                         </rows>
@@ -50,7 +50,7 @@
                                 </panelchildren>
                             </panel>
                         </columnchildren>
-                        <columnchildren width="30%">
+                        <columnchildren width="40%">
                             <panel width="100%" border="normal">
                                 <panelchildren>
                                     <vbox width="100%">
@@ -74,12 +74,23 @@
                                                         selectedItem="@{abmcTracksWin.websiteUserModelTrabajador.selected}" width="80%">
                                                             <comboitem
                                                             self="@{each=x1}"
-                                                            label="@{x1.loginName}"/>
+                                                            label="@{x1.apellidoNombre}"
+                                                            description="@{x1.loginName}"/>
                                                         </combobox>
                                                         <button image="/img/user_add.png" onClick=""/>
                                                     </hbox>
                                                 </row>
-                                                <row width="100%">
+                                                <row width="100%">Fecha Estimada de Realización:
+                                                    <datebox id="fechaEstimadaRealizacion"/>
+                                                </row>
+                                                <row width="100%">Fecha límite:
+                                                    <datebox id="fechaLimie"/>
+                                                </row>
+                                                <row width="100%">Fecha de Realización:
+                                                    <datebox id="fechaRealización"/>
+                                                </row>
+                                                <row width="100%">Estado:
+
                                                 </row>
                                             </rows>
                                         </grid>
