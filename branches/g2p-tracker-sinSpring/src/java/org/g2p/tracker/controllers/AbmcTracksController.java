@@ -61,7 +61,9 @@ public class AbmcTracksController extends BaseController {
     public AbmcTracksController() {
         super(true);
         websiteUserModel = new WebsiteUserModel();
+        websiteUserModelTrabajador = new WebsiteUserModel();
     }
+
 
     public WebsiteUserModel getWebsiteUserModel() {
         return websiteUserModel;
@@ -75,8 +77,8 @@ public class AbmcTracksController extends BaseController {
         return websiteUserModelTrabajador;
     }
 
-    public void setWebsiteUserModelTrabajador (WebsiteUserModel websiteUserModel) {
-        this.websiteUserModelTrabajador = websiteUserModel;
+    public void setWebsiteUserModelTrabajador (WebsiteUserModel websiteUserModelTrabajador) {
+        this.websiteUserModelTrabajador = websiteUserModelTrabajador;
     }
 
     public void onCreate$abmcTracksWin(Event event) {
