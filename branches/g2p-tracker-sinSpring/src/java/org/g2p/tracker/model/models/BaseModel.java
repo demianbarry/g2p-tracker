@@ -260,14 +260,16 @@ public class BaseModel {
         EntityManager em = getEntityManager();
         Query query = em.createNamedQuery(namedQuery);
 
-        Enumeration keys = parameters.keys();
+        if (parameters != null) {
+            Enumeration keys = parameters.keys();
 
-        while (keys.hasMoreElements()) {
-            String param = (String) keys.nextElement();
-            Object value = parameters.get(param);
-            System.out.println("---> PARAM: " + param + " - VALUE: " + value);
-            query.setParameter(param, value);
+            while (keys.hasMoreElements()) {
+                String param = (String) keys.nextElement();
+                Object value = parameters.get(param);
+                System.out.println("---> PARAM: " + param + " - VALUE: " + value);
+                query.setParameter(param, value);
 
+            }
         }
         System.out.println("---> QUERY: " + query.getResultList().size());
         return query.getResultList();

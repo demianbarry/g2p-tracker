@@ -30,7 +30,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "roles")
 @NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r")})
-public class RolesEntity extends BaseEntity implements Serializable {
+public class RolesEntity extends BaseEntity implements Serializable, Taggeable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
