@@ -29,7 +29,9 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "AccesoMenuEntity.findAll", query = "SELECT a FROM AccesoMenuEntity a"),
     @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.menuId.grupo LIKE :GroupName AND (a.userId.userId = :userId)")})
-public class AccesoMenuEntity implements Serializable {
+
+    // se agrego "extiende de baseentity". ¿sera correcto?
+public class AccesoMenuEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,6 +110,11 @@ public class AccesoMenuEntity implements Serializable {
     @Override
     public String toString() {
         return "org.g2p.tracker.model.entities.AccesoMenuEntity[accesoMenuId=" + accesoMenuId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

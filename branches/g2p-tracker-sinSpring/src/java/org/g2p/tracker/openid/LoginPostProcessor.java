@@ -6,23 +6,12 @@ package org.g2p.tracker.openid;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.SystemException;
 import org.g2p.tracker.controllers.Constants;
-import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
-import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
-import org.g2p.tracker.model.models.BaseModel;
 
 /**
  * Finaliza el proceso de autentificación
@@ -56,6 +45,13 @@ public class LoginPostProcessor implements Constants {
         // el usuario ingresa al sistema
         WebsiteUsersEntity usuario = sso.login(request);
 
+
+            /*if(usuario == null)
+            throw new NoAutentificadoException("");*/
+
+            if (!sso.isUserLogged(request, usuario)) {
+                throw new NoAutentificadoException("Por favor autentifiquese");
+            }
         // otro usuario conectado
         if (usuario != null) {
             request.getSession().setAttribute(USER_ID, usuario.getUserId());

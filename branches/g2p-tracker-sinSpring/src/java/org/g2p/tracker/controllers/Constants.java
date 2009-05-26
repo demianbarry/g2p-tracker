@@ -27,4 +27,6 @@ public interface Constants {
 
     public static final String BASE_PAGE_CONTROLLER = "BasePageController";
 
+    public static final String OBSERVADOR = "observador";
+
 }

@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +46,7 @@ import org.openid4java.util.ProxyProperties;
  *
  * @author Cristian Pacheco
  */
-public class OpenID implements IOpenID, Constants {
+public class OpenID extends Observable implements IOpenID, Constants {
 
     private ConsumerManager manager;
     private Properties properties;
@@ -68,6 +70,8 @@ public class OpenID implements IOpenID, Constants {
             HttpServletRequest httpReq,
             HttpServletResponse httpResp)
             throws IOException, DiscoveryException {
+
+        addObserver((Observer) httpReq.getSession().getAttribute(OBSERVADOR));
         try {
 
             InputStream is = (httpReq.getSession().getServletContext().getResourceAsStream("/WEB-INF/openid.properties"));
@@ -161,6 +165,7 @@ public class OpenID implements IOpenID, Constants {
     // --- processing the authentication response ---
     //public Identifier verifyResponse(HttpServletRequest httpReq)
     private WebsiteUsersEntity verifyResponse(HttpServletRequest httpReq) throws NoAutentificadoException {
+        boolean registrar;
         try {
             // extract the parameters from the authentication response
             // (which comes in as a HTTP request from the OpenID provider)
@@ -189,9 +194,14 @@ public class OpenID implements IOpenID, Constants {
             Hashtable parameters = new Hashtable();
             parameters.put("claimedId", verified.getIdentifier());
 
-            List users = BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters);
+//            usuario.setUrlDiscovery(discovered.getOPEndpoint().toString());
+//            usuario.setID(verified.getIdentifier());
+//            usuario.setSession(httpReq.getSession());
+            if (verified != null) {
+                // solicita que se recupere los usuarios que tienen un claimid dado
+                List users = BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters);
 
-            WebsiteUsersEntity usuario = null;
+                WebsiteUsersEntity usuario = null;
             if (users.size() != 0) {
                 usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
                 httpReq.getSession().removeAttribute(PROVEEDOR_SSO_ID);
@@ -199,7 +209,13 @@ public class OpenID implements IOpenID, Constants {
                 httpReq.getSession().setAttribute(CLAIMED_ID, verified.getIdentifier());
             }
 
-            if (verified != null) {
+                // si se encontro algun usuario que cumpliera con la condicion (registrado)
+                if (users.size() != 0) {
+                    // se obtienen sus datos
+                    usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
+                }
+
+
                 AuthSuccess authSuccess =
                         (AuthSuccess) verification.getAuthResponse();
 
@@ -212,7 +228,15 @@ public class OpenID implements IOpenID, Constants {
                     setDatos(fetchResp, usuario);
                 }
 
-                //return verified;  // success
+                //Properties mensaje = new Properties();
+                // si el usuario no esta registrado en la aplicacion
+                registrar = (usuario == null);
+
+                // indica si hay que registrar o no
+                httpReq.getSession().setAttribute("registrar", new Boolean(registrar).toString());
+
+                setChanged();
+                notifyObservers(httpReq);
                 return usuario;  // success
             } else {
                 throw new NoAutentificadoException("No se ha podido identificar");
@@ -232,6 +256,7 @@ public class OpenID implements IOpenID, Constants {
      * @return los datos del usuario
      * @throws modelo.NoAutentificadoException
      */
+    @Override
     public WebsiteUsersEntity login(HttpServletRequest httpReq) throws NoAutentificadoException {
         return verifyResponse(httpReq);
     }
@@ -245,6 +270,7 @@ public class OpenID implements IOpenID, Constants {
      * @throws java.io.IOException
      * @throws org.openid4java.discovery.DiscoveryException
      */
+    @Override
     public String solicitarAutentificacion(String userSuppliedString,
             HttpServletRequest httpReq,
             HttpServletResponse httpResp)

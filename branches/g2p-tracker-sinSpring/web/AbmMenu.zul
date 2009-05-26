@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmMenuWin"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="abmMenuWin" title="Administrar Páginas" use="org.g2p.tracker.controllers.AbmMenuController" width="500px"  height="500px">
+        <vbox>
+            <borderlayout>
+			<west title="Paginas" size="25%" flex="true" maxsize="250" splittable="true" collapsible="true">
+                <vbox>
+                    <listbox id="lbPaginas"
+                            multiple="true"
+                            height="300px"
+                            oddRowSclass="non-odd"
+                            fixedLayout="true"
+                            checkmark="true" >
+                        
+                    </listbox>
+
+                    <hbox>
+                <!-- botones ejecutadores -->
+                        <button id="btnBaja" label="DarBaja"/>
+                        <button id="btnAlta" label="DarAlta"/>
+                    </hbox>
+                </vbox>
+			</west>
+
+
+            <center border="none" flex="true">
+                <vbox>
+                    <rows id="filas">
+
+                        <row id="titulos">
+                            <label id="lblSeleccion" value="Seleccionar"/>
+                            <label id="lblNombre" value="Nombre"/>
+                            <label id="lblDescripcion" value="Descripcion"/>
+                            <label id="lblUrl" value="URL"/>
+                            <label id="lblGrupo" value="Grupo"/>
+                        </row>
+
+
+                    </rows>
+                    <hbox>
+                        <button id="btnCancelar" label="Cancelar"/>
+                        <button id="btnAplicar" label="Aplicar"/>
+                        <button id="btnAceptar" label="Aceptar"/>
+                    </hbox>
+                </vbox>
+            </center>
+
+
+            <east size="50%" border="none" flex="true">
+                <vbox>
+                    <columnlayout>
+				<!-- descripcion del menu seleccionado -->
+                        <columnchildren width="50%">
+                            <panel title="Roles:" height="">
+                                <panelchildren>
+                                    <listbox id="lbRoles"
+                            width=""
+                            height=""
+                            multiple="true"
+                            checkmark="true"
+                            oddRowSclass="non-odd"
+                            fixedLayout="true">
+                                        <listitem>
+                                            <listcell label=""/>
+                                            <listcell label=""/>
+                                        </listitem>
+
+                                    </listbox>
+                                </panelchildren>
+                            </panel>
+                        </columnchildren>
+
+                 <!-- grupos -->
+                        <columnchildren width="50%">
+                            <panel title="Usuarios:" height="">
+                                <panelchildren>
+                                    <listbox id="lbUsuarios"
+                            multiple="true"
+                            height="300px"
+                            oddRowSclass="non-odd"
+                            fixedLayout="true"
+                            checkmark="true"
+                            >
+                                        <listitem>
+                                            <listcell label="ZK"/>
+                                        </listitem>
+                                    </listbox>
+                                </panelchildren>
+                            </panel>
+                        </columnchildren>
+                    </columnlayout>
+                    <hbox>
+                        <button id="btnAsociar" label="Asociar"/>
+                        <button id="btnDesasociar" label="Desasociar"/>
+                    </hbox>
+                </vbox>
+            </east>
+		</borderlayout>
+    </window>
+</zk>
