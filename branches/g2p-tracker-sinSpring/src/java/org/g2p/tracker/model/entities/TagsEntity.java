@@ -25,7 +25,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tags")
-@NamedQueries({@NamedQuery(name = "TagsEntity.findAll", query = "SELECT t FROM TagsEntity t")})
+@NamedQueries({
+    @NamedQuery(name = "TagsEntity.findAll", query = "SELECT t FROM TagsEntity t ORDER BY t.tagIdGrupo"),
+    @NamedQuery(name = "TagsEntity.findRootTags", query = "SELECT t FROM TagsEntity t WHERE t.tagIdGrupo IS NULL"),
+    @NamedQuery(name = "TagsEntity.findByTagId", query = "SELECT t FROM TagsEntity t WHERE t.tagId = :tagId"),
+    @NamedQuery(name = "TagsEntity.findByFather", query = "SELECT t FROM TagsEntity t WHERE t.tagIdGrupo.tagId = :tagId"),
+    @NamedQuery(name = "TagsEntity.findByCriteria", query = "SELECT t FROM TagsEntity t WHERE t.tag LIKE :criteria OR t.descripcion LIKE :criteria")
+})
 public class TagsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
