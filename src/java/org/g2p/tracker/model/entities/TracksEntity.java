@@ -45,8 +45,8 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Column(name = "observaciones")
     private String observaciones;
     @Basic(optional = false)
-    @Column(name = "criticidad")
-    private int criticidad;
+    @Column(name = "importancia")
+    private int importancia;
     @Basic(optional = false)
     @Column(name = "prioridad")
     private int prioridad;
@@ -84,10 +84,10 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.trackId = trackId;
     }
 
-    public TracksEntity(Integer trackId, String descripcion, int criticidad, int prioridad, Date fechaCreacion, String titulo) {
+    public TracksEntity(Integer trackId, String descripcion, int importancia, int prioridad, Date fechaCreacion, String titulo) {
         this.trackId = trackId;
         this.descripcion = descripcion;
-        this.criticidad = criticidad;
+        this.importancia = importancia;
         this.prioridad = prioridad;
         this.fechaCreacion = fechaCreacion;
         this.titulo = titulo;
@@ -117,12 +117,12 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public int getCriticidad() {
-        return criticidad;
+    public int getImportancia() {
+        return importancia;
     }
 
-    public void setCriticidad(int criticidad) {
-        this.criticidad = criticidad;
+    public void setImportancia(int importancia) {
+        this.importancia = importancia;
     }
 
     public int getPrioridad() {

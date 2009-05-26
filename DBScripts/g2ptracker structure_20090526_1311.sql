@@ -1,7 +1,7 @@
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
--- Server version	5.0.67-community-nt
+-- Server version	5.0.77
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -22,11 +22,11 @@ CREATE DATABASE IF NOT EXISTS g2p_tracker;
 USE g2p_tracker;
 
 --
--- Definition of table `acceso_menu`
+-- Definition of table `g2p_tracker`.`acceso_menu`
 --
 
-DROP TABLE IF EXISTS `acceso_menu`;
-CREATE TABLE `acceso_menu` (
+DROP TABLE IF EXISTS `g2p_tracker`.`acceso_menu`;
+CREATE TABLE  `g2p_tracker`.`acceso_menu` (
   `acceso_menu_id` int(10) unsigned NOT NULL auto_increment,
   `menu_id` int(10) unsigned NOT NULL default '0',
   `rol_id` int(10) unsigned default '0',
@@ -43,27 +43,33 @@ CREATE TABLE `acceso_menu` (
   CONSTRAINT `FK_acceso_menu_3` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_acceso_menu_4` FOREIGN KEY (`user_id`) REFERENCES `website_users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `rol_FK` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`rol_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `acceso_menu`
+-- Dumping data for table `g2p_tracker`.`acceso_menu`
 --
 
 /*!40000 ALTER TABLE `acceso_menu` DISABLE KEYS */;
-INSERT INTO `acceso_menu` (`acceso_menu_id`,`menu_id`,`rol_id`,`user_id`) VALUES 
- (1,1,NULL,11),
+LOCK TABLES `acceso_menu` WRITE;
+INSERT INTO `g2p_tracker`.`acceso_menu` VALUES  (1,1,NULL,11),
  (2,2,NULL,11),
  (3,3,NULL,11),
- (4,4,NULL,11);
+ (4,4,NULL,11),
+ (5,5,NULL,14),
+ (6,1,NULL,14),
+ (7,2,NULL,14),
+ (8,3,NULL,14),
+ (9,4,NULL,14);
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `acceso_menu` ENABLE KEYS */;
 
 
 --
--- Definition of table `acciones_apps`
+-- Definition of table `g2p_tracker`.`acciones_apps`
 --
 
-DROP TABLE IF EXISTS `acciones_apps`;
-CREATE TABLE `acciones_apps` (
+DROP TABLE IF EXISTS `g2p_tracker`.`acciones_apps`;
+CREATE TABLE  `g2p_tracker`.`acciones_apps` (
   `accion_id` int(10) unsigned NOT NULL auto_increment,
   `nombre` varchar(90) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -80,19 +86,21 @@ CREATE TABLE `acciones_apps` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `acciones_apps`
+-- Dumping data for table `g2p_tracker`.`acciones_apps`
 --
 
 /*!40000 ALTER TABLE `acciones_apps` DISABLE KEYS */;
+LOCK TABLES `acciones_apps` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `acciones_apps` ENABLE KEYS */;
 
 
 --
--- Definition of table `aplica_circuito`
+-- Definition of table `g2p_tracker`.`aplica_circuito`
 --
 
-DROP TABLE IF EXISTS `aplica_circuito`;
-CREATE TABLE `aplica_circuito` (
+DROP TABLE IF EXISTS `g2p_tracker`.`aplica_circuito`;
+CREATE TABLE  `g2p_tracker`.`aplica_circuito` (
   `aplica_circuito_id` int(11) NOT NULL,
   `tipo_objeto` varchar(15) NOT NULL,
   `nombre_objeto` varchar(45) NOT NULL,
@@ -109,19 +117,21 @@ CREATE TABLE `aplica_circuito` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `aplica_circuito`
+-- Dumping data for table `g2p_tracker`.`aplica_circuito`
 --
 
 /*!40000 ALTER TABLE `aplica_circuito` DISABLE KEYS */;
+LOCK TABLES `aplica_circuito` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `aplica_circuito` ENABLE KEYS */;
 
 
 --
--- Definition of table `atributos_configuracion`
+-- Definition of table `g2p_tracker`.`atributos_configuracion`
 --
 
-DROP TABLE IF EXISTS `atributos_configuracion`;
-CREATE TABLE `atributos_configuracion` (
+DROP TABLE IF EXISTS `g2p_tracker`.`atributos_configuracion`;
+CREATE TABLE  `g2p_tracker`.`atributos_configuracion` (
   `configuracion_id` int(15) unsigned NOT NULL,
   `atributo_id` int(15) unsigned NOT NULL,
   `valor` varchar(255) NOT NULL,
@@ -137,19 +147,21 @@ CREATE TABLE `atributos_configuracion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `atributos_configuracion`
+-- Dumping data for table `g2p_tracker`.`atributos_configuracion`
 --
 
 /*!40000 ALTER TABLE `atributos_configuracion` DISABLE KEYS */;
+LOCK TABLES `atributos_configuracion` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `atributos_configuracion` ENABLE KEYS */;
 
 
 --
--- Definition of table `atributos_entidad`
+-- Definition of table `g2p_tracker`.`atributos_entidad`
 --
 
-DROP TABLE IF EXISTS `atributos_entidad`;
-CREATE TABLE `atributos_entidad` (
+DROP TABLE IF EXISTS `g2p_tracker`.`atributos_entidad`;
+CREATE TABLE  `g2p_tracker`.`atributos_entidad` (
   `atributo_entidad_id` int(15) unsigned NOT NULL auto_increment,
   `valor` varchar(255) default NULL COMMENT 'Valor del atributo',
   `valor_entero` int(11) default NULL,
@@ -173,19 +185,21 @@ CREATE TABLE `atributos_entidad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Atributos asociados a la entidad; InnoDB free: 6144 kB; (`at';
 
 --
--- Dumping data for table `atributos_entidad`
+-- Dumping data for table `g2p_tracker`.`atributos_entidad`
 --
 
 /*!40000 ALTER TABLE `atributos_entidad` DISABLE KEYS */;
+LOCK TABLES `atributos_entidad` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `atributos_entidad` ENABLE KEYS */;
 
 
 --
--- Definition of table `atributos_rol`
+-- Definition of table `g2p_tracker`.`atributos_rol`
 --
 
-DROP TABLE IF EXISTS `atributos_rol`;
-CREATE TABLE `atributos_rol` (
+DROP TABLE IF EXISTS `g2p_tracker`.`atributos_rol`;
+CREATE TABLE  `g2p_tracker`.`atributos_rol` (
   `atributo_id` int(15) unsigned NOT NULL auto_increment COMMENT 'IdentificaciÃÂ³n ÃÂºnica de atributo de entidad',
   `nombre` varchar(90) NOT NULL COMMENT 'Nombre ÃÂºnico de atributo para entidad',
   `descripcion` varchar(255) default NULL COMMENT 'DescripciÃÂ³n del atributo',
@@ -217,40 +231,44 @@ CREATE TABLE `atributos_rol` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `atributos_rol`
+-- Dumping data for table `g2p_tracker`.`atributos_rol`
 --
 
 /*!40000 ALTER TABLE `atributos_rol` DISABLE KEYS */;
+LOCK TABLES `atributos_rol` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `atributos_rol` ENABLE KEYS */;
 
 
 --
--- Definition of table `attachment`
+-- Definition of table `g2p_tracker`.`attachment`
 --
 
-DROP TABLE IF EXISTS `attachment`;
-CREATE TABLE `attachment` (
+DROP TABLE IF EXISTS `g2p_tracker`.`attachment`;
+CREATE TABLE  `g2p_tracker`.`attachment` (
   `documento_id` int(10) NOT NULL,
   `track_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`documento_id`,`track_id`),
   KEY `fk_attachment_documentos` (`documento_id`),
   KEY `fk_attachment_tracks` (`track_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `attachment`
+-- Dumping data for table `g2p_tracker`.`attachment`
 --
 
 /*!40000 ALTER TABLE `attachment` DISABLE KEYS */;
+LOCK TABLES `attachment` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `attachment` ENABLE KEYS */;
 
 
 --
--- Definition of table `audita_estados_circuitos`
+-- Definition of table `g2p_tracker`.`audita_estados_circuitos`
 --
 
-DROP TABLE IF EXISTS `audita_estados_circuitos`;
-CREATE TABLE `audita_estados_circuitos` (
+DROP TABLE IF EXISTS `g2p_tracker`.`audita_estados_circuitos`;
+CREATE TABLE  `g2p_tracker`.`audita_estados_circuitos` (
   `audita_id` int(15) unsigned NOT NULL auto_increment COMMENT 'IdentificaciÃ³n Ãºnica del registro de auditorÃ­a',
   `circuito_id` int(11) NOT NULL COMMENT 'Circuito asociado al cambio de estado',
   `fecha` datetime NOT NULL COMMENT 'Fecha y hora en que se realiza la acciÃ³n .Timestamp',
@@ -290,19 +308,21 @@ CREATE TABLE `audita_estados_circuitos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `audita_estados_circuitos`
+-- Dumping data for table `g2p_tracker`.`audita_estados_circuitos`
 --
 
 /*!40000 ALTER TABLE `audita_estados_circuitos` DISABLE KEYS */;
+LOCK TABLES `audita_estados_circuitos` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `audita_estados_circuitos` ENABLE KEYS */;
 
 
 --
--- Definition of table `circuitos_estados`
+-- Definition of table `g2p_tracker`.`circuitos_estados`
 --
 
-DROP TABLE IF EXISTS `circuitos_estados`;
-CREATE TABLE `circuitos_estados` (
+DROP TABLE IF EXISTS `g2p_tracker`.`circuitos_estados`;
+CREATE TABLE  `g2p_tracker`.`circuitos_estados` (
   `circuito_id` int(11) NOT NULL,
   `nombre` varchar(40) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -313,38 +333,42 @@ CREATE TABLE `circuitos_estados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `circuitos_estados`
+-- Dumping data for table `g2p_tracker`.`circuitos_estados`
 --
 
 /*!40000 ALTER TABLE `circuitos_estados` DISABLE KEYS */;
+LOCK TABLES `circuitos_estados` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `circuitos_estados` ENABLE KEYS */;
 
 
 --
--- Definition of table `clase_atributo_rol`
+-- Definition of table `g2p_tracker`.`clase_atributo_rol`
 --
 
-DROP TABLE IF EXISTS `clase_atributo_rol`;
-CREATE TABLE `clase_atributo_rol` (
+DROP TABLE IF EXISTS `g2p_tracker`.`clase_atributo_rol`;
+CREATE TABLE  `g2p_tracker`.`clase_atributo_rol` (
   `clase_atributo_rol_id` int(15) unsigned NOT NULL auto_increment COMMENT 'IdentificaciÃÂ³n ÃÂºnica para la clase de atributo',
   `etiqueta` varchar(90) NOT NULL COMMENT 'Etiqueta que le corresponde a la clase de atributos',
   PRIMARY KEY  (`clase_atributo_rol_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `clase_atributo_rol`
+-- Dumping data for table `g2p_tracker`.`clase_atributo_rol`
 --
 
 /*!40000 ALTER TABLE `clase_atributo_rol` DISABLE KEYS */;
+LOCK TABLES `clase_atributo_rol` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `clase_atributo_rol` ENABLE KEYS */;
 
 
 --
--- Definition of table `clase_lov_atributo`
+-- Definition of table `g2p_tracker`.`clase_lov_atributo`
 --
 
-DROP TABLE IF EXISTS `clase_lov_atributo`;
-CREATE TABLE `clase_lov_atributo` (
+DROP TABLE IF EXISTS `g2p_tracker`.`clase_lov_atributo`;
+CREATE TABLE  `g2p_tracker`.`clase_lov_atributo` (
   `clase_lov_atributo_id` int(15) unsigned NOT NULL auto_increment,
   `nombre` varchar(90) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -354,19 +378,21 @@ CREATE TABLE `clase_lov_atributo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `clase_lov_atributo`
+-- Dumping data for table `g2p_tracker`.`clase_lov_atributo`
 --
 
 /*!40000 ALTER TABLE `clase_lov_atributo` DISABLE KEYS */;
+LOCK TABLES `clase_lov_atributo` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `clase_lov_atributo` ENABLE KEYS */;
 
 
 --
--- Definition of table `configuracion`
+-- Definition of table `g2p_tracker`.`configuracion`
 --
 
-DROP TABLE IF EXISTS `configuracion`;
-CREATE TABLE `configuracion` (
+DROP TABLE IF EXISTS `g2p_tracker`.`configuracion`;
+CREATE TABLE  `g2p_tracker`.`configuracion` (
   `configuracion_id` int(15) unsigned NOT NULL auto_increment,
   `esquema_configuracion_id` int(15) unsigned NOT NULL,
   `nombre` varchar(90) NOT NULL,
@@ -382,38 +408,42 @@ CREATE TABLE `configuracion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `configuracion`
+-- Dumping data for table `g2p_tracker`.`configuracion`
 --
 
 /*!40000 ALTER TABLE `configuracion` DISABLE KEYS */;
+LOCK TABLES `configuracion` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `configuracion` ENABLE KEYS */;
 
 
 --
--- Definition of table `diccionario_aplicacion`
+-- Definition of table `g2p_tracker`.`diccionario_aplicacion`
 --
 
-DROP TABLE IF EXISTS `diccionario_aplicacion`;
-CREATE TABLE `diccionario_aplicacion` (
+DROP TABLE IF EXISTS `g2p_tracker`.`diccionario_aplicacion`;
+CREATE TABLE  `g2p_tracker`.`diccionario_aplicacion` (
   `tipo_objeto` varchar(15) NOT NULL default '' COMMENT 'tipo del objeto (TABLA, VISTA, PROGRAMA, INDICE, etc.)',
   `nombre_objeto` varchar(45) NOT NULL default '' COMMENT 'Nombre del objeto de la aplicacin',
   PRIMARY KEY  (`tipo_objeto`,`nombre_objeto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Permite guardar nombres de objetos usados en la aplicacin, t';
 
 --
--- Dumping data for table `diccionario_aplicacion`
+-- Dumping data for table `g2p_tracker`.`diccionario_aplicacion`
 --
 
 /*!40000 ALTER TABLE `diccionario_aplicacion` DISABLE KEYS */;
+LOCK TABLES `diccionario_aplicacion` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `diccionario_aplicacion` ENABLE KEYS */;
 
 
 --
--- Definition of table `diccionario_aplicacion_detalle`
+-- Definition of table `g2p_tracker`.`diccionario_aplicacion_detalle`
 --
 
-DROP TABLE IF EXISTS `diccionario_aplicacion_detalle`;
-CREATE TABLE `diccionario_aplicacion_detalle` (
+DROP TABLE IF EXISTS `g2p_tracker`.`diccionario_aplicacion_detalle`;
+CREATE TABLE  `g2p_tracker`.`diccionario_aplicacion_detalle` (
   `id_diccionario` int(11) NOT NULL,
   `tipo_objeto` varchar(15) NOT NULL default '' COMMENT 'Tipo Objeto. Relaciona al objeto',
   `nombre_objeto` varchar(45) NOT NULL default '' COMMENT 'Nombre del objeto. relaciona al objeto',
@@ -425,19 +455,21 @@ CREATE TABLE `diccionario_aplicacion_detalle` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de un objeto de la aplicacin. En el caso de tabla, s';
 
 --
--- Dumping data for table `diccionario_aplicacion_detalle`
+-- Dumping data for table `g2p_tracker`.`diccionario_aplicacion_detalle`
 --
 
 /*!40000 ALTER TABLE `diccionario_aplicacion_detalle` DISABLE KEYS */;
+LOCK TABLES `diccionario_aplicacion_detalle` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `diccionario_aplicacion_detalle` ENABLE KEYS */;
 
 
 --
--- Definition of table `documentos`
+-- Definition of table `g2p_tracker`.`documentos`
 --
 
-DROP TABLE IF EXISTS `documentos`;
-CREATE TABLE `documentos` (
+DROP TABLE IF EXISTS `g2p_tracker`.`documentos`;
+CREATE TABLE  `g2p_tracker`.`documentos` (
   `id_documento` int(10) NOT NULL,
   `titulo` varchar(100) NOT NULL,
   `descripción` varchar(255) default NULL,
@@ -447,19 +479,21 @@ CREATE TABLE `documentos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `documentos`
+-- Dumping data for table `g2p_tracker`.`documentos`
 --
 
 /*!40000 ALTER TABLE `documentos` DISABLE KEYS */;
+LOCK TABLES `documentos` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `documentos` ENABLE KEYS */;
 
 
 --
--- Definition of table `entidad_externa`
+-- Definition of table `g2p_tracker`.`entidad_externa`
 --
 
-DROP TABLE IF EXISTS `entidad_externa`;
-CREATE TABLE `entidad_externa` (
+DROP TABLE IF EXISTS `g2p_tracker`.`entidad_externa`;
+CREATE TABLE  `g2p_tracker`.`entidad_externa` (
   `entidad_id` int(15) unsigned NOT NULL auto_increment,
   `codigo` varchar(15) default NULL COMMENT 'CÃÂ³digo externo que identifica a la entidad',
   `nombre` varchar(90) NOT NULL,
@@ -473,19 +507,21 @@ CREATE TABLE `entidad_externa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `entidad_externa`
+-- Dumping data for table `g2p_tracker`.`entidad_externa`
 --
 
 /*!40000 ALTER TABLE `entidad_externa` DISABLE KEYS */;
+LOCK TABLES `entidad_externa` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `entidad_externa` ENABLE KEYS */;
 
 
 --
--- Definition of table `esquema_configuracion`
+-- Definition of table `g2p_tracker`.`esquema_configuracion`
 --
 
-DROP TABLE IF EXISTS `esquema_configuracion`;
-CREATE TABLE `esquema_configuracion` (
+DROP TABLE IF EXISTS `g2p_tracker`.`esquema_configuracion`;
+CREATE TABLE  `g2p_tracker`.`esquema_configuracion` (
   `esquema_configuracion_id` int(15) unsigned NOT NULL auto_increment,
   `nombre` varchar(90) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -499,24 +535,26 @@ CREATE TABLE `esquema_configuracion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `esquema_configuracion`
+-- Dumping data for table `g2p_tracker`.`esquema_configuracion`
 --
 
 /*!40000 ALTER TABLE `esquema_configuracion` DISABLE KEYS */;
+LOCK TABLES `esquema_configuracion` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `esquema_configuracion` ENABLE KEYS */;
 
 
 --
--- Definition of table `estados`
+-- Definition of table `g2p_tracker`.`estados`
 --
 
-DROP TABLE IF EXISTS `estados`;
-CREATE TABLE `estados` (
+DROP TABLE IF EXISTS `g2p_tracker`.`estados`;
+CREATE TABLE  `g2p_tracker`.`estados` (
   `estado_id` int(11) NOT NULL,
   `nombre` varchar(30) NOT NULL,
   `descripcion` varchar(255) default NULL,
   `observaciones` varchar(255) default NULL,
-  `circuito_id` int(11) NOT NULL,
+  `circuito_id` int(11) default NULL,
   `circuito` varchar(255) default NULL,
   `estado` varchar(255) default NULL,
   PRIMARY KEY  (`estado_id`),
@@ -528,19 +566,54 @@ CREATE TABLE `estados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `estados`
+-- Dumping data for table `g2p_tracker`.`estados`
 --
 
 /*!40000 ALTER TABLE `estados` DISABLE KEYS */;
+LOCK TABLES `estados` WRITE;
+INSERT INTO `g2p_tracker`.`estados` VALUES  (1,'Creado','Estado en que se encuentra el track ni bien es Creado',NULL,NULL,NULL,NULL),
+ (2,'Iniciado','Se empezó a trabajar sobre el track',NULL,NULL,NULL,NULL),
+ (3,'Finalizado','Se terminó las tareas a realizar sobre el track',NULL,NULL,NULL,NULL),
+ (4,'Aprobado','Se dio el OK a lo realizado en el track',NULL,NULL,NULL,NULL),
+ (5,'Rechazado','No se dio el OK a lo realizado en el track',NULL,NULL,NULL,NULL);
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `estados` ENABLE KEYS */;
 
 
 --
--- Definition of table `lov_atributo`
+-- Definition of table `g2p_tracker`.`importancia`
 --
 
-DROP TABLE IF EXISTS `lov_atributo`;
-CREATE TABLE `lov_atributo` (
+DROP TABLE IF EXISTS `g2p_tracker`.`importancia`;
+CREATE TABLE  `g2p_tracker`.`importancia` (
+  `importancia_id` int(11) NOT NULL,
+  `nombre` varchar(30) NOT NULL,
+  `descripcion` varchar(255) default NULL,
+  PRIMARY KEY  USING BTREE (`importancia_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `g2p_tracker`.`importancia`
+--
+
+/*!40000 ALTER TABLE `importancia` DISABLE KEYS */;
+LOCK TABLES `importancia` WRITE;
+INSERT INTO `g2p_tracker`.`importancia` VALUES  (1,'Impide continuar',NULL),
+ (2,'Crítica',NULL),
+ (3,'Mayor',NULL),
+ (4,'Normal',NULL),
+ (5,'Menor',NULL),
+ (6,'Minima',NULL);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `importancia` ENABLE KEYS */;
+
+
+--
+-- Definition of table `g2p_tracker`.`lov_atributo`
+--
+
+DROP TABLE IF EXISTS `g2p_tracker`.`lov_atributo`;
+CREATE TABLE  `g2p_tracker`.`lov_atributo` (
   `clase_lov_atributo_id` int(15) unsigned NOT NULL,
   `valor` varchar(255) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -551,19 +624,21 @@ CREATE TABLE `lov_atributo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `lov_atributo`
+-- Dumping data for table `g2p_tracker`.`lov_atributo`
 --
 
 /*!40000 ALTER TABLE `lov_atributo` DISABLE KEYS */;
+LOCK TABLES `lov_atributo` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `lov_atributo` ENABLE KEYS */;
 
 
 --
--- Definition of table `menu`
+-- Definition of table `g2p_tracker`.`menu`
 --
 
-DROP TABLE IF EXISTS `menu`;
-CREATE TABLE `menu` (
+DROP TABLE IF EXISTS `g2p_tracker`.`menu`;
+CREATE TABLE  `g2p_tracker`.`menu` (
   `menu_id` int(10) unsigned NOT NULL,
   `nombre` varchar(90) NOT NULL default '',
   `descripcion` varchar(255) default NULL,
@@ -574,24 +649,26 @@ CREATE TABLE `menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `menu`
+-- Dumping data for table `g2p_tracker`.`menu`
 --
 
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` (`menu_id`,`nombre`,`descripcion`,`url`,`grupo`) VALUES 
- (1,'ABM Roles','Pantalla de ABM de roles','AbmcRoles.zul','BaseRolesPage.zul'),
+LOCK TABLES `menu` WRITE;
+INSERT INTO `g2p_tracker`.`menu` VALUES  (1,'ABM Roles','Pantalla de ABM de roles','AbmcRoles.zul','BaseRolesPage.zul'),
  (2,'Asignacion de roles','Pantalla de asignación de roles a usuarios','AbmcUsuariosRoles.zul','BaseRolesPage.zul'),
  (3,'Página Principal','Página principal','HomePage.zul',''),
- (4,'Roles','Menú de administración de roles','BaseRolesPage.zul','HomePage.zul');
+ (4,'Roles','Menú de administración de roles','BaseRolesPage.zul','HomePage.zul'),
+ (5,'Tracks','Administracion de Tracks','AbmcTracks.zul','HomePage.zul');
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 
 
 --
--- Definition of table `posts`
+-- Definition of table `g2p_tracker`.`posts`
 --
 
-DROP TABLE IF EXISTS `posts`;
-CREATE TABLE `posts` (
+DROP TABLE IF EXISTS `g2p_tracker`.`posts`;
+CREATE TABLE  `g2p_tracker`.`posts` (
   `post_id` int(11) NOT NULL,
   `contenido` text NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -609,19 +686,21 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `posts`
+-- Dumping data for table `g2p_tracker`.`posts`
 --
 
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+LOCK TABLES `posts` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 
 
 --
--- Definition of table `preferencias`
+-- Definition of table `g2p_tracker`.`preferencias`
 --
 
-DROP TABLE IF EXISTS `preferencias`;
-CREATE TABLE `preferencias` (
+DROP TABLE IF EXISTS `g2p_tracker`.`preferencias`;
+CREATE TABLE  `g2p_tracker`.`preferencias` (
   `preferencia_id` int(10) unsigned NOT NULL default '0',
   `nombre` varchar(90) NOT NULL default '',
   `descripcion` varchar(255) default NULL,
@@ -631,19 +710,49 @@ CREATE TABLE `preferencias` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `preferencias`
+-- Dumping data for table `g2p_tracker`.`preferencias`
 --
 
 /*!40000 ALTER TABLE `preferencias` DISABLE KEYS */;
+LOCK TABLES `preferencias` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `preferencias` ENABLE KEYS */;
 
 
 --
--- Definition of table `proveedores_sso`
+-- Definition of table `g2p_tracker`.`prioridades`
 --
 
-DROP TABLE IF EXISTS `proveedores_sso`;
-CREATE TABLE `proveedores_sso` (
+DROP TABLE IF EXISTS `g2p_tracker`.`prioridades`;
+CREATE TABLE  `g2p_tracker`.`prioridades` (
+  `prioridad_id` int(11) NOT NULL,
+  `nombre` varchar(30) NOT NULL,
+  `descripcion` varchar(255) default NULL,
+  PRIMARY KEY  (`prioridad_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `g2p_tracker`.`prioridades`
+--
+
+/*!40000 ALTER TABLE `prioridades` DISABLE KEYS */;
+LOCK TABLES `prioridades` WRITE;
+INSERT INTO `g2p_tracker`.`prioridades` VALUES  (1,'Critica',NULL),
+ (2,'Urgente',NULL),
+ (3,'Alta',NULL),
+ (4,'Normal',NULL),
+ (5,'Baja',NULL),
+ (6,'Muy Baja',NULL);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `prioridades` ENABLE KEYS */;
+
+
+--
+-- Definition of table `g2p_tracker`.`proveedores_sso`
+--
+
+DROP TABLE IF EXISTS `g2p_tracker`.`proveedores_sso`;
+CREATE TABLE  `g2p_tracker`.`proveedores_sso` (
   `proveedor_sso_id` int(11) NOT NULL auto_increment,
   `nombre` varchar(40) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -654,22 +763,23 @@ CREATE TABLE `proveedores_sso` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `proveedores_sso`
+-- Dumping data for table `g2p_tracker`.`proveedores_sso`
 --
 
 /*!40000 ALTER TABLE `proveedores_sso` DISABLE KEYS */;
-INSERT INTO `proveedores_sso` (`proveedor_sso_id`,`nombre`,`descripcion`,`observaciones`,`url_discovery`,`url_icono`) VALUES 
- (1,'Google','OpenID de Google','','https://www.google.com/accounts/o8/id','/img/gmail-openid.jpg'),
+LOCK TABLES `proveedores_sso` WRITE;
+INSERT INTO `g2p_tracker`.`proveedores_sso` VALUES  (1,'Google','OpenID de Google','','https://www.google.com/accounts/o8/id','/img/gmail-openid.jpg'),
  (2,'Yahoo','OpenID de Yahoo','','https://me.yahoo.com/','http://l.yimg.com/a/i/ydn/openid-signin-yellow.png');
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `proveedores_sso` ENABLE KEYS */;
 
 
 --
--- Definition of table `rol_entidad`
+-- Definition of table `g2p_tracker`.`rol_entidad`
 --
 
-DROP TABLE IF EXISTS `rol_entidad`;
-CREATE TABLE `rol_entidad` (
+DROP TABLE IF EXISTS `g2p_tracker`.`rol_entidad`;
+CREATE TABLE  `g2p_tracker`.`rol_entidad` (
   `rol` char(4) NOT NULL,
   `nombre` varchar(90) NOT NULL COMMENT 'nombre del rol de entidad',
   `descripcion` varchar(255) default NULL COMMENT 'DescripciÃÂ³n del rol de entidad',
@@ -682,19 +792,21 @@ CREATE TABLE `rol_entidad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `rol_entidad`
+-- Dumping data for table `g2p_tracker`.`rol_entidad`
 --
 
 /*!40000 ALTER TABLE `rol_entidad` DISABLE KEYS */;
+LOCK TABLES `rol_entidad` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `rol_entidad` ENABLE KEYS */;
 
 
 --
--- Definition of table `roles`
+-- Definition of table `g2p_tracker`.`roles`
 --
 
-DROP TABLE IF EXISTS `roles`;
-CREATE TABLE `roles` (
+DROP TABLE IF EXISTS `g2p_tracker`.`roles`;
+CREATE TABLE  `g2p_tracker`.`roles` (
   `rol_id` int(10) unsigned NOT NULL auto_increment,
   `nombre` varchar(90) NOT NULL default '',
   `descripcion` varchar(255) default NULL,
@@ -705,23 +817,24 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `roles`
+-- Dumping data for table `g2p_tracker`.`roles`
 --
 
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` (`rol_id`,`nombre`,`descripcion`,`observaciones`,`OBJ_VERSION`) VALUES 
- (1,'Administrador','Administrador del sistema','','2009-04-20 00:00:00'),
+LOCK TABLES `roles` WRITE;
+INSERT INTO `g2p_tracker`.`roles` VALUES  (1,'Administrador','Administrador del sistema','','2009-04-20 00:00:00'),
  (18,'Hola 666','Hola','Hola','2009-05-05 13:02:01'),
  (19,'Rol 1','Este es el rol nº 1','Este rol se usa en dos casos: \n- Cuando yo quiero.\n- Cuando se me antoja.','2009-04-30 13:28:07');
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 
 --
--- Definition of table `roles_entidad`
+-- Definition of table `g2p_tracker`.`roles_entidad`
 --
 
-DROP TABLE IF EXISTS `roles_entidad`;
-CREATE TABLE `roles_entidad` (
+DROP TABLE IF EXISTS `g2p_tracker`.`roles_entidad`;
+CREATE TABLE  `g2p_tracker`.`roles_entidad` (
   `entidad_id` int(15) unsigned NOT NULL,
   `rol_id` char(4) NOT NULL,
   `desde` date NOT NULL COMMENT 'Fecha desde cuando estÃ¡ activo en el rol',
@@ -741,19 +854,21 @@ CREATE TABLE `roles_entidad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Roles asociados a la entidad.';
 
 --
--- Dumping data for table `roles_entidad`
+-- Dumping data for table `g2p_tracker`.`roles_entidad`
 --
 
 /*!40000 ALTER TABLE `roles_entidad` DISABLE KEYS */;
+LOCK TABLES `roles_entidad` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `roles_entidad` ENABLE KEYS */;
 
 
 --
--- Definition of table `roles_per_website_users`
+-- Definition of table `g2p_tracker`.`roles_per_website_users`
 --
 
-DROP TABLE IF EXISTS `roles_per_website_users`;
-CREATE TABLE `roles_per_website_users` (
+DROP TABLE IF EXISTS `g2p_tracker`.`roles_per_website_users`;
+CREATE TABLE  `g2p_tracker`.`roles_per_website_users` (
   `user_id` int(10) unsigned NOT NULL default '0',
   `rol_id` int(10) unsigned NOT NULL default '0',
   `desde` date NOT NULL,
@@ -772,23 +887,24 @@ CREATE TABLE `roles_per_website_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `roles_per_website_users`
+-- Dumping data for table `g2p_tracker`.`roles_per_website_users`
 --
 
 /*!40000 ALTER TABLE `roles_per_website_users` DISABLE KEYS */;
-INSERT INTO `roles_per_website_users` (`user_id`,`rol_id`,`desde`,`hasta`,`anulado`,`OBJ_VERSION`) VALUES 
- (11,1,'2009-01-01',NULL,'F',NULL),
+LOCK TABLES `roles_per_website_users` WRITE;
+INSERT INTO `g2p_tracker`.`roles_per_website_users` VALUES  (11,1,'2009-01-01',NULL,'F',NULL),
  (11,18,'2009-05-10',NULL,'\0',NULL),
  (11,19,'2009-05-10',NULL,'\0',NULL);
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `roles_per_website_users` ENABLE KEYS */;
 
 
 --
--- Definition of table `sticky_notes`
+-- Definition of table `g2p_tracker`.`sticky_notes`
 --
 
-DROP TABLE IF EXISTS `sticky_notes`;
-CREATE TABLE `sticky_notes` (
+DROP TABLE IF EXISTS `g2p_tracker`.`sticky_notes`;
+CREATE TABLE  `g2p_tracker`.`sticky_notes` (
   `sticky_note_id` int(11) NOT NULL,
   `titulo` varchar(90) NOT NULL,
   `contenido` text,
@@ -802,19 +918,21 @@ CREATE TABLE `sticky_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sticky_notes`
+-- Dumping data for table `g2p_tracker`.`sticky_notes`
 --
 
 /*!40000 ALTER TABLE `sticky_notes` DISABLE KEYS */;
+LOCK TABLES `sticky_notes` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `sticky_notes` ENABLE KEYS */;
 
 
 --
--- Definition of table `tags`
+-- Definition of table `g2p_tracker`.`tags`
 --
 
-DROP TABLE IF EXISTS `tags`;
-CREATE TABLE `tags` (
+DROP TABLE IF EXISTS `g2p_tracker`.`tags`;
+CREATE TABLE  `g2p_tracker`.`tags` (
   `tag_id` int(10) NOT NULL,
   `tag` varchar(45) NOT NULL,
   `descripcion` varchar(255) default NULL,
@@ -829,40 +947,44 @@ CREATE TABLE `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tags`
+-- Dumping data for table `g2p_tracker`.`tags`
 --
 
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+LOCK TABLES `tags` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 
 
 --
--- Definition of table `tags_per_tracks`
+-- Definition of table `g2p_tracker`.`tags_per_tracks`
 --
 
-DROP TABLE IF EXISTS `tags_per_tracks`;
-CREATE TABLE `tags_per_tracks` (
+DROP TABLE IF EXISTS `g2p_tracker`.`tags_per_tracks`;
+CREATE TABLE  `g2p_tracker`.`tags_per_tracks` (
   `tag_id` int(10) NOT NULL,
   `track_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`tag_id`,`track_id`),
   KEY `fk_tags` (`tag_id`),
   KEY `fk_tracks` (`track_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tags_per_tracks`
+-- Dumping data for table `g2p_tracker`.`tags_per_tracks`
 --
 
 /*!40000 ALTER TABLE `tags_per_tracks` DISABLE KEYS */;
+LOCK TABLES `tags_per_tracks` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `tags_per_tracks` ENABLE KEYS */;
 
 
 --
--- Definition of table `tracks`
+-- Definition of table `g2p_tracker`.`tracks`
 --
 
-DROP TABLE IF EXISTS `tracks`;
-CREATE TABLE `tracks` (
+DROP TABLE IF EXISTS `g2p_tracker`.`tracks`;
+CREATE TABLE  `g2p_tracker`.`tracks` (
   `track_id` int(10) unsigned NOT NULL auto_increment,
   `descripcion` varchar(90) NOT NULL,
   `observaciones` varchar(255) default NULL,
@@ -875,6 +997,7 @@ CREATE TABLE `tracks` (
   `estado_id` int(11) NOT NULL,
   `user_id_owner` int(10) unsigned NOT NULL,
   `titulo` varchar(255) default NULL,
+  `criticidad` int(11) default NULL,
   PRIMARY KEY  (`track_id`),
   KEY `fk_estados` (`estado_id`),
   KEY `fk_website_user` (`user_id_owner`),
@@ -887,19 +1010,21 @@ CREATE TABLE `tracks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tabla que almacena cada track en la aplicaciÃ³n';
 
 --
--- Dumping data for table `tracks`
+-- Dumping data for table `g2p_tracker`.`tracks`
 --
 
 /*!40000 ALTER TABLE `tracks` DISABLE KEYS */;
+LOCK TABLES `tracks` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `tracks` ENABLE KEYS */;
 
 
 --
--- Definition of table `transicion_estados`
+-- Definition of table `g2p_tracker`.`transicion_estados`
 --
 
-DROP TABLE IF EXISTS `transicion_estados`;
-CREATE TABLE `transicion_estados` (
+DROP TABLE IF EXISTS `g2p_tracker`.`transicion_estados`;
+CREATE TABLE  `g2p_tracker`.`transicion_estados` (
   `transicion_id` int(11) NOT NULL,
   `estado_id_origen` int(11) NOT NULL,
   `accion_id` int(10) unsigned NOT NULL default '0',
@@ -926,19 +1051,21 @@ CREATE TABLE `transicion_estados` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `transicion_estados`
+-- Dumping data for table `g2p_tracker`.`transicion_estados`
 --
 
 /*!40000 ALTER TABLE `transicion_estados` DISABLE KEYS */;
+LOCK TABLES `transicion_estados` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `transicion_estados` ENABLE KEYS */;
 
 
 --
--- Definition of table `usuario_preferencias`
+-- Definition of table `g2p_tracker`.`usuario_preferencias`
 --
 
-DROP TABLE IF EXISTS `usuario_preferencias`;
-CREATE TABLE `usuario_preferencias` (
+DROP TABLE IF EXISTS `g2p_tracker`.`usuario_preferencias`;
+CREATE TABLE  `g2p_tracker`.`usuario_preferencias` (
   `user_id` int(10) unsigned NOT NULL default '0',
   `preferencia_id` int(10) unsigned NOT NULL default '0',
   `valor` varchar(255) NOT NULL default '',
@@ -953,19 +1080,21 @@ CREATE TABLE `usuario_preferencias` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `usuario_preferencias`
+-- Dumping data for table `g2p_tracker`.`usuario_preferencias`
 --
 
 /*!40000 ALTER TABLE `usuario_preferencias` DISABLE KEYS */;
+LOCK TABLES `usuario_preferencias` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `usuario_preferencias` ENABLE KEYS */;
 
 
 --
--- Definition of table `website_users`
+-- Definition of table `g2p_tracker`.`website_users`
 --
 
-DROP TABLE IF EXISTS `website_users`;
-CREATE TABLE `website_users` (
+DROP TABLE IF EXISTS `g2p_tracker`.`website_users`;
+CREATE TABLE  `g2p_tracker`.`website_users` (
   `user_id` int(10) unsigned NOT NULL auto_increment,
   `login_name` varchar(60) NOT NULL default '',
   `login_password` varchar(60) default NULL,
@@ -980,25 +1109,27 @@ CREATE TABLE `website_users` (
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `unique_nombre_completo_fecha_nacimiento` USING BTREE (`nombre`,`fecha_nacimiento`,`apellido`),
   UNIQUE KEY `unique_login_name` (`login_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `website_users`
+-- Dumping data for table `g2p_tracker`.`website_users`
 --
 
 /*!40000 ALTER TABLE `website_users` DISABLE KEYS */;
-INSERT INTO `website_users` (`user_id`,`login_name`,`login_password`,`nivel_visibilidad`,`nombre`,`apellido`,`email`,`nro_legajo`,`nro_comprador`,`OBJ_VERSION`,`fecha_nacimiento`) VALUES 
- (11,'Juanma','BqfWmg9HKe4bWol4/ATXU4jBNEg=',NULL,'Juan Manuel','Cortez',NULL,NULL,NULL,NULL,'1985-02-06 00:00:00'),
- (13,'juanperez',NULL,NULL,'Juan Manuel','Perez',NULL,NULL,NULL,NULL,'1985-02-06 00:00:00');
+LOCK TABLES `website_users` WRITE;
+INSERT INTO `g2p_tracker`.`website_users` VALUES  (11,'Juanma','BqfWmg9HKe4bWol4/ATXU4jBNEg=',NULL,'Juan Manuel','Cortez',NULL,NULL,NULL,NULL,'1985-02-06 00:00:00'),
+ (13,'juanperez',NULL,NULL,'Juan Manuel','Perez',NULL,NULL,NULL,NULL,'1985-02-06 00:00:00'),
+ (14,'nacho','KfCVPY4DC/T32ix/QdaKZXgYhkg=',NULL,'Luis Ignacio','Aita',NULL,NULL,NULL,NULL,'1979-09-02 00:00:00');
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `website_users` ENABLE KEYS */;
 
 
 --
--- Definition of table `website_users_per_proveedores_openid`
+-- Definition of table `g2p_tracker`.`website_users_per_proveedores_openid`
 --
 
-DROP TABLE IF EXISTS `website_users_per_proveedores_openid`;
-CREATE TABLE `website_users_per_proveedores_openid` (
+DROP TABLE IF EXISTS `g2p_tracker`.`website_users_per_proveedores_openid`;
+CREATE TABLE  `g2p_tracker`.`website_users_per_proveedores_openid` (
   `user_id` int(10) unsigned NOT NULL,
   `proveedor_sso_id` int(11) NOT NULL,
   `fecha_asociacion` datetime default NULL,
@@ -1006,36 +1137,39 @@ CREATE TABLE `website_users_per_proveedores_openid` (
   PRIMARY KEY  (`user_id`,`proveedor_sso_id`),
   KEY `fk_website_users` (`user_id`),
   KEY `fk_proveedores_sso` (`proveedor_sso_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `website_users_per_proveedores_openid`
+-- Dumping data for table `g2p_tracker`.`website_users_per_proveedores_openid`
 --
 
 /*!40000 ALTER TABLE `website_users_per_proveedores_openid` DISABLE KEYS */;
-INSERT INTO `website_users_per_proveedores_openid` (`user_id`,`proveedor_sso_id`,`fecha_asociacion`,`claimed_id`) VALUES 
- (13,1,'2009-05-21 13:25:14','https://www.google.com/accounts/o8/id?id=AItOawl0YIZdwyrrTj0WoJB9LtNlJngmI01dv0I');
+LOCK TABLES `website_users_per_proveedores_openid` WRITE;
+INSERT INTO `g2p_tracker`.`website_users_per_proveedores_openid` VALUES  (13,1,'2009-05-21 13:25:14','https://www.google.com/accounts/o8/id?id=AItOawl0YIZdwyrrTj0WoJB9LtNlJngmI01dv0I');
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `website_users_per_proveedores_openid` ENABLE KEYS */;
 
 
 --
--- Definition of table `workers_per_tracks`
+-- Definition of table `g2p_tracker`.`workers_per_tracks`
 --
 
-DROP TABLE IF EXISTS `workers_per_tracks`;
-CREATE TABLE `workers_per_tracks` (
+DROP TABLE IF EXISTS `g2p_tracker`.`workers_per_tracks`;
+CREATE TABLE  `g2p_tracker`.`workers_per_tracks` (
   `track_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`track_id`,`user_id`),
   KEY `fk_tracks` (`track_id`),
   KEY `fk_website_users` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `workers_per_tracks`
+-- Dumping data for table `g2p_tracker`.`workers_per_tracks`
 --
 
 /*!40000 ALTER TABLE `workers_per_tracks` DISABLE KEYS */;
+LOCK TABLES `workers_per_tracks` WRITE;
+UNLOCK TABLES;
 /*!40000 ALTER TABLE `workers_per_tracks` ENABLE KEYS */;
 
 

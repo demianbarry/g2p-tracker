@@ -9,6 +9,9 @@ import org.zkoss.zul.Toolbarbutton;
 import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity;
 import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntityPK;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
+import org.g2p.tracker.model.models.EstadosModel;
+import org.g2p.tracker.model.models.ImportanciaModel;
+import org.g2p.tracker.model.models.PrioridadesModel;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.RolesPerWebsiteUsersModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
@@ -35,6 +38,10 @@ public class AbmcTracksController extends BaseController {
 
     protected WebsiteUserModel websiteUserModel = null;
     protected WebsiteUserModel websiteUserModelTrabajador = null;
+    protected EstadosModel estadosModel = null;
+    protected PrioridadesModel prioridadesModel = null;
+    protected ImportanciaModel importanciaModel = null;
+
 
     protected Toolbar trackToolbar;
     protected Toolbarbutton termiandos;
@@ -43,6 +50,9 @@ public class AbmcTracksController extends BaseController {
     protected Toolbarbutton congelados;
     protected Toolbarbutton nuevoTrack;
     protected Toolbarbutton guardarTrack;
+
+    protected Button addUser;
+    protected Button deleteUser;
 
     protected Component trackDetail;
     protected Component terminadosTrackView;
@@ -57,11 +67,16 @@ public class AbmcTracksController extends BaseController {
     protected boolean congeladosTrackMode;
     protected boolean nuevoTrackMode;
 
+    protected boolean trabajadorDos;
+
 
     public AbmcTracksController() {
         super(true);
         websiteUserModel = new WebsiteUserModel();
         websiteUserModelTrabajador = new WebsiteUserModel();
+        estadosModel = new EstadosModel();
+        prioridadesModel = new PrioridadesModel();
+        importanciaModel = new ImportanciaModel();
     }
 
 
@@ -81,11 +96,36 @@ public class AbmcTracksController extends BaseController {
         this.websiteUserModelTrabajador = websiteUserModelTrabajador;
     }
 
+    public EstadosModel getEstadosModel() {
+        return estadosModel;
+    }
+
+    public void setEstadosModel(EstadosModel estadosModel) {
+        this.estadosModel = estadosModel;
+    }
+
+    public PrioridadesModel getPrioridadesModel() {
+        return prioridadesModel;
+    }
+
+    public void setPrioridadesModel(PrioridadesModel prioridadesModel) {
+        this.prioridadesModel = prioridadesModel;
+    }
+
+    public ImportanciaModel getImportanciaModel() {
+        return importanciaModel;
+    }
+
+    public void setImportanciaModel(ImportanciaModel importanciaModel) {
+        this.importanciaModel = importanciaModel;
+    }
+
     public void onCreate$abmcTracksWin(Event event) {
         // Obtengo el DataBinder que instancia la página
         binder = (DataBinder) getVariable("binder", true);
 
         setNuevoTrackMode();
+        trabajadorDos = false;
         refresh();
     }
 
@@ -107,6 +147,10 @@ public class AbmcTracksController extends BaseController {
 
     public boolean isCongeladosTrackMode() {
         return congeladosTrackMode;
+    }
+
+    public boolean isTrabajadorDos() {
+        return trabajadorDos;
     }
 
     protected void setNuevoTrackMode() {
@@ -171,6 +215,16 @@ public class AbmcTracksController extends BaseController {
 
     public void onClick$nuevoTrack (Event event) {
         setNuevoTrackMode();
+        refresh();
+    }
+
+    public void onClick$addUser (Event event) {
+        trabajadorDos = true;
+        refresh();
+    }
+
+    public void onClick$deleteUser (Event event) {
+        trabajadorDos = false;
         refresh();
     }
 
