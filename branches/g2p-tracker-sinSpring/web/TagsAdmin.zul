@@ -2,7 +2,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./tagsAdmin"?>
-<groupbox id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer" width="100%" mold="3d">
+<groupbox id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer" width="100%" mold="3d" open="false">
     <caption label="Tags"/>
     <borderlayout height="300px" width="100%">
         <north size="15%" style="border:none">
