@@ -6,29 +6,19 @@
 package org.g2p.tracker.controllers;
 
 import org.zkoss.zul.Toolbarbutton;
-import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity;
-import org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntityPK;
-import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.EstadosModel;
 import org.g2p.tracker.model.models.ImportanciaModel;
 import org.g2p.tracker.model.models.PrioridadesModel;
-import org.g2p.tracker.model.models.RolesModel;
-import org.g2p.tracker.model.models.RolesPerWebsiteUsersModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Datebox;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Toolbar;
+import org.zkoss.zul.Vbox;
 
 /**
  *
@@ -52,7 +42,7 @@ public class AbmcTracksController extends BaseController {
     protected Toolbarbutton guardarTrack;
 
     protected Button addUser;
-    protected Button deleteUser;
+    //protected Button deleteUser;
 
     protected Component trackDetail;
     protected Component terminadosTrackView;
@@ -69,14 +59,17 @@ public class AbmcTracksController extends BaseController {
 
     protected boolean trabajadorDos;
 
+    Vbox workersBox;
+
 
     public AbmcTracksController() {
         super(true);
         websiteUserModel = new WebsiteUserModel();
         websiteUserModelTrabajador = new WebsiteUserModel();
-        estadosModel = new EstadosModel();
         prioridadesModel = new PrioridadesModel();
         importanciaModel = new ImportanciaModel();
+        estadosModel = new EstadosModel();
+        
     }
 
 
@@ -218,10 +211,19 @@ public class AbmcTracksController extends BaseController {
         refresh();
     }
 
-    public void onClick$addUser (Event event) {
-        trabajadorDos = true;
+    /*public void onClick$addUser (Event event) {
+        Hbox box = new Hbox();
+        Combobox combo = new Combobox();
+        Comboitem item = new Comboitem();
+        Button button = new Button();
+
+        box.setId("worker"+workersBox.getC);
+
+        box.appendChild(combo);
+        workersBox.appendChild(box);
+
         refresh();
-    }
+    }*/
 
     public void onClick$deleteUser (Event event) {
         trabajadorDos = false;

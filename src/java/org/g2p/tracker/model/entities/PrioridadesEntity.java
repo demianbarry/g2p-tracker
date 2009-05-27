@@ -37,9 +37,6 @@ public class PrioridadesEntity extends BaseEntity implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "prioridad_Id", fetch = FetchType.EAGER)
-    private Set<TracksEntity> tracksCollection;
-
     public PrioridadesEntity() {
     }
 
@@ -103,7 +100,7 @@ public class PrioridadesEntity extends BaseEntity implements Serializable {
 
     @Override
     public Object getPK() {
-        return prioridadId;
+        return getPrioridadId();
     }
 
 }
