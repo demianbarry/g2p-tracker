@@ -39,6 +39,8 @@
     <class>org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity</class>
     <class>org.g2p.tracker.model.entities.WorkersPerTracksEntity</class>
     <class>org.g2p.tracker.model.entities.DiccionarioAplicacionDetalleEntity</class>
+    <class>org.g2p.tracker.model.entities.ImportanciaEntity</class>
+    <class>org.g2p.tracker.model.entities.PrioridadesEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.connection.username" value="tracker"/>

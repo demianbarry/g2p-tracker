@@ -96,7 +96,7 @@ public class ImportanciaEntity extends BaseEntity implements Serializable {
 
     @Override
     public Object getPK() {
-        return importanciaId;
+        return getImportanciaId();
     }
 
 }
