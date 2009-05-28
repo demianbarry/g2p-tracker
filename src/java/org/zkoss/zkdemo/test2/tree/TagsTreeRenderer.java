@@ -4,8 +4,7 @@
  */
 package org.zkoss.zkdemo.test2.tree;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import org.g2p.tracker.controllers.Constants;
 import org.g2p.tracker.model.entities.TagsEntity;
 import org.zkoss.zul.Treecell;
 import org.zkoss.zul.Treeitem;
@@ -16,7 +15,7 @@ import org.zkoss.zul.Treerow;
  *
  * @author Administrador
  */
-public class TagsTreeRenderer implements TreeitemRenderer {
+public class TagsTreeRenderer implements TreeitemRenderer, Constants {
 
     @Override
     public void render(Treeitem item, Object data) throws Exception {
@@ -30,6 +29,7 @@ public class TagsTreeRenderer implements TreeitemRenderer {
         //TagsEntity tag = (TagsEntity)t.getData();
         //Construct treecells
         Treecell treecell = new Treecell(tag != null ? tag.getTag() : tagsList.getTag().getTag());
+        treecell.setAttribute(TAG_ID, tag != null ? tag : tagsList.getTag());
         Treerow tr = null;
         /*
          * Since only one treerow is allowed, if treerow is not null,

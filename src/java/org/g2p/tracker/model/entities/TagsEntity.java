@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -11,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,9 +34,11 @@ import javax.persistence.Table;
     @NamedQuery(name = "TagsEntity.findByCriteria", query = "SELECT t FROM TagsEntity t WHERE t.tag LIKE :criteria OR t.descripcion LIKE :criteria")
 })
 public class TagsEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
     private Integer tagId;
     @Basic(optional = false)
@@ -140,5 +143,4 @@ public class TagsEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return tagId;
     }
-
 }

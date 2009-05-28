@@ -2,33 +2,52 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./tagsAdmin"?>
-<groupbox id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer" width="100%" mold="3d" open="false">
-    <caption label="Tags"/>
-    <borderlayout height="300px" width="100%">
-        <north size="15%" style="border:none">
-            <div>
-                <hbox>Search:
-                    <textbox id="searchBox" tooltip="Press TAB key for update tags"/>
-                </hbox>
-            </div>
-        </north>
-        <east style="border:none">
-        </east>
-        <west style="border:none">
-        </west>
-        <center style="border:none">
-            <div align="center">
-                <tree id="tagsTree" fixedLayout="true" multiple="true" checkmark="true">
-                </tree>
-            </div>
-        </center>
-        <south style="border:none">
-            <vbox width="100%" spacing="0">
-                Tag:
-                <textbox id="tagTextbox" width="40%"/>
-                Descripción: 
-                <textbox id="descripcionTextbox" width="80%"/>
-            </vbox>
-        </south>
-    </borderlayout>
-</groupbox>
+<panel title="Tags" id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer" collapsible="true" width="true">
+    <panelchildren>
+        <tablelayout width="100%">
+            <tablechildren style="border:none">
+                <panel framable="true">
+                    <panelchildren >
+                        <hbox>Search:
+                            <textbox id="searchBox" tooltip="Press TAB key for update tags"/>
+                        </hbox>
+                        <separator bar="true" spacing="20px"/>
+                        <button id="switchButton" label="Lista" width="100%"/>
+                        <tree id="tagsTree" fixedLayout="true" multiple="true" checkmark="true" vflex="true">
+                        </tree>
+                        <listbox id="tagsList" visible="false" multiple="true" width="100%" model="@{tagsAdmin$TagsAdminComposer.tagsModel.all}" selectedItem="@{tagsAdmin$TagsAdminComposer.tagsModel.selected}" checkmark="true">
+                            <listitem self="@{each=tag}">
+                                <listcell label="@{tag.tag}"/>
+                                <listcell label="@{tag.descripcion}"/>
+                            </listitem>
+                        </listbox>
+                        <separator bar="true" spacing="20px"/>
+                        <hbox>
+                            <button id="nuevoButton" label="Nuevo" />
+                            <button id="administrarButton" label="Administrar" />
+                        </hbox>
+                    </panelchildren>
+                </panel>
+            </tablechildren>
+            <tablechildren style="border:none">
+                <panel>
+                    <panelchildren>
+                        <window  id="newTagWin" apply="org.g2p.tracker.composers.TagsAdminComposer" border="normal">
+                            <vbox width="100%" spacing="0">
+                        Tag:
+                                <textbox id="tagText" width="40%" constraint="no empty"/>
+                        Descripción:
+                                <textbox id="descripcionText" width="80%" constraint="no empty"/>
+                            </vbox>
+                            <separator bar="true" spacing="20px"/>
+                            <hbox>
+                                <button id="aceptarButton" label="Aceptar"/>
+                                <button id="cancelarButton" label="Cancelar" />
+                            </hbox>
+                        </window>
+                    </panelchildren>
+                </panel>
+            </tablechildren>
+        </tablelayout>
+    </panelchildren>
+</panel>

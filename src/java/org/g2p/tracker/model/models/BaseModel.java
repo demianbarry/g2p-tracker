@@ -388,4 +388,13 @@ public class BaseModel {
             }
         }
     }
+
+    public static BaseEntity findEntityByPK(Object pk, Class entity) {
+        EntityManager em = getEntityManager();
+        try {
+            return (BaseEntity) em.find(entity, pk);
+        } finally {
+            em.close();
+        }
+    }
 }
