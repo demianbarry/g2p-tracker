@@ -92,6 +92,10 @@ public class BaseController extends Window implements AfterCompose, Constants {
         this.binder = binder;
     }
 
+    protected void showMessage(String msg) {
+        showMessage(msg,null);
+    }
+
     protected void showMessage(String msg, Exception ex) {
         try {
             Messagebox.show(msg + ex.getMessage());

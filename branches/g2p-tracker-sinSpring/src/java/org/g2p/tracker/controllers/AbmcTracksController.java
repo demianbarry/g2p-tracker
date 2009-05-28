@@ -5,18 +5,25 @@
 
 package org.g2p.tracker.controllers;
 
+import java.util.Date;
+import org.g2p.tracker.model.entities.EstadosEntity;
+import org.g2p.tracker.model.entities.ImportanciaEntity;
+import org.g2p.tracker.model.entities.PrioridadesEntity;
+import org.g2p.tracker.model.entities.TracksEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.zkoss.zul.Toolbarbutton;
 import org.g2p.tracker.model.models.EstadosModel;
 import org.g2p.tracker.model.models.ImportanciaModel;
 import org.g2p.tracker.model.models.PrioridadesModel;
+import org.g2p.tracker.model.models.TracksModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Toolbar;
 import org.zkoss.zul.Vbox;
 
@@ -31,7 +38,7 @@ public class AbmcTracksController extends BaseController {
     protected EstadosModel estadosModel = null;
     protected PrioridadesModel prioridadesModel = null;
     protected ImportanciaModel importanciaModel = null;
-
+    protected TracksModel trackModel = null;
 
     protected Toolbar trackToolbar;
     protected Toolbarbutton termiandos;
@@ -40,6 +47,20 @@ public class AbmcTracksController extends BaseController {
     protected Toolbarbutton congelados;
     protected Toolbarbutton nuevoTrack;
     protected Toolbarbutton guardarTrack;
+
+    //Campos del track
+    protected Textbox titulo;
+    protected Textbox descripcion;
+    protected Textbox observaciones;
+    protected Combobox propietario;
+    protected Combobox trabajador;
+    protected Datebox fechaCreacion;
+    protected Datebox fechaEstimadaRealizacion;
+    protected Datebox fechaLimite;
+    protected Datebox fechaRealizacion;
+    protected Combobox estado;
+    protected Combobox prioridad;
+    protected Combobox importancia;
 
     protected Button addUser;
     //protected Button deleteUser;
@@ -69,7 +90,8 @@ public class AbmcTracksController extends BaseController {
         prioridadesModel = new PrioridadesModel();
         importanciaModel = new ImportanciaModel();
         estadosModel = new EstadosModel();
-        
+        trackModel = new TracksModel();
+        trackModel.setSelected(new TracksEntity());
     }
 
 
@@ -113,6 +135,14 @@ public class AbmcTracksController extends BaseController {
         this.importanciaModel = importanciaModel;
     }
 
+    public TracksModel getTrackModel() {
+        return trackModel;
+    }
+
+    public void setTrackModel(TracksModel trackModel) {
+        this.trackModel = trackModel;
+    }
+
     public void onCreate$abmcTracksWin(Event event) {
         // Obtengo el DataBinder que instancia la página
         binder = (DataBinder) getVariable("binder", true);
@@ -152,6 +182,23 @@ public class AbmcTracksController extends BaseController {
         pendientesTrackMode = false;
         congeladosTrackMode = false;
         nuevoTrackMode = true;
+        nuevoTrack();
+    }
+
+    protected void nuevoTrack() {
+        titulo.setText("");
+        descripcion.setText("");
+        observaciones.setText("");
+        websiteUserModel.setSelected(null);
+        websiteUserModelTrabajador.setSelected(null);
+        trabajador.setSelectedIndex(1);
+        ((TracksEntity) trackModel.getSelected()).setFechaCreacion(new Date());
+        fechaEstimadaRealizacion.setText("");
+        fechaLimite.setText("");
+        fechaRealizacion.setText("");
+        estadosModel.setSelected(estadosModel.getAll().get(0));
+        prioridadesModel.setSelected(prioridadesModel.getAll().get(3));
+        importanciaModel.setSelected(importanciaModel.getAll().get(3));
     }
 
     protected void setTerminadosTrackMode() {
@@ -209,6 +256,43 @@ public class AbmcTracksController extends BaseController {
     public void onClick$nuevoTrack (Event event) {
         setNuevoTrackMode();
         refresh();
+    }
+
+    public void onClick$guardarTrack (Event event) {
+            //save into bean
+            binder.saveComponent(trackDetail); //reload model to force refresh
+            
+            ((TracksEntity)trackModel.getSelected()).setTitulo(titulo.getValue());
+            ((TracksEntity)trackModel.getSelected()).setDescripcion(descripcion.getValue());
+            ((TracksEntity)trackModel.getSelected()).setObservaciones(observaciones.getValue());
+            ((TracksEntity)trackModel.getSelected()).setUserIdOwner((WebsiteUsersEntity) websiteUserModel.getSelected());
+            //((TracksEntity)trackModel.getSelected()).setFechaCreacion(fechaCreacion.getValue());
+            ((TracksEntity)trackModel.getSelected()).setFechaEstimadaRealizacion(fechaEstimadaRealizacion.getValue());
+            ((TracksEntity)trackModel.getSelected()).setFechaRealizacion(fechaRealizacion.getValue());
+            ((TracksEntity)trackModel.getSelected()).setEstadoId((EstadosEntity) estadosModel.getSelected());
+            ((TracksEntity)trackModel.getSelected()).setPrioridadId((PrioridadesEntity) prioridadesModel.getSelected());
+            ((TracksEntity)trackModel.getSelected()).setImportanciaId((ImportanciaEntity) importanciaModel.getSelected());
+
+            try {
+                //store into db
+                trackModel.getUtx().begin();
+                
+                trackModel.persist(false);
+                
+                trackModel.getUtx().commit();
+                showMessage("El track se guardo correctamente");
+
+            } catch (Exception ex) {
+                try {
+                    showMessage("Ocurrió un error mientras se intentaba crear el track: ", ex);
+                    trackModel.getUtx().rollback();
+                } catch (Exception ex1) {
+                    showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex);
+                }
+            } finally {
+                //refresh the rolesList
+                refresh();
+            }
     }
 
     /*public void onClick$addUser (Event event) {

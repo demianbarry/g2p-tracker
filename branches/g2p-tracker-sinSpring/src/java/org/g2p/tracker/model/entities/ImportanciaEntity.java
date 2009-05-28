@@ -6,12 +6,18 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -24,6 +30,7 @@ import javax.persistence.Table;
 public class ImportanciaEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "importancia_id")
     private Integer importanciaId;
@@ -32,6 +39,8 @@ public class ImportanciaEntity extends BaseEntity implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "importanciaId", fetch = FetchType.EAGER)
+    private Set<TracksEntity> tracksEntityCollection;
 
     public ImportanciaEntity() {
     }
@@ -67,6 +76,14 @@ public class ImportanciaEntity extends BaseEntity implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Set<TracksEntity> getTracksEntityCollection() {
+        return tracksEntityCollection;
+    }
+
+    public void setTracksEntityCollection(Set<TracksEntity> tracksEntityCollection) {
+        this.tracksEntityCollection = tracksEntityCollection;
     }
 
     @Override

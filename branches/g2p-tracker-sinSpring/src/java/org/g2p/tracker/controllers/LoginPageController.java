@@ -63,6 +63,10 @@ public class LoginPageController extends BaseController {
         username.setFocus(true);
     }
 
+    public void onOK$loginWin(Event event) {
+        onClick$okButton(event);
+    }
+
     public void onClick$okButton(Event event) {
         // Seteo el usuario y vuelvo a la HomePage
 
