@@ -36,8 +36,8 @@
                 </div>
             </north>
 	<!-- Sidebar -->
-            <west title="Navegación" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;">
-                <div >
+            <west width="20%" title="Navegación" splittable="true" collapsible="true" style="background:#c5e6ef;">
+                <div>
                     <panel collapsible="true" title="Barra de navegación">
                         <panelchildren style="padding:5px;background:#A9D0F5;background-image:url('http://tbn1.google.com/images?q=tbn:9mYpD__91Sb0sM:http://www.imagineargentina.com/images/Blue_Background_Large_Web_view4.jpg')" id="panelChildren">
                             <vbox id="navBar">

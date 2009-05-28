@@ -29,4 +29,6 @@ public interface Constants {
 
     public static final String OBSERVADOR = "observador";
 
+    public static final String TAG_ID = "tag_id";
+
 }
