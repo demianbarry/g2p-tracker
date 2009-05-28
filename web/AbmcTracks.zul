@@ -35,13 +35,13 @@
                                         <grid width="100%" >
                                             <rows>
                                                 <row width="100%">Titulo:
-                                                    <textbox id="titulo" value="" width="100%"/>
+                                                    <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="100%"/>
                                                 </row>
                                                 <row width="100%">Descripcion:
-                                                    <textbox id="descripcion" value="" rows="12" width="100%"/>
+                                                    <textbox id="descripcion" value="@{abmcTracksWin.trackModel.selected.descripcion}" rows="12" width="100%"/>
                                                 </row>
                                                 <row width="100%">Observaciones:
-                                                    <textbox id="observaciones" value="" rows="5" width="100%"/>
+                                                    <textbox id="observaciones" value="@{abmcTracksWin.trackModel.selected.observaciones}" rows="5" width="100%"/>
                                                 </row>
                                                 <row width="100%">Comentarios:
                                                     <textbox value="Funcionalidad a desarrollar" rows="5" width="100%" disabled="true"/>
@@ -91,14 +91,17 @@
                                     <vbox width="100%">
                                         <grid>
                                             <rows>
+                                                <row width="100%">Fecha de Creacion:
+                                                    <datebox id="fechaCreacion" value="@{abmcTracksWin.trackModel.selected.fechaCreacion}" buttonVisible="false" disabled="true"/>
+                                                </row>
                                                 <row width="100%">Fecha Estimada de Realización:
                                                     <datebox id="fechaEstimadaRealizacion"/>
                                                 </row>
                                                 <row width="100%">Fecha límite:
-                                                    <datebox id="fechaLimie"/>
+                                                    <datebox id="fechaLimite"/>
                                                 </row>
                                                 <row width="100%">Fecha de Realización:
-                                                    <datebox id="fechaRealización"/>
+                                                    <datebox id="fechaRealizacion"/>
                                                 </row>
                                             </rows>
                                         </grid>

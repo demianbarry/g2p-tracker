@@ -45,12 +45,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Column(name = "observaciones")
     private String observaciones;
     @Basic(optional = false)
-    @Column(name = "importancia")
-    private int importancia;
-    @Basic(optional = false)
-    @Column(name = "prioridad")
-    private int prioridad;
-    @Basic(optional = false)
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -63,19 +57,24 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha_realizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizacion;
+    @Column(name = "titulo")
+    private String titulo;
     @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER)
-    private Set<StickyNotesEntity> stickyNotesCollection;
+    private Set<StickyNotesEntity> stickyNotesEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
-    private Set<PostsEntity> postsCollection;
-    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
+    private Set<PostsEntity> postsEntityCollection;
+    @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private EstadosEntity estadoId;
+    private PrioridadesEntity prioridadId;
+    @JoinColumn(name = "importancia_id", referencedColumnName = "importancia_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private ImportanciaEntity importanciaId;
     @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userIdOwner;
-    @Basic(optional = false)
-    @Column(name = "titulo")
-    private String titulo;
+    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private EstadosEntity estadoId;
 
     public TracksEntity() {
     }
@@ -84,13 +83,10 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.trackId = trackId;
     }
 
-    public TracksEntity(Integer trackId, String descripcion, int importancia, int prioridad, Date fechaCreacion, String titulo) {
+    public TracksEntity(Integer trackId, String descripcion, Date fechaCreacion) {
         this.trackId = trackId;
         this.descripcion = descripcion;
-        this.importancia = importancia;
-        this.prioridad = prioridad;
         this.fechaCreacion = fechaCreacion;
-        this.titulo = titulo;
     }
 
     public Integer getTrackId() {
@@ -115,22 +111,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
-    }
-
-    public int getImportancia() {
-        return importancia;
-    }
-
-    public void setImportancia(int importancia) {
-        this.importancia = importancia;
-    }
-
-    public int getPrioridad() {
-        return prioridad;
-    }
-
-    public void setPrioridad(int prioridad) {
-        this.prioridad = prioridad;
     }
 
     public Date getFechaCreacion() {
@@ -165,28 +145,44 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.fechaRealizacion = fechaRealizacion;
     }
 
-    public Set<StickyNotesEntity> getStickyNotesCollection() {
-        return stickyNotesCollection;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setStickyNotesCollection(Set<StickyNotesEntity> stickyNotesCollection) {
-        this.stickyNotesCollection = stickyNotesCollection;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public Set<PostsEntity> getPostsCollection() {
-        return postsCollection;
+    public Set<StickyNotesEntity> getStickyNotesEntityCollection() {
+        return stickyNotesEntityCollection;
     }
 
-    public void setPostsCollection(Set<PostsEntity> postsCollection) {
-        this.postsCollection = postsCollection;
+    public void setStickyNotesEntityCollection(Set<StickyNotesEntity> stickyNotesEntityCollection) {
+        this.stickyNotesEntityCollection = stickyNotesEntityCollection;
     }
 
-    public EstadosEntity getEstadoId() {
-        return estadoId;
+    public Set<PostsEntity> getPostsEntityCollection() {
+        return postsEntityCollection;
     }
 
-    public void setEstadoId(EstadosEntity estadoId) {
-        this.estadoId = estadoId;
+    public void setPostsEntityCollection(Set<PostsEntity> postsEntityCollection) {
+        this.postsEntityCollection = postsEntityCollection;
+    }
+
+    public PrioridadesEntity getPrioridadId() {
+        return prioridadId;
+    }
+
+    public void setPrioridadId(PrioridadesEntity prioridadId) {
+        this.prioridadId = prioridadId;
+    }
+
+    public ImportanciaEntity getImportanciaId() {
+        return importanciaId;
+    }
+
+    public void setImportanciaId(ImportanciaEntity importanciaId) {
+        this.importanciaId = importanciaId;
     }
 
     public WebsiteUsersEntity getUserIdOwner() {
@@ -197,12 +193,12 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.userIdOwner = userIdOwner;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public EstadosEntity getEstadoId() {
+        return estadoId;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setEstadoId(EstadosEntity estadoId) {
+        this.estadoId = estadoId;
     }
 
     @Override
@@ -227,12 +223,12 @@ public class TracksEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.Tracks[trackId=" + trackId + "]";
+        return "org.g2p.tracker.model.entities.TracksEntity[trackId=" + trackId + "]";
     }
 
     @Override
     public Object getPK() {
-        return trackId;
+        return getTrackId();
     }
 
 }
