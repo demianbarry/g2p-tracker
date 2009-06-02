@@ -267,6 +267,7 @@ public class AbmcTracksController extends BaseController {
             ((TracksEntity)trackModel.getSelected()).setObservaciones(observaciones.getValue());
             ((TracksEntity)trackModel.getSelected()).setUserIdOwner((WebsiteUsersEntity) websiteUserModel.getSelected());
             //((TracksEntity)trackModel.getSelected()).setFechaCreacion(fechaCreacion.getValue());
+            ((TracksEntity)trackModel.getSelected()).setDeadline(fechaLimite.getValue());
             ((TracksEntity)trackModel.getSelected()).setFechaEstimadaRealizacion(fechaEstimadaRealizacion.getValue());
             ((TracksEntity)trackModel.getSelected()).setFechaRealizacion(fechaRealizacion.getValue());
             ((TracksEntity)trackModel.getSelected()).setEstadoId((EstadosEntity) estadosModel.getSelected());
@@ -280,6 +281,7 @@ public class AbmcTracksController extends BaseController {
                 trackModel.persist(false);
                 
                 trackModel.getUtx().commit();
+                nuevoTrack();
                 showMessage("El track se guardo correctamente");
 
             } catch (Exception ex) {
