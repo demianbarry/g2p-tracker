@@ -503,11 +503,11 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.hibernate-persistence.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.hibernate-persistence.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.hibernate-support.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.hibernate-support.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.Xerces.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.Xerces.classpath" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.Openid4Java.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.Openid4Java.classpath" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.XmlSec.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.XmlSec.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.XMLSec.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.XMLSec.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.OpenID4Java.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.OpenID4Java.classpath" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.ZK3.6.0.classpath} ${manifest.libs.MySQLDriver.classpath} ${manifest.libs.hibernate-persistence.classpath} ${manifest.libs.hibernate-support.classpath} ${manifest.libs.Xerces.classpath} ${manifest.libs.Openid4Java.classpath} ${manifest.libs.XmlSec.classpath} "/>
+            <attribute name="Class-Path" value="${manifest.libs.ZK3.6.0.classpath} ${manifest.libs.MySQLDriver.classpath} ${manifest.libs.hibernate-persistence.classpath} ${manifest.libs.hibernate-support.classpath} ${manifest.libs.Xerces.classpath} ${manifest.libs.XMLSec.classpath} ${manifest.libs.OpenID4Java.classpath} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
@@ -516,8 +516,8 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.hibernate-persistence.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.hibernate-support.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.Xerces.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${libs.Openid4Java.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${libs.XmlSec.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.XMLSec.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.OpenID4Java.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>

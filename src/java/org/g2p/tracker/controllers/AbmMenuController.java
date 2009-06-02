@@ -37,6 +37,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Group;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -54,6 +55,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     protected Listbox lbMenues;
     protected Listbox lbUsuarios;
     protected Listbox lbRoles;
+ //   protected Listbox filas;
 
     protected Listbox lbGrupos;
     protected Textbox tbDescripcion;
@@ -70,6 +72,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
     //protected Component vistasDetail; //domain object detail
     protected MenuModel menuModel;
+    protected RolesModel rolesModel;
+    protected WebsiteUserModel usuariosModel;
 
     public AbmMenuController(){
         super(true);
@@ -89,6 +93,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 //        btnDesasociar = new Button();
 
         menuModel = new MenuModel();
+        rolesModel = new RolesModel();
+        usuariosModel = new WebsiteUserModel();
     }
 
     public void onClick$btnAplicar(){
@@ -122,7 +128,11 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         asociar();
     }
 
-    public void onCreate$abmMenu(Event evento){
+    public void onClick$btnDesasociar(){
+        desasociar();
+    }
+
+    public void onCreate$abmMenuWin(Event evento){
         // Obtengo el DataBinder que instancia la página
         binder = (DataBinder) getVariable("binder", true);
         //binder.loadComponent(vistasDetail);
@@ -130,8 +140,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         pantallaInit();
     }
 
-    private void pantallaInit(){
-        listaDisponibles();
+    public void pantallaInit(){
+    //   listaDisponibles();
         listaAlta();
         listaRoles();
         listaUsuarios();
@@ -204,18 +214,29 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         }
     }
 
-    private List<BaseEntity> menuesAlta(){
+    public List<BaseEntity> menuesAlta(){
         return menuModel.findEntities();
     }
 
-    private void listaDisponibles(){
+    public void listaDisponibles(){
         try {
             final String EXTENSION = ".zul";
-            File dirVistas = new File(getHttpRequest().getSession().getServletContext().getResource("/web").getPath());
+
+            if (getHttpRequest().getSession().getServletContext().getResource("/") == null){
+                System.out.println("##############  ES NULO   ##############");
+                
+            }
+            else{
+                System.out.println("##############  todo bien   ##############");
+            }
+
+           // System.err.println("##############  " + getHttpRequest().getContextPath() + "##############");
+            File dirVistas = new File(getHttpRequest().getSession().getServletContext().getResource("/").getFile());
             File[] vistas;
             String nombre;
             List<BaseEntity> activos;
-            if (dirVistas.isDirectory()) {
+            if (dirVistas.list().length > 0){
+       //     if (dirVistas.isDirectory()) {
                 // obtiene la lista de pantallas
                 vistas = dirVistas.listFiles(new FileFilter() {
 
@@ -244,51 +265,120 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         }
     }
 
+    // aca hay un nullPointerException
     private void listaAlta(){
+//        List<BaseEntity> menues = menuesAlta();
+//
+//        for (int i=0;i < menues.size(); i++){
+//            Listitem filaActual = new Listitem();
+//            MenuEntity menuActual = (MenuEntity) menues.get(i);
+//            Combobox comboActual = new Combobox();
+//            Comboitem itemSeleccionado = new Comboitem();
+//
+//            // agrega los grupos al combo
+//            for (int j = 0; j < menues.size(); j++) {
+//                String nombre = ((MenuEntity) menues.get(j)).getNombre();
+//
+//                comboActual.appendItem(nombre);
+//            }
+//            itemSeleccionado.setContent(menuActual.getGrupo());
+//            comboActual.setSelectedItem(itemSeleccionado);
+//
+//            filaActual.setCheckable(true);
+//
+//            // agrega la primary key a la fila (pero no se muestra)
+//            Listcell lclPk = new Listcell(menuActual.getPK().toString());
+//            lclPk.setVisible(false);
+//
+//            // nombre del menu (editable)
+//            filaActual.appendChild(new Listcell(menuActual.getNombre()));
+//
+//            // descripcion (editable)
+//            filaActual.appendChild(new Listcell(menuActual.getDescripcion()));
+//
+//            // url del menu
+//            filaActual.appendChild(new Listcell(menuActual.getUrl()));
+//
+//            // grupo del menu (elegible)
+//            filaActual.appendChild(new Listcell(menuActual.getGrupo()));
+//        }
+        try {
 
         List<BaseEntity> menues = menuesAlta();
         Row filaActual;
         List itemsActual;
         MenuEntity menuActual;
         Combobox comboActual;
-
+        List gruposComponentes = filas.getGroups();
 
 
         for (int i=0;i < menues.size(); i++){
+
                 filaActual = new Row();
-                itemsActual = filaActual.getGroup().getItems();
+            //    Group grupo = new Group();
+            //    itemsActual = grupo.getItems();
                 menuActual = (MenuEntity) menues.get(i);
                 comboActual = new Combobox();
-                Comboitem itemSeleccionado = new Comboitem();
+                Comboitem itemSeleccionado = new Comboitem(menuActual.getGrupo());
+                
 
                 // agrega los grupos al combo
                 for (int j=0; j < menues.size();j++){
                     String nombre = ((MenuEntity)menues.get(j)).getNombre();
 
-                    comboActual.appendItem(nombre);
+                    Comboitem item = comboActual.appendItem(nombre);
+
+                    if (menuActual.getGrupo().compareTo(nombre) == 0){
+                        itemSeleccionado = item;
+                    }
                 }
-                itemSeleccionado.setContent(menuActual.getGrupo());
+            //    itemSeleccionado.(menuActual.getGrupo());
                 comboActual.setSelectedItem(itemSeleccionado);
+                comboActual.setAutocomplete(true);
 
                 // agrega la primary key a la fila (pero no se muestra)
                 Label lblPk = new Label(menuActual.getPK().toString());
                 lblPk.setVisible(false);
 
-                itemsActual.add(lblPk);
+                filaActual.appendChild(lblPk);
 
                 // seleccionar menu? si/no
-                itemsActual.add(new Checkbox());
-                // nombre del menu (editable)
-                itemsActual.add(new Textbox(menuActual.getNombre()));
-                // descripcion (editable)
-                itemsActual.add(new Textbox(menuActual.getDescripcion()));
-                // url del menu
-                itemsActual.add(new Label(menuActual.getUrl()));
-                // grupo del menu (elegible)
-                itemsActual.add(comboActual);
-                
+                filaActual.appendChild(new Checkbox());
 
-                filas.getGroups().add(filaActual);
+                // nombre del menu (editable)
+                filaActual.appendChild(new Textbox(menuActual.getNombre()));
+
+                // descripcion (editable)
+                filaActual.appendChild(new Textbox(menuActual.getDescripcion()));
+
+                // url del menu
+                filaActual.appendChild(new Label(menuActual.getUrl()));
+
+                // grupo del menu (elegible)
+                filaActual.appendChild(comboActual);
+
+                filas.appendChild(filaActual);
+
+//                itemsActual.add(lblPk);
+//
+//                // seleccionar menu? si/no
+//                itemsActual.add(new Checkbox());
+//                // nombre del menu (editable)
+//                itemsActual.add(new Textbox(menuActual.getNombre()));
+//                // descripcion (editable)
+//                itemsActual.add(new Textbox(menuActual.getDescripcion()));
+//                // url del menu
+//                itemsActual.add(new Label(menuActual.getUrl()));
+//                // grupo del menu (elegible)
+//                itemsActual.add(comboActual);
+//
+//
+//                //filas.getGroups().add(filaActual);
+//                gruposComponentes.add(grupo);
+        }
+
+        } catch (NullPointerException e){
+            e.printStackTrace();
         }
     }
 
@@ -307,12 +397,23 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         List<Row> menues = getFilasSeleccionadas();
 
 
+        
+
         Iterator<Row> itMenues = menues.iterator();
+
+        System.out.println("#### Roles:" + roles.size() + "#####");
+                System.out.println("#### Usuarios:" + usuarios.size() + "#####");
+
+                System.out.println("#### hay menues seleccionados:" + itMenues.hasNext() + "#####");
 
         while (itMenues.hasNext()){
             Iterator<Listitem> itRoles = roles.iterator();
             Iterator<Listitem> itUsuarios = usuarios.iterator();
             Row menuActual = itMenues.next();
+
+
+            System.out.println("#### hay usuarios seleccionados:" + itUsuarios.hasNext() + "#####");
+            System.out.println("#### hay roles seleccionados:" + itRoles.hasNext() + "#####");
 
             String strPk = ((Label)(menuActual.getGroup().getItems().get(0))).getValue();
             int menuPk = Integer.parseInt(strPk);
@@ -330,14 +431,15 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             // asociados
 
             // al menu actual le asocia los roles
+            //for (int i = 0;i < roles.size();++i){
             while (itRoles.hasNext()){
                 Listitem rolActual = (Listitem) itRoles.next();
+                //Listitem rolActual = roles.
 
                 Integer pk = Integer.parseInt((String)(rolActual.getValue()));
 
                 AccesoMenuEntity accesoMenu = new AccesoMenuEntity();
                 accesoMenu.setRolId(new RolesEntity(pk.intValue()));
-
 
                 // ver si es correcto 
                 accesoMenu.setMenuId(new MenuEntity(menuPk));
@@ -364,6 +466,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             // al menu actual le asocia los usuarios
             while (itUsuarios.hasNext()){
                 Listitem usuarioActual = (Listitem) itUsuarios.next();
+
+                System.out.println("####" + (String)(usuarioActual.getValue()) + "#####");
 
                 Integer pk = Integer.parseInt((String)(usuarioActual.getValue()));
 
@@ -538,9 +642,9 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         itRoles = roles.iterator();
 
         while (itRoles.hasNext()){
-            WebsiteUsersEntity usuarioActual = (WebsiteUsersEntity) itRoles.next();
+            RolesEntity rolActual = (RolesEntity) itRoles.next();
 
-            lbUsuarios.appendItem(usuarioActual.getApellidoNombre(), usuarioActual.getPK().toString());
+            lbRoles.appendItem(rolActual.getNombre(), rolActual.getPK().toString());
         }
     }
 }
