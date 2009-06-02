@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +44,7 @@ import org.openid4java.util.ProxyProperties;
  *
  * @author Cristian Pacheco
  */
-public class OpenID extends Observable implements IOpenID, Constants {
+public class OpenID implements IOpenID, Constants {
 
     private ConsumerManager manager;
     private Properties properties;
@@ -71,7 +69,6 @@ public class OpenID extends Observable implements IOpenID, Constants {
             HttpServletResponse httpResp)
             throws IOException, DiscoveryException {
 
-        addObserver((Observer) httpReq.getSession().getAttribute(OBSERVADOR));
         try {
 
             InputStream is = (httpReq.getSession().getServletContext().getResourceAsStream("/WEB-INF/openid.properties"));
@@ -83,7 +80,6 @@ public class OpenID extends Observable implements IOpenID, Constants {
             // configure the return_to URL where your application will receive
             // the authentication responses from the OpenID provider
             String returnToUrl = properties.getProperty("return_to_url");
-
 
             // --- Forward proxy setup (only if needed) ---
             if (Boolean.parseBoolean(properties.getProperty("is_proxy"))) {
@@ -165,7 +161,6 @@ public class OpenID extends Observable implements IOpenID, Constants {
     // --- processing the authentication response ---
     //public Identifier verifyResponse(HttpServletRequest httpReq)
     private WebsiteUsersEntity verifyResponse(HttpServletRequest httpReq) throws NoAutentificadoException {
-        boolean registrar;
         try {
             // extract the parameters from the authentication response
             // (which comes in as a HTTP request from the OpenID provider)
@@ -204,7 +199,6 @@ public class OpenID extends Observable implements IOpenID, Constants {
                 WebsiteUsersEntity usuario = null;
             if (users.size() != 0) {
                 usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
-                httpReq.getSession().removeAttribute(PROVEEDOR_SSO_ID);
             } else {
                 httpReq.getSession().setAttribute(CLAIMED_ID, verified.getIdentifier());
             }
@@ -228,15 +222,6 @@ public class OpenID extends Observable implements IOpenID, Constants {
                     setDatos(fetchResp, usuario);
                 }
 
-                //Properties mensaje = new Properties();
-                // si el usuario no esta registrado en la aplicacion
-                registrar = (usuario == null);
-
-                // indica si hay que registrar o no
-                httpReq.getSession().setAttribute("registrar", new Boolean(registrar).toString());
-
-                setChanged();
-                notifyObservers(httpReq);
                 return usuario;  // success
             } else {
                 throw new NoAutentificadoException("No se ha podido identificar");
@@ -280,6 +265,7 @@ public class OpenID extends Observable implements IOpenID, Constants {
 
     @Override
     public boolean isUserLogged(HttpServletRequest req, WebsiteUsersEntity user) {
+        System.out.println(">>>>>>>>> " + user.getUserId() + " --- " + req.getSession().getAttribute(USER_ID));
         if (user != null && user.getUserId().equals((Integer) req.getSession().getAttribute(USER_ID))) {
             return true;
         }
