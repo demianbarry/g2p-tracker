@@ -141,7 +141,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     }
 
     public void pantallaInit(){
-    //   listaDisponibles();
+       listaDisponibles();
         listaAlta();
         listaRoles();
         listaUsuarios();
@@ -232,10 +232,11 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
            // System.err.println("##############  " + getHttpRequest().getContextPath() + "##############");
             File dirVistas = new File(getHttpRequest().getSession().getServletContext().getResource("/").getFile());
+            System.out.println("----- "+dirVistas.listFiles()+"   FILE: "+getHttpRequest().getSession().getServletContext().getResourcePaths("/"));
             File[] vistas;
             String nombre;
             List<BaseEntity> activos;
-            if (dirVistas.list().length > 0){
+            if (dirVistas.isDirectory() && dirVistas.list() != null && dirVistas.list().length > 0){
        //     if (dirVistas.isDirectory()) {
                 // obtiene la lista de pantallas
                 vistas = dirVistas.listFiles(new FileFilter() {
