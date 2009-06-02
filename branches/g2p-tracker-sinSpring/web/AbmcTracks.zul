@@ -27,123 +27,112 @@
             <div id="trackDetail" style="overflow:auto">
                 <!--ALTA DE TRACK-->
                 <div id="nuevoTrackView" visible="@{abmcTracksWin.nuevoTrackMode}" width="100%">
-                    <columnlayout>
-                        <columnchildren width="75%">
-                            <panel width="100%" border="normal" framable="true">
-                                <panelchildren>
-                                    <vbox width="100%">
-                                        <grid width="100%" >
-                                            <rows>
-                                                <row width="100%">Titulo:
-                                                    <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="100%"/>
-                                                </row>
-                                                <row width="100%">Descripcion:
-                                                    <textbox id="descripcion" value="@{abmcTracksWin.trackModel.selected.descripcion}" rows="12" width="100%"/>
-                                                </row>
-                                                <row width="100%">Observaciones:
-                                                    <textbox id="observaciones" value="@{abmcTracksWin.trackModel.selected.observaciones}" rows="5" width="100%"/>
-                                                </row>
-                                                <row width="100%">Comentarios:
-                                                    <textbox value="Funcionalidad a desarrollar" rows="5" width="100%" disabled="true"/>
-                                                </row>
-                                            </rows>
-                                        </grid>
-                                    </vbox>
-                                </panelchildren>
-                            </panel>
-                        </columnchildren>
-                        <columnchildren width="25%">
-                            <panel width="100%" border="normal" framable="true">
-                                <panelchildren>
-                                    <vbox width="100%">
-                                        <grid>
-                                            <rows>
-                                                <row width="100%">Propietario:
-                                                    <combobox id="propietario"
+                    <borderlayout height="1000px">
+                        <center>
+                            <vbox width="100%">
+                                        Título:
+                                <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="100%"/>
+                                <separator/>
+                                        Descripción:
+                                <textbox id="descripcion" value="@{abmcTracksWin.trackModel.selected.descripcion}" rows="12" width="100%"/>
+                                <separator/>
+                                        Observaciones:
+                                <textbox id="observaciones" value="@{abmcTracksWin.trackModel.selected.observaciones}" rows="5" width="100%"/>
+                                <separator/>
+                                        Comentarios:
+                                <textbox value="Funcionalidad a desarrollar" rows="5" width="100%" disabled="true"/>
+                            </vbox>
+                        </center>
+                        <east width="35%" splittable="true">
+                            <vbox width="100%">
+                                <vbox width="100%">
+                                    <grid>
+                                        <rows>
+                                            <row width="100%">Propietario:
+                                                <combobox id="propietario"
                                                     model="@{abmcTracksWin.websiteUserModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.websiteUserModel.selected}" width="90%">
-                                                        <comboitem self="@{each=prop}"
+                                                    <comboitem self="@{each=prop}"
                                                         label="@{prop.apellidoNombre}"
                                                         description="@{prop.loginName}"/>
-                                                    </combobox>
-                                                </row>
-                                                <row width="100%">Trabajadores:
-                                                    <vbox width="100%" id="workersBox">
-                                                        <hbox width="100%">
-                                                            <combobox id="trabajador"
+                                                </combobox>
+                                            </row>
+                                            <row width="100%">Trabajadores:
+                                                <vbox width="100%" id="workersBox">
+                                                    <hbox width="100%">
+                                                        <combobox id="trabajador"
                                                                 model="@{abmcTracksWin.websiteUserModelTrabajador.all}"
                                                                 autodrop="true"
                                                                 selectedItem="@{abmcTracksWin.websiteUserModelTrabajador.selected}" width="80%">
-                                                                <comboitem
+                                                            <comboitem
                                                                     self="@{each=trab}"
                                                                     label="@{trab.apellidoNombre}"
                                                                     description="@{trab.loginName}"/>
-                                                            </combobox>
-                                                            <button id="addUser" image="/img/user_add.png" onClick=""/>
-                                                        </hbox>                                                        
-                                                    </vbox>
-                                                </row>
-                                            </rows>
-                                        </grid>
-                                    </vbox>
-                                    <separator bar="true"/>
-                                    <vbox width="100%">
-                                        <grid>
-                                            <rows>
-                                                <row width="100%">Fecha de Creacion:
-                                                    <datebox id="fechaCreacion" value="@{abmcTracksWin.trackModel.selected.fechaCreacion}" buttonVisible="false" disabled="true"/>
-                                                </row>
-                                                <row width="100%">Fecha Estimada de Realización:
-                                                    <datebox id="fechaEstimadaRealizacion"/>
-                                                </row>
-                                                <row width="100%">Fecha límite:
-                                                    <datebox id="fechaLimite"/>
-                                                </row>
-                                                <row width="100%">Fecha de Realización:
-                                                    <datebox id="fechaRealizacion"/>
-                                                </row>
-                                            </rows>
-                                        </grid>
-                                    </vbox>
-                                    <separator bar="true"/>
-                                    <vbox width="100%">
-                                        <grid>
-                                            <rows>                                                
-                                                <row width="100%">Estado:
-                                                    <combobox id="estado"
+                                                        </combobox>
+                                                        <button id="addUser" image="/img/user_add.png" onClick=""/>
+                                                    </hbox>
+                                                </vbox>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </vbox>
+                                <separator bar="true"/>
+                                <vbox width="100%">
+                                    <grid>
+                                        <rows>
+                                            <row width="100%">Fecha de Creacion:
+                                                <datebox id="fechaCreacion" value="@{abmcTracksWin.trackModel.selected.fechaCreacion}" buttonVisible="false" disabled="true"/>
+                                            </row>
+                                            <row width="100%">Fecha Estimada de Realización:
+                                                <datebox id="fechaEstimadaRealizacion"/>
+                                            </row>
+                                            <row width="100%">Fecha límite:
+                                                <datebox id="fechaLimite"/>
+                                            </row>
+                                            <row width="100%">Fecha de Realización:
+                                                <datebox id="fechaRealizacion"/>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </vbox>
+                                <separator bar="true"/>
+                                <vbox width="100%">
+                                    <grid>
+                                        <rows>
+                                            <row width="100%">Estado:
+                                                <combobox id="estado"
                                                     model="@{abmcTracksWin.estadosModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.estadosModel.selected}" width="90%">
-                                                        <comboitem self="@{each=est}"
+                                                    <comboitem self="@{each=est}"
                                                         label="@{est.nombre}"/>
-                                                    </combobox>
-                                                </row>
-                                                <row width="100%">Prioridad:
-                                                    <combobox id="prioridad"
+                                                </combobox>
+                                            </row>
+                                            <row width="100%">Prioridad:
+                                                <combobox id="prioridad"
                                                     model="@{abmcTracksWin.prioridadesModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.prioridadesModel.selected}" width="90%">
-                                                        <comboitem self="@{each=prio}"
+                                                    <comboitem self="@{each=prio}"
                                                         label="@{prio.nombre}"/>
-                                                    </combobox>
-                                                </row>
-                                                <row width="100%">Importancia:
-                                                    <combobox id="importancia"
+                                                </combobox>
+                                            </row>
+                                            <row width="100%">Importancia:
+                                                <combobox id="importancia"
                                                     model="@{abmcTracksWin.importanciaModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.importanciaModel.selected}" width="90%">
-                                                        <comboitem self="@{each=imp}"
+                                                    <comboitem self="@{each=imp}"
                                                         label="@{imp.nombre}"/>
-                                                    </combobox>
-                                                </row>
-                                            </rows>
-                                        </grid>
-                                    </vbox>
-                                </panelchildren>
-                            </panel>
-                        </columnchildren>
-                    </columnlayout>
+                                                </combobox>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </vbox>
+                            </vbox>
+                        </east>
+                    </borderlayout>
                 </div>
                 <!--TRACKS TERMINADOS-->
                 <div id="termiandosTrackView" visible="@{abmcTracksWin.terminadosTrackMode}" width="100%">
