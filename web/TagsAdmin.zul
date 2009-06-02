@@ -1,53 +1,41 @@
 <!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
-<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<!-- Instancio el DataBinder estandar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./tagsAdmin"?>
-<panel title="Tags" id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer" collapsible="true" width="true">
-    <panelchildren>
-        <tablelayout width="100%">
-            <tablechildren style="border:none">
-                <panel framable="true">
-                    <panelchildren >
-                        <hbox>Search:
-                            <textbox id="searchBox" tooltip="Press TAB key for update tags"/>
-                        </hbox>
-                        <separator bar="true" spacing="20px"/>
-                        <button id="switchButton" label="Lista" width="100%"/>
-                        <tree id="tagsTree" fixedLayout="true" multiple="true" checkmark="true" vflex="true">
-                        </tree>
-                        <listbox id="tagsList" visible="false" multiple="true" width="100%" model="@{tagsAdmin$TagsAdminComposer.tagsModel.all}" selectedItem="@{tagsAdmin$TagsAdminComposer.tagsModel.selected}" checkmark="true">
-                            <listitem self="@{each=tag}">
-                                <listcell label="@{tag.tag}"/>
-                                <listcell label="@{tag.descripcion}"/>
-                            </listitem>
-                        </listbox>
-                        <separator bar="true" spacing="20px"/>
-                        <hbox>
-                            <button id="nuevoButton" label="Nuevo" />
-                            <button id="administrarButton" label="Administrar" />
-                        </hbox>
-                    </panelchildren>
-                </panel>
-            </tablechildren>
-            <tablechildren style="border:none">
-                <panel>
-                    <panelchildren>
-                        <window  id="newTagWin" apply="org.g2p.tracker.composers.TagsAdminComposer" border="normal">
-                            <vbox width="100%" spacing="0">
+<zk>
+    <groupbox id="tagsAdmin" mold="3d" use="org.zkoss.zkdemo.test2.tree.TagsTree">
+        <caption label="Tags"/>
+        <hbox>Search:
+            <textbox id="searchBox" onChanging="tagsAdmin.onChangingSearchBox(event);" tooltip="Press TAB key for update tags"/>
+        </hbox>
+        <separator bar="true" spacing="20px"/>
+        <hbox>
+            <button id="nuevoButton" label="Nuevo" />
+            <button id="administrarButton" label="Administrar" />
+            <checkbox id="treeCheck" onCheck="tagsAdmin.onCheckTreeCheck(event)" label="Árbol" width="100%"/>
+        </hbox>
+        <separator bar="true" spacing="20px"/>
+        <tree id="tagsTree" visible="false" fixedLayout="true" multiple="true" checkmark="true" vflex="true">
+        </tree>
+        <listbox id="tagsList" visible="true" multiple="true" height="200px" model="@{tagsAdmin.tags}" checkmark="true">
+            <listitem self="@{each=tag}">
+                <listcell label="@{tag.tag}"/>
+                <listcell label="@{tag.descripcion}"/>
+            </listitem>
+        </listbox>
+        <button id="aplicarButton" label="Aplicar"/>
+        <window visible="false" id="newTagWin" border="normal">
+            <vbox width="100%" spacing="0">
                         Tag:
-                                <textbox id="tagText" width="40%" constraint="no empty"/>
+                <textbox id="tagText" width="40%" constraint="no empty"/>
                         Descripción:
-                                <textbox id="descripcionText" width="80%" constraint="no empty"/>
-                            </vbox>
-                            <separator bar="true" spacing="20px"/>
-                            <hbox>
-                                <button id="aceptarButton" label="Aceptar"/>
-                                <button id="cancelarButton" label="Cancelar" />
-                            </hbox>
-                        </window>
-                    </panelchildren>
-                </panel>
-            </tablechildren>
-        </tablelayout>
-    </panelchildren>
-</panel>
+                <textbox id="descripcionText" width="80%" constraint="no empty"/>
+            </vbox>
+            <separator bar="true" spacing="20px"/>
+            <hbox>
+                <button id="aceptarButton" label="Aceptar"/>
+                <button id="cancelarButton" label="Cancelar" />
+            </hbox>
+        </window>
+    </groupbox>
+</zk>

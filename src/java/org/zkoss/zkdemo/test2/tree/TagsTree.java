@@ -2,25 +2,27 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.g2p.tracker.composers;
+package org.zkoss.zkdemo.test2.tree;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.g2p.tracker.controllers.Constants;
+import org.g2p.tracker.model.models.Taggeable;
 import org.g2p.tracker.model.entities.TagsEntity;
 import org.g2p.tracker.model.entities.TagsPerTracksEntity;
 import org.g2p.tracker.model.models.BaseModel;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zkdemo.test2.tree.TagsList;
-import org.zkoss.zkdemo.test2.tree.TagsTreeRenderer;
-import org.zkoss.zkdemo.test2.tree.TreeModelA;
+import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
@@ -31,19 +33,48 @@ import org.zkoss.zul.Window;
  *
  * @author Administrador
  */
-public class TagsAdminComposer extends BaseComposer implements Constants {
+public class TagsTree extends Groupbox implements AfterCompose, Constants {
 
+    String _name;
+    Taggeable _model;
     Tree tagsTree;
     TagsTreeRenderer tagsTreeRenderer;
     Listbox tagsList;
     Textbox searchBox;
-    Groupbox tagsAdmin;
     TagsList tagsTreeList;
     Window newTagWin;
     Textbox tagText;
     Textbox descripcionText;
     Checkbox treeCheck;
     String criteria = null;
+
+    public Taggeable getModel() {
+        return _model;
+    }
+
+    public void setModel(Taggeable _model) {
+        this._model = _model;
+    }
+
+    public String getName() {
+        return _name;
+    }
+
+    public void setName(String _name) {
+        this._name = _name;
+    }
+
+    public void onClick$administrarButton(Event event) {
+    }
+
+    @Override
+    public void afterCompose() {
+        //wire variables
+        Components.wireVariables(this, this);
+
+        //auto forward
+        Components.addForwards(this, this);
+    }
 
     public void setCriteria(String criteria) {
         this.criteria = criteria;
@@ -64,15 +95,15 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         return tags;
     }
 
-    public TagsAdminComposer() {
+    public TagsTree() {
         tagsTreeRenderer = new TagsTreeRenderer();
         tagsTreeList = new TagsList();
     }
 
     public void onCreate$tagsAdmin(Event event) {
-        binder = (DataBinder) tagsAdmin.getVariable("binder", true);
+        binder = (DataBinder) getVariable("binder", true);
         tagsTree.setTreeitemRenderer(tagsTreeRenderer);
-        tagsAdmin.setOpen(false);
+        setOpen(false);
         populateTagsTree(null);
     }
 
@@ -114,7 +145,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         return tagsList;
     }
 
-    public void onChanging$searchBox(InputEvent event) {
+    public void onChangingSearchBox(InputEvent event) {
         String value = event.getValue();
         populateTagsTree(value);
         setCriteria(value);
@@ -183,14 +214,45 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         descripcionText.setValue("");
     }
 
-    public void onCheck$treeCheck(CheckEvent event) {
+    public void onCheckTreeCheck(CheckEvent event) {
         tagsTree.setVisible(event.isChecked());
         tagsList.setVisible(!event.isChecked());
+
+
     }
 
-    public void onClick$administrarButton(Event event) {
-        System.out.println("PEPEPEEPEPEPEP");
+    protected void showMessage(String msg) {
+        showMessage(msg, null);
     }
 
+    protected void showMessage(String msg, Exception ex) {
+        try {
+            Messagebox.show(msg + ex.getMessage());
+            ex.printStackTrace();
+        } catch (InterruptedException ex1) {
+            System.out.println("ERROR MOSTRANDO MENSAJE: " + ex1.getMessage());
+            ex1.printStackTrace();
+        }
+    }
 
+    public void onClick$aplicarButton(Event event) {
+        Set<Treeitem> selectedTags = tagsTree.getSelectedItems();
+
+        if (selectedTags.size() > 0 && getModel() != null) {
+            Treeitem treeitem;
+            TagsEntity tag;
+            Iterator<Treeitem> tagsIterator = selectedTags.iterator();
+            List<TagsEntity> tagsList = new ArrayList();
+            while (tagsIterator.hasNext()) {
+                try {
+                    treeitem = tagsIterator.next();
+                    tag = (TagsEntity) ((Treecell) treeitem.getTreerow().getChildren().get(0)).getAttribute(TAG_ID);
+                    tagsList.add(tag);
+                } catch (Exception ex) {
+                    showMessage("ERROR: ", ex);
+                }
+            }
+            getModel().aplicarTags(tagsList);
+        }
+    }
 }

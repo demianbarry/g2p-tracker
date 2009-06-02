@@ -3,7 +3,10 @@
  * and open the template in the editor.
  */
 
-package org.g2p.tracker.model.entities;
+package org.g2p.tracker.model.models;
+
+import java.util.List;
+import org.g2p.tracker.model.entities.TagsEntity;
 
 /**
  *
@@ -11,4 +14,5 @@ package org.g2p.tracker.model.entities;
  */
 public interface Taggeable {
     public String getNombre();
+    public void aplicarTags(List<TagsEntity> tagsList);
 }
