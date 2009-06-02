@@ -93,7 +93,12 @@ public class BaseController extends Window implements AfterCompose, Constants {
     }
 
     protected void showMessage(String msg) {
-        showMessage(msg,null);
+        try {
+            Messagebox.show(msg);
+        } catch (InterruptedException ex1) {
+            System.out.println("ERROR MOSTRANDO MENSAJE: " + ex1.getMessage());
+            ex1.printStackTrace();
+        }
     }
 
     protected void showMessage(String msg, Exception ex) {
