@@ -44,7 +44,7 @@
                             </vbox>
                         </panelchildren>
                     </panel>
-                    <tagstree id="tagsTree" name="Arbol"/>
+                <!--    <tagstree id="tagsTree" name="Arbol"/> -->
                 </div>
             </west>
             <east width="20%" title="Gadgets" flex="true" splittable="true" collapsible="true" style="background:#c5e6ef;" >
