@@ -26,15 +26,17 @@ public class TracksModel extends BaseModel implements Taggeable {
     }
 
     @Override
-    public void aplicarTags(List<TagsEntity> tagsList) {
+    public void aplicarTags(List<TagsEntity> tagsList) throws Exception {
         TracksEntity track = ((TracksEntity) getSelected());
-        TagsPerTracksEntity tagsPerTrack = null;
-        Iterator<TagsEntity> tags = tagsList.iterator();
-        while (tags.hasNext()) {
-            tagsPerTrack = new TagsPerTracksEntity(
-                                    tags.next().getTagId(),
-                                    ((TracksEntity) getSelected()).getTrackId()
-                                    );
+        if (track != null) {
+            TagsPerTracksEntity tagsPerTrack = null;
+            Iterator<TagsEntity> tags = tagsList.iterator();
+            while (tags.hasNext()) {
+                tagsPerTrack = new TagsPerTracksEntity(
+                        tags.next().getTagId(),
+                        track.getTrackId());
+                create(tagsPerTrack);
+            }
         }
     }
 }
