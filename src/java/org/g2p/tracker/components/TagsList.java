@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zkoss.zkdemo.test2.tree;
+package org.g2p.tracker.components;
 
 import java.util.ArrayList;
 import org.g2p.tracker.model.entities.TagsEntity;

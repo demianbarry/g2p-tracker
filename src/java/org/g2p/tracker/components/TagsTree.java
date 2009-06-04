@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zkoss.zkdemo.test2.tree;
+package org.g2p.tracker.components;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +11,6 @@ import java.util.Set;
 import org.g2p.tracker.controllers.Constants;
 import org.g2p.tracker.model.models.Taggeable;
 import org.g2p.tracker.model.entities.TagsEntity;
-import org.g2p.tracker.model.entities.TagsPerTracksEntity;
 import org.g2p.tracker.model.models.BaseModel;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.CheckEvent;
@@ -22,6 +21,8 @@ import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;
@@ -36,24 +37,29 @@ import org.zkoss.zul.Window;
 public class TagsTree extends Groupbox implements AfterCompose, Constants {
 
     String _name;
-    Taggeable _model;
+    private Taggeable _model;
     Tree tagsTree;
     TagsTreeRenderer tagsTreeRenderer;
     Listbox tagsList;
     Textbox searchBox;
     TagsList tagsTreeList;
-    Window newTagWin;
+    Groupbox newTagWin;
     Textbox tagText;
     Textbox descripcionText;
     Checkbox treeCheck;
     String criteria = null;
 
     public Taggeable getModel() {
+        System.out.println("GET: " + _model);
         return _model;
     }
 
     public void setModel(Taggeable _model) {
-        this._model = _model;
+        System.out.println("MODEL1: " + _model);
+        if (_model != null && this._model != _model) {
+            System.out.println("MODEL: " + _model);
+            this._model = _model;
+        }
     }
 
     public String getName() {
@@ -103,7 +109,6 @@ public class TagsTree extends Groupbox implements AfterCompose, Constants {
     public void onCreate$tagsAdmin(Event event) {
         binder = (DataBinder) getVariable("binder", true);
         tagsTree.setTreeitemRenderer(tagsTreeRenderer);
-        setOpen(false);
         populateTagsTree(null);
     }
 
@@ -154,7 +159,7 @@ public class TagsTree extends Groupbox implements AfterCompose, Constants {
 
     public void onClick$nuevoButton(Event event) {
         try {
-            newTagWin.doModal();
+            newTagWin.setVisible(true);
         } catch (Exception ex) {
             showMessage("ERROR: ", ex);
         }
@@ -214,6 +219,41 @@ public class TagsTree extends Groupbox implements AfterCompose, Constants {
         descripcionText.setValue("");
     }
 
+    public void onClick$aplicarButton(Event event) {
+        System.out.println("MODEL: " + _model);
+        Set selectedTags;
+        if (tagsList.isVisible()) {
+            selectedTags = tagsList.getSelectedItems();
+        } else {
+            selectedTags = tagsTree.getSelectedItems();
+        }
+        System.out.println("SELECTED: " + selectedTags);
+        if (selectedTags.size() > 0 && getModel() != null) {
+            Object item;
+            TagsEntity tag = null;
+            Iterator tagsIterator = selectedTags.iterator();
+            List<TagsEntity> tagsList = new ArrayList();
+            while (tagsIterator.hasNext()) {
+                try {
+                    item = tagsIterator.next();
+                    if (item instanceof Treeitem) {
+                        tag = (TagsEntity) ((Treecell) ((Treeitem) item).getTreerow().getChildren().get(0)).getAttribute(TAG_ID);
+                    } else
+                        tag = (TagsEntity) ((Listitem) item).getValue();
+                    tagsList.add(tag);
+                } catch (Exception ex) {
+                    showMessage("ERROR: ", ex);
+                }
+            }
+            try {
+                getModel().aplicarTags(tagsList);
+            } catch (Exception ex) {
+                showMessage("ERROR aplicando tags: ", ex);
+            }
+        }
+
+    }
+
     public void onCheckTreeCheck(CheckEvent event) {
         tagsTree.setVisible(event.isChecked());
         tagsList.setVisible(!event.isChecked());
@@ -232,27 +272,6 @@ public class TagsTree extends Groupbox implements AfterCompose, Constants {
         } catch (InterruptedException ex1) {
             System.out.println("ERROR MOSTRANDO MENSAJE: " + ex1.getMessage());
             ex1.printStackTrace();
-        }
-    }
-
-    public void onClick$aplicarButton(Event event) {
-        Set<Treeitem> selectedTags = tagsTree.getSelectedItems();
-
-        if (selectedTags.size() > 0 && getModel() != null) {
-            Treeitem treeitem;
-            TagsEntity tag;
-            Iterator<Treeitem> tagsIterator = selectedTags.iterator();
-            List<TagsEntity> tagsList = new ArrayList();
-            while (tagsIterator.hasNext()) {
-                try {
-                    treeitem = tagsIterator.next();
-                    tag = (TagsEntity) ((Treecell) treeitem.getTreerow().getChildren().get(0)).getAttribute(TAG_ID);
-                    tagsList.add(tag);
-                } catch (Exception ex) {
-                    showMessage("ERROR: ", ex);
-                }
-            }
-            getModel().aplicarTags(tagsList);
         }
     }
 }
