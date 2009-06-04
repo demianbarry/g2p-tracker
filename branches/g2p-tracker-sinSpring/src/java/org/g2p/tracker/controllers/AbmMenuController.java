@@ -5,16 +5,10 @@
 
 package org.g2p.tracker.controllers;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.net.MalformedURLException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
 import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
@@ -27,8 +21,6 @@ import org.g2p.tracker.model.models.AccesoMenuModel;
 import org.g2p.tracker.model.models.MenuModel;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
-import org.zkoss.idom.Item;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.AfterCompose;
@@ -37,10 +29,8 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Group;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Textbox;
@@ -77,20 +67,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
     public AbmMenuController(){
         super(true);
-
-//        lbPaginas = new Listbox();
-//        lbMenues = new Listbox();
-//        filas = new Rows();
-//        lbRoles = new Listbox();
-//        lbUsuarios = new Listbox();
-//
-//        btnAlta = new Button();
-//        btnBaja = new Button();
-//        btnAceptar = new Button();
-//        btnCancelar = new Button();
-//        btnAplicar = new Button();
-//        btnAsociar =  new Button();
-//        btnDesasociar = new Button();
 
         menuModel = new MenuModel();
         rolesModel = new RolesModel();
@@ -152,30 +128,28 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         Iterator itItems;
 
         itItems = lbPaginas.getSelectedItems().iterator();
-        MenuModel mnModel = new MenuModel();
 
         while (itItems.hasNext()){
-            
+
             MenuEntity nuevoMenu = new MenuEntity();
             Listitem itemActual = ((Listitem) (itItems.next()));
 
             nuevoMenu.setNombre(itemActual.getLabel());
             nuevoMenu.setUrl(itemActual.getValue().toString());
+         //   nuevoMenu.setMenuId(10);
 
-            mnModel.setSelected(nuevoMenu);
-            
             try{
             MenuModel.createEntity(nuevoMenu,true);
 
 
             } catch (RollbackFailureException ex) {
-                showMessage("No se pudo dar de baja el menu", ex);
+                showMessage("No se pudo dar de alta el menu", ex);
             } catch (Exception ex) {
                 showMessage("Sucedio un error desconocido", ex);
             }
-            
+
         }
-        
+
 
     }
 
@@ -219,90 +193,39 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     }
 
     public void listaDisponibles(){
-        try {
             final String EXTENSION = ".zul";
-
-            if (getHttpRequest().getSession().getServletContext().getResource("/") == null){
-                System.out.println("##############  ES NULO   ##############");
-                
-            }
-            else{
-                System.out.println("##############  todo bien   ##############");
-            }
-
-           // System.err.println("##############  " + getHttpRequest().getContextPath() + "##############");
-            File dirVistas = new File(getHttpRequest().getSession().getServletContext().getResource("/").getFile());
-            System.out.println("----- "+dirVistas.listFiles()+"   FILE: "+getHttpRequest().getSession().getServletContext().getResourcePaths("/"));
-            File[] vistas;
+            Set dirVistas = getHttpRequest().getSession().getServletContext().getResourcePaths("/");
             String nombre;
             List<BaseEntity> activos;
-            if (dirVistas.isDirectory() && dirVistas.list() != null && dirVistas.list().length > 0){
-       //     if (dirVistas.isDirectory()) {
-                // obtiene la lista de pantallas
-                vistas = dirVistas.listFiles(new FileFilter() {
 
-                    @Override
-                    public boolean accept(File archivo) {
-                        return archivo.getName().endsWith(EXTENSION);
-                    }
-                });
-                //busca las paginas dadas de alta
-                activos = menuesAlta();
-                // agrega las pantallas al componente
-                for (int i = 0; i < vistas.length; i++) {
-                    for (int j = 0; j < activos.size(); j++) {
-                        // si una pagina, ubicada en el disco, no fue dada de alta previamente
-                        // se la agrega a la lista como disponible
-                        if (((MenuEntity) activos.get(j)).getNombre().compareTo(vistas[i].getName()) != 0) {
-                            nombre = vistas[i].getName().substring(0, vistas[i].getName().lastIndexOf(EXTENSION));
-                            lbPaginas.appendItem(nombre, vistas[i].getAbsolutePath());
-                        }
+
+            //busca las paginas dadas de alta
+            activos = menuesAlta();
+
+            // obtiene la lista de pantallas
+            Iterator<String> itVistas = dirVistas.iterator();
+            Iterator<BaseEntity> itActivos = activos.iterator();
+
+            while (itActivos.hasNext()) {
+                MenuEntity activoActual = (MenuEntity) itActivos.next();
+
+                while (itVistas.hasNext()) {
+                    String vistaActual = itVistas.next();
+                //nombre = vistaActual.substring(0, vistaActual.lastIndexOf(EXTENSION) -1);
+                    nombre = vistaActual.substring(1);
+
+                    // si una pagina, ubicada en el disco, no fue dada de alta previamente
+                    // se la agrega a la lista como disponible
+                    if (vistaActual.endsWith(EXTENSION) &&  activoActual.getUrl().compareTo(nombre) != 0) {
+                        lbPaginas.appendItem(nombre, vistaActual);
+                        //lbPaginas.appendItem(vistaActual, vistaActual);
                     }
                 }
             }
             setFocus(true);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(AbmMenuController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
-    // aca hay un nullPointerException
     private void listaAlta(){
-//        List<BaseEntity> menues = menuesAlta();
-//
-//        for (int i=0;i < menues.size(); i++){
-//            Listitem filaActual = new Listitem();
-//            MenuEntity menuActual = (MenuEntity) menues.get(i);
-//            Combobox comboActual = new Combobox();
-//            Comboitem itemSeleccionado = new Comboitem();
-//
-//            // agrega los grupos al combo
-//            for (int j = 0; j < menues.size(); j++) {
-//                String nombre = ((MenuEntity) menues.get(j)).getNombre();
-//
-//                comboActual.appendItem(nombre);
-//            }
-//            itemSeleccionado.setContent(menuActual.getGrupo());
-//            comboActual.setSelectedItem(itemSeleccionado);
-//
-//            filaActual.setCheckable(true);
-//
-//            // agrega la primary key a la fila (pero no se muestra)
-//            Listcell lclPk = new Listcell(menuActual.getPK().toString());
-//            lclPk.setVisible(false);
-//
-//            // nombre del menu (editable)
-//            filaActual.appendChild(new Listcell(menuActual.getNombre()));
-//
-//            // descripcion (editable)
-//            filaActual.appendChild(new Listcell(menuActual.getDescripcion()));
-//
-//            // url del menu
-//            filaActual.appendChild(new Listcell(menuActual.getUrl()));
-//
-//            // grupo del menu (elegible)
-//            filaActual.appendChild(new Listcell(menuActual.getGrupo()));
-//        }
         try {
 
         List<BaseEntity> menues = menuesAlta();
@@ -321,7 +244,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 menuActual = (MenuEntity) menues.get(i);
                 comboActual = new Combobox();
                 Comboitem itemSeleccionado = new Comboitem(menuActual.getGrupo());
-                
+
 
                 // agrega los grupos al combo
                 for (int j=0; j < menues.size();j++){
@@ -359,23 +282,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 filaActual.appendChild(comboActual);
 
                 filas.appendChild(filaActual);
-
-//                itemsActual.add(lblPk);
-//
-//                // seleccionar menu? si/no
-//                itemsActual.add(new Checkbox());
-//                // nombre del menu (editable)
-//                itemsActual.add(new Textbox(menuActual.getNombre()));
-//                // descripcion (editable)
-//                itemsActual.add(new Textbox(menuActual.getDescripcion()));
-//                // url del menu
-//                itemsActual.add(new Label(menuActual.getUrl()));
-//                // grupo del menu (elegible)
-//                itemsActual.add(comboActual);
-//
-//
-//                //filas.getGroups().add(filaActual);
-//                gruposComponentes.add(grupo);
         }
 
         } catch (NullPointerException e){
@@ -398,7 +304,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         List<Row> menues = getFilasSeleccionadas();
 
 
-        
+
 
         Iterator<Row> itMenues = menues.iterator();
 
@@ -442,13 +348,13 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 AccesoMenuEntity accesoMenu = new AccesoMenuEntity();
                 accesoMenu.setRolId(new RolesEntity(pk.intValue()));
 
-                // ver si es correcto 
+                // ver si es correcto
                 accesoMenu.setMenuId(new MenuEntity(menuPk));
                 try {
-                    
+
                     AccesoMenuModel.createEntity((BaseEntity) accesoMenu, true);
 
-                    
+
                  } catch (RollbackFailureException ex) {
                         showMessage("No se pudo dar de baja el menu", ex);
                     } catch (NamingException ex) {

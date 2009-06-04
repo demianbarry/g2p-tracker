@@ -39,14 +39,14 @@
                 </west>
 
 
-                <center border="none" flex="true">
-                    <!--
+                <center title="Menues" border="none" flex="true">
+                    <vbox>
                     <hbox>
                             <button id="btnAceptar" label="Aceptar" />
                             <button id="btnAplicar" label="Aplicar" />
                             <button id="btnCancelar" label="Cancelar" />
                         </hbox>
-                    -->
+                    
                     <grid>
                         
 
@@ -64,7 +64,7 @@
                                 -->
                             </rows>
                     </grid>
-                    
+                    </vbox>
                 </center>
 
                 <east title="Roles y Usuarios" size="50%" flex="true" maxsize="250" splittable="true" collapsible="true">
@@ -87,9 +87,7 @@
                             fixedLayout="true"
             
                             >
-                                            <listitem >
-                                                <listcell label=""/>
-                                            </listitem>
+                                           
 
                                         </listbox>
                                     </panelchildren>
@@ -107,9 +105,7 @@
                             fixedLayout="true"
                             checkmark="true"
                             >
-                                            <listitem >
-                                                <listcell label=""/>
-                                            </listitem>
+                                            
                                         </listbox>
                                     </panelchildren>
                                 </panel>
