@@ -14,11 +14,9 @@
                 <!-- botones ejecutadores -->
                             <button id="btnBaja"
                             label="DarBaja"
-                            onClick="abmMenuWin.onClick$btnBaja()"
                             />
                             <button id="btnAlta"
                             label="DarAlta"
-                            onClick="abmMenuWin.onClick$btnAlta()"
                             />
                         </hbox>
                         
@@ -70,8 +68,8 @@
                 <east title="Roles y Usuarios" size="50%" flex="true" maxsize="250" splittable="true" collapsible="true">
                     <vbox>
                         <hbox>
-                            <button id="btnAsociar" label="Asociar" onClick="abmMenuWin.onClick$btnAsociar()"/>
-                            <button id="btnDesasociar" label="Desasociar" onClick="abmMenuWin.onClick$btnDesasociar()"/>
+                            <button id="btnAsociar" label="Asociar" />
+                            <button id="btnDesasociar" label="Desasociar"/>
                         </hbox>
                         <columnlayout>
 				<!-- descripcion del menu seleccionado -->

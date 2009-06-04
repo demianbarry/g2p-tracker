@@ -114,7 +114,7 @@ public class AccesoMenuEntity extends BaseEntity implements Serializable {
 
     @Override
     public Object getPK() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getAccesoMenuId();
     }
 
 }

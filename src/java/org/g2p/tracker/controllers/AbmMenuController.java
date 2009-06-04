@@ -136,7 +136,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
             nuevoMenu.setNombre(itemActual.getLabel());
             nuevoMenu.setUrl(itemActual.getValue().toString());
-         //   nuevoMenu.setMenuId(10);
 
             try{
             MenuModel.createEntity(nuevoMenu,true);
@@ -150,6 +149,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
         }
 
+        showMessage("La alta ha sido exitosa");
 
     }
 
@@ -163,7 +163,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         while (itFilas.hasNext()){
             Row filaActual = (Row) itFilas.next();
 
-            Label lblPk = (Label) filaActual.getGroup().getItems().get(PK);
+            Label lblPk = (Label) filaActual.getChildren().get(PK);
 
             MenuEntity menuActual = (MenuEntity) menuModel.findEntity(Integer.parseInt(lblPk.getValue()));
 
@@ -186,6 +186,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                         showMessage("Sucedio un error desconocido", ex);
                     }
         }
+
+        showMessage("La baja ha sido exitosa");
     }
 
     public List<BaseEntity> menuesAlta(){
@@ -217,8 +219,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                     // si una pagina, ubicada en el disco, no fue dada de alta previamente
                     // se la agrega a la lista como disponible
                     if (vistaActual.endsWith(EXTENSION) &&  activoActual.getUrl().compareTo(nombre) != 0) {
-                        lbPaginas.appendItem(nombre, vistaActual);
-                        //lbPaginas.appendItem(vistaActual, vistaActual);
+                       Listitem item = lbPaginas.appendItem(nombre, nombre);
+                        item.setSelected(false);
                     }
                 }
             }
@@ -230,10 +232,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
         List<BaseEntity> menues = menuesAlta();
         Row filaActual;
-        List itemsActual;
         MenuEntity menuActual;
         Combobox comboActual;
-        List gruposComponentes = filas.getGroups();
 
 
         for (int i=0;i < menues.size(); i++){
@@ -252,8 +252,13 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
                     Comboitem item = comboActual.appendItem(nombre);
 
-                    if (menuActual.getGrupo().compareTo(nombre) == 0){
-                        itemSeleccionado = item;
+                    if (menuActual.getGrupo() != null) {
+                        if (menuActual.getGrupo().compareTo(nombre) == 0) {
+                            itemSeleccionado = item;
+                        }
+                    }
+                    else {
+                        itemSeleccionado = null;
                     }
                 }
             //    itemSeleccionado.(menuActual.getGrupo());
@@ -290,7 +295,13 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     }
 
     private void vaciarListaAlta(){
-        filas.getGroups().clear();
+        List<Row> items = filas.getGroups();
+
+        Iterator<Row> itRows = items.iterator();
+
+        while (itRows.hasNext()){
+            filas.getGroups().remove(itRows.next());
+        }
     }
 
     private void actualizarListaAlta(){
@@ -302,7 +313,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         Set<Listitem> roles = lbRoles.getSelectedItems();
         Set<Listitem> usuarios = lbUsuarios.getSelectedItems();
         List<Row> menues = getFilasSeleccionadas();
-
+        final int PK = 0;
 
 
 
@@ -322,7 +333,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             System.out.println("#### hay usuarios seleccionados:" + itUsuarios.hasNext() + "#####");
             System.out.println("#### hay roles seleccionados:" + itRoles.hasNext() + "#####");
 
-            String strPk = ((Label)(menuActual.getGroup().getItems().get(0))).getValue();
+            String strPk = ((Label)(menuActual.getChildren().get(PK))).getValue();
             int menuPk = Integer.parseInt(strPk);
 
             // TODO
@@ -404,13 +415,15 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                     }
             }
         }
+
+                showMessage("La asociasión ha sido exitosa");
     }
 
     private void desasociar(){
         Set<Listitem> roles = lbRoles.getSelectedItems();
         Set<Listitem> usuarios = lbUsuarios.getSelectedItems();
         List<Row> menues = getFilasSeleccionadas();
-
+        final int PK = 0;
 
         Iterator<Row> itMenues = menues.iterator();
 
@@ -419,7 +432,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             Iterator<Listitem> itUsuarios = usuarios.iterator();
             Row menuActual = itMenues.next();
 
-            String strPk = ((Label)(menuActual.getGroup().getItems().get(0))).getValue();
+            String strPk = ((Label)(menuActual.getChildren().get(PK))).getValue();
             int menuPk = Integer.parseInt(strPk);
 
             // TODO
@@ -449,7 +462,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 try {
                     AccesoMenuModel.deleteEntity((BaseEntity) accesoMenu, true);
 
-
+                    showMessage("La desasociasión ha sido exitosa");
                 } catch (RollbackFailureException ex) {
                         showMessage("No se pudo dar de baja el menu", ex);
                     } catch (NamingException ex) {
@@ -508,13 +521,15 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
         Vector<Row> filasSeleccionadas;
 
-        itFilas = filas.getGroups().iterator();
+        itFilas = filas.getChildren().iterator();
         filasSeleccionadas = new Vector<Row>();
 
         while (itFilas.hasNext()){
             Row filaActual = (Row) itFilas.next();
 
-            Checkbox item = (Checkbox) filaActual.getGroup().getItems().get(CHECKBOX);
+
+            //Checkbox item = (Checkbox) filaActual.getGroup().getItems().get(CHECKBOX);
+            Checkbox item = (Checkbox) filaActual.getChildren().get(CHECKBOX);
 
             if (item.isChecked()){
                 filasSeleccionadas.add(filaActual);
