@@ -19,7 +19,6 @@ import org.g2p.tracker.model.entities.MenuEntity;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.AccesoMenuModel;
-import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.MenuModel;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
@@ -47,7 +46,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     protected Listbox lbMenues;
     protected Listbox lbUsuarios;
     protected Listbox lbRoles;
- //   protected Listbox filas;
 
     protected Listbox lbGrupos;
     protected Textbox tbDescripcion;
@@ -130,8 +128,12 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         mostrarMenuesRol();
     }
 
-    public void onClick$btnDesseleccionar(){
-        desseleccionarListaAlta();
+    public void onClick$btnDesSel(){
+        seleccionarTodoListaAlta(false);
+    }
+
+    public void onClick$btnSel(){
+        seleccionarTodoListaAlta(true);
     }
 
     public void onCreate$abmMenuWin(Event evento){
@@ -262,17 +264,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             setFocus(true);
     }
 
-    private void desseleccionarListaAlta() {
-        List<Row> itemsSeleccionados = getFilasSeleccionadas();
-        Iterator<Row> itItemSelected = itemsSeleccionados.iterator();
-
-        while (itItemSelected.hasNext()){
-            Row filaActual = itItemSelected.next();
-
-            ((Checkbox) filaActual.getChildren().get(CHECKBOX)).setChecked(false);
-        }
-    }
-
     private void listaAlta(){
 
         List<BaseEntity> menues = menuesAlta();
@@ -282,7 +273,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         }
     }
 
-    private void agregarFila(MenuEntity menuActual){
+    private Row agregarFila(MenuEntity menuActual){
         Row filaActual;
         Combobox comboActual;
         List<BaseEntity> menues = menuesAlta();
@@ -309,6 +300,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                         itemSeleccionado = null;
                     }
                 }
+
+               // agregarGrupos(comboActual);
             //    itemSeleccionado.(menuActual.getGrupo());
                 comboActual.setSelectedItem(itemSeleccionado);
                 comboActual.setAutocomplete(true);
@@ -335,7 +328,35 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 filaActual.appendChild(comboActual);
 
                 filas.appendChild(filaActual);
+
+                return filaActual;
     }
+
+//    private void agregarGrupos(Combobox combo){
+//        List<BaseEntity> menues = menuesAlta();
+//        Comboitem itemSeleccionado = new Comboitem();
+//
+//        // agrega los grupos al combo
+//                for (int j=0; j < menues.size();j++){
+//                    MenuEntity menuActual = (MenuEntity) menues.get(j);
+//                    String nombre = ((MenuEntity)menues.get(j)).getUrl();
+//                    itemSeleccionado.setValue(menuActual.getGrupo());
+//
+//                    Comboitem item = combo.appendItem(nombre);
+//
+//                    if (menuActual.getGrupo() != null) {
+//                        if (menuActual.getGrupo().compareTo(nombre) == 0) {
+//                            itemSeleccionado = item;
+//                        }
+//                    }
+//                    else {
+//                        itemSeleccionado = null;
+//                    }
+//                }
+//
+//                combo.setSelectedItem(itemSeleccionado);
+//                combo.setAutocomplete(true);
+//    }
 
     private void eliminarFila(MenuEntity menu){
         List<Row> hijos = filas.getChildren();
@@ -360,7 +381,9 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             MenuEntity menuActual = itMenues.next();
 
             if (accion.compareTo("alta") == 0){
-            agregarFila(menuActual);
+            Row fila = agregarFila(menuActual);
+
+            
         }
         else {
             if (accion.compareTo("baja") == 0){
@@ -691,7 +714,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             List<BaseEntity> menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByUsuario", parametros);
             Iterator<BaseEntity> itMenues = menues.iterator();
 
-            desseleccionarListaAlta();
+            seleccionarTodoListaAlta(false);
 
             while (itMenues.hasNext()) {
                 BaseEntity menuActual = itMenues.next();
@@ -713,7 +736,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 }
             }
         } catch (NullPointerException e) {
-            desseleccionarListaAlta();
+            seleccionarTodoListaAlta(false);
         }
     }
 
@@ -728,7 +751,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             List<BaseEntity> menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByRol", parametros);
             Iterator<BaseEntity> itMenues = menues.iterator();
 
-            desseleccionarListaAlta();
+            seleccionarTodoListaAlta(false);
 
             while (itMenues.hasNext()) {
                 BaseEntity menuActual = itMenues.next();
@@ -750,7 +773,19 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 }
             }
         } catch (NullPointerException e) {
-            desseleccionarListaAlta();
+            seleccionarTodoListaAlta(false);
         }
+    }
+
+    public void seleccionarTodoListaAlta(boolean sel){
+        List<Row> menues = filas.getChildren();
+        Iterator<Row> itMenues = menues.iterator();
+
+        while (itMenues.hasNext()){
+            Row filaActual = itMenues.next();
+
+            ((Checkbox) filaActual.getChildren().get(CHECKBOX)).setChecked(sel);
+        }
+
     }
 }

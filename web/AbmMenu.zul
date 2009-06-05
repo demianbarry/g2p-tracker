@@ -28,7 +28,6 @@
                             checkmark="true"
 
                             >
-                                  <!--  onCreate="abmMenuWin.listaDisponibles()" -->
                         
                         </listbox>
 
@@ -43,10 +42,8 @@
                             <button id="btnAceptar" label="Aceptar" />
                             <button id="btnAplicar" label="Aplicar" />
                             <button id="btnCancelar" label="Cancelar" />
-                            <!--
                             <button id="btnDesSel" label="Desmarcar todo" />
                             <button id="btnSel" label="Marcar todo" />
-                            -->
                         </hbox>
                     
                     <grid>
