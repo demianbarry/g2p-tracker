@@ -371,7 +371,9 @@ public class BaseModel {
             }
 
             em = getEntityManager();
-            em.remove(em.getReference(entity.getClass(), entity.getPK()));
+            BaseEntity entidad = em.find(entity.getClass(), entity.getPK());
+            //em.remove(em.getReference(entity.getClass(), entity.getPK()));
+            em.remove(em.getReference(entidad.getClass(), entidad.getPK()));
 
             if (ownTx) {
                 utx.commit();
