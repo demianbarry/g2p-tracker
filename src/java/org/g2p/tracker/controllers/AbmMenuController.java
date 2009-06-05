@@ -5,6 +5,7 @@
 
 package org.g2p.tracker.controllers;
 
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.g2p.tracker.model.entities.MenuEntity;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.AccesoMenuModel;
+import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.MenuModel;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
@@ -57,6 +59,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     protected Button btnAplicar;
     protected Button btnAsociar;
     protected Button btnDesasociar;
+    protected Button btnDesSel;
+    protected Button btnSel;
 
     protected Rows filas;
 
@@ -64,6 +68,9 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     protected MenuModel menuModel;
     protected RolesModel rolesModel;
     protected WebsiteUserModel usuariosModel;
+    
+    
+    private final int PK, CHECKBOX, NOMBRE, DESCRIPCION, URL, COMBO;
 
     public AbmMenuController(){
         super(true);
@@ -71,14 +78,23 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         menuModel = new MenuModel();
         rolesModel = new RolesModel();
         usuariosModel = new WebsiteUserModel();
+
+        PK = 0;
+        CHECKBOX = 1;
+        NOMBRE = 2;
+        DESCRIPCION = 3;
+        URL = 4;
+        COMBO = 5;
     }
 
     public void onClick$btnAplicar(){
 
-        darAlta();
-        darBaja();
+       // darAlta();
+       // darBaja();
 
-        asociar();
+       // asociar();
+
+        actualizar();
     }
 
     public void onClick$btnCancelar(){
@@ -91,13 +107,11 @@ public class AbmMenuController extends BaseController implements AfterCompose{
     }
 
     public void onClick$btnAlta(){
-        darAlta();
-        actualizarListaAlta();
+        actualizarListaAlta(darAlta(),"alta");
     }
 
     public void onClick$btnBaja(){
-        darBaja();
-        actualizarListaAlta();
+        actualizarListaAlta(darBaja(),"baja");
     }
 
     public void onClick$btnAsociar(){
@@ -106,6 +120,18 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
     public void onClick$btnDesasociar(){
         desasociar();
+    }
+
+    public void onSelect$lbUsuarios(){
+        mostrarMenuesUsuario();
+    }
+
+    public void onSelect$lbRoles(){
+        mostrarMenuesRol();
+    }
+
+    public void onClick$btnDesseleccionar(){
+        desseleccionarListaAlta();
     }
 
     public void onCreate$abmMenuWin(Event evento){
@@ -123,11 +149,13 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         listaUsuarios();
     }
 
-    private void darAlta(){
+    private List<MenuEntity> darAlta(){
 
         Iterator itItems;
 
         itItems = lbPaginas.getSelectedItems().iterator();
+
+        Vector<MenuEntity> menuesAgregados = new Vector<MenuEntity>();
 
         while (itItems.hasNext()){
 
@@ -140,7 +168,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             try{
             MenuModel.createEntity(nuevoMenu,true);
 
-
+            menuesAgregados.add(nuevoMenu);
             } catch (RollbackFailureException ex) {
                 showMessage("No se pudo dar de alta el menu", ex);
             } catch (Exception ex) {
@@ -151,13 +179,16 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
         showMessage("La alta ha sido exitosa");
 
+        return menuesAgregados;
+
     }
 
-    private void darBaja(){
+    private List<MenuEntity> darBaja(){
         List<Row> menuesAEliminar = getFilasSeleccionadas();
         Iterator<Row> itFilas;
         final int PK = 0;
 
+        Vector<MenuEntity> menuesEliminados = new Vector<MenuEntity>();
         itFilas = menuesAEliminar.iterator();
 
         while (itFilas.hasNext()){
@@ -170,6 +201,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             try {
                     MenuModel.deleteEntity(menuActual, true);
 
+                    menuesEliminados.add(menuActual);
+                    ((Checkbox) filaActual.getChildren().get(CHECKBOX)).setChecked(false);
 
 
                 } catch (RollbackFailureException ex) {
@@ -188,6 +221,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         }
 
         showMessage("La baja ha sido exitosa");
+
+        return menuesEliminados;
     }
 
     public List<BaseEntity> menuesAlta(){
@@ -227,28 +262,41 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             setFocus(true);
     }
 
+    private void desseleccionarListaAlta() {
+        List<Row> itemsSeleccionados = getFilasSeleccionadas();
+        Iterator<Row> itItemSelected = itemsSeleccionados.iterator();
+
+        while (itItemSelected.hasNext()){
+            Row filaActual = itItemSelected.next();
+
+            ((Checkbox) filaActual.getChildren().get(CHECKBOX)).setChecked(false);
+        }
+    }
+
     private void listaAlta(){
-        try {
 
         List<BaseEntity> menues = menuesAlta();
-        Row filaActual;
-        MenuEntity menuActual;
-        Combobox comboActual;
-
 
         for (int i=0;i < menues.size(); i++){
+                agregarFila((MenuEntity) menues.get(i));
+        }
+    }
 
-                filaActual = new Row();
+    private void agregarFila(MenuEntity menuActual){
+        Row filaActual;
+        Combobox comboActual;
+        List<BaseEntity> menues = menuesAlta();
+
+        filaActual = new Row();
             //    Group grupo = new Group();
             //    itemsActual = grupo.getItems();
-                menuActual = (MenuEntity) menues.get(i);
                 comboActual = new Combobox();
                 Comboitem itemSeleccionado = new Comboitem(menuActual.getGrupo());
 
 
                 // agrega los grupos al combo
                 for (int j=0; j < menues.size();j++){
-                    String nombre = ((MenuEntity)menues.get(j)).getNombre();
+                    String nombre = ((MenuEntity)menues.get(j)).getUrl();
 
                     Comboitem item = comboActual.appendItem(nombre);
 
@@ -287,26 +335,41 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 filaActual.appendChild(comboActual);
 
                 filas.appendChild(filaActual);
-        }
+    }
 
-        } catch (NullPointerException e){
-            e.printStackTrace();
+    private void eliminarFila(MenuEntity menu){
+        List<Row> hijos = filas.getChildren();
+        Iterator<Row> itHijos = hijos.iterator();
+
+        while (itHijos.hasNext()){
+            Row hijoActual = itHijos.next();
+
+            int hijoPK = Integer.parseInt(((Label)(hijoActual.getChildren().get(0))).getValue());
+
+            if (hijoPK == menu.getMenuId()){
+                hijoActual.setVisible(false);
+            }
         }
     }
 
-    private void vaciarListaAlta(){
-        List<Row> items = filas.getGroups();
+    private void actualizarListaAlta(List<MenuEntity> menues,String accion){
 
-        Iterator<Row> itRows = items.iterator();
+        Iterator<MenuEntity> itMenues = menues.iterator();
 
-        while (itRows.hasNext()){
-            filas.getGroups().remove(itRows.next());
+        while (itMenues.hasNext()){
+            MenuEntity menuActual = itMenues.next();
+
+            if (accion.compareTo("alta") == 0){
+            agregarFila(menuActual);
         }
-    }
+        else {
+            if (accion.compareTo("baja") == 0){
+                eliminarFila(menuActual);
+            }
+        }
+        }
 
-    private void actualizarListaAlta(){
-        vaciarListaAlta();
-        listaAlta();
+
     }
 
     private void asociar(){
@@ -319,19 +382,10 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
         Iterator<Row> itMenues = menues.iterator();
 
-        System.out.println("#### Roles:" + roles.size() + "#####");
-                System.out.println("#### Usuarios:" + usuarios.size() + "#####");
-
-                System.out.println("#### hay menues seleccionados:" + itMenues.hasNext() + "#####");
-
         while (itMenues.hasNext()){
             Iterator<Listitem> itRoles = roles.iterator();
             Iterator<Listitem> itUsuarios = usuarios.iterator();
             Row menuActual = itMenues.next();
-
-
-            System.out.println("#### hay usuarios seleccionados:" + itUsuarios.hasNext() + "#####");
-            System.out.println("#### hay roles seleccionados:" + itRoles.hasNext() + "#####");
 
             String strPk = ((Label)(menuActual.getChildren().get(PK))).getValue();
             int menuPk = Integer.parseInt(strPk);
@@ -364,7 +418,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 try {
 
                     AccesoMenuModel.createEntity((BaseEntity) accesoMenu, true);
-
+                    rolActual.setSelected(false);
 
                  } catch (RollbackFailureException ex) {
                         showMessage("No se pudo dar de baja el menu", ex);
@@ -385,8 +439,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             while (itUsuarios.hasNext()){
                 Listitem usuarioActual = (Listitem) itUsuarios.next();
 
-                System.out.println("####" + (String)(usuarioActual.getValue()) + "#####");
-
                 Integer pk = Integer.parseInt((String)(usuarioActual.getValue()));
 
                 AccesoMenuEntity accesoMenu = new AccesoMenuEntity();
@@ -398,7 +450,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 try {
 
                     AccesoMenuModel.createEntity((BaseEntity) accesoMenu, true);
-
+                    usuarioActual.setSelected(false);
 
                  } catch (RollbackFailureException ex) {
                         showMessage("No se pudo dar de baja el menu", ex);
@@ -414,6 +466,8 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                         showMessage("Sucedio un error desconocido", ex);
                     }
             }
+
+            ((Checkbox) menuActual.getChildren().get(CHECKBOX)).setChecked(false);
         }
 
                 showMessage("La asociasión ha sido exitosa");
@@ -423,7 +477,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         Set<Listitem> roles = lbRoles.getSelectedItems();
         Set<Listitem> usuarios = lbUsuarios.getSelectedItems();
         List<Row> menues = getFilasSeleccionadas();
-        final int PK = 0;
 
         Iterator<Row> itMenues = menues.iterator();
 
@@ -450,19 +503,22 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             // al menu actual le asocia los roles
             while (itRoles.hasNext()){
                 Listitem rolActual = (Listitem) itRoles.next();
+                Hashtable<String,Integer> parametros = new Hashtable<String, Integer>();
 
                 Integer pk = Integer.parseInt((String)(rolActual.getValue()));
 
-                AccesoMenuEntity accesoMenu = new AccesoMenuEntity();
-                accesoMenu.setRolId(new RolesEntity(pk.intValue()));
+                parametros.put("menuId", menuPk);
+                parametros.put("rolId", pk);
 
+                List<BaseEntity> amenu = AccesoMenuModel.findEntities("AccesoMenuEntity.findByMenuIdAndRolId", parametros);
 
-                // ver si es correcto
-                accesoMenu.setMenuId(new MenuEntity(menuPk));
+                BaseEntity accesoMenu = amenu.get(0);
+
                 try {
-                    AccesoMenuModel.deleteEntity((BaseEntity) accesoMenu, true);
+                    AccesoMenuModel.deleteEntity(accesoMenu, true);
 
-                    showMessage("La desasociasión ha sido exitosa");
+                    rolActual.setSelected(false);
+
                 } catch (RollbackFailureException ex) {
                         showMessage("No se pudo dar de baja el menu", ex);
                     } catch (NamingException ex) {
@@ -484,19 +540,21 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             // al menu actual le asocia los usuarios
             while (itUsuarios.hasNext()){
                 Listitem usuarioActual = (Listitem) itUsuarios.next();
+                Hashtable<String,Integer> parametros = new Hashtable<String, Integer>();
 
                 Integer pk = Integer.parseInt((String)(usuarioActual.getValue()));
 
-                AccesoMenuEntity accesoMenu = new AccesoMenuEntity();
-                accesoMenu.setUserId(new WebsiteUsersEntity(pk.intValue()));
+                parametros.put("menuId", menuPk);
+                parametros.put("userId", pk);
 
+                List<BaseEntity> amenu = AccesoMenuModel.findEntities("AccesoMenuEntity.findByMenuIdAndUsuarioId", parametros);
 
-                // ver si es correcto
-                accesoMenu.setMenuId(new MenuEntity(menuPk));
+                AccesoMenuEntity accesoMenu = (AccesoMenuEntity) amenu.get(0);
                 try {
 
                     AccesoMenuModel.deleteEntity((BaseEntity) accesoMenu, true);
 
+                    usuarioActual.setSelected(false);
 
                  } catch (RollbackFailureException ex) {
                         showMessage("No se pudo dar de baja el menu", ex);
@@ -512,12 +570,12 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                         showMessage("Sucedio un error desconocido", ex);
                     }
             }
+            ((Checkbox) menuActual.getChildren().get(CHECKBOX)).setChecked(false);
         }
     }
 
     private List getFilasSeleccionadas(){
         Iterator itFilas;
-        final int CHECKBOX = 1;
 
         Vector<Row> filasSeleccionadas;
 
@@ -527,8 +585,6 @@ public class AbmMenuController extends BaseController implements AfterCompose{
         while (itFilas.hasNext()){
             Row filaActual = (Row) itFilas.next();
 
-
-            //Checkbox item = (Checkbox) filaActual.getGroup().getItems().get(CHECKBOX);
             Checkbox item = (Checkbox) filaActual.getChildren().get(CHECKBOX);
 
             if (item.isChecked()){
@@ -567,6 +623,134 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             RolesEntity rolActual = (RolesEntity) itRoles.next();
 
             lbRoles.appendItem(rolActual.getNombre(), rolActual.getPK().toString());
+        }
+    }
+
+    private void actualizar(){
+
+        List<Row> menuesActualizar = getFilasSeleccionadas();
+        Iterator<Row> itMenuesSel = menuesActualizar.iterator();
+
+        while (itMenuesSel.hasNext()){
+            Row filaActual = itMenuesSel.next();
+            MenuEntity menuActual = new MenuEntity();
+            String descripcion;
+            String grupo;
+            int pk;
+            String nombre;
+            String url;
+            Combobox combo;
+
+            combo = (Combobox) filaActual.getChildren().get(COMBO);
+
+            descripcion = ((Textbox)filaActual.getChildren().get(DESCRIPCION)).getText();
+            pk = Integer.parseInt(((Label) filaActual.getChildren().get(PK)).getValue());
+            nombre = ((Textbox) filaActual.getChildren().get(NOMBRE)).getText();
+            url = ((Label) filaActual.getChildren().get(URL)).getValue();
+
+
+            menuActual.setDescripcion(descripcion);
+            menuActual.setMenuId(pk);
+            menuActual.setNombre(nombre);
+            menuActual.setUrl(url);
+
+            if (combo != null){
+                grupo = combo.getSelectedItem().getLabel();
+                menuActual.setGrupo(grupo);
+            }
+
+            try {
+
+                MenuModel.editEntity((BaseEntity) menuActual, true);
+
+                ((Checkbox) filaActual.getChildren().get(CHECKBOX)).setChecked(false);
+            } catch (RollbackFailureException ex) {
+                showMessage("No se pudo dar de baja el menu", ex);
+            } catch (NamingException ex) {
+                showMessage("Error de nombrado", ex);
+            } catch (IllegalStateException ex) {
+                showMessage("Estado ilegal", ex);
+            } catch (SecurityException ex) {
+                showMessage("Se ha violado la seguridad", ex);
+            } catch (SystemException ex) {
+                showMessage("Error del sistema", ex);
+            } catch (Exception ex) {
+                showMessage("Sucedio un error desconocido", ex);
+            }
+        }
+    }
+
+    private void mostrarMenuesUsuario() {
+        try {
+            Listitem itemUsuario = lbUsuarios.getSelectedItem();
+            int pk = Integer.parseInt(itemUsuario.getValue().toString());
+            Hashtable<String, Integer> parametros = new Hashtable<String, Integer>();
+
+            parametros.put("userId", pk);
+
+            List<BaseEntity> menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByUsuario", parametros);
+            Iterator<BaseEntity> itMenues = menues.iterator();
+
+            desseleccionarListaAlta();
+
+            while (itMenues.hasNext()) {
+                BaseEntity menuActual = itMenues.next();
+                boolean seguir = true;
+                List<Row> rows = ((List<Row>) filas.getChildren());
+
+                for (int i = 0; seguir && i < filas.getChildren().size(); i++) {
+
+                    for (int j = 0; j < ((Row) filas.getChildren().get(i)).getChildren().size(); ++j) {
+
+                        int filaPk = Integer.parseInt(((Label) rows.get(j).getChildren().get(PK)).getValue());
+
+                        if (filaPk == ((Integer) menuActual.getPK()).intValue()) {
+
+                            ((Checkbox) rows.get(j).getChildren().get(CHECKBOX)).setChecked(true);
+                            seguir = false;
+                        }
+                    }
+                }
+            }
+        } catch (NullPointerException e) {
+            desseleccionarListaAlta();
+        }
+    }
+
+    private void mostrarMenuesRol() {
+        try {
+            Listitem itemRol = lbRoles.getSelectedItem();
+            int pk = Integer.parseInt(itemRol.getValue().toString());
+            Hashtable<String, Integer> parametros = new Hashtable<String, Integer>();
+
+            parametros.put("rolId", pk);
+
+            List<BaseEntity> menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByRol", parametros);
+            Iterator<BaseEntity> itMenues = menues.iterator();
+
+            desseleccionarListaAlta();
+
+            while (itMenues.hasNext()) {
+                BaseEntity menuActual = itMenues.next();
+                boolean seguir = true;
+                List<Row> rows = ((List<Row>) filas.getChildren());
+
+                for (int i = 0; seguir && i < filas.getChildren().size(); i++) {
+
+                    for (int j = 0; j < ((Row) filas.getChildren().get(i)).getChildren().size(); ++j) {
+
+                        int filaPk = Integer.parseInt(((Label) rows.get(j).getChildren().get(PK)).getValue());
+
+                        if (filaPk == ((Integer) menuActual.getPK()).intValue()) {
+
+                            ((Checkbox) rows.get(j).getChildren().get(CHECKBOX)).setChecked(true);
+                            seguir = false;
+                        }
+                    }
+                }
+            }
+        } catch (NullPointerException e) {
+            desseleccionarListaAlta();
         }
     }
 }
