@@ -91,6 +91,7 @@ public class OpenID implements IOpenID, Constants {
 
             manager.setMaxRedirects(3);
 
+            System.out.println("---URLLLLLLLLLLLLLLLL "+returnToUrl);
             // perform discovery on the user-supplied identifier
             List discoveries = manager.discover(userSuppliedString);
 
@@ -179,6 +180,7 @@ public class OpenID implements IOpenID, Constants {
 
             // verify the response; ConsumerManager needs to be the same
             // (static) instance used to place the authentication request
+            System.out.println("----------------URLLLLL "+receivingURL);
             VerificationResult verification = manager.verify(
                     receivingURL.toString(),
                     response, discovered);
@@ -193,7 +195,7 @@ public class OpenID implements IOpenID, Constants {
 
             WebsiteUsersEntity usuario = null;
             if (users.size() != 0) {
-                usuario = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters).get(0);
+                usuario = (WebsiteUsersEntity) users.get(0);
                 httpReq.getSession().removeAttribute(PROVEEDOR_SSO_ID);
             } else {
                 httpReq.getSession().setAttribute(CLAIMED_ID, verified.getIdentifier());

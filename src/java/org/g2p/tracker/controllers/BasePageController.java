@@ -59,13 +59,16 @@ public class BasePageController extends BaseController {
             }
 
             if (getUserFromSession() == null) {
-                if (getHttpRequest().getCookies().length > 0) {
+                if (getHttpRequest().getCookies().length > 0 && getSession().getAttribute(CLAIMED_ID) == null) {
                     Cookie cookies[] = getHttpRequest().getCookies();
                     int i = 0;
+                    Hashtable parameters = new Hashtable();
                     while (cookies.length > i++) {
                         if (USER.equals(cookies[i - 1].getName())) {
-                            Hashtable parameters = new Hashtable();
-                            if (cookies[i - 1].getValue() != null) {
+                            if (cookies[i - 1].getValue() != null 
+                                    && cookies[i - 1].getValue().length() > 0
+                                    && !"null".equalsIgnoreCase(cookies[i - 1].getValue())) {
+                                System.out.println("-----------USER: " + cookies[i - 1].getValue());
                                 parameters.put("userId", cookies[i - 1].getValue());
                                 WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByUserId", parameters).get(0);
                                 setUserInSession(user);
@@ -238,7 +241,7 @@ public class BasePageController extends BaseController {
 
     public void onClick$logoutLabel(Event event) {
         setUserInSession(null);
-        getHttpResponse().addCookie(new Cookie(USER, null));
+        getHttpResponse().addCookie(new Cookie(USER, ""));
         include.setSrc(LOGIN_PAGE);
         setNavBarItem(HOME_PAGE);
     }

@@ -85,7 +85,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
     }
 
     private Taggeable getModel() {
-        return (Taggeable) self.getDesktop().getAttribute("MODEL");
+        return (Taggeable) self.getDesktop().getAttribute("TAGGEABLE_MODEL");
     }
 
     private void populateTagsTree(String criteria) {
@@ -234,7 +234,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
 
         }
         if (self instanceof Groupbox) {
-            Events.sendEvent(new Event("onTag", (Component) self.getDesktop().getAttribute("COMPONENT")));
+            Events.sendEvent(new Event("onTag", (Component) self.getDesktop().getAttribute("TAGGEABLE_COMPONENT")));
         }
     }
 

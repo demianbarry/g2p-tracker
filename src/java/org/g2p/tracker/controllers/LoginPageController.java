@@ -54,9 +54,16 @@ public class LoginPageController extends BaseController {
     }
 
     public void onClick$openIdLoginButton(Event event) {
-        localLoginGrid.setVisible(false);
-        proveedoresList.setVisible(true);
-        openIdLoginButton.setVisible(false);
+        if ("Usar cuenta OpenId".equals(openIdLoginButton.getLabel())) {
+            localLoginGrid.setVisible(false);
+            proveedoresList.setVisible(true);
+            openIdLoginButton.setLabel("Usar cuenta local");
+        } else {
+            localLoginGrid.setVisible(true);
+            proveedoresList.setVisible(false);
+            openIdLoginButton.setLabel("Usar cuenta OpenId");
+        }
+
     }
 
     public void onCreate$loginWin(Event event) {
@@ -113,16 +120,8 @@ public class LoginPageController extends BaseController {
         }
     }
 
-    public void onClick$cancelButton(Event event) {
-        // Vuelvo a la HomePage
-        proveedoresList.setVisible(false);
-        localLoginGrid.setVisible(true);
-        openIdLoginButton.setVisible(true);
-    }
-
     public void onSelect$proveedoresListbox(Event event) {
         getSession().setAttribute(PROVEEDOR_SSO_ID, ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getProveedorSsoId());
-        System.out.println("------------------>" + ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getProveedorSsoId());
         try {
             String urlOpenidLogin = LoginPreProcessor.processRequest(getHttpRequest(), getHttpResponse(), ((ProveedoresSsoEntity) proveedoresSSOModel.getSelected()).getUrlDiscovery());
             Executions.sendRedirect(urlOpenidLogin);
