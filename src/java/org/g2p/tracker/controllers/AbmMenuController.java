@@ -19,6 +19,7 @@ import org.g2p.tracker.model.entities.MenuEntity;
 import org.g2p.tracker.model.entities.RolesEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.AccesoMenuModel;
+import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.MenuModel;
 import org.g2p.tracker.model.models.RolesModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
@@ -577,7 +578,7 @@ public class AbmMenuController extends BaseController implements AfterCompose{
                 AccesoMenuEntity accesoMenu = (AccesoMenuEntity) amenu.get(0);
                 try {
 
-                    AccesoMenuModel.deleteEntity((BaseEntity) accesoMenu, true);
+                    BaseModel.deleteEntity(accesoMenu, true);
 
                     usuarioActual.setSelected(false);
 
