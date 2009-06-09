@@ -42,13 +42,13 @@ public class AccesoMenuEntity extends BaseEntity implements Serializable {
     @Column(name = "acceso_menu_id")
     private Integer accesoMenuId;
     @JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private MenuEntity menuId;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private WebsiteUsersEntity userId;
     @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RolesEntity rolId;
 
     public AccesoMenuEntity() {
