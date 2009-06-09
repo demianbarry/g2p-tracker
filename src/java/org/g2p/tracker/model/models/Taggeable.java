@@ -14,5 +14,6 @@ import org.g2p.tracker.model.entities.TagsEntity;
  */
 public interface Taggeable {
     public String getNombre();
-    public void aplicarTags(List<TagsEntity> tagsList);
+    public List getStoredTags();
+    public void aplicarTags(List<TagsEntity> tagsList) throws Exception;
 }

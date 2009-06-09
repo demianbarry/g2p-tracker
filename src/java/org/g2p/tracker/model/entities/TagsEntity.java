@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Entity
 @Table(name = "tags")
@@ -31,14 +31,16 @@ import javax.persistence.Table;
     @NamedQuery(name = "TagsEntity.findRootTags", query = "SELECT t FROM TagsEntity t WHERE t.tagIdGrupo IS NULL"),
     @NamedQuery(name = "TagsEntity.findByTagId", query = "SELECT t FROM TagsEntity t WHERE t.tagId = :tagId"),
     @NamedQuery(name = "TagsEntity.findByFather", query = "SELECT t FROM TagsEntity t WHERE t.tagIdGrupo.tagId = :tagId"),
-    @NamedQuery(name = "TagsEntity.findByCriteria", query = "SELECT t FROM TagsEntity t WHERE t.tag LIKE :criteria OR t.descripcion LIKE :criteria")
+    @NamedQuery(name = "TagsEntity.findByCriteria", query = "SELECT t FROM TagsEntity t WHERE t.tag LIKE :criteria OR t.descripcion LIKE :criteria"),
+    @NamedQuery(name = "TagsEntity.findByTag", query = "SELECT t FROM TagsEntity t WHERE t.tag = :tag"),
+    @NamedQuery(name = "TagsEntity.findByTrack", query = "SELECT t FROM TagsEntity t WHERE t.tagId IN (SELECT tpt.tagsPerTracksPK.tagId FROM TagsPerTracksEntity tpt WHERE tpt.tagsPerTracksPK.trackId = :trackId)")
 })
 public class TagsEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "tag_id")
     private Integer tagId;
     @Basic(optional = false)
@@ -48,10 +50,10 @@ public class TagsEntity extends BaseEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(mappedBy = "tagIdGrupo", fetch = FetchType.EAGER)
-    private Set<TagsEntity> tagsCollection;
+    @OneToMany(mappedBy = "tagIdGrupo", fetch = FetchType.LAZY)
+    private Set<TagsEntity> tagsEntityCollection;
     @JoinColumn(name = "tag_id_grupo", referencedColumnName = "tag_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private TagsEntity tagIdGrupo;
 
     public TagsEntity() {
@@ -98,12 +100,12 @@ public class TagsEntity extends BaseEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public Set<TagsEntity> getTagsCollection() {
-        return tagsCollection;
+    public Set<TagsEntity> getTagsEntityCollection() {
+        return tagsEntityCollection;
     }
 
-    public void setTagsCollection(Set<TagsEntity> tagsCollection) {
-        this.tagsCollection = tagsCollection;
+    public void setTagsEntityCollection(Set<TagsEntity> tagsEntityCollection) {
+        this.tagsEntityCollection = tagsEntityCollection;
     }
 
     public TagsEntity getTagIdGrupo() {
@@ -136,11 +138,11 @@ public class TagsEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.Tags[tagId=" + tagId + "]";
+        return "org.g2p.tracker.model.entities.TagsEntity[tagId=" + tagId + "]";
     }
 
     @Override
     public Object getPK() {
-        return tagId;
+        return getTagId();
     }
 }

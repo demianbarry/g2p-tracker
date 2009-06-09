@@ -4,23 +4,28 @@
  */
 package org.g2p.tracker.composers;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.g2p.tracker.controllers.Constants;
 import org.g2p.tracker.model.entities.TagsEntity;
-import org.g2p.tracker.model.entities.TagsPerTracksEntity;
 import org.g2p.tracker.model.models.BaseModel;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zkdemo.test2.tree.TagsList;
-import org.zkoss.zkdemo.test2.tree.TagsTreeRenderer;
-import org.zkoss.zkdemo.test2.tree.TreeModelA;
-import org.zkoss.zkplus.databind.DataBinder;
+import org.g2p.tracker.components.TagsList;
+import org.g2p.tracker.components.TagsTreeRenderer;
+import org.g2p.tracker.components.TreeModelA;
+import org.g2p.tracker.model.models.Taggeable;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
@@ -34,10 +39,10 @@ import org.zkoss.zul.Window;
 public class TagsAdminComposer extends BaseComposer implements Constants {
 
     Tree tagsTree;
+    Groupbox tagsAdmin;
     TagsTreeRenderer tagsTreeRenderer;
     Listbox tagsList;
     Textbox searchBox;
-    Groupbox tagsAdmin;
     TagsList tagsTreeList;
     Window newTagWin;
     Textbox tagText;
@@ -45,11 +50,26 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
     Checkbox treeCheck;
     String criteria = null;
 
+    public void onClick$administrarButton(Event event) {
+    }
+
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+        tagsTreeRenderer = new TagsTreeRenderer();
+        tagsTreeList = new TagsList();
+
+
+        if (self instanceof Groupbox) {
+            tagsTree.setTreeitemRenderer(tagsTreeRenderer);
+            ((Groupbox) self).setOpen(false);
+            populateTagsTree(null);
+        }
+    }
+
     public void setCriteria(String criteria) {
         this.criteria = criteria;
     }
-    //ZK databinder
-    protected DataBinder binder;
 
     public List getTags() {
         List tagsList = BaseModel.findEntities("TagsEntity.findAll", null);
@@ -64,16 +84,8 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         return tags;
     }
 
-    public TagsAdminComposer() {
-        tagsTreeRenderer = new TagsTreeRenderer();
-        tagsTreeList = new TagsList();
-    }
-
-    public void onCreate$tagsAdmin(Event event) {
-        binder = (DataBinder) tagsAdmin.getVariable("binder", true);
-        tagsTree.setTreeitemRenderer(tagsTreeRenderer);
-        tagsAdmin.setOpen(false);
-        populateTagsTree(null);
+    private Taggeable getModel() {
+        return (Taggeable) self.getDesktop().getAttribute("MODEL");
     }
 
     private void populateTagsTree(String criteria) {
@@ -96,7 +108,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
     }
 
     private TagsList getNodeTags(TagsEntity rootTag, String criteria) {
-        Iterator tags = rootTag.getTagsCollection().iterator();
+        Iterator tags = rootTag.getTagsEntityCollection().iterator();
         TagsEntity tag;
         TagsList tagsList = new TagsList();
 
@@ -118,7 +130,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         String value = event.getValue();
         populateTagsTree(value);
         setCriteria(value);
-        binder.loadAttribute(tagsList, "model");
+        getDataBinder().loadAttribute(tagsList, "model");
     }
 
     public void onClick$nuevoButton(Event event) {
@@ -183,14 +195,94 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         descripcionText.setValue("");
     }
 
+    public void onClick$aplicarButton(Event event) {
+        Set selectedTags;
+        Hashtable parameters = null;
+        if (tagsList.isVisible()) {
+            selectedTags = tagsList.getSelectedItems();
+            parameters = new Hashtable();
+        } else {
+            selectedTags = tagsTree.getSelectedItems();
+        }
+        if (getModel() != null) {
+            List<TagsEntity> tagsList = new ArrayList();
+            if (selectedTags.size() > 0) {
+                Object item;
+                TagsEntity tag = null;
+                Iterator tagsIterator = selectedTags.iterator();
+                while (tagsIterator.hasNext()) {
+                    try {
+                        item = tagsIterator.next();
+                        if (item instanceof Treeitem) {
+                            tag = (TagsEntity) ((Treecell) ((Treeitem) item).getTreerow().getChildren().get(0)).getAttribute(TAG_ID);
+                        } else {
+                            parameters.clear();
+                            parameters.put("tag", ((Listcell) ((Listitem) item).getChildren().get(0)).getLabel());
+                            tag = (TagsEntity) (BaseModel.findEntities("TagsEntity.findByTag", parameters).get(0));
+                        }
+                        tagsList.add(tag);
+                    } catch (Exception ex) {
+                        showMessage("ERROR: ", ex);
+                    }
+                }
+            }
+            try {
+                getModel().aplicarTags(tagsList);
+            } catch (Exception ex) {
+                showMessage("ERROR aplicando tags: ", ex);
+            }
+
+        }
+        if (self instanceof Groupbox) {
+            Events.sendEvent(new Event("onTag", (Component) self.getDesktop().getAttribute("COMPONENT")));
+        }
+    }
+
     public void onCheck$treeCheck(CheckEvent event) {
         tagsTree.setVisible(event.isChecked());
         tagsList.setVisible(!event.isChecked());
+        tagsTree.clearSelection();
+        tagsList.clearSelection();
+        setSelectedItems();
     }
 
-    public void onClick$administrarButton(Event event) {
-        System.out.println("PEPEPEEPEPEPEP");
+    public void onCreate$tagsAdmin(Event event) {
+        setSelectedItems();
     }
 
+    protected void showMessage(String msg) {
+        showMessage(msg, null);
+    }
 
+    private void setSelectedItems() {
+        if (self instanceof Groupbox) {
+            Iterator it = getModel().getStoredTags().iterator();
+            List<String> tagNames = new ArrayList();
+            while (it.hasNext()) {
+                tagNames.add(((TagsEntity) it.next()).getTag());
+            }
+            List items = null;
+            if (tagsList.isVisible()) {
+                items = new ArrayList(tagsList.getItems());
+            } else {
+                items = new ArrayList(tagsTree.getItems());
+            }
+            List selectedItems = new ArrayList();
+
+            int i = 0;
+
+            while (items.size() > i++) {
+                if (tagsList.isVisible()) {
+                    if (tagNames.contains(((Listcell) ((Listitem) items.get(i - 1)).getChildren().get(0)).getLabel())) {
+                        selectedItems.add(items.get(i - 1));
+                        ((Listitem) items.get(i - 1)).setSelected(true);
+                    }
+                } else {
+                    if (tagNames.contains(((Treecell) ((Treeitem) items.get(i - 1)).getTreerow().getChildren().get(0)).getLabel())) {
+                        ((Treeitem) items.get(i - 1)).setSelected(true);
+                    }
+                }
+            }
+        }
+    }
 }

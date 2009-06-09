@@ -45,6 +45,7 @@ public class TagsTreeRenderer implements TreeitemRenderer, Constants {
         }
         //Attach treecells to treerow
         treecell.setParent(tr);
+
         item.setOpen(true);
     }
 }
