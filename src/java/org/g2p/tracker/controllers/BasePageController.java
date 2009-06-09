@@ -17,6 +17,7 @@ import org.zkoss.zul.Include;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.http.Cookie;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
 import org.g2p.tracker.model.models.BaseModel;
@@ -58,6 +59,23 @@ public class BasePageController extends BaseController {
             }
 
             if (getUserFromSession() == null) {
+                if (getHttpRequest().getCookies().length > 0) {
+                    Cookie cookies[] = getHttpRequest().getCookies();
+                    int i = 0;
+                    while (cookies.length > i++) {
+                        if (USER.equals(cookies[i - 1].getName())) {
+                            Hashtable parameters = new Hashtable();
+                            if (cookies[i - 1].getValue() != null) {
+                                parameters.put("userId", cookies[i - 1].getValue());
+                                WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByUserId", parameters).get(0);
+                                setUserInSession(user);
+                                setUserNameInSession(user.getApellidoNombre());
+                            }
+                        }
+                    }
+
+                }
+
                 if (getSession().getAttribute(CLAIMED_ID) == null) {
                     LoginPostProcessor.processRequest(getHttpRequest(), getHttpResponse());
                 } else {
@@ -81,8 +99,7 @@ public class BasePageController extends BaseController {
 
                     }
 
-                    int option = Messagebox.show("¿Desea asociar los siguientes proveedores OpenId con las claves indicadas? "
-                            + proveedores_claves, "Usuario ya registrado", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
+                    int option = Messagebox.show("¿Desea asociar los siguientes proveedores OpenId con las claves indicadas? " + proveedores_claves, "Usuario ya registrado", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
 
                     if (option == Messagebox.YES) {
                         it = usersPerProveedor.iterator();
@@ -221,6 +238,7 @@ public class BasePageController extends BaseController {
 
     public void onClick$logoutLabel(Event event) {
         setUserInSession(null);
+        getHttpResponse().addCookie(new Cookie(USER, null));
         include.setSrc(LOGIN_PAGE);
         setNavBarItem(HOME_PAGE);
     }
