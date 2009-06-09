@@ -118,7 +118,7 @@ public class AltaUsuarioController extends BaseController implements AfterCompos
                 getSession().removeAttribute(PROVEEDOR_SSO_ID);
                 getSession().removeAttribute(CLAIMED_ID);
 
-                setUserIdInSession(usuario.getUserId());
+                setUserInSession(usuario);
                 setUserNameInSession(usuario.getNombre() + " " + usuario.getApellido());
             }
 
