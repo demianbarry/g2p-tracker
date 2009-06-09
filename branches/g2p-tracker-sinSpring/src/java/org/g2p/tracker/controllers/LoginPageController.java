@@ -6,6 +6,7 @@ package org.g2p.tracker.controllers;
 
 import java.util.Hashtable;
 import java.util.List;
+import javax.servlet.http.Cookie;
 import org.g2p.tracker.model.entities.ProveedoresSsoEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.BaseModel;
@@ -16,6 +17,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.DataBinder;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
@@ -36,6 +38,7 @@ public class LoginPageController extends BaseController {
     private Toolbarbutton openIdLoginButton;
     private Textbox username;
     private Textbox password;
+    private Checkbox remember;
 
     public LoginPageController() {
         super(false);
@@ -104,7 +107,10 @@ public class LoginPageController extends BaseController {
             }
         }
 
-
+        if (remember.isChecked()) {
+            Cookie userCookie = new Cookie(USER, getUserFromSession().getPK().toString());
+            getHttpResponse().addCookie(userCookie);
+        }
     }
 
     public void onClick$cancelButton(Event event) {

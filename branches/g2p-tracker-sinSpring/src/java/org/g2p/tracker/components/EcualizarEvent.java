@@ -20,4 +20,8 @@ public class EcualizarEvent extends Event {
     public EcualizarEvent(String name, Component target) {
         super(name, target);
     }
+
+    public String getQuery() {
+        return (String) getData();
+    }
 }
