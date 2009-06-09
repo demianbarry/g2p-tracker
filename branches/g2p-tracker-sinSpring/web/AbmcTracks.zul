@@ -33,80 +33,80 @@
                                     <column width="20%" label="Prioridad"/>
                                 </columns>
                                 <rows id="trackList" width="100%">
-                                    <row self="@{each=tracks}">
-                                        <detail width="100%" fulfill="onOpen">
-                                            <borderlayout height="500px">
-                                                <center>
-                                                <vbox width="100%">
-                                                    Título:
-                                                    <textbox value="@{tracks.titulo}" width="100%"/>
-                                                    <separator/>
-                                                    Descripción:
-                                                    <textbox value="@{tracks.descripcion}" rows="12" width="100%"/>
-                                                    <separator/>
-                                                    Observaciones:
-                                                    <textbox value="@{tracks.observaciones}" rows="5" width="100%"/>
-                                                    <separator/>
-                                                    Comentarios:
-                                                    <textbox value="Funcionalidad a desarrollar" rows="5" width="100%" disabled="true"/>
-                                                </vbox>
-                                                </center>
-                                                <east width="35%" splittable="true">
-                                                <vbox width="100%">
-                                                    <vbox width="100%">
-                                                        <grid>
-                                                            <rows>
-                                                                <row width="100%">Propietario:
-                                                                    <textbox value="@{tracks.userIdOwner.apellidoNombre}" width="100%"/>
-                                                                </row>
-                                                                <row width="100%">Trabajadores:
-                                                                    <textbox value="A desarrollar" width="100%"/>
-                                                                </row>
-                                                            </rows>
-                                                        </grid>
-                                                    </vbox>
-                                                    <separator bar="true"/>
-                                                    <vbox width="100%">
-                                                        <grid>
-                                                            <rows>
-                                                                <row width="100%">Fecha de Creacion:
-                                                                    <datebox value="@{tracks.fechaCreacion}" buttonVisible="false" disabled="true"/>
-                                                                </row>
-                                                                <row width="100%">Fecha Estimada de Realización:
-                                                                    <datebox value="@{tracks.fechaEstimadaRealizacion}"/>
-                                                                </row>
-                                                                <row width="100%">Fecha límite:
-                                                                    <datebox value="@{tracks.deadline}"/>
-                                                                </row>
-                                                                <row width="100%">Fecha de Realización:
-                                                                    <datebox value="@{tracks.fechaRealizacion}"/>
-                                                                </row>
-                                                            </rows>
-                                                        </grid>
-                                                    </vbox>
-                                                    <separator bar="true"/>
-                                                    <vbox width="100%">
-                                                        <grid>
-                                                            <rows>
-                                                                <row width="100%">Estado:
-                                                                    <textbox value="@{tracks.estadoId.nombre}" width="100%"/>
-                                                                </row>
-                                                                <row width="100%">Prioridad:
-                                                                    <textbox value="@{tracks.prioridadId.nombre}" width="100%"/>
-                                                                </row>
-                                                                <row width="100%">Importancia:
-                                                                    <textbox value="@{tracks.importanciaId.nombre}" width="100%"/>
-                                                                </row>
-                                                            </rows>
-                                                        </grid>
-                                                    </vbox>
-                                                </vbox>
-                                                </east>
-                                            </borderlayout>
-                                        </detail>
+                                    <row id="r" self="@{each=tracks}">
                                         <label value="@{tracks.titulo}"/>
                                         <label style="color:green;float:right;" value="@{tracks.fechaEstimadaRealizacion}"/>
                                         <label value="@{tracks.prioridadId.nombre}"/>
+                                        <detail width="100%">
+                                            <borderlayout height="500px">
+                                                <center>
+                                                    <vbox width="100%">
+                                                    Título:
+                                                        <textbox value="@{tracks.titulo}" width="100%"/>
+                                                        <separator/>
+                                                    Descripción:
+                                                        <textbox value="@{tracks.descripcion}" rows="12" width="100%"/>
+                                                        <separator/>
+                                                    Observaciones:
+                                                        <textbox value="@{tracks.observaciones}" rows="5" width="100%"/>
+                                                        <separator/>
+                                                    Comentarios:
+                                                        <textbox value="Funcionalidad a desarrollar" rows="5" width="100%" disabled="true"/>
+                                                    </vbox>
+                                                </center>
+                                                <east width="35%" splittable="true">
+                                                    <vbox width="100%">
+                                                        <vbox width="100%">
+                                                            <grid>
+                                                                <rows>
+                                                                    <row width="100%">Propietario:
+                                                                        <textbox value="@{tracks.userIdOwner.apellidoNombre}" width="100%"/>
+                                                                    </row>
+                                                                    <row width="100%">Trabajadores:
+                                                                        <textbox value="A desarrollar" width="100%"/>
+                                                                    </row>
+                                                                </rows>
+                                                            </grid>
+                                                        </vbox>
+                                                        <separator bar="true"/>
+                                                        <vbox width="100%">
+                                                            <grid>
+                                                                <rows>
+                                                                    <row width="100%">Fecha de Creacion:
+                                                                        <datebox value="@{tracks.fechaCreacion}" buttonVisible="false" disabled="true"/>
+                                                                    </row>
+                                                                    <row width="100%">Fecha Estimada de Realización:
+                                                                        <datebox value="@{tracks.fechaEstimadaRealizacion}"/>
+                                                                    </row>
+                                                                    <row width="100%">Fecha límite:
+                                                                        <datebox value="@{tracks.deadline}"/>
+                                                                    </row>
+                                                                    <row width="100%">Fecha de Realización:
+                                                                        <datebox value="@{tracks.fechaRealizacion}"/>
+                                                                    </row>
+                                                                </rows>
+                                                            </grid>
+                                                        </vbox>
+                                                        <separator bar="true"/>
+                                                        <vbox width="100%">
+                                                            <grid>
+                                                                <rows>
+                                                                    <row width="100%">Estado:
+                                                                        <textbox value="@{tracks.estadoId.nombre}" width="100%"/>
+                                                                    </row>
+                                                                    <row width="100%">Prioridad:
+                                                                        <textbox value="@{tracks.prioridadId.nombre}" width="100%"/>
+                                                                    </row>
+                                                                    <row width="100%">Importancia:
+                                                                        <textbox value="@{tracks.importanciaId.nombre}" width="100%"/>
+                                                                    </row>
+                                                                </rows>
+                                                            </grid>
+                                                        </vbox>
+                                                    </vbox>
+                                                </east>
+                                            </borderlayout>
+                                        </detail>                                        
                                     </row>
                                 </rows>
                             </grid>
@@ -226,6 +226,7 @@
                                             </row>
                                         </rows>
                                     </grid>
+                                    <tagsadmin id="tagAdmin" model="@{abmcTracksWin.trackModel}" />
                                 </vbox>
                             </vbox>
                         </east>
