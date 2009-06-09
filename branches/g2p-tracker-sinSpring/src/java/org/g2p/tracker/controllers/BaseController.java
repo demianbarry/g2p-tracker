@@ -7,6 +7,7 @@ package org.g2p.tracker.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.g2p.tracker.model.entities.BaseEntity;
+import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -33,7 +34,7 @@ public class BaseController extends Window implements AfterCompose, Constants {
     public BaseController(boolean pageProtected) {
         this.pageProtected = pageProtected;
 
-        if (this.pageProtected && getSession().getAttribute(USER_ID) == null) {
+        if (this.pageProtected && getSession().getAttribute(USER) == null) {
             Executions.sendRedirect("/");
         }
 
@@ -93,18 +94,16 @@ public class BaseController extends Window implements AfterCompose, Constants {
     }
 
     protected void showMessage(String msg) {
-        try {
-            Messagebox.show(msg);
-        } catch (InterruptedException ex1) {
-            System.out.println("ERROR MOSTRANDO MENSAJE: " + ex1.getMessage());
-            ex1.printStackTrace();
-        }
+        showMessage(msg, null);
     }
 
     protected void showMessage(String msg, Exception ex) {
         try {
-            Messagebox.show(msg + ex.getMessage());
-            ex.printStackTrace();
+            if (ex != null) {
+                msg += ex.getMessage();
+                ex.printStackTrace();
+            }
+            Messagebox.show(msg);
         } catch (InterruptedException ex1) {
             System.out.println("ERROR MOSTRANDO MENSAJE: " + ex1.getMessage());
             ex1.printStackTrace();
@@ -122,16 +121,16 @@ public class BaseController extends Window implements AfterCompose, Constants {
         return pageProtected;
     }
 
-    public Integer getUserIdFromSession() {
-        return (Integer) getSession().getAttribute(USER_ID);
+    public WebsiteUsersEntity getUserFromSession() {
+        return (WebsiteUsersEntity) getSession().getAttribute(USER);
     }
 
     public String getUserNameFromSession() {
         return (String) getSession().getAttribute(USER_NAME);
     }
 
-    public void setUserIdInSession(Integer userId) {
-        getSession().setAttribute(USER_ID, userId);
+    public void setUserInSession(WebsiteUsersEntity user) {
+        getSession().setAttribute(USER, user);
     }
 
     public void setUserNameInSession(String userName) {
