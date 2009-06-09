@@ -87,7 +87,7 @@ public class LoginPageController extends BaseController {
 
         if (websiteUsersList.size() != 0) {
             WebsiteUsersEntity websiteUser = (WebsiteUsersEntity) websiteUsersList.get(0);
-            setUserIdInSession(websiteUser.getUserId());
+            setUserInSession(websiteUser);
             setUserNameInSession(websiteUser.getNombre() + " " + websiteUser.getApellido());
 
             Executions.sendRedirect("/");

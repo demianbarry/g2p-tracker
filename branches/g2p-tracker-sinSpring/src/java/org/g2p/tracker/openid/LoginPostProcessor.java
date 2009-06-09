@@ -54,7 +54,7 @@ public class LoginPostProcessor implements Constants {
             }
         // otro usuario conectado
         if (usuario != null) {
-            request.getSession().setAttribute(USER_ID, usuario.getUserId());
+            request.getSession().setAttribute(USER, usuario);
             request.getSession().setAttribute(USER_NAME, usuario.getNombre() + " " + usuario.getApellido());
         } else {
             if (request.getSession().getAttribute(CLAIMED_ID) == null) {
