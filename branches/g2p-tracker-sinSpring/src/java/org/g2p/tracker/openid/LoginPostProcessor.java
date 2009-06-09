@@ -49,9 +49,9 @@ public class LoginPostProcessor implements Constants {
             /*if(usuario == null)
             throw new NoAutentificadoException("");*/
 
-            if (!sso.isUserLogged(request, usuario)) {
+            /*if (!sso.isUserLogged(request, usuario)) {
                 throw new NoAutentificadoException("Por favor autentifiquese");
-            }
+            }*/
         // otro usuario conectado
         if (usuario != null) {
             request.getSession().setAttribute(USER, usuario);

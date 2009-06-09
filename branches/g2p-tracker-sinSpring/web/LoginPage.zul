@@ -30,10 +30,7 @@
                                 <image src="@{x0.urlIcono}" width="80%"/>
                             </listcell>
                         </listitem>
-                    </listbox>
-                    <hbox valign="middle" spacing="10%">
-                        <button id="cancelButton" label="Cancel" width="100px"/>
-                    </hbox>
+                    </listbox>                    
                 </div>
                 <grid id="localLoginGrid" width="80%">
                     <rows>
@@ -44,7 +41,7 @@
                             <textbox id="password" type="password"/>
                         </row>
                         <row spans="2">
-                            <checkbox id="remember" label=" Remember me on this computer"/>
+                            <checkbox id="remember" label="Recordarme en esta computadora"/>
                         </row>
                         <row spans="2">
                             <div align="center">
