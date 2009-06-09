@@ -122,10 +122,12 @@ public class AbmMenuController extends BaseController implements AfterCompose{
 
     public void onSelect$lbUsuarios(){
         mostrarMenuesUsuario();
+        //masterDetail();
     }
 
     public void onSelect$lbRoles(){
         mostrarMenuesRol();
+        //masterDetail();
     }
 
     public void onClick$btnDesSel(){
@@ -787,5 +789,200 @@ public class AbmMenuController extends BaseController implements AfterCompose{
             ((Checkbox) filaActual.getChildren().get(CHECKBOX)).setChecked(sel);
         }
 
+    }
+
+    private void masterDetail(){
+
+        List<Row> menues = intersectar(getMenuesRoles(),getMenuesUsuarios());
+        Iterator<Row> itMenues = menues.iterator();
+
+        seleccionarTodoListaAlta(false);
+
+        while (itMenues.hasNext()){
+            ((Checkbox) itMenues.next().getChildren().get(CHECKBOX)).setChecked(true);
+        }
+    }
+
+    public List<Row> intersectar(List<Row> uno, List<Row> otro){
+        Vector<Row> salida = new Vector<Row>();
+        Iterator<Row> itUno = uno.iterator();
+        Iterator<Row> itOtro = otro.iterator();
+
+        while (itUno.hasNext()){
+            Row elementoActual = itUno.next();
+            int pkUno = Integer.parseInt(((Label) elementoActual.getChildren().get(PK)).getValue());
+
+            while (itOtro.hasNext()){
+                Row otroActual = itOtro.next();
+                int pkOtro = Integer.parseInt(((Label) otroActual.getChildren().get(PK)).getValue());
+
+                if (pkUno == pkOtro){
+                    salida.add(elementoActual);
+                }
+            }
+        }
+
+        return salida;
+
+    }
+
+    public List<Row> unir(List<Row> uno, List<Row> otro){
+        Vector<Row> salida;
+        Iterator<Row> itUno = uno.iterator();
+        Iterator<Row> itOtro = otro.iterator();
+        Vector<Row> temp = new Vector<Row>();
+        Vector<Row> interseccion = new Vector<Row>();
+
+        interseccion = (Vector<Row>) intersectar(uno, otro);
+        Iterator<Row> itInter = interseccion.iterator();
+
+        salida = new Vector<Row>(interseccion);
+
+//        while (itOtro.hasNext()){
+//            Row actual = itOtro.next();
+//
+//            int otroPk = Integer.parseInt(((Label) actual.getChildren().get(PK)).getValue());
+//
+//            while (itInter.hasNext()){
+//                Row interActual = itInter.next();
+//
+//                int interPk = Integer.parseInt(((Label) interActual.getChildren().get(PK)).getValue());
+//
+//                if (interPk != otroPk){
+//                    salida.add(actual);
+//                }
+//            }
+//        }
+//
+//        while (itUno.hasNext()){
+//            Row actual = itUno.next();
+//
+//            int otroPk = Integer.parseInt(((Label) actual.getChildren().get(PK)).getValue());
+//
+//            while (itInter.hasNext()){
+//                Row interActual = itInter.next();
+//
+//                int interPk = Integer.parseInt(((Label) interActual.getChildren().get(PK)).getValue());
+//
+//                if (interPk != otroPk){
+//                    salida.add(actual);
+//                }
+//            }
+//        }
+
+        agregarSiDistinto(itOtro, itInter, salida);
+        agregarSiDistinto(itUno, itInter, salida);
+
+        return salida;
+    }
+
+    private void agregarSiDistinto(Iterator<Row> itAlgo,Iterator<Row> itInter, Vector<Row> salida){
+        // si no hay elementos en comun entonces todos son diferentes
+        if (!itInter.hasNext()){
+            while (itAlgo.hasNext()){
+                Row actual = itAlgo.next();
+
+                salida.add(actual);
+            }
+        }
+        else {
+            while (itAlgo.hasNext()){
+            Row actual = itAlgo.next();
+
+            int otroPk = Integer.parseInt(((Label) actual.getChildren().get(PK)).getValue());
+
+            while (itInter.hasNext()){
+                Row interActual = itInter.next();
+
+                int interPk = Integer.parseInt(((Label) interActual.getChildren().get(PK)).getValue());
+
+                if (interPk != otroPk){
+                    salida.add(actual);
+                }
+            }
+        }
+        }
+
+
+        
+    }
+
+    private List<Row> getMenuesRoles(){
+        Set itemsRol = lbRoles.getSelectedItems();
+        Iterator<Listitem> itRoles = itemsRol.iterator();
+        List<Row> salida = new Vector<Row>();
+
+        while (itRoles.hasNext()){
+            Listitem rolActual = itRoles.next();
+            Vector<Row> menuesR = new Vector<Row>();
+
+            int pk = Integer.parseInt(rolActual.getValue().toString());
+            Hashtable<String, Integer> parametros = new Hashtable<String, Integer>();
+
+            parametros.put("rolId", pk);
+
+            List<BaseEntity> menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByRol", parametros);
+            Iterator<BaseEntity> itMenues = menues.iterator();
+
+            while (itMenues.hasNext()){
+                BaseEntity menuActual = itMenues.next();
+                int menuPk = Integer.parseInt(menuActual.getPK().toString());
+
+                Iterator<Row> itRows = filas.getChildren().iterator();
+
+                while (itRows.hasNext()){
+                    Row rowActual = itRows.next();
+                    int rowPk = Integer.parseInt(((Label) rowActual.getChildren().get(PK)).getValue());
+
+                    if (menuPk == rowPk){
+                        menuesR.add(rowActual);
+                    }
+                }
+            }
+
+            salida = unir(salida,menuesR);
+        }
+
+        return salida;
+    }
+
+    private List<Row> getMenuesUsuarios(){
+        Set itemsUsuario = lbUsuarios.getSelectedItems();
+        Iterator<Listitem> itUsuarios = itemsUsuario.iterator();
+        List<Row> salida = new Vector<Row>();
+
+        while (itUsuarios.hasNext()){
+            Listitem rolActual = itUsuarios.next();
+            Vector<Row> menuesR = new Vector<Row>();
+
+            int pk = Integer.parseInt(rolActual.getValue().toString());
+            Hashtable<String, Integer> parametros = new Hashtable<String, Integer>();
+
+            parametros.put("userId", pk);
+
+            List<BaseEntity> menues = AccesoMenuModel.findEntities("AccesoMenuEntity.findByUsuario", parametros);
+            Iterator<BaseEntity> itMenues = menues.iterator();
+
+            while (itMenues.hasNext()){
+                BaseEntity menuActual = itMenues.next();
+                int menuPk = Integer.parseInt(menuActual.getPK().toString());
+
+                Iterator<Row> itRows = filas.getChildren().iterator();
+
+                while (itRows.hasNext()){
+                    Row rowActual = itRows.next();
+                    int rowPk = Integer.parseInt(((Label) rowActual.getChildren().get(PK)).getValue());
+
+                    if (menuPk == rowPk){
+                        menuesR.add(rowActual);
+                    }
+                }
+            }
+
+            salida = unir(salida,menuesR);
+        }
+
+        System.out.println("menues de los usuarios: " + salida);
+        return salida;
     }
 }
