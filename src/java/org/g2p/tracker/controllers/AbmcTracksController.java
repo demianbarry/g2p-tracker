@@ -11,6 +11,7 @@ import org.g2p.tracker.model.entities.ImportanciaEntity;
 import org.g2p.tracker.model.entities.PrioridadesEntity;
 import org.g2p.tracker.model.entities.TracksEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Toolbarbutton;
 import org.g2p.tracker.model.models.EstadosModel;
 import org.g2p.tracker.model.models.ImportanciaModel;
@@ -41,13 +42,15 @@ public class AbmcTracksController extends BaseController {
     protected TracksModel trackModel = null;
 
     protected Toolbar trackToolbar;
-    protected Toolbarbutton termiandos;
-    protected Toolbarbutton enCurso;
-    protected Toolbarbutton pendientes;
-    protected Toolbarbutton congelados;
-    protected Toolbarbutton nuevoTrack;
-    protected Toolbarbutton guardarTrack;
+    protected Button nuevoTrack;
+    protected Button editarTrack;
+    protected Button guardarTrack;
+    protected Button cancelarAltaTrack;
 
+
+    protected Listbox trackList;
+    protected TracksEntity tracks;
+    
     //Campos del track
     protected Textbox titulo;
     protected Textbox descripcion;
@@ -66,19 +69,14 @@ public class AbmcTracksController extends BaseController {
     //protected Button deleteUser;
 
     protected Component trackDetail;
-    protected Component terminadosTrackView;
-    protected Component enCuersoTrackView;
-    protected Component pendientesTrackView;
-    protected Component congeladosTrackView;
     protected Component nuevoTrackView;
+    protected Component listTrackView;
     
-    protected boolean terminadosTrackMode;
-    protected boolean enCursoTrackMode;
-    protected boolean pendientesTrackMode;
-    protected boolean congeladosTrackMode;
     protected boolean nuevoTrackMode;
-
+    protected boolean listMode;
+    protected boolean editMode;
     protected boolean trabajadorDos;
+
 
     Vbox workersBox;
 
@@ -91,7 +89,6 @@ public class AbmcTracksController extends BaseController {
         importanciaModel = new ImportanciaModel();
         estadosModel = new EstadosModel();
         trackModel = new TracksModel();
-        trackModel.setSelected(new TracksEntity());
     }
 
 
@@ -147,7 +144,7 @@ public class AbmcTracksController extends BaseController {
         // Obtengo el DataBinder que instancia la página
         binder = (DataBinder) getVariable("binder", true);
 
-        setNuevoTrackMode();
+        setListMode();
         trabajadorDos = false;
         refresh();
     }
@@ -156,20 +153,12 @@ public class AbmcTracksController extends BaseController {
         return nuevoTrackMode;
     }
 
-    public boolean isTerminadosTrackMode() {
-        return terminadosTrackMode;
+    public boolean isEditMode() {
+        return editMode;
     }
 
-    public boolean isEnCursoTrackMode() {
-        return enCursoTrackMode;
-    }
-
-    public boolean isPendientesTrackMode() {
-        return pendientesTrackMode;
-    }
-
-    public boolean isCongeladosTrackMode() {
-        return congeladosTrackMode;
+    public boolean isListMode() {
+        return listMode;
     }
 
     public boolean isTrabajadorDos() {
@@ -177,15 +166,29 @@ public class AbmcTracksController extends BaseController {
     }
 
     protected void setNuevoTrackMode() {
-        terminadosTrackMode = false;
-        enCursoTrackMode = false;
-        pendientesTrackMode = false;
-        congeladosTrackMode = false;
         nuevoTrackMode = true;
+        listMode = false;
+        editMode = false;
+        guardarTrack.setDisabled(false);
         nuevoTrack();
     }
 
+    protected void setListMode() {
+        nuevoTrackMode = false;
+        listMode = true;
+        editMode = false;
+        guardarTrack.setDisabled(true);
+    }
+
+    protected void seteditMode() {
+        nuevoTrackMode = false;
+        listMode = false;
+        editMode = true;
+        guardarTrack.setDisabled(false);
+    }
+
     protected void nuevoTrack() {
+        trackModel.setSelected(new TracksEntity());
         titulo.setText("");
         descripcion.setText("");
         observaciones.setText("");
@@ -201,60 +204,14 @@ public class AbmcTracksController extends BaseController {
         importanciaModel.setSelected(importanciaModel.getAll().get(3));
     }
 
-    protected void setTerminadosTrackMode() {
-        terminadosTrackMode = true;
-        enCursoTrackMode = false;
-        pendientesTrackMode = false;
-        congeladosTrackMode = false;
-        nuevoTrackMode = false;
-    }
-
-    protected void setEnCursoTrackMode() {
-        terminadosTrackMode = false;
-        enCursoTrackMode = true;
-        pendientesTrackMode = false;
-        congeladosTrackMode = false;
-        nuevoTrackMode = false;
-    }
-
-    protected void setPendientesTrackMode() {
-        terminadosTrackMode = false;
-        enCursoTrackMode = false;
-        pendientesTrackMode = true;
-        congeladosTrackMode = false;
-        nuevoTrackMode = false;
-    }
-
-    protected void setCongeladosTrackMode() {
-        terminadosTrackMode = false;
-        enCursoTrackMode = false;
-        pendientesTrackMode = false;
-        congeladosTrackMode = true;
-        nuevoTrackMode = false;
-    }
-
-    public void onClick$terminados (Event event) {
-        setTerminadosTrackMode();
-        refresh();
-    }
-
-    public void onClick$enCurso (Event event) {
-        setEnCursoTrackMode();
-        refresh();
-    }
-
-    public void onClick$pendientes (Event event) {
-        setPendientesTrackMode();
-        refresh();
-    }
-
-    public void onClick$congelados (Event event) {
-        setCongeladosTrackMode();
-        refresh();
-    }
 
     public void onClick$nuevoTrack (Event event) {
         setNuevoTrackMode();
+        refresh();
+    }
+
+    public void onClick$cancelarAltaTrack (Event event) {
+        setListMode();
         refresh();
     }
 
@@ -281,7 +238,7 @@ public class AbmcTracksController extends BaseController {
                 trackModel.persist(false);
                 
                 trackModel.getUtx().commit();
-                nuevoTrack();
+                //nuevoTrack();
                 showMessage("El track se guardo correctamente");
 
             } catch (Exception ex) {
@@ -293,6 +250,7 @@ public class AbmcTracksController extends BaseController {
                 }
             } finally {
                 //refresh the rolesList
+                setListMode();
                 refresh();
             }
     }
