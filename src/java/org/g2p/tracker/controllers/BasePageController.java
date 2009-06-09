@@ -17,6 +17,7 @@ import org.zkoss.zul.Include;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
@@ -46,7 +47,7 @@ public class BasePageController extends BaseController {
             getDesktop().setAttribute(INCLUDE, include);
             getDesktop().setAttribute(BASE_PAGE_CONTROLLER, this);
             // Muestro/oculto los links de login/logout según corresponda
-            if (getUserIdFromSession() == null) {
+            if (getUserFromSession() == null) {
                 loginLabel.setVisible(true);
                 logoutLabel.setVisible(false);
                 registerLabel.setVisible(true);
@@ -56,17 +57,17 @@ public class BasePageController extends BaseController {
                 registerLabel.setVisible(false);
             }
 
-            if (getUserIdFromSession() == null) {
+            if (getUserFromSession() == null) {
                 if (getSession().getAttribute(CLAIMED_ID) == null) {
                     LoginPostProcessor.processRequest(getHttpRequest(), getHttpResponse());
                 } else {
-                    if (getUserIdFromSession() == null) {
+                    if (getUserFromSession() == null) {
                         include.setSrc("AltaUsuario.zul");
                     }
                 }
             } else {
                 Hashtable parameters = new Hashtable();
-                parameters.put("userId", getUserIdFromSession());
+                parameters.put("userId", getUserFromSession().getUserId());
                 List usersPerProveedor = BaseModel.findEntities("WebsiteUsersPerProveedoresOpenidEntity.findByUserIdAndFechaNull", parameters);
                 WebsiteUsersPerProveedoresOpenidEntity userPerProveedor;
                 if (usersPerProveedor != null && usersPerProveedor.size() != 0) {
@@ -143,7 +144,7 @@ public class BasePageController extends BaseController {
 
                 @Override
                 public void onEvent(Event arg0) throws Exception {
-                    if (getUserIdFromSession() == null) {
+                    if (getUserFromSession() == null) {
                         include.setSrc(LOGIN_PAGE);
                     } else {
                         include.setSrc(HOME_PAGE);
@@ -156,7 +157,7 @@ public class BasePageController extends BaseController {
         parameters = new Hashtable();
 
         // Obtengo el userId de la sesión
-        parameters.put("userId", getUserIdFromSession() != null ? getUserIdFromSession() : 0);
+        parameters.put("userId", getUserFromSession() != null ? getUserFromSession().getUserId() : 0);
 
         parameters.put("GroupName", groupName);
 
@@ -219,7 +220,7 @@ public class BasePageController extends BaseController {
     }
 
     public void onClick$logoutLabel(Event event) {
-        setUserIdInSession(null);
+        setUserInSession(null);
         include.setSrc(LOGIN_PAGE);
         setNavBarItem(HOME_PAGE);
     }
@@ -231,8 +232,8 @@ public class BasePageController extends BaseController {
 
     public void doLoginLogout() {
         // Muestro/oculto el mensaje de bienvenida para el usuario según corresponda
-        Integer userId = getUserIdFromSession();
-        if (userId != null && userId != 0) {
+        WebsiteUsersEntity user = getUserFromSession();
+        if (user != null) {
             logoutLabel.setVisible(true);
             loginLabel.setVisible(false);
             registerLabel.setVisible(false);
