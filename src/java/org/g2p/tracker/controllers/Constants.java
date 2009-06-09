@@ -10,7 +10,7 @@ package org.g2p.tracker.controllers;
  * @author Administrador
  */
 public interface Constants {
-    public static final String USER_ID = "User";
+    public static final String USER = "User";
     public static final String USER_NAME = "UserName";
 
     public static final String CLAIMED_ID = "ClaimedId";
