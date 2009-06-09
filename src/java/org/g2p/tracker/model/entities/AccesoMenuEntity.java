@@ -28,14 +28,12 @@ import javax.persistence.Table;
 @Table(name = "acceso_menu")
 @NamedQueries({
     @NamedQuery(name = "AccesoMenuEntity.findAll", query = "SELECT a FROM AccesoMenuEntity a"),
-    @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.menuId.grupo LIKE :GroupName AND (a.userId.userId = :userId)"),
+    @NamedQuery(name = "AccesoMenuEntity.findByUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE a.menuId.grupo LIKE :GroupName AND ((a.userId.userId = :userId) OR (a.rolId.rolId IN (SELECT r.rolesPerWebsiteUsersPK.rolId FROM RolesPerWebsiteUsersEntity r WHERE r.rolesPerWebsiteUsersPK.userId = :userId AND ((CURDATE() BETWEEN r.desde AND r.hasta) OR (CURDATE() >= r.desde AND r.hasta IS NULL)))))"),
     @NamedQuery(name = "AccesoMenuEntity.findByMenuIdAndRolId", query = "SELECT a FROM AccesoMenuEntity a WHERE (a.menuId.menuId = :menuId) AND (a.rolId.rolId = :rolId)"),
     @NamedQuery(name = "AccesoMenuEntity.findByMenuIdAndUsuarioId", query = "SELECT a FROM AccesoMenuEntity a WHERE (a.menuId.menuId = :menuId) AND (a.userId.userId = :userId)"),
     @NamedQuery(name = "AccesoMenuEntity.findByUsuario", query = "SELECT a FROM AccesoMenuEntity a WHERE (a.userId.userId = :userId)"),
     @NamedQuery(name = "AccesoMenuEntity.findByRol", query = "SELECT a FROM AccesoMenuEntity a WHERE (a.rolId.rolId = :rolId)")
 })
-
-    // se agrego "extiende de baseentity". ¿sera correcto?
 public class AccesoMenuEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
