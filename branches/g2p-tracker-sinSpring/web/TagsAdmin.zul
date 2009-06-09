@@ -2,29 +2,31 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estandar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./tagsAdmin"?>
-<zk>
-    <groupbox id="tagsAdmin" mold="3d" use="org.zkoss.zkdemo.test2.tree.TagsTree">
-        <caption label="Tags"/>
+<groupbox id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer" mold="3d">
+    <caption label="Tags" style="color:red;"/>
+    <div id="t">
         <hbox>Search:
-            <textbox id="searchBox" onChanging="tagsAdmin.onChangingSearchBox(event);" tooltip="Press TAB key for update tags"/>
+            <textbox id="searchBox"/>
         </hbox>
         <separator bar="true" spacing="20px"/>
         <hbox>
             <button id="nuevoButton" label="Nuevo" />
             <button id="administrarButton" label="Administrar" />
-            <checkbox id="treeCheck" onCheck="tagsAdmin.onCheckTreeCheck(event)" label="Árbol" width="100%"/>
+            <checkbox id="treeCheck" label="Árbol" width="100%"/>
         </hbox>
         <separator bar="true" spacing="20px"/>
         <tree id="tagsTree" visible="false" fixedLayout="true" multiple="true" checkmark="true" vflex="true">
         </tree>
-        <listbox id="tagsList" visible="true" multiple="true" height="200px" model="@{tagsAdmin.tags}" checkmark="true">
-            <listitem self="@{each=tag}">
+        <listbox id="tagsList" visible="true" multiple="true" height="200px" checkmark="true" vflex="true" model="@{tagsAdmin$TagsAdminComposer.tags}" >
+            <listitem self="@{each=tag}" >
                 <listcell label="@{tag.tag}"/>
                 <listcell label="@{tag.descripcion}"/>
             </listitem>
         </listbox>
-        <button id="aplicarButton" label="Aplicar"/>
-        <window visible="false" id="newTagWin" border="normal">
+        <hbox>
+            <button id="aplicarButton" label="Aplicar"/>
+        </hbox>
+        <window visible="false" id="newTagWin" title="Nuevo tag" border="normal" apply="org.g2p.tracker.composers.TagsAdminComposer">
             <vbox width="100%" spacing="0">
                         Tag:
                 <textbox id="tagText" width="40%" constraint="no empty"/>
@@ -34,8 +36,8 @@
             <separator bar="true" spacing="20px"/>
             <hbox>
                 <button id="aceptarButton" label="Aceptar"/>
-                <button id="cancelarButton" label="Cancelar" />
+                <button id="cancelarButton" label="Cancelar"/>
             </hbox>
         </window>
-    </groupbox>
-</zk>
+    </div>
+</groupbox>
