@@ -2,19 +2,19 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcTracksWin"?>
-<window id="abmcTracksWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcTracksController">
+<window id="abmcTracksWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcTracksController" xmlns:a="http://www.zkoss.org/2005/zk/annotation">    
     <borderlayout>
-        <north size="90px">
+        <north size="290px">
             <borderlayout>
-                <!-- Título -->
-                <center border="none" style="background-color:#B1CBD5">
+                <north border="none" style="background-color:#B1CBD5" height="30%">
                     <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Administracion de Tracks</h2>]]>
                     </html>
-                </center>
-                <south>
+                </north>
+                <!-- Título -->
+                <center flex="true">
                     <toolbar id="tracksToolbar" height="30px" >
                         <button id="nuevoTrack" label="Nuevo Track"/>
-                        <button id="editarTrack" label="Editar Track"/>
+                        <button id="editarTrack" label="Editar" />
                         <bandbox id="buscarTrack" buttonVisible="true" width="400px">
                             <bandpopup>
                                 Funcionalidad a implementar
@@ -23,97 +23,134 @@
                         <button id="guardarTrack" label="Guardar Track"/>
                         <button id="cancelarAltaTrack" label="Cancelar"/>
                     </toolbar>
+                </center>
+                <south style="overflow:auto;align:top;" height="60%">
+                    <ecualizador id="ecualizador" model="@{abmcTracksWin.trackModel}"/>
                 </south>
             </borderlayout>
         </north>
-        <center flex="true">
-            <div id="trackDetail" style="overflow:auto">
-                <div id="listTrackView" visible="@{abmcTracksWin.listMode}" width="100%">
+        <center flex="true" autoscroll="true">
+            <div id="trackDetail"  style="overflow:auto">
+                <div id="listTrackView" width="100%">
                     <borderlayout height="1000px">
                         <east width="100%" autoscroll="true">
-                            <grid fixedLayout="true" width="100%" oddRowSclass="myodd" model="@{abmcTracksWin.trackModel.all}">
-                                <columns>
-                                    <column width="20px" />
-                                    <column width="60%" label="Título"/>
-                                    <column width="20%" label="Fecha Est. Realización"/>
-                                    <column width="20%" label="Prioridad"/>
-                                </columns>
-                                <rows id="trackList" width="100%">
-                                    <row self="@{each=tracks}">
-                                        <detail width="100%">
-                                            <tabbox width="100%">
-                                                <tabs>
-                                                    <tab label="Descripción"/>
-                                                    <tab label="Observaciones"/>
-                                                    <tab label="Usuarios"/>
-                                                    <tab label="Fechas"/>
-                                                    <tab label="Estado"/>
-                                                    <tab label="Comentarios"/>
-                                                </tabs>
-                                                <tabpanels>
-                                                    <tabpanel>
-                                                        <vbox width="100%">
+                            <div>
+                                <grid zclass="tracks-grid">
+                                    <columns>
+                                        <column width="20%"/>
+                                        <column width="50%"/>
+                                        <column width="30%"/>
+                                    </columns>
+                                    <rows zclass="tracks-title-grid-rows">
+                                        <row>
+                                            <hbox>
+                                                <label width="20%" value="Título"/>
+                                            </hbox>
+                                            <label width="50%" value="Propietario"/>
+                                            <label width="30%" value="Fecha de realización"/>
+                                        </row>
+                                    </rows>
+                                </grid>
+                                <listbox id="tracksList" fixedLayout="true" width="100%" model="@{abmcTracksWin.trackModel.all}" selectedItem="@{abmcTracksWin.trackModel.selected}"  >
+                                    <listitem self="@{each=tracks}">
+                                        <listcell>
+                                        <!--<grid>
+                                            <rows>
+                                                <row>
+                                                    <detail >-->
+                                            <groupbox mold="3d" open="false" zclass="track-groupbox">
+                                                <caption zclass="tracks-caption" >
+                                                    <grid zclass="tracks-caption-grid">
+                                                        <columns>
+                                                            <column width="20%"/>
+                                                            <column width="50%"/>
+                                                            <column width="30%"/>
+                                                        </columns>
+                                                        <rows>
+                                                            <row>
+                                                                <label value="@{tracks.titulo}" width="20%"/>
+                                                                <label value="@{tracks.userIdOwner.apellidoNombre}" width="50%"/>
+                                                                <label value="@{tracks.fechaEstimadaRealizacion}" width="30%"/>
+                                                            </row>
+                                                        </rows>
+                                                    </grid>
+                                                </caption>
+                                                <tabbox width="100%">
+                                                    <tabs>
+                                                        <tab label="Descripción"/>
+                                                        <tab label="Observaciones"/>
+                                                        <tab label="Usuarios"/>
+                                                        <tab label="Fechas"/>
+                                                        <tab label="Estado"/>
+                                                        <tab label="Comentarios"/>
+                                                    </tabs>
+                                                    <tabpanels>
+                                                        <tabpanel>
+                                                            <vbox width="100%">
                                                             Título:
-                                                            <textbox value="@{tracks.titulo}" width="100%"/>
-                                                            <separator/>
+                                                                <textbox value="@{tracks.titulo}" width="100%" readonly="true"/>
+                                                                <separator/>
                                                             Descripción:
-                                                            <textbox value="@{tracks.descripcion}" rows="12" width="100%"/>
-                                                            <separator/>
-                                                        </vbox>
-                                                    </tabpanel>
-                                                    <tabpanel>
-                                                        <vbox width="100%">
+                                                                <textbox value="@{tracks.descripcion}" rows="5" width="100%" readonly="true"/>
+                                                                <separator/>
+                                                            </vbox>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <vbox width="100%">
                                                             Observaciones:
-                                                            <textbox value="@{tracks.observaciones}" rows="5" width="100%"/>
-                                                            <separator/>
-                                                        </vbox>
-                                                    </tabpanel>
-                                                    <tabpanel>
-                                                        <vbox width="100%">
+                                                                <textbox value="@{tracks.observaciones}" rows="5" width="100%" disabled="true"/>
+                                                                <separator/>
+                                                            </vbox>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <vbox width="100%">
                                                             Propietario:
-                                                            <textbox value="@{tracks.userIdOwner.apellidoNombre}" width="100%"/>
+                                                                <textbox value="@{tracks.userIdOwner.apellidoNombre}" width="100%" disabled="true"/>
                                                             Trabajadores:
-                                                            <textbox value="A desarrollar" width="100%"/>
-                                                        </vbox>
-                                                    </tabpanel>
-                                                    <tabpanel>
+                                                                <textbox value="A desarrollar" width="100%" disabled="true"/>
+                                                            </vbox>
+                                                        </tabpanel>
+                                                        <tabpanel>
                                                         Fecha de Creacion:
-                                                        <datebox value="@{tracks.fechaCreacion}" buttonVisible="false" disabled="true"/>
+                                                            <datebox value="@{tracks.fechaCreacion}" buttonVisible="false" readonly="true"/>
                                                         Fecha Estimada de Realización:
-                                                        <datebox value="@{tracks.fechaEstimadaRealizacion}"/>
+                                                            <datebox value="@{tracks.fechaEstimadaRealizacion}" readonly="true"/>
                                                         Fecha límite:
-                                                        <datebox value="@{tracks.deadline}"/>
+                                                            <datebox value="@{tracks.deadline}" readonly="true"/>
                                                         Fecha de Realización:
-                                                        <datebox value="@{tracks.fechaRealizacion}"/>
-                                                    </tabpanel>
-                                                    <tabpanel>
+                                                            <datebox value="@{tracks.fechaRealizacion}" readonly="true"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
                                                         Estado:
-                                                        <textbox value="@{tracks.estadoId.nombre}" width="100%"/>
+                                                            <textbox value="@{tracks.estadoId.nombre}" width="100%" readonly="true"/>
                                                         Prioridad:
-                                                        <textbox value="@{tracks.prioridadId.nombre}" width="100%"/>
+                                                            <textbox value="@{tracks.prioridadId.nombre}" width="100%" readonly="true"/>
                                                         Importancia:
-                                                        <textbox value="@{tracks.importanciaId.nombre}" width="100%"/>
-                                                    </tabpanel>
-                                                    <tabpanel>
-                                                        <vbox width="100%">
+                                                            <textbox value="@{tracks.importanciaId.nombre}" width="100%" readonly="true"/>
+                                                        </tabpanel>
+                                                        <tabpanel>
+                                                            <vbox width="100%">
                                                             Comentarios:
-                                                            <textbox value="Funcionalidad en desarrollollo" rows="5" width="100%" disabled="true"/>
-                                                        </vbox>
-                                                    </tabpanel>
-                                                </tabpanels>
-                                            </tabbox>
-                                        </detail>
-                                        <label value="@{tracks.titulo}"/>
-                                        <label style="color:green;float:right;" value="@{tracks.fechaEstimadaRealizacion}"/>
-                                        <label value="@{tracks.prioridadId.nombre}"/>
-                                    </row>
-                                </rows>
-                            </grid>
+                                                                <textbox value="Funcionalidad en desarrollollo" rows="5" width="100%" readonly="true"/>
+                                                            </vbox>
+                                                        </tabpanel>
+                                                    </tabpanels>
+                                                </tabbox>
+                                            </groupbox>
+                                                    <!--</detail>
+                                                </row>
+                                            </rows>
+                                        </grid>-->
+                                        </listcell>
+                                    </listitem>
+                                <!--</listitem>-->
+                                </listbox>
+                            </div>
                         </east>
                     </borderlayout>
                 </div>
                 <!--ALTA DE TRACK-->
-                <div id="nuevoTrackView" visible="@{abmcTracksWin.nuevoTrackMode}" width="100%">
+                <div id="nuevoTrackView" width="100%">
                     <borderlayout height="1000px">
                         <center>
                             <vbox width="100%">
@@ -213,6 +250,7 @@
                                             </row>
                                         </rows>
                                     </grid>
+                                    <tagsadmin model="@{abmcTracksWin.trackModel}" />
                                 </vbox>
                             </vbox>
                         </east>

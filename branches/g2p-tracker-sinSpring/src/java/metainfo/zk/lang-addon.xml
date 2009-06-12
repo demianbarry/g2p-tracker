@@ -1,20 +1,30 @@
 <language-addon>
 	<!-- The name of this addon. It must be unique -->
-	<addon-name>tagsadmin</addon-name>
+    <addon-name>g2p-tracker</addon-name>
 	<!-- Specifies what other addon this depends
 	<depends></depends>
 	-->
 
 	<!-- Which language this addon will be added to -->
-	<language-name>xul/html</language-name>
+    <language-name>xul/html</language-name>
 
-	<component>
-	<component-name>tagsadmin</component-name>
-	<component-inline>true</component-inline>
-    <component-class>org.g2p.tracker.components.TagsTree</component-class>
-	<mold>
-	<mold-name>default</mold-name>
-	<mold-uri>TagsAdmin.zul</mold-uri>
-	</mold>
-	</component>
+    <component>
+        <component-name>tagsadmin</component-name>
+        <component-inline>true</component-inline>
+        <component-class>org.g2p.tracker.components.TagsAdmin</component-class>
+        <mold>
+            <mold-name>default</mold-name>
+            <mold-uri>components/TagsAdmin.zul</mold-uri>
+        </mold>
+    </component>
+
+    <component>
+        <component-name>ecualizador</component-name>
+        <component-inline>true</component-inline>
+        <component-class>org.g2p.tracker.components.Ecualizador</component-class>
+        <mold>
+            <mold-name>default</mold-name>
+            <mold-uri>components/Ecualizador.zul</mold-uri>
+        </mold>
+    </component>
 </language-addon>

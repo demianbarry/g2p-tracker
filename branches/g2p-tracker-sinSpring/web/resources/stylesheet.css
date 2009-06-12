@@ -1,50 +1,92 @@
-/*
- * After modifying this style sheet, refresh the page being designed to see the effect of the modification.
- * Click the Refresh button in the Visual Designer toolbar to refresh the page.
- */ 
+/*Tracks Groupbox style*/
 
-/* Style rules to make Java Server faces Standarad data tables look better */
+/*.track-groupbox-header{
 
-.list-header {
-  background-color: #eeeeee;
-  font-size: larger;
-  font-weight: bold;
+}
+.track-groupbox-hl .track-groupbox-header {
+
+}
+.track-groupbox-tl {
+
+}
+.track-groupbox-tr {
+
+}*/
+.track-groupbox-hl {
+    padding-left:0px;
+}
+/*.track-groupbox-hr {
+
+}
+.track-groupbox-hm {
+
+}
+.track-groupbox-cnt {
+
+}
+.track-groupbox-bm {
+
+}
+.track-groupbox-bl {
+
+}
+.track-groupbox-br {
+
+}*/
+
+/* Tracks grid style */
+
+div.tracks-caption-grid {
+    background: red;
+    overflow: hidden;
 }
 
-.list-paging-header {
-  background-color: white;
+div.tracks-grid {
+    background: transparent;
+    overflow: hidden;
+    padding-left:8px;
 }
 
-.list-paging-footer {
-  background-color: white;
-}
+/* div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 
-.list-row-even { 
 }
+/* div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 
-.list-row-odd { 
-  background-color: #eeeeee;
+}*/
+/* div.z-grid-body {
+    padding-left: 0px;
+}*/
+/* div.z-grid-footer {
+
+} */
+
+/*.z-caption input, .z- caption td {
+
+}*/
+.tracks-caption .tracks-caption-l {
+    width:0px;
+    padding:0px;
 }
+/*.z-caption .z-caption-r {
 
-/* Style rules for message severity levels */
-
-.infoMessage {
-  color: black;
 }
+.z-caption button, .z-caption .z-button .z-button-btn {
 
-.warnMessage {
-  color: orange;
-  font-weight: bold;
 }
+.z-caption a, .z-caption a:visited {
 
-.errorMessage {
-  color: red;
-  font-weight: bold;
-}
+}*/
 
-.fatalMessage {
-  color: red;
-  font-style: italic;
-  font-weight: bold;
+div.z-listbox {
+    padding:0px;
 }
+/*div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
+
+}*/
+div.z-listbox-body {
+    padding:0px;
+}
+/*div.z-listbox-footer {
+
+}*/
 

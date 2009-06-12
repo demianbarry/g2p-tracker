@@ -66,8 +66,11 @@ public class TracksModel extends BaseModel implements Taggeable {
 
     @Override
     public List getStoredTags() {
-        Hashtable parameters = new Hashtable();
-        parameters.put("trackId", ((TracksEntity) getSelected()).getTrackId());
-        return BaseModel.findEntities("TagsEntity.findByTrack", parameters);
+        if (getSelected() != null) {
+            Hashtable parameters = new Hashtable();
+            parameters.put("trackId", ((TracksEntity) getSelected()).getTrackId());
+            return BaseModel.findEntities("TagsEntity.findByTrack", parameters);
+        }
+        return null;
     }
 }

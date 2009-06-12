@@ -57,6 +57,10 @@ public class BaseModel {
         this.where = where;
     }
 
+    public String getWhere() {
+        return where;
+    }
+
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
     }
@@ -183,10 +187,8 @@ public class BaseModel {
 
             em = getEntityManager();
 
-            try {
-                findEntity(entity.getPK()).toString();
-            } catch (NullPointerException enfe) {
-                throw new NonexistentEntityException("El item con el id " + entity.getPK() + " fue eliminado por otro usuario.", enfe);
+            if ((entity = findEntity(entity.getPK())) == null) {
+                throw new NonexistentEntityException("El item con el id " + entity.getPK() + " fue eliminado por otro usuario.");
             }
 
             entity = em.merge(entity);
@@ -244,8 +246,12 @@ public class BaseModel {
 
     private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
+        String query = "select object(o) from " + this.entity.getName() + " as o";
+        if(getWhere() != null) {
+            query += " WHERE "+getWhere();
+        }
         try {
-            Query q = em.createQuery("select object(o) from " + this.entity.getName() + " as o");
+            Query q = em.createQuery(query);
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);

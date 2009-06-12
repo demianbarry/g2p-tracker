@@ -86,6 +86,12 @@ public class BaseController extends Window implements AfterCompose, Constants {
     }
 
     public DataBinder getBinder() {
+        if (binder == null) {
+            binder = (DataBinder) getVariable("binder", false);
+        }
+        if (binder == null) {
+            binder = new DataBinder();
+        }
         return binder;
     }
 
