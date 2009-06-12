@@ -18,11 +18,22 @@
                         <label>
                             Ingrese un comentario:
                         </label>
+                        <fckeditor id="ingresoComentario"
+                                    customConfigurationsPath="/config.js"
+                                    toolbarSet="Post"
+                        />
+                        <!--
                         <textbox id="tbComentario" 
                             multiline="true" />
-                        <button id="btnSubmit"
+                            -->
+                                        <hbox>
+                                            <button id="btnSubmit"
                             label="Enviar"
                         />
+                                            <checkbox id="descendiente" label="Descendiente" />
+                                        </hbox>
+                        
+                        
                     </vbox>
                     <vbox id="vboxShowComments" >
                         <!-- <paging id="pgPaginado" pageSize="3" />
