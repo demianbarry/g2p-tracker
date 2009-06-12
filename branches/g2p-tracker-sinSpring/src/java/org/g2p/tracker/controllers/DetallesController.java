@@ -30,11 +30,13 @@ import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.PostsEntity;
 import org.g2p.tracker.model.entities.TracksEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
+import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.PostModel;
 import org.zkforge.fckez.FCKeditor;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Paging;
@@ -111,12 +113,12 @@ public class DetallesController extends BaseController implements AfterCompose{
         post.setContenido(comentario);
         post.setFechaCreacion(new Date());
         post.setUserId(getUserFromSession());
-        post.setTrackId(new TracksEntity(ELIMINAR));
+        post.setTrackId((TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class));
         try {
 
             PostModel.createEntity(post, true);
 
-            enviarEmail();
+            //enviarEmail();
 
         } catch (RollbackFailureException ex) {
             showMessage("No se pudo guardar su comentario", ex);
@@ -140,7 +142,7 @@ public class DetallesController extends BaseController implements AfterCompose{
         final int ELIMINAR = 10;
 
         // cambiar por el track actual!!!!!!!!!!!!
-            TracksEntity trackActual = new TracksEntity(ELIMINAR);
+            TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class);
 
         Message mensaje = new MimeMessage(Session.getDefaultInstance(conf));
 
@@ -167,23 +169,33 @@ public class DetallesController extends BaseController implements AfterCompose{
 
     private void mostrarComentarios(){
         // se ordenara de acuerdo a la eleccion del usuario
-        String order = (descendiente.isChecked()) ? "DESC" : "ASC";
+        // String order = (descendiente.isChecked()) ? "DESC" : "ASC";
+        String consulta = (descendiente.isChecked()) ? "PostsEntity.findByTrackDesc" : "PostsEntity.findByTrackAsc";
         // busca el track asociado
-        String buscarPor = new TracksEntity().getTitulo(); // CAMBIAR1!!!!
+        String buscarPor = ( (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class)).getTitulo(); // CAMBIAR1!!!!
         Hashtable<String,String> parametros = new Hashtable<String, String>();
 
-        parametros.put("direccion", order);
+        //parametros.put("direccion", order);
         parametros.put("titulo", buscarPor);
 
-        List<BaseEntity> comentarios = PostModel.findEntities("PostsEntity.findByTrack", parametros);
+        List<BaseEntity> comentarios = PostModel.findEntities(consulta, parametros);
 
         Iterator<BaseEntity> itComentarios = comentarios.iterator();
 
+        FCKeditor visualizadorActual = null;
+        Row fila = null;
+
         while (itComentarios.hasNext()){
             PostsEntity postActual = (PostsEntity) itComentarios.next();
-            FCKeditor visualizadorActual = new FCKeditor();
+            visualizadorActual = new FCKeditor();
+            fila = new Row();
+
+            visualizadorActual.setCustomConfigurationsPath("/config.js");
+            visualizadorActual.setToolbarSet("visualizar");
 
             visualizadorActual.setValue(postActual.getContenido());
+            fila.appendChild(visualizadorActual);
+            filas.appendChild(fila);
         }
 
     }
