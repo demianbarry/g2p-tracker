@@ -31,7 +31,8 @@ import javax.persistence.TemporalType;
 @Table(name = "posts")
 @NamedQueries({
     @NamedQuery(name = "PostsEntity.findAll", query = "SELECT p FROM PostsEntity p"),
-    @NamedQuery(name = "PostsEntity.findByTrack", query = "SELECT p FROM PostsEntity p WHERE (p.trackId.titulo = :titulo) ORDER BY fechaCreacion :direccion")
+    @NamedQuery(name = "PostsEntity.findByTrackAsc", query = "SELECT p FROM PostsEntity p WHERE (p.trackId.titulo = :titulo) ORDER BY fechaCreacion ASC"),
+    @NamedQuery(name = "PostsEntity.findByTrackDesc", query = "SELECT p FROM PostsEntity p WHERE (p.trackId.titulo = :titulo) ORDER BY fechaCreacion DESC")
 })
 public class PostsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
