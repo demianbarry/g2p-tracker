@@ -13,7 +13,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author Administrador
  */
-public class TagsTree extends XulElement implements Constants, AfterCompose {
+public class Ecualizador extends XulElement implements Constants, AfterCompose {
 
     String _name;
     private Taggeable _model;
@@ -25,7 +25,7 @@ public class TagsTree extends XulElement implements Constants, AfterCompose {
 
     public void setModel(Taggeable _model) {
         if (_model != null && this._model != _model) {
-            getDesktop().setAttribute("TAGGEABLE_MODEL", _model);
+            getDesktop().setAttribute("ECUALIZABLE_MODEL", _model);
             this._model = _model;
         }
     }
@@ -40,6 +40,6 @@ public class TagsTree extends XulElement implements Constants, AfterCompose {
 
     @Override
     public void afterCompose() {
-        getDesktop().setAttribute("TAGGEABLE_COMPONENT", this);
+        getDesktop().setAttribute("ECUALIZABLE_COMPONENT", this);
     }
 }

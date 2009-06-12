@@ -81,6 +81,8 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     private Set<TracksEntity> tracksCollection;
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuCollection;
+    @OneToMany(mappedBy = "workersPerTracksPK.userId", fetch = FetchType.EAGER)
+    private Set<WorkersPerTracksEntity> tracksOnWorkerCollection;
 
     public WebsiteUsersEntity() {
     }
@@ -235,6 +237,14 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
 
     public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
         this.accesoMenuCollection = accesoMenuCollection;
+    }
+
+    public Set<WorkersPerTracksEntity> getTracksOnWorkerCollection() {
+        return tracksOnWorkerCollection;
+    }
+
+    public void setTracksOnWorkerCollection(Set<WorkersPerTracksEntity> tracksOnWorkerCollection) {
+        this.tracksOnWorkerCollection = tracksOnWorkerCollection;
     }
 
     @Override

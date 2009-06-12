@@ -255,7 +255,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
     }
 
     private void setSelectedItems() {
-        if (self instanceof Groupbox) {
+        if (self instanceof Groupbox && getModel().getStoredTags() != null) {
             Iterator it = getModel().getStoredTags().iterator();
             List<String> tagNames = new ArrayList();
             while (it.hasNext()) {

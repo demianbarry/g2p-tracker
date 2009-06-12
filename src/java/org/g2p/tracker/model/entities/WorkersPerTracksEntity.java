@@ -2,14 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -20,9 +21,32 @@ import javax.persistence.Table;
 @Table(name = "workers_per_tracks")
 @NamedQueries({@NamedQuery(name = "WorkersPerTracksEntity.findAll", query = "SELECT w FROM WorkersPerTracksEntity w")})
 public class WorkersPerTracksEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected WorkersPerTracksEntityPK workersPerTracksPK;
+    @ManyToOne
+    @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private WebsiteUsersEntity worker;
+    @ManyToOne
+    @PrimaryKeyJoinColumn(name = "track_id", referencedColumnName = "track_id")
+    private TracksEntity track;
+
+    public TracksEntity getTrack() {
+        return track;
+    }
+
+    public void setTrack(TracksEntity track) {
+        this.track = track;
+    }
+
+    public WebsiteUsersEntity getWorker() {
+        return worker;
+    }
+
+    public void setWorker(WebsiteUsersEntity worker) {
+        this.worker = worker;
+    }
 
     public WorkersPerTracksEntity() {
     }
@@ -72,5 +96,4 @@ public class WorkersPerTracksEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return workersPerTracksPK;
     }
-
 }

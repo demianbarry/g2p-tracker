@@ -75,6 +75,8 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoId;
+    @OneToMany(mappedBy = "workersPerTracksPK.userId", fetch = FetchType.EAGER)
+    private Set<WorkersPerTracksEntity> workersCollection;
 
     public TracksEntity() {
     }
@@ -201,6 +203,14 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.estadoId = estadoId;
     }
 
+    public Set<WorkersPerTracksEntity> getWorkersCollection() {
+        return workersCollection;
+    }
+
+    public void setWorkersCollection(Set<WorkersPerTracksEntity> workersCollection) {
+        this.workersCollection = workersCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -230,5 +240,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return getTrackId();
     }
+
 
 }
