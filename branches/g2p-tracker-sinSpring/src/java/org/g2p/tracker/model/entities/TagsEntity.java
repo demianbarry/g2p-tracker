@@ -7,6 +7,7 @@ package org.g2p.tracker.model.entities;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -55,6 +56,16 @@ public class TagsEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "tag_id_grupo", referencedColumnName = "tag_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private TagsEntity tagIdGrupo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tag", fetch = FetchType.EAGER)
+    private Set<TagsPerTracksEntity> tracksPerTagCollection;
+
+    public Set<TagsPerTracksEntity> getTracksPerWorkerCollection() {
+        return tracksPerTagCollection;
+    }
+
+    public void setTracksPerWorkerCollection(Set<TagsPerTracksEntity> tracksPerTagCollection) {
+        this.tracksPerTagCollection = tracksPerTagCollection;
+    }
 
     public TagsEntity() {
     }
