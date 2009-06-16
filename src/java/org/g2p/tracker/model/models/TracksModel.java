@@ -4,9 +4,11 @@
  */
 package org.g2p.tracker.model.models;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.TagsEntity;
 import org.g2p.tracker.model.entities.TagsPerTracksEntity;
 import org.g2p.tracker.model.entities.TracksEntity;
@@ -15,7 +17,7 @@ import org.g2p.tracker.model.entities.TracksEntity;
  *
  * @author nacho
  */
-public class TracksModel extends BaseModel implements Taggeable {
+public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
 
     public TracksModel() {
         super(TracksEntity.class);
@@ -66,11 +68,34 @@ public class TracksModel extends BaseModel implements Taggeable {
 
     @Override
     public List getStoredTags() {
+        System.out.println("SELECTED "+getSelected());
         if (getSelected() != null) {
             Hashtable parameters = new Hashtable();
             parameters.put("trackId", ((TracksEntity) getSelected()).getTrackId());
             return BaseModel.findEntities("TagsEntity.findByTrack", parameters);
         }
         return null;
+    }
+
+    @Override
+    public List<BaseEntity> ecualizarByTags(List<TagsEntity> tagsList) throws Exception {
+        Iterator<TagsEntity> tagsIterator = tagsList.iterator();
+        Iterator tracksIterator;
+        List tracks = new ArrayList();
+        TracksEntity track;
+
+        getParameters().clear();
+
+        while(tagsIterator.hasNext()) {
+            parameters.put("tagId", tagsIterator.next().getTagId());
+            tracksIterator = BaseModel.findEntities("TagsPerTracksEntity.findByTag", parameters).iterator();
+            while(tracksIterator.hasNext()) {
+                track = ((TagsPerTracksEntity) tracksIterator.next()).getTrack();
+                if(!tracks.contains(track)) {
+                    tracks.add(track);
+                }
+            }
+        }
+        return tracks;
     }
 }
