@@ -82,7 +82,7 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuCollection;
     @OneToMany(mappedBy = "workersPerTracksPK.userId", fetch = FetchType.EAGER)
-    private Set<WorkersPerTracksEntity> tracksOnWorkerCollection;
+    private Set<WorkersPerTracksEntity> tracksPerWorkerCollection;
 
     public WebsiteUsersEntity() {
     }
@@ -240,11 +240,11 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     }
 
     public Set<WorkersPerTracksEntity> getTracksOnWorkerCollection() {
-        return tracksOnWorkerCollection;
+        return tracksPerWorkerCollection;
     }
 
     public void setTracksOnWorkerCollection(Set<WorkersPerTracksEntity> tracksOnWorkerCollection) {
-        this.tracksOnWorkerCollection = tracksOnWorkerCollection;
+        this.tracksPerWorkerCollection = tracksOnWorkerCollection;
     }
 
     @Override
