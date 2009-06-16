@@ -15,34 +15,23 @@
             <tabpanels>
                 <tabpanel>
                     <vbox>
-                        <label>
+                        <label >
                             Ingrese un comentario:
                         </label>
                         <fckeditor id="ingresoComentario"
                                     customConfigurationsPath="/config.js"
                                     toolbarSet="Post"
                         />
-                        <!--
-                        <textbox id="tbComentario" 
-                            multiline="true" />
-                            -->
-                                        <hbox>
-                                            <button id="btnSubmit"
+                        <hbox>
+                            <button id="btnSubmit"
                             label="Enviar"
                         />
-                                            <checkbox id="descendiente" label="Descendiente" />
-                                        </hbox>
+                            <checkbox id="descendiente" label="Descendiente" />
+                        </hbox>
                         
                         
                     </vbox>
                     <vbox id="vboxShowComments" >
-                        <!-- <paging id="pgPaginado" pageSize="3" />
-                        <textbox id="tbShow"
-                            multiline="true"
-                            readonly="true"
-                            >
-
-                        </textbox> -->
 
                         <grid id="grid" mold="paging" pageSize="2" pagingPosition="top">
                             <rows id="filas">

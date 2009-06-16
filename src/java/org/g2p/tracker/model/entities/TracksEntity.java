@@ -31,7 +31,10 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tracks")
-@NamedQueries({@NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t")})
+@NamedQueries({
+    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t"),
+    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo")
+})
 public class TracksEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
