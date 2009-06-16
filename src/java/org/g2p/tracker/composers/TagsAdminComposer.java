@@ -22,7 +22,7 @@ import org.g2p.tracker.components.TreeModelA;
 import org.g2p.tracker.model.models.Taggeable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -39,7 +39,7 @@ import org.zkoss.zul.Window;
 public class TagsAdminComposer extends BaseComposer implements Constants {
 
     Tree tagsTree;
-    Groupbox tagsAdmin;
+    Bandbox tagsAdmin;
     TagsTreeRenderer tagsTreeRenderer;
     Listbox tagsList;
     Textbox searchBox;
@@ -60,11 +60,13 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         tagsTreeList = new TagsList();
 
 
-        if (self instanceof Groupbox) {
+        if (self instanceof Bandbox) {
             tagsTree.setTreeitemRenderer(tagsTreeRenderer);
-            ((Groupbox) self).setOpen(false);
+            ((Bandbox) self).setOpen(false);
             populateTagsTree(null);
         }
+
+        setSelectedItems();
     }
 
     public void setCriteria(String criteria) {
@@ -126,11 +128,17 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         return tagsList;
     }
 
-    public void onChanging$searchBox(InputEvent event) {
+    public void onChanging$tagsAdmin(InputEvent event) {
         String value = event.getValue();
         populateTagsTree(value);
         setCriteria(value);
         getDataBinder().loadAttribute(tagsList, "model");
+        setSelectedItems();
+    }
+
+    public void onOpen$tagsAdmin(Event event){
+        if(self instanceof Bandbox)
+            setSelectedItems();
     }
 
     public void onClick$nuevoButton(Event event) {
@@ -233,7 +241,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
             }
 
         }
-        if (self instanceof Groupbox) {
+        if (self instanceof Bandbox) {
             Events.sendEvent(new Event("onTag", (Component) self.getDesktop().getAttribute("TAGGEABLE_COMPONENT")));
         }
     }
@@ -241,12 +249,6 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
     public void onCheck$treeCheck(CheckEvent event) {
         tagsTree.setVisible(event.isChecked());
         tagsList.setVisible(!event.isChecked());
-        tagsTree.clearSelection();
-        tagsList.clearSelection();
-        setSelectedItems();
-    }
-
-    public void onCreate$tagsAdmin(Event event) {
         setSelectedItems();
     }
 
@@ -255,29 +257,31 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
     }
 
     private void setSelectedItems() {
-        if (self instanceof Groupbox && getModel().getStoredTags() != null) {
+        tagsTree.clearSelection();
+        tagsList.clearSelection();
+        System.out.println("---------> "+self);
+        if (self instanceof Bandbox && getModel().getStoredTags() != null) {
             Iterator it = getModel().getStoredTags().iterator();
             List<String> tagNames = new ArrayList();
             while (it.hasNext()) {
                 tagNames.add(((TagsEntity) it.next()).getTag());
             }
             List items = null;
-            if (tagsList.isVisible()) {
-                items = new ArrayList(tagsList.getItems());
-            } else {
-                items = new ArrayList(tagsTree.getItems());
-            }
             List selectedItems = new ArrayList();
 
             int i = 0;
 
-            while (items.size() > i++) {
-                if (tagsList.isVisible()) {
+            if (tagsList.isVisible()) {
+                items = new ArrayList(tagsList.getItems());
+                while (items.size() > i++) {
                     if (tagNames.contains(((Listcell) ((Listitem) items.get(i - 1)).getChildren().get(0)).getLabel())) {
                         selectedItems.add(items.get(i - 1));
                         ((Listitem) items.get(i - 1)).setSelected(true);
                     }
-                } else {
+                }
+            } else {
+                items = new ArrayList(tagsTree.getItems());
+                while (items.size() > i++) {
                     if (tagNames.contains(((Treecell) ((Treeitem) items.get(i - 1)).getTreerow().getChildren().get(0)).getLabel())) {
                         ((Treeitem) items.get(i - 1)).setSelected(true);
                     }
