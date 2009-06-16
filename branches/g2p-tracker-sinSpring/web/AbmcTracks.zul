@@ -58,6 +58,9 @@
                                             <rows>
                                                 <row>
                                                     <detail >-->
+                                            <html>
+                                                        <![CDATA[<A name="${tracks.trackId}"></A>]]>
+                                            </html>
                                             <groupbox mold="3d" open="false" zclass="track-groupbox">
                                                 <caption zclass="tracks-caption" >
                                                     <grid zclass="tracks-caption-grid">
@@ -131,7 +134,40 @@
                                                         <tabpanel>
                                                             <vbox width="100%">
                                                             Comentarios:
-                                                                <textbox value="Funcionalidad en desarrollollo" rows="5" width="100%" readonly="true"/>
+                                                                <vbox>
+                                                                    <label id="track"
+                                                                            value="@{tracks.trackId}"
+                                                                            visible="false"
+                                                                    />
+                                                                    <label>
+                                                                        Ingrese un comentario (encierre entre $ para crear links a tracks):
+                                                                    </label>
+                                                                    <fckeditor id="ingresoComentario"
+                                                                         customConfigurationsPath="/config.js"
+                                                                         toolbarSet="Post"
+                                                                    />
+                                                                    <hbox>
+                                                                        <button id="btnSubmit"
+                                                                                label="Enviar"
+                                                                        />
+                                                                        <checkbox id="descendiente"
+                                                                                label="Descendiente" />
+                                                                    </hbox>
+
+
+                                                                </vbox>
+                                                                <vbox id="vboxShowComments" >
+
+                                                                    <grid id="grid" 
+                                                                            mold="paging"
+                                                                            pageSize="2"
+                                                                            pagingPosition="top"
+                                                                    >
+                                                                        <rows id="filas">
+
+                                                                        </rows>
+                                                                    </grid>
+                                                                </vbox>
                                                             </vbox>
                                                         </tabpanel>
                                                     </tabpanels>

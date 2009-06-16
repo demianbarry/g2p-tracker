@@ -51,7 +51,6 @@ import org.zkoss.zul.Vbox;
  */
 public class DetallesController extends BaseController implements AfterCompose{
     protected Textbox tbComentario;
-    //protected Textbox tbShow;
     protected Vbox vboxShowComments;
     protected Paging pgPaginado;
     protected Rows filas;
@@ -65,41 +64,10 @@ public class DetallesController extends BaseController implements AfterCompose{
     public void onCreate$detallesWin(Event evento){
         // Obtengo el DataBinder que instancia la página
         binder = (DataBinder) getVariable("binder", true);
-        //binder.loadComponent(vistasDetail);
-
-        //getHttpRequest().getSession().getServletContext().getResourcePaths("/")
 
     }
 
     public void onClick$btnSubmit(){
-//        Textbox tbShow = new Textbox();
-//        tbShow.setReadonly(true);
-//        tbShow.setMultiline(true);
-
-        //tbShow.setText(tbComentario.getText());
-        //vboxShowComments.appendChild(tbShow);
-        //pgPaginado.smartUpdate(SSO, SSO);
-
-//        FCKeditor tbShow = new FCKeditor();
-//        tbShow.setValue(ingresoComentario.getValue());
-//
-//        Row comentario = new Row();
-//        comentario.appendChild(tbShow);
-//
-//        List<FCKeditor> hijos = filas.getChildren();
-//
-//        Collections.sort(hijos,new Comparator() {
-//
-//            @Override
-//            public int compare(Object arg0, Object arg1) {
-//                String cadena = ((FCKeditor) arg0).getValue();
-//                String otraCadena = ((FCKeditor) arg1).getValue();
-//
-//                return cadena.compareTo(otraCadena);
-//            }
-//        });
-//
-//        filas.appendChild(comentario);
 
         guardarComentario();
         mostrarComentarios();
@@ -118,7 +86,7 @@ public class DetallesController extends BaseController implements AfterCompose{
 
             PostModel.createEntity(post, true);
 
-            //enviarEmail();
+            enviarEmail();
 
         } catch (RollbackFailureException ex) {
             showMessage("No se pudo guardar su comentario", ex);
@@ -130,26 +98,45 @@ public class DetallesController extends BaseController implements AfterCompose{
             showMessage("Se ha violado la seguridad", ex);
         } catch (SystemException ex) {
             showMessage("Error del sistema", ex);
+        } catch (MessagingException ex) {
+            showMessage("Ha sucedido un error al intentar enviar el email", ex);
         } catch (Exception ex) {
             showMessage("Sucedio un error desconocido", ex);
         }
     }
 
     private void enviarEmail() throws MessagingException{
+    String emailRemitente = "laykondash@gmail.com";
+    String contraseniaRemitente = "";
+
         Properties conf = new Properties();
         String contenido;
+
+        // nombre del host de correo
         conf.put("mail.smtp.host", "smtp.gmail.com");
-        final int ELIMINAR = 10;
+
+        // TLS si está disponible
+        conf.setProperty("mail.smtp.starttls.enable", "true");
+
+        // Puerto de gmail para envio de correos
+        conf.setProperty("mail.smtp.port", "587");
+
+        // Nombre del usuario
+        conf.setProperty("mail.smtp.user", emailRemitente);
+
+        // Si requiere o no usuario y password para conectarse.
+        conf.setProperty("mail.smtp.auth", "true");
 
         // cambiar por el track actual!!!!!!!!!!!!
             TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class);
 
-        Message mensaje = new MimeMessage(Session.getDefaultInstance(conf));
+         Session   sesion = Session.getDefaultInstance(conf);
+        Message mensaje = new MimeMessage(sesion);
 
         contenido = getUserNameFromSession() + " ha comentado el track " + trackActual.getTitulo();
 
         try {
-            InternetAddress de = new InternetAddress("laykondash@gmail.com");
+            InternetAddress de = new InternetAddress(emailRemitente);
 
             InternetAddress a = new InternetAddress(trackActual.getUserIdOwner().getEmail());
 
@@ -159,7 +146,10 @@ public class DetallesController extends BaseController implements AfterCompose{
             mensaje.setContent(contenido, "text/plain");
             mensaje.setSentDate(new Date());
 
-            Transport.send(mensaje);
+            Transport t = sesion.getTransport("smtp");
+            t.connect(emailRemitente,contraseniaRemitente);
+            t.sendMessage(mensaje, mensaje.getAllRecipients());
+            t.close();
 
 
         } catch (AddressException ex) {
@@ -168,6 +158,7 @@ public class DetallesController extends BaseController implements AfterCompose{
     }
 
     private void mostrarComentarios(){
+        filas.getChildren().clear();
         // se ordenara de acuerdo a la eleccion del usuario
         // String order = (descendiente.isChecked()) ? "DESC" : "ASC";
         String consulta = (descendiente.isChecked()) ? "PostsEntity.findByTrackDesc" : "PostsEntity.findByTrackAsc";
