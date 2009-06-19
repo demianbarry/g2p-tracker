@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Html;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
@@ -69,8 +70,13 @@ public class DetallesController extends BaseController implements AfterCompose{
 
     public void onClick$btnSubmit(){
 
-        guardarComentario();
-        mostrarComentarios();
+        //guardarComentario();
+        //mostrarComentarios();
+        String comentario = ingresoComentario.getValue();
+        Html visor = new Html();
+
+        visor.setContent("<p>"+ comentario +"</p>");
+
     }
 
     private void guardarComentario(){

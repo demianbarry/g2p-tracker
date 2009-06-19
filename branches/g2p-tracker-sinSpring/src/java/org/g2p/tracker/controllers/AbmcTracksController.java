@@ -292,6 +292,8 @@ public class AbmcTracksController extends BaseController {
     protected FCKeditor ingresoComentario;  // editor para escribir un comentario
     protected Checkbox descendiente;    // indica el modo de ordenamiento
     protected Label track;              // guarda la pk del track actual
+    //protected String tituloTrack;
+    protected Vbox postBox;
 
 
     public void onClick$btnSubmit(){
@@ -303,9 +305,16 @@ public class AbmcTracksController extends BaseController {
     private void guardarComentario(){
         String comentario = ingresoComentario.getValue();
         PostsEntity post = new PostsEntity();
-        int pk = Integer.parseInt(track.getValue());
+        //int pk = Integer.parseInt(track.getValue());
+        //String titulo = track.getValue();
 
-        post.setContenido(procesarCadena(comentario));
+        int pk = Integer.parseInt(trackModel.getSelected().getPK().toString());
+
+//        String salida = procesarCadena(comentario);
+//        System.out.println("############# cadena procesada: " + salida );
+
+        //post.setContenido(procesarCadena(comentario));
+        post.setContenido(comentario);
         post.setFechaCreacion(new Date());
         post.setUserId(getUserFromSession());
         post.setTrackId((TracksEntity) BaseModel.findEntityByPK(pk, TracksEntity.class));
@@ -336,7 +345,8 @@ public class AbmcTracksController extends BaseController {
     String emailRemitente = "laykondash@gmail.com";
     String contraseniaRemitente = "";
 
-    int pk = Integer.parseInt(track.getValue());
+    //int pk = Integer.parseInt(track.getValue());
+    int pk = Integer.parseInt(trackModel.getSelected().getPK().toString());
     TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(pk, TracksEntity.class);
 
         Properties conf = new Properties();
@@ -390,7 +400,8 @@ public class AbmcTracksController extends BaseController {
         // String order = (descendiente.isChecked()) ? "DESC" : "ASC";
         String consulta = (descendiente.isChecked()) ? "PostsEntity.findByTrackDesc" : "PostsEntity.findByTrackAsc";
         // busca el track asociado
-        int pk = Integer.parseInt(track.getValue());
+        //int pk = Integer.parseInt(track.getValue());
+        int pk = Integer.parseInt(trackModel.getSelected().getPK().toString());
     TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(pk, TracksEntity.class);
         String buscarPor = trackActual.getTitulo();
         Hashtable<String,String> parametros = new Hashtable<String, String>();
@@ -424,7 +435,8 @@ public class AbmcTracksController extends BaseController {
         String salida, elemento;
         StringTokenizer tokens = new StringTokenizer(cadena,"$");
 
-        salida = tokens.nextToken();
+        //salida = tokens.nextToken();
+        salida = cadena;
 
         while (tokens.hasMoreTokens()){
             elemento = tokens.nextToken();
@@ -445,5 +457,10 @@ public class AbmcTracksController extends BaseController {
         }
 
         return salida;
+    }
+
+    public void setTitulo(String track){
+        System.out.println("################ El titulo es " + track + " ####################");
+        this.track.setValue(track);
     }
 }
