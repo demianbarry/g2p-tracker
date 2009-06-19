@@ -58,7 +58,7 @@
                                             <rows>
                                                 <row>
                                                     <detail >-->
-                                            <html>
+                                            <html >
                                                         <![CDATA[<A name="${tracks.trackId}"></A>]]>
                                             </html>
                                             <groupbox mold="3d" open="false" zclass="track-groupbox">
@@ -135,10 +135,14 @@
                                                             <vbox width="100%">
                                                             Comentarios:
                                                                 <vbox>
-                                                                    <label id="track"
+                                                                    <label id="tracker"
                                                                             value="@{tracks.trackId}"
                                                                             visible="false"
+
                                                                     />
+                                                                    <!--
+                                                                    <variables tituloTrack="@{tracks.titulo}"/>
+                                                                    -->
                                                                     <label>
                                                                         Ingrese un comentario (encierre entre $ para crear links a tracks):
                                                                     </label>
@@ -156,9 +160,9 @@
 
 
                                                                 </vbox>
-                                                                <vbox id="vboxShowComments" >
+                                                                <vbox >
 
-                                                                    <grid id="grid" 
+                                                                    <grid
                                                                             mold="paging"
                                                                             pageSize="2"
                                                                             pagingPosition="top"

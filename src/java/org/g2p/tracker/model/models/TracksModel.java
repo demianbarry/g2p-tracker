@@ -87,14 +87,14 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
         getParameters().clear();
 
         while(tagsIterator.hasNext()) {
-            parameters.put("tagId", tagsIterator.next().getTagId());
-            tracksIterator = BaseModel.findEntities("TagsPerTracksEntity.findByTag", parameters).iterator();
-            while(tracksIterator.hasNext()) {
-                track = ((TagsPerTracksEntity) tracksIterator.next()).getTrack();
-                if(!tracks.contains(track)) {
-                    tracks.add(track);
-                }
-            }
+//            parameters.put("tagId", tagsIterator.next().getTagId());
+//            tracksIterator = BaseModel.findEntities("TagsPerTracksEntity.findByTag", parameters).iterator();
+//            while(tracksIterator.hasNext()) {
+//                track = ((TagsPerTracksEntity) tracksIterator.next()).getTrack();
+//                if(!tracks.contains(track)) {
+//                    tracks.add(track);
+//                }
+//            }
         }
         return tracks;
     }
