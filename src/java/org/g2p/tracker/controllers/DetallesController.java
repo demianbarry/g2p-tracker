@@ -9,6 +9,7 @@ import com.jhlabs.vecmath.Vector3f;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -37,9 +38,11 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Html;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
@@ -57,9 +60,11 @@ public class DetallesController extends BaseController implements AfterCompose{
     protected Rows filas;
     protected FCKeditor ingresoComentario;
     protected Checkbox descendiente;
+    protected ZScript script;
 
     public DetallesController(){
         super(true);
+        mostrarComentarios();
     }
     
     public void onCreate$detallesWin(Event evento){
@@ -70,12 +75,12 @@ public class DetallesController extends BaseController implements AfterCompose{
 
     public void onClick$btnSubmit(){
 
-        //guardarComentario();
-        //mostrarComentarios();
-        String comentario = ingresoComentario.getValue();
-        Html visor = new Html();
-
-        visor.setContent("<p>"+ comentario +"</p>");
+        guardarComentario();
+        mostrarComentarios();
+//        String comentario = ingresoComentario.getValue();
+//        Html visor = new Html();
+//
+//        visor.setContent(comentario);
 
     }
 
@@ -92,7 +97,7 @@ public class DetallesController extends BaseController implements AfterCompose{
 
             PostModel.createEntity(post, true);
 
-            enviarEmail();
+            //enviarEmail();
 
         } catch (RollbackFailureException ex) {
             showMessage("No se pudo guardar su comentario", ex);
@@ -186,12 +191,26 @@ public class DetallesController extends BaseController implements AfterCompose{
             PostsEntity postActual = (PostsEntity) itComentarios.next();
             visualizadorActual = new FCKeditor();
             fila = new Row();
+            Vbox caja = new Vbox();
+            String fecha = postActual.getFechaCreacion().getDay() + "/" + postActual.getFechaCreacion().getMonth() + "/" + postActual.getFechaCreacion().getYear();
+            Label lblAutor = new Label(postActual.getUserId().getLoginName());
+            Label lblFecha = new Label(fecha);
 
             visualizadorActual.setCustomConfigurationsPath("/config.js");
             visualizadorActual.setToolbarSet("visualizar");
 
             visualizadorActual.setValue(postActual.getContenido());
-            fila.appendChild(visualizadorActual);
+
+            caja.appendChild(visualizadorActual);
+            caja.appendChild(lblAutor);
+            caja.appendChild(lblFecha);
+
+            //fila.appendChild(visualizadorActual);
+//            filas.appendChild(fila);
+//            filas.appendChild(lblAutor);
+//            filas.appendChild(lblFecha);
+
+            fila.appendChild(caja);
             filas.appendChild(fila);
         }
 
