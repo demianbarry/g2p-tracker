@@ -6,11 +6,19 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -18,11 +26,22 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "attachment")
-@NamedQueries({@NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a")})
+@NamedQueries({
+    @NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a"),
+    @NamedQuery(name = "AttachmentEntity.findAllByTrack", query = "SELECT a FROM AttachmentEntity a WHERE trackId = :track")
+})
 public class AttachmentEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AttachmentEntityPK attachmentPK;
+    @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private WebsiteUsersEntity usuario;
+
+    @Column(name = "fecha")
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
     public AttachmentEntity() {
     }
@@ -71,6 +90,22 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
     @Override
     public Object getPK() {
         return attachmentPK;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public WebsiteUsersEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setUsuario(WebsiteUsersEntity usuario) {
+        this.usuario = usuario;
     }
 
 }

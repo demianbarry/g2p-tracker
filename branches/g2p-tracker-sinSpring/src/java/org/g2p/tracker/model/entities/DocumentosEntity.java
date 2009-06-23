@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,10 +22,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "documentos")
-@NamedQueries({@NamedQuery(name = "DocumentosEntity.findAll", query = "SELECT d FROM DocumentosEntity d")})
+@NamedQueries({
+    @NamedQuery(name = "DocumentosEntity.findAll", query = "SELECT d FROM DocumentosEntity d"),
+    @NamedQuery(name = "DocumentosEntity.findDocument", query = "SELECT d FROM DocumentosEntity d WHERE titulo = :titulo AND descripcion = :descripcion AND path = :path AND version = :version")
+})
 public class DocumentosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id_documento")
     private Integer idDocumento;
@@ -38,6 +44,9 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "version")
     private double version;
+    @Basic(optional = false)
+    @Column(name = "tipo")
+    private String tipo;
 
     public DocumentosEntity() {
     }
@@ -121,6 +130,14 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
     @Override
     public Object getPK() {
         return idDocumento;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
 }

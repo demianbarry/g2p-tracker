@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./adjuntosWin"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" >
+    <window id="adjuntosWin" title="Detalles" use="org.g2p.tracker.controllers.AdjuntosController" width="400px"  height="1000px" >
+        <listbox id="adjuntos" 
+                width="400px"
+                mold="paging"
+                pageSize="10"
+                pagingPosition="top"
+        >
+						<listhead>
+							<listheader label="Titulo"/>
+							<listheader label="Descripcion"/>
+                            <listheader label="Version"/>
+                            <listheader label="Subido por..."/>
+                            <listheader label="Subido el..."/>
+						</listhead>
+						<listitem>
+                            <listcell label="">
+                                <attribute name="onClick">{
+                                    Filedownload.save(inputstream,"tipo", documento);
+                                    }
+                                </attribute>
+                            </listcell>
+							<listcell label=""/>
+                            <listcell label=""/>
+                            <listcell label=""/>
+                            <listcell label=""/>
+						</listitem>
+
+		</listbox>
+        <groupbox>
+            <caption label="Adjuntar documento "/>
+            <vbox>
+                <label value="Titulo: "/>
+                <textbox id="tituloDoc" readonly="false" multiline="false" />
+            </vbox>
+            <vbox>
+                <label value="Descripcion: "/>
+                <textbox id="descripcionDoc" readonly="false" multiline="true"/>
+            </vbox>
+            <fileupload id="subir" />
+        </groupbox>
+    </window>
+
+</zk>
