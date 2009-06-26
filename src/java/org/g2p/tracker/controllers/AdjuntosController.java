@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Html;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -71,10 +72,12 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
         String path = subirDocumento(doc);
 
-        guardarAdjunto(path,doc.getFormat());
+        //guardarAdjunto(path,doc.getFormat());
+        guardarAdjunto(path);
     }
 
-    private void guardarAdjunto(String path,String tipo){
+    //private void guardarAdjunto(String path,String tipo){
+    private void guardarAdjunto(String path){
         if (path != null){
             DocumentosEntity documento = new DocumentosEntity();
             AttachmentEntity adjunto;
@@ -83,11 +86,11 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             documento.setPath(path);
             documento.setTitulo(tituloDoc.getText());
             documento.setDescripción(descripcionDoc.getText());
-            documento.setTipo(tipo);
+            //documento.setTipo(tipo);
             documento.setVersion(1); // cambiar!!!!!!!!!!!!!
 
             try {
-                Hashtable<String,String> parametros = new Hashtable<String, String>();
+                Hashtable<String,Object> parametros = new Hashtable<String, Object>();
             // guardar el documento
                 BaseModel.createEntity(documento, true);
 
@@ -95,7 +98,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
                 parametros.put("path", documento.getPath());
                 parametros.put("titulo", documento.getTitulo());
                 parametros.put("descripcion", documento.getDescripción());
-                parametros.put("version", new Double(documento.getDocumentVersion()).toString());
+                parametros.put("version", documento.getDocumentVersion());
                 List<BaseEntity> listDocs = BaseModel.findEntities("DocumentosEntity.findDocument", parametros);
 
                 documento.setIdDocumento(((DocumentosEntity) listDocs.get(0)).getIdDocumento());
@@ -209,17 +212,22 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             Listcell version = new Listcell();
             Listcell subidoPor = new Listcell();
             Listcell subidoEl = new Listcell();
+            Html link = new Html();
 
             DocumentosEntity docActual = DocumentosModel.findEntityByPK(docPk.getPK());
 
+            // ademas se especifica la posibilidad de descargarlo
+            link.setContent("<![CDATA[<a href=\"" + docActual.getPath() + "\" >" + docActual.getTitulo() + "</a>]]>");
+
             // agrego los datos de cada adjunto en un item propio
-            titulo.setValue(docActual.getTitulo());
+            //titulo.setValue(docActual.getTitulo());
+            titulo.appendChild(link);
             descripcion.setValue(docActual.getDescripción());
             version.setValue(docActual.getDocumentVersion());
             subidoPor.setValue(docPk.getUsuario());
             subidoEl.setValue(docPk.getFecha());
 
-            // ademas se especifica la posibilidad de descargarlo
+            
             //Attribute descargar = new Attribute("onClick", "{Filedownload.save(inputstream,\"" + docActual.getTipo() + "\", documento)}");
 
             // se agrega el item a la lista principal
