@@ -114,9 +114,24 @@ public class LoginPageController extends BaseController {
             }
         }
 
+
+
         if (remember.isChecked()) {
-            Cookie userCookie = new Cookie(USER, getUserFromSession().getPK().toString());
-            getHttpResponse().addCookie(userCookie);
+
+            Cookie cookies[] = getHttpRequest().getCookies();
+            boolean b = true;
+            int i = 0;
+            while (cookies.length > i++) {
+                if (USER.equals(cookies[i - 1].getName())) {
+                    cookies[i - 1].setValue(null);
+                    b = false;
+                }
+            }
+
+            if (b) {
+                Cookie userCookie = new Cookie(USER, getUserFromSession().getPK().toString());
+                getHttpResponse().addCookie(userCookie);
+            }
         }
     }
 
