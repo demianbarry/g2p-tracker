@@ -2,25 +2,30 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estandar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./ecualizador"?>
-<groupbox id="ecualizador" apply="org.g2p.tracker.composers.EcualizadorComposer">
-    <caption label="Ecualizador" style="color:red;"/>
-    <div id="t">
-        <hbox>Search:
-            <textbox id="searchBox"/>
-            <separator bar="true" spacing="20px"/>
-            <checkbox id="treeCheck" label="Árbol" width="100%"/>
-        </hbox>
-        <separator bar="true" spacing="20px"/>
-        <tree id="tagsTree" visible="false" fixedLayout="true" multiple="true" checkmark="true" vflex="true">
-        </tree>
-        <listbox id="tagsList" visible="true" multiple="true"  checkmark="true" vflex="true" model="@{ecualizador$EcualizadorComposer.tags}" >
-            <listitem self="@{each=tag}" >
-                <listcell label="@{tag.tag}"/>
-                <listcell label="@{tag.descripcion}"/>
-            </listitem>
-        </listbox>
-        <hbox>
-            <button id="ecualizarButton" label="Ecualizar"/>
-        </hbox>
-    </div>
-</groupbox>
+<zk>
+    <label value="Ecualizar"/>
+    <bandbox id="ecualizador" apply="org.g2p.tracker.composers.EcualizadorComposer" zclass="z-bandbox-tags" width="20%">
+    <!--<caption label="Ecualizador" style="color:red;"/>-->
+        <bandpopup id="ecualizadorPopup" style="border-style:ridge;border-width:5px">
+            <vbox style="background:white;" >
+                <hbox><!--Search:
+                <textbox id="searchBox"/>
+                <separator bar="true" spacing="20px"/>-->
+                    <checkbox id="treeCheck" label="Árbol" width="100%"/>
+                    <button id="ecualizarButton" label="Ecualizar"/>
+                </hbox>
+                <separator bar="true" spacing="20px"/>
+                <tree id="tagsTree" visible="false" multiple="true" checkmark="true">
+                </tree>
+                <listbox id="tagsList" visible="true" multiple="true"  checkmark="true" model="@{ecualizador$EcualizadorComposer.tags}" >
+                    <listitem self="@{each=tag}" >
+                        <listcell label="@{tag.tag}"/>
+                        <listcell label="@{tag.descripcion}"/>
+                    </listitem>
+                </listbox>
+                <hbox>                    
+                </hbox>
+            </vbox>
+        </bandpopup>
+    </bandbox>
+</zk>
