@@ -34,10 +34,12 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AttachmentEntityPK attachmentPK;
-    @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity usuario;
-
+    @JoinColumn(name = "track_id", referencedColumnName = "track_id", insertable=false, updatable=false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private TracksEntity tracksEntity;
     @Column(name = "fecha")
     @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,4 +110,12 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
         this.usuario = usuario;
     }
 
+
+    public TracksEntity getTracksEntity() {
+        return tracksEntity;
+    }
+
+    public void setTracksEntity(TracksEntity tracksEntity) {
+        this.tracksEntity = tracksEntity;
+    }
 }
