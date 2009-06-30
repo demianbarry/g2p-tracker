@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -17,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,7 +27,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Entity
 @Table(name = "tracks")
@@ -36,19 +36,20 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo")
 })
 public class TracksEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "track_id")
+    @Column(name = "track_id", nullable = false)
     private Integer trackId;
     @Basic(optional = false)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", nullable = false, length = 90)
     private String descripcion;
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 255)
     private String observaciones;
     @Basic(optional = false)
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     @Column(name = "fecha_estimada_realizacion")
@@ -60,26 +61,30 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha_realizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizacion;
-    @Column(name = "titulo")
+    @Column(name = "titulo", length = 255)
     private String titulo;
+    @ManyToMany(mappedBy = "tracksEntityCollection", fetch = FetchType.EAGER)
+    private Set<WebsiteUsersEntity> websiteUsersEntityCollection;
     @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<StickyNotesEntity> stickyNotesEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<PostsEntity> postsEntityCollection;
-    @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private PrioridadesEntity prioridadId;
     @JoinColumn(name = "importancia_id", referencedColumnName = "importancia_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ImportanciaEntity importanciaId;
-    @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private WebsiteUsersEntity userIdOwner;
-    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
+    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoId;
-    @OneToMany(mappedBy = "workersPerTracksPK.userId", fetch = FetchType.EAGER)
-    private Set<WorkersPerTracksEntity> workersCollection;
+    @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private PrioridadesEntity prioridadId;
+    @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private WebsiteUsersEntity userIdOwner;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tracksEntity", fetch = FetchType.EAGER)
+    private Set<AttachmentEntity> attachmentEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
+    private Set<TagsPerTracksEntity> tagsCollection;
 
     public TracksEntity() {
     }
@@ -158,6 +163,14 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.titulo = titulo;
     }
 
+    public Set<WebsiteUsersEntity> getWebsiteUsersEntityCollection() {
+        return websiteUsersEntityCollection;
+    }
+
+    public void setWebsiteUsersEntityCollection(Set<WebsiteUsersEntity> websiteUsersEntityCollection) {
+        this.websiteUsersEntityCollection = websiteUsersEntityCollection;
+    }
+
     public Set<StickyNotesEntity> getStickyNotesEntityCollection() {
         return stickyNotesEntityCollection;
     }
@@ -174,28 +187,12 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.postsEntityCollection = postsEntityCollection;
     }
 
-    public PrioridadesEntity getPrioridadId() {
-        return prioridadId;
-    }
-
-    public void setPrioridadId(PrioridadesEntity prioridadId) {
-        this.prioridadId = prioridadId;
-    }
-
     public ImportanciaEntity getImportanciaId() {
         return importanciaId;
     }
 
     public void setImportanciaId(ImportanciaEntity importanciaId) {
         this.importanciaId = importanciaId;
-    }
-
-    public WebsiteUsersEntity getUserIdOwner() {
-        return userIdOwner;
-    }
-
-    public void setUserIdOwner(WebsiteUsersEntity userIdOwner) {
-        this.userIdOwner = userIdOwner;
     }
 
     public EstadosEntity getEstadoId() {
@@ -206,12 +203,36 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.estadoId = estadoId;
     }
 
-    public Set<WorkersPerTracksEntity> getWorkersCollection() {
-        return workersCollection;
+    public PrioridadesEntity getPrioridadId() {
+        return prioridadId;
     }
 
-    public void setWorkersCollection(Set<WorkersPerTracksEntity> workersCollection) {
-        this.workersCollection = workersCollection;
+    public void setPrioridadId(PrioridadesEntity prioridadId) {
+        this.prioridadId = prioridadId;
+    }
+
+    public WebsiteUsersEntity getUserIdOwner() {
+        return userIdOwner;
+    }
+
+    public void setUserIdOwner(WebsiteUsersEntity userIdOwner) {
+        this.userIdOwner = userIdOwner;
+    }
+
+    public Set<AttachmentEntity> getAttachmentEntityCollection() {
+        return attachmentEntityCollection;
+    }
+
+    public void setAttachmentEntityCollection(Set<AttachmentEntity> attachmentEntityCollection) {
+        this.attachmentEntityCollection = attachmentEntityCollection;
+    }
+
+    public Set<TagsPerTracksEntity> getTagsCollection() {
+        return tagsCollection;
+    }
+
+    public void setTagsCollection(Set<TagsPerTracksEntity> tagsCollection) {
+        this.tagsCollection = tagsCollection;
     }
 
     @Override
@@ -244,5 +265,18 @@ public class TracksEntity extends BaseEntity implements Serializable {
         return getTrackId();
     }
 
+    public void addWorker(WebsiteUsersEntity worker) {
+        getWebsiteUsersEntityCollection().add(worker);
+        worker.getTracksEntityCollection().add(this);
+    }
 
+    public void removeWorker(WebsiteUsersEntity worker) {
+        getWebsiteUsersEntityCollection().remove(worker);
+        worker.getTracksEntityCollection().remove(this);
+    }
+
+    public void addPost(PostsEntity post) {
+        post.setTrackId(this);
+        getPostsEntityCollection().add(post);
+    }
 }
