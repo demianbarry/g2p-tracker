@@ -37,7 +37,6 @@
     <class>org.g2p.tracker.model.entities.UsuarioPreferenciasEntity</class>
     <class>org.g2p.tracker.model.entities.WebsiteUsersEntity</class>
     <class>org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity</class>
-    <class>org.g2p.tracker.model.entities.WorkersPerTracksEntity</class>
     <class>org.g2p.tracker.model.entities.DiccionarioAplicacionDetalleEntity</class>
     <class>org.g2p.tracker.model.entities.ImportanciaEntity</class>
     <class>org.g2p.tracker.model.entities.PrioridadesEntity</class>
@@ -48,7 +47,6 @@
       <property name="hibernate.connection.password" value="tracker"/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/g2p_tracker"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.SunONETransactionManagerLookup"/>
       <property name="hibernate.show_sql" value="true"/>
     </properties>
