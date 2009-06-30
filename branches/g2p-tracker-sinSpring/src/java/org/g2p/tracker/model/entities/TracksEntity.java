@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -27,7 +29,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Administrador
+ * @author g2p
  */
 @Entity
 @Table(name = "tracks")
@@ -36,20 +38,19 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo")
 })
 public class TracksEntity extends BaseEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "track_id", nullable = false)
+    @Column(name = "track_id")
     private Integer trackId;
     @Basic(optional = false)
-    @Column(name = "descripcion", nullable = false, length = 90)
+    @Column(name = "descripcion")
     private String descripcion;
-    @Column(name = "observaciones", length = 255)
+    @Column(name = "observaciones")
     private String observaciones;
     @Basic(optional = false)
-    @Column(name = "fecha_creacion", nullable = false)
+    @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     @Column(name = "fecha_estimada_realizacion")
@@ -61,9 +62,13 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha_realizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRealizacion;
-    @Column(name = "titulo", length = 255)
+    @Column(name = "titulo")
     private String titulo;
-    @ManyToMany(mappedBy = "tracksEntityCollection", fetch = FetchType.EAGER)
+    @Column(name = "OBJ_VERSION")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date objVersion;
+    @JoinTable(name = "workers_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<WebsiteUsersEntity> websiteUsersEntityCollection;
     @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<StickyNotesEntity> stickyNotesEntityCollection;
@@ -72,19 +77,17 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "importancia_id", referencedColumnName = "importancia_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private ImportanciaEntity importanciaId;
-    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id", nullable = false)
+    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoId;
     @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private PrioridadesEntity prioridadId;
-    @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userIdOwner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tracksEntity", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
-    private Set<TagsPerTracksEntity> tagsCollection;
 
     public TracksEntity() {
     }
@@ -163,6 +166,14 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.titulo = titulo;
     }
 
+    public Date getObjVersion() {
+        return objVersion;
+    }
+
+    public void setObjVersion(Date objVersion) {
+        this.objVersion = objVersion;
+    }
+
     public Set<WebsiteUsersEntity> getWebsiteUsersEntityCollection() {
         return websiteUsersEntityCollection;
     }
@@ -227,14 +238,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.attachmentEntityCollection = attachmentEntityCollection;
     }
 
-    public Set<TagsPerTracksEntity> getTagsCollection() {
-        return tagsCollection;
-    }
-
-    public void setTagsCollection(Set<TagsPerTracksEntity> tagsCollection) {
-        this.tagsCollection = tagsCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -276,7 +279,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public void addPost(PostsEntity post) {
-        post.setTrackId(this);
         getPostsEntityCollection().add(post);
     }
 }
