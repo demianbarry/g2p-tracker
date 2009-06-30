@@ -2,19 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.controllers;
 
-import com.jhlabs.vecmath.Vector3f;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
@@ -30,18 +24,14 @@ import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.PostsEntity;
 import org.g2p.tracker.model.entities.TracksEntity;
-import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.PostModel;
 import org.zkforge.fckez.FCKeditor;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Html;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Row;
@@ -53,7 +43,8 @@ import org.zkoss.zul.Vbox;
  *
  * @author kristian
  */
-public class DetallesController extends BaseController implements AfterCompose{
+public class DetallesController extends BaseController implements AfterCompose {
+
     protected Textbox tbComentario;
     protected Vbox vboxShowComments;
     protected Paging pgPaginado;
@@ -62,18 +53,15 @@ public class DetallesController extends BaseController implements AfterCompose{
     protected Checkbox descendiente;
     protected ZScript script;
 
-    public DetallesController(){
-        super(true);
-        mostrarComentarios();
+    public DetallesController() {
+        super(true);        
     }
-    
-    public void onCreate$detallesWin(Event evento){
+
+    public void onCreate$detallesWin(Event evento) {
         // Obtengo el DataBinder que instancia la página
-        binder = (DataBinder) getVariable("binder", true);
-
     }
 
-    public void onClick$btnSubmit(){
+    public void onClick$btnSubmit() {
 
         guardarComentario();
         mostrarComentarios();
@@ -84,7 +72,7 @@ public class DetallesController extends BaseController implements AfterCompose{
 
     }
 
-    private void guardarComentario(){
+    private void guardarComentario() {
         String comentario = ingresoComentario.getValue();
         PostsEntity post = new PostsEntity();
         final int ELIMINAR = 10;
@@ -97,7 +85,7 @@ public class DetallesController extends BaseController implements AfterCompose{
 
             PostModel.createEntity(post, true);
 
-            //enviarEmail();
+        //enviarEmail();
 
         } catch (RollbackFailureException ex) {
             showMessage("No se pudo guardar su comentario", ex);
@@ -116,9 +104,9 @@ public class DetallesController extends BaseController implements AfterCompose{
         }
     }
 
-    private void enviarEmail() throws MessagingException{
-    String emailRemitente = "laykondash@gmail.com";
-    String contraseniaRemitente = "";
+    private void enviarEmail() throws MessagingException {
+        String emailRemitente = "laykondash@gmail.com";
+        String contraseniaRemitente = "";
 
         Properties conf = new Properties();
         String contenido;
@@ -139,9 +127,9 @@ public class DetallesController extends BaseController implements AfterCompose{
         conf.setProperty("mail.smtp.auth", "true");
 
         // cambiar por el track actual!!!!!!!!!!!!
-            TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class);
+        TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class);
 
-         Session   sesion = Session.getDefaultInstance(conf);
+        Session sesion = Session.getDefaultInstance(conf);
         Message mensaje = new MimeMessage(sesion);
 
         contenido = getUserNameFromSession() + " ha comentado el track " + trackActual.getTitulo();
@@ -158,7 +146,7 @@ public class DetallesController extends BaseController implements AfterCompose{
             mensaje.setSentDate(new Date());
 
             Transport t = sesion.getTransport("smtp");
-            t.connect(emailRemitente,contraseniaRemitente);
+            t.connect(emailRemitente, contraseniaRemitente);
             t.sendMessage(mensaje, mensaje.getAllRecipients());
             t.close();
 
@@ -168,14 +156,23 @@ public class DetallesController extends BaseController implements AfterCompose{
         }
     }
 
-    private void mostrarComentarios(){
+    @Override
+    public void afterCompose() {
+        super.afterCompose();
+        mostrarComentarios();
+    }
+
+
+
+    private void mostrarComentarios() {
+        if(filas.getChildren()!= null)
         filas.getChildren().clear();
         // se ordenara de acuerdo a la eleccion del usuario
         // String order = (descendiente.isChecked()) ? "DESC" : "ASC";
         String consulta = (descendiente.isChecked()) ? "PostsEntity.findByTrackDesc" : "PostsEntity.findByTrackAsc";
         // busca el track asociado
-        String buscarPor = ( (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class)).getTitulo(); // CAMBIAR1!!!!
-        Hashtable<String,String> parametros = new Hashtable<String, String>();
+        String buscarPor = ((TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class)).getTitulo(); // CAMBIAR1!!!!
+        Hashtable<String, String> parametros = new Hashtable<String, String>();
 
         //parametros.put("direccion", order);
         parametros.put("titulo", buscarPor);
@@ -187,7 +184,7 @@ public class DetallesController extends BaseController implements AfterCompose{
         FCKeditor visualizadorActual = null;
         Row fila = null;
 
-        while (itComentarios.hasNext()){
+        while (itComentarios.hasNext()) {
             PostsEntity postActual = (PostsEntity) itComentarios.next();
             visualizadorActual = new FCKeditor();
             fila = new Row();
