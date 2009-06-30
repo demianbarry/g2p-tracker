@@ -37,7 +37,7 @@ import javax.persistence.TemporalType;
 public class PostsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "post_id")
     private Integer postId;
@@ -106,6 +106,7 @@ public class PostsEntity extends BaseEntity implements Serializable {
     }
 
     public void setTrackId(TracksEntity trackId) {
+        System.out.println("TRACKID: "+trackId + " --- POSTID: "+getPostId());
         this.trackId = trackId;
     }
 
@@ -136,7 +137,7 @@ public class PostsEntity extends BaseEntity implements Serializable {
 
     @Override
     public Object getPK() {
-        return postId;
+        return getPostId();
     }
 
 }
