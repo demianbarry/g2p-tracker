@@ -22,11 +22,11 @@
                     <listbox id="usersList" width="100%" model="@{abmcUsuarioRolesWin.websiteUserModel.all}" selectedItem="@{abmcUsuarioRolesWin.websiteUserModel.selected}">
                         <listhead sizable="true">
                             <listheader id="userLoginName" label="Login Name" width="40%"  sort="auto(loginName)"/>
-                            <listheader id="userNombreCompleto" label="Nombre completo" width="60%"  sort="auto(nombreCompleto)"/>
+                            <listheader id="userNombreCompleto" label="Nombre completo" width="60%"  sort="auto(apellidoNombre)"/>
                         </listhead>
                         <listitem self="@{each=x0}">
                             <listcell label="@{x0.loginName}"/>
-                            <listcell label="@{x0.nombreCompleto}"/>
+                            <listcell label="@{x0.apellidoNombre}"/>
                         </listitem>
                     </listbox>
                 </center>
@@ -66,7 +66,7 @@
                                 </columns>
                                 <rows>
                                     <row>User ID:
-                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.selected.nombreCompleto}"/>
+                                        <label value="@{abmcUsuarioRolesWin.websiteUserModel.selected.apellidoNombre}"/>
                                     </row>
                                     <row>Rol ID:
                                         <label value="@{abmcUsuarioRolesWin.websiteUserModel.rolSelected.roles.nombre}"/>
@@ -98,7 +98,7 @@
                                 </columns>
                                 <rows>
                                     <row>User ID:
-                                        <label id="userId" value="@{abmcUsuarioRolesWin.websiteUserModel.selected.nombreCompleto}"/>
+                                        <label id="userId" value="@{abmcUsuarioRolesWin.websiteUserModel.selected.apellidoNombre}"/>
                                     </row>
                                     <row>Rol ID:
                                         <combobox id="usuarioRolIdCombobox"
