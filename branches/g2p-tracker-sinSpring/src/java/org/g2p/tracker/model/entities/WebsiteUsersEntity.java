@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -15,20 +16,24 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
- * @author nacho
+ * @author Administrador
  */
 @Entity
-@Table(name = "website_users")
-@NamedQueries({
+@Table(name = "website_users", uniqueConstraints = {@UniqueConstraint(columnNames = {"login_name"}), @UniqueConstraint(columnNames = {"nombre", "fecha_nacimiento", "apellido"})})
+@NamedQueries({    
     @NamedQuery(name = "WebsiteUsersEntity.findByUserId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = :userId"),
     @NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w"),
     @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId AND wu.fechaAsociacion IS NOT NULL)"),
@@ -36,27 +41,26 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "WebsiteUsersEntity.findByLogin", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.loginName = :loginName AND w.loginPassword = :loginPassword")
 })
 public class WebsiteUsersEntity extends BaseEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
     @Basic(optional = false)
-    @Column(name = "login_name")
+    @Column(name = "login_name", nullable = false, length = 60)
     private String loginName;
-    @Column(name = "login_password")
+    @Column(name = "login_password", length = 60)
     private String loginPassword;
-    @Column(name = "nivel_visibilidad")
+    @Column(name = "nivel_visibilidad", length = 255)
     private String nivelVisibilidad;
     @Basic(optional = false)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 90)
     private String nombre;
     @Basic(optional = false)
-    @Column(name = "apellido")
+    @Column(name = "apellido", nullable = false, length = 90)
     private String apellido;
-    @Column(name = "email")
+    @Column(name = "email", length = 90)
     private String email;
     @Column(name = "nro_legajo")
     private Integer nroLegajo;
@@ -66,23 +70,28 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date objVersion;
     @Basic(optional = false)
-    @Column(name = "fecha_nacimiento")
+    @Column(name = "fecha_nacimiento", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
+    @JoinTable(name = "workers_per_tracks", 
+        joinColumns = {@JoinColumn(name = "user_id")},
+        inverseJoinColumns = {@JoinColumn(name = "track_id")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<TracksEntity> tracksEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
-    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
-    private Set<PostsEntity> postsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
-    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
-    private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection;
+    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userIdOwner", fetch = FetchType.EAGER)
-    private Set<TracksEntity> tracksCollection;
+    private Set<TracksEntity> tracksOwnedEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
+    private Set<PostsEntity> postsEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
+    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
+    private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    private Set<AttachmentEntity> attachmentEntityCollection;
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
-    private Set<AccesoMenuEntity> accesoMenuCollection;
-    @OneToMany(mappedBy = "workersPerTracksPK.userId", fetch = FetchType.EAGER)
-    private Set<WorkersPerTracksEntity> tracksPerWorkerCollection;
+    private Set<AccesoMenuEntity> accesoMenuEntityCollection;
 
     public WebsiteUsersEntity() {
     }
@@ -91,12 +100,16 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
         this.userId = userId;
     }
 
-    public WebsiteUsersEntity(Integer userId, String loginName, String loginPassword, String nombreCompleto, Date fechaNacimiento) {
+    public WebsiteUsersEntity(Integer userId, String loginName, String nombre, String apellido, Date fechaNacimiento) {
         this.userId = userId;
         this.loginName = loginName;
-        this.loginPassword = loginPassword;
-        this.apellido = nombreCompleto;
+        this.nombre = nombre;
+        this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getApellidoNombre() {
+        return getNombre() + " " +getApellido();
     }
 
     public Integer getUserId() {
@@ -187,64 +200,68 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getApellidoNombre() {
-        return getNombre() + " " + getApellido();
+    public Set<TracksEntity> getTracksEntityCollection() {
+        return tracksEntityCollection;
     }
 
-    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosCollection() {
-        return auditaEstadosCircuitosCollection;
+    public void setTracksEntityCollection(Set<TracksEntity> tracksEntityCollection) {
+        this.tracksEntityCollection = tracksEntityCollection;
     }
 
-    public void setAuditaEstadosCircuitosCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection) {
-        this.auditaEstadosCircuitosCollection = auditaEstadosCircuitosCollection;
+    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosEntityCollection() {
+        return auditaEstadosCircuitosEntityCollection;
     }
 
-    public Set<PostsEntity> getPostsCollection() {
-        return postsCollection;
+    public void setAuditaEstadosCircuitosEntityCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection) {
+        this.auditaEstadosCircuitosEntityCollection = auditaEstadosCircuitosEntityCollection;
     }
 
-    public void setPostsCollection(Set<PostsEntity> postsCollection) {
-        this.postsCollection = postsCollection;
+    public Set<PostsEntity> getPostsEntityCollection() {
+        return postsEntityCollection;
     }
 
-    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasCollection() {
-        return usuarioPreferenciasCollection;
+    public void setPostsEntityCollection(Set<PostsEntity> postsEntityCollection) {
+        this.postsEntityCollection = postsEntityCollection;
     }
 
-    public void setUsuarioPreferenciasCollection(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection) {
-        this.usuarioPreferenciasCollection = usuarioPreferenciasCollection;
+    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasEntityCollection() {
+        return usuarioPreferenciasEntityCollection;
     }
 
-    public Set<RolesPerWebsiteUsersEntity> getRolesPerWebsiteUsersCollection() {
-        return rolesPerWebsiteUsersCollection;
+    public void setUsuarioPreferenciasEntityCollection(Set<UsuarioPreferenciasEntity> usuarioPreferenciasEntityCollection) {
+        this.usuarioPreferenciasEntityCollection = usuarioPreferenciasEntityCollection;
     }
 
-    public void setRolesPerWebsiteUsersCollection(Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection) {
-        this.rolesPerWebsiteUsersCollection = rolesPerWebsiteUsersCollection;
+    public Set<RolesPerWebsiteUsersEntity> getRolesPerWebsiteUsersEntityCollection() {
+        return rolesPerWebsiteUsersEntityCollection;
     }
 
-    public Set<TracksEntity> getTracksCollection() {
-        return tracksCollection;
+    public void setRolesPerWebsiteUsersEntityCollection(Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection) {
+        this.rolesPerWebsiteUsersEntityCollection = rolesPerWebsiteUsersEntityCollection;
     }
 
-    public void setTracksCollection(Set<TracksEntity> tracksCollection) {
-        this.tracksCollection = tracksCollection;
+    public Set<AttachmentEntity> getAttachmentEntityCollection() {
+        return attachmentEntityCollection;
     }
 
-    public Set<AccesoMenuEntity> getAccesoMenuCollection() {
-        return accesoMenuCollection;
+    public void setAttachmentEntityCollection(Set<AttachmentEntity> attachmentEntityCollection) {
+        this.attachmentEntityCollection = attachmentEntityCollection;
     }
 
-    public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
-        this.accesoMenuCollection = accesoMenuCollection;
+    public Set<AccesoMenuEntity> getAccesoMenuEntityCollection() {
+        return accesoMenuEntityCollection;
     }
 
-    public Set<WorkersPerTracksEntity> getTracksOnWorkerCollection() {
-        return tracksPerWorkerCollection;
+    public void setAccesoMenuEntityCollection(Set<AccesoMenuEntity> accesoMenuEntityCollection) {
+        this.accesoMenuEntityCollection = accesoMenuEntityCollection;
     }
 
-    public void setTracksOnWorkerCollection(Set<WorkersPerTracksEntity> tracksOnWorkerCollection) {
-        this.tracksPerWorkerCollection = tracksOnWorkerCollection;
+    public Set<TracksEntity> getTracksOwnedEntityCollection() {
+        return tracksOwnedEntityCollection;
+    }
+
+    public void setTracksOwnedEntityCollection(Set<TracksEntity> tracksOwnedEntityCollection) {
+        this.tracksOwnedEntityCollection = tracksOwnedEntityCollection;
     }
 
     @Override
@@ -269,11 +286,11 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.WebsiteUsers[userId=" + userId + "]";
+        return "org.g2p.tracker.model.entities.WebsiteUsersEntity[userId=" + userId + "]";
     }
 
     @Override
     public Object getPK() {
-        return userId;
+        return getUserId();
     }
 }
