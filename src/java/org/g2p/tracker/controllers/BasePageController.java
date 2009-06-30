@@ -23,6 +23,7 @@ import org.g2p.tracker.model.entities.WebsiteUsersPerProveedoresOpenidEntity;
 import org.g2p.tracker.model.models.BaseModel;
 //import org.zkoss.zul.Menu;
 import org.g2p.tracker.openid.LoginPostProcessor;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Separator;
@@ -64,12 +65,11 @@ public class BasePageController extends BaseController {
                     int i = 0;
                     Hashtable parameters = new Hashtable();
                     while (cookies.length > i++) {
+                        System.out.println(cookies[i - 1].getName()+" ----- "+cookies[i-1].getValue());
                         if (USER.equals(cookies[i - 1].getName())) {
-                            if (cookies[i - 1].getValue() != null 
-                                    && cookies[i - 1].getValue().length() > 0
-                                    && !"null".equalsIgnoreCase(cookies[i - 1].getValue())) {
-                                System.out.println("-----------USER: " + cookies[i - 1].getValue());
-                                parameters.put("userId", cookies[i - 1].getValue());
+                            if (cookies[i - 1].getValue() != null && cookies[i - 1].getValue().length() > 0 && !"null".equalsIgnoreCase(cookies[i - 1].getValue())) {
+
+                                parameters.put("userId", Integer.parseInt(cookies[i - 1].getValue()));
                                 WebsiteUsersEntity user = (WebsiteUsersEntity) BaseModel.findEntities("WebsiteUsersEntity.findByUserId", parameters).get(0);
                                 setUserInSession(user);
                                 setUserNameInSession(user.getApellidoNombre());
@@ -208,7 +208,6 @@ public class BasePageController extends BaseController {
 
         // Por cada resultado recuperado, creo la referencia en la NavBar
         while (menues.hasNext()) {
-            System.out.println("----->");
             if (navBar.getChildren().size() > 0) {
                 Separator separator = new Separator();
                 separator.setBar(true);
@@ -241,7 +240,15 @@ public class BasePageController extends BaseController {
 
     public void onClick$logoutLabel(Event event) {
         setUserInSession(null);
-        getHttpResponse().addCookie(new Cookie(USER, ""));
+
+        Cookie cookies[] = getHttpRequest().getCookies();
+        int i = 0;
+        while (cookies.length > i++) {
+            if (USER.equals(cookies[i - 1].getName())) {
+                cookies[i - 1].setValue(null);
+            }
+        }
+
         include.setSrc(LOGIN_PAGE);
         setNavBarItem(HOME_PAGE);
     }
