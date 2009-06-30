@@ -4,11 +4,17 @@
  */
 package org.g2p.tracker.model.models;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -16,13 +22,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.BaseEntity;
+import org.g2p.tracker.model.entities.TracksEntity;
 import org.zkoss.lang.Strings;
 
 /**
@@ -32,21 +42,26 @@ import org.zkoss.lang.Strings;
 public class BaseModel {
 
     protected BaseEntity selected;
-    protected static List<BaseEntity> all;
+    protected List<BaseEntity> all;
+    protected List<BaseEntity> filtered;
     protected String queryString;
     protected String where;
     protected String orderBy;
     protected int offset;
     protected int maxResults;
-    protected Map<String, ?> parameters;
+    protected Hashtable parameters;
+    protected static EntityManagerFactory emf = null;
+    private Class entity = null;
+    private UserTransaction utx = null;
 
     public BaseModel(Class entity) {
         setEntity(entity);
-        all = new ArrayList<BaseEntity>(findEntities());
+        all = Collections.synchronizedList(findEntities());
+        filtered = new ArrayList();
     }
 
     public BaseEntity getSelected() {
-        return (BaseEntity) selected;
+        return selected;
     }
 
     public void setSelected(BaseEntity todo) {
@@ -84,12 +99,23 @@ public class BaseModel {
         this.queryString = queryString;
     }
 
-    public Map<String, ?> getParameters() {
+    public Hashtable getParameters() {
+        if (this.parameters == null) {
+            parameters = new Hashtable();
+        }
         return this.parameters;
     }
 
-    public void setParameters(Map<String, ?> params) {
+    public void setParameters(Hashtable params) {
         this.parameters = params;
+    }
+
+    public List<BaseEntity> getFiltered() {
+        return filtered;
+    }
+
+    public void setFiltered(List<BaseEntity> filtered) {
+        this.filtered = filtered;
     }
 
     //-- DB access on the selected bean --//
@@ -110,7 +136,7 @@ public class BaseModel {
     }
 
     public List<BaseEntity> getAll() {
-        return findEntities();
+        return all;
     }
 
     //-- overridable --//
@@ -126,7 +152,6 @@ public class BaseModel {
         }
         return sb.toString();
     }
-    private Class entity = null;
 
     public Class getEntity() {
         return entity;
@@ -135,7 +160,6 @@ public class BaseModel {
     public void setEntity(Class entity) {
         this.entity = entity;
     }
-    private UserTransaction utx = null;
 
     public UserTransaction getUtx() throws NamingException {
         if (utx == null) {
@@ -143,7 +167,18 @@ public class BaseModel {
         }
         return utx;
     }
-    protected static EntityManagerFactory emf = null;
+
+    public void beginTransaction() throws NamingException, NotSupportedException, SystemException {
+        getUtx().begin();
+    }
+
+    public void commitTransaction() throws NamingException, NamingException, RollbackException, HeuristicMixedException, HeuristicMixedException, HeuristicRollbackException, HeuristicRollbackException, SecurityException, IllegalStateException, IllegalStateException, SystemException {
+        getUtx().commit();
+    }
+
+    public void rollbackTransaction() throws NamingException, NamingException, IllegalStateException, IllegalStateException, SecurityException, SecurityException, SystemException {
+        getUtx().rollback();
+    }
 
     public static EntityManager getEntityManager() {
         if (emf == null) {
@@ -187,11 +222,11 @@ public class BaseModel {
 
             em = getEntityManager();
 
-            if ((entity = findEntity(entity.getPK())) == null) {
+            if ((findEntity(entity.getPK())) == null) {
                 throw new NonexistentEntityException("El item con el id " + entity.getPK() + " fue eliminado por otro usuario.");
             }
 
-            entity = em.merge(entity);
+            em.merge(entity);
 
             if (ownTx) {
                 getUtx().commit();
@@ -247,8 +282,8 @@ public class BaseModel {
     private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         String query = "select object(o) from " + this.entity.getName() + " as o";
-        if(getWhere() != null) {
-            query += " WHERE "+getWhere();
+        if (getWhere() != null) {
+            query += " WHERE " + getWhere();
         }
         try {
             Query q = em.createQuery(query);
@@ -404,5 +439,113 @@ public class BaseModel {
         } finally {
             em.close();
         }
+    }
+
+    public void refreshAll() {
+        setAll(findEntities());
+    }
+
+    public void filter(List<BaseEntity> entities) {
+        if (filtered != null & filtered.size() > 0) {
+            all.addAll(filtered);
+            filtered.clear();
+        }
+        if (all != null && entities != null) {
+            int i = 0;
+            while (all.size() > i) {
+                if (!entities.contains(all.get(i))) {
+                    filtered.add(all.get(i));
+                    all.remove(i);
+                } else {
+                    i++;
+                }
+            }
+        } else {
+            refreshAll();
+        }
+    }
+
+    public void filter(Set entities) {
+        if (filtered != null & filtered.size() > 0) {
+            all.addAll(filtered);
+            filtered.clear();
+        }
+        if (all != null && entities != null) {
+
+            int i = 0;
+            while (all.size() > i) {
+                if (!entities.contains(all.get(i))) {
+                    filtered.add(all.get(i));
+                    all.remove(i);
+                } else {
+                    i++;
+                }
+            }
+
+        } else {
+            refreshAll();
+        }
+    }
+
+    public void filter(Hashtable criteria) throws Exception {
+        if (all != null) {
+            Iterator<BaseEntity> entities = all.iterator();
+            while (entities.hasNext()) {
+                BaseEntity entity = entities.next();
+                if (criteria != null) {
+                    Enumeration keys = criteria.keys();
+
+                    while (keys.hasMoreElements()) {
+                        try {
+                            String param = (String) keys.nextElement();
+                            Object value = criteria.get(param);
+                            if (getAttributeValue(param, entity) != value) {
+                                all.remove(entity);
+                            }
+                        } catch (Exception ex) {
+                            throw ex;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    private Object getAttributeValue(String attribute, BaseEntity entity) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Method m = this.entity.getMethod("get" + attribute);
+        return m.invoke(entity);
+    }
+
+    public void newEntity() {
+        try {
+            setSelected((BaseEntity) entity.newInstance());
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void mergeAll(boolean ownTx) throws Exception {
+        Iterator<BaseEntity> it = all.iterator();
+        while (it.hasNext()) {
+            edit(it.next(), ownTx);
+        }
+    }
+
+    public void mergeAll() throws Exception {
+        mergeAll(true);
+    }
+
+    public void mergeFiltered(boolean ownTx) throws Exception {
+        Iterator<BaseEntity> it = filtered.iterator();
+        while (it.hasNext()) {
+            edit(it.next(), ownTx);
+        }
+    }
+
+    public void mergeFiltered() throws Exception {
+        mergeFiltered(true);
     }
 }
