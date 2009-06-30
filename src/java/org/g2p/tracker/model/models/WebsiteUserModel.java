@@ -81,4 +81,11 @@ public class WebsiteUserModel extends BaseModel {
 
         return null;
     }
+
+    @Override
+    public WebsiteUsersEntity getSelected() {
+        return (WebsiteUsersEntity) super.getSelected();
+    }
+
+
 }
