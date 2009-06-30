@@ -4,6 +4,7 @@
  */
 package org.g2p.tracker.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -41,16 +42,18 @@ import org.zkforge.fckez.FCKeditor;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Toolbar;
 import org.zkoss.zul.Vbox;
 
 /**
@@ -60,18 +63,17 @@ import org.zkoss.zul.Vbox;
 public class AbmcTracksController extends BaseController {
 
     protected WebsiteUserModel websiteUserModel = null;
-    protected WebsiteUserModel websiteUserModelTrabajador = null;
+    protected WebsiteUserModel workersModel;
+    protected WebsiteUsersEntity workerSelected;
     protected EstadosModel estadosModel = null;
     protected PrioridadesModel prioridadesModel = null;
     protected ImportanciaModel importanciaModel = null;
     protected TracksModel trackModel = null;
-    protected Toolbar trackToolbar;
     protected Button nuevoTrack;
     protected Button guardarTrack;
     protected Button cancelarAltaTrack;
     protected Button editarTrack;
     protected Listbox tracksList;
-    protected TracksEntity tracks;
     //Campos del track
     protected Textbox titulo;
     protected Textbox descripcion;
@@ -86,20 +88,20 @@ public class AbmcTracksController extends BaseController {
     protected Combobox prioridad;
     protected Combobox importancia;
     protected Button addUser;
-    //protected Button deleteUser;
+    protected Button deleteUser;
+    protected Listbox workersList;
     protected Component trackDetail;
     protected Component nuevoTrackView;
     protected Component listTrackView;
     protected boolean nuevoTrackMode;
     protected boolean listMode;
-    protected boolean editMode;
-    protected boolean trabajadorDos;
     Vbox workersBox;
+    Hbox ecualizadorBox;
 
     public AbmcTracksController() {
         super(true);
         websiteUserModel = new WebsiteUserModel();
-        websiteUserModelTrabajador = new WebsiteUserModel();
+        workersModel = new WebsiteUserModel();
         prioridadesModel = new PrioridadesModel();
         importanciaModel = new ImportanciaModel();
         estadosModel = new EstadosModel();
@@ -112,14 +114,6 @@ public class AbmcTracksController extends BaseController {
 
     public void setWebsiteUserModel(WebsiteUserModel websiteUserModel) {
         this.websiteUserModel = websiteUserModel;
-    }
-
-    public WebsiteUserModel getWebsiteUserModelTrabajador() {
-        return websiteUserModelTrabajador;
-    }
-
-    public void setWebsiteUserModelTrabajador(WebsiteUserModel websiteUserModelTrabajador) {
-        this.websiteUserModelTrabajador = websiteUserModelTrabajador;
     }
 
     public EstadosModel getEstadosModel() {
@@ -154,16 +148,6 @@ public class AbmcTracksController extends BaseController {
         this.trackModel = trackModel;
     }
 
-    public void onCreate$abmcTracksWin(Event event) {
-        // Obtengo el DataBinder que instancia la página
-        binder = (DataBinder) getVariable("binder", true);
-
-        setListMode(true);
-        trabajadorDos = false;
-
-        refresh();
-    }
-
     public boolean isListMode() {
         return listMode;
     }
@@ -175,24 +159,41 @@ public class AbmcTracksController extends BaseController {
         guardarTrack.setVisible(!list);
         nuevoTrack.setVisible(list);
         editarTrack.setVisible(list);
+        ecualizadorBox.setVisible(list);
         listMode = list;
+    }
+
+    public WebsiteUsersEntity getWorkerSelected() {
+        return workerSelected;
+    }
+
+    public void setWorkerSelected(WebsiteUsersEntity workerSelected) {
+        this.workerSelected = workerSelected;
+    }
+
+    public WebsiteUserModel getWorkersModel() {
+        return workersModel;
+    }
+
+    public void setWorkersModel(WebsiteUserModel workersModel) {
+        this.workersModel = workersModel;
+    }
+
+    public void onCreate$abmcTracksWin(Event event) {
+        // Obtengo el DataBinder que instancia la página
+        binder = (DataBinder) getVariable("binder", true);
+
+        setListMode(true);
+
+        refresh();
     }
 
     protected void nuevoTrack() {
         trackModel.setSelected(new TracksEntity());
-        titulo.setText("");
-        descripcion.setText("");
-        observaciones.setText("");
-        websiteUserModel.setSelected(null);
-        websiteUserModelTrabajador.setSelected(null);
-        trabajador.setSelectedIndex(1);
-        ((TracksEntity) trackModel.getSelected()).setFechaCreacion(new Date());
-        fechaEstimadaRealizacion.setText("");
-        fechaLimite.setText("");
-        fechaRealizacion.setText("");
-        estadosModel.setSelected(estadosModel.getAll().get(0));
-        prioridadesModel.setSelected(prioridadesModel.getAll().get(3));
-        importanciaModel.setSelected(importanciaModel.getAll().get(3));
+        trackModel.getSelected().setFechaCreacion(new Date());
+        setListMode(false);
+        refresh();
+        binder.loadComponent(trackDetail);
     }
 
     public void onClick$nuevoTrack(Event event) {
@@ -205,149 +206,172 @@ public class AbmcTracksController extends BaseController {
     }
 
     public void onClick$guardarTrack(Event event) {
-        //save into bean
-        binder.saveComponent(trackDetail); //reload model to force refresh
+        //save into bean       
+        TracksEntity track = trackModel.getSelected();
+        WebsiteUsersEntity userOwner = websiteUserModel.getSelected();
 
-        ((TracksEntity) trackModel.getSelected()).setTitulo(titulo.getValue());
-        ((TracksEntity) trackModel.getSelected()).setDescripcion(descripcion.getValue());
-        ((TracksEntity) trackModel.getSelected()).setObservaciones(observaciones.getValue());
-        ((TracksEntity) trackModel.getSelected()).setUserIdOwner((WebsiteUsersEntity) websiteUserModel.getSelected());
-        //((TracksEntity)trackModel.getSelected()).setFechaCreacion(fechaCreacion.getValue());
-        ((TracksEntity) trackModel.getSelected()).setDeadline(fechaLimite.getValue());
-        ((TracksEntity) trackModel.getSelected()).setFechaEstimadaRealizacion(fechaEstimadaRealizacion.getValue());
-        ((TracksEntity) trackModel.getSelected()).setFechaRealizacion(fechaRealizacion.getValue());
-        ((TracksEntity) trackModel.getSelected()).setEstadoId((EstadosEntity) estadosModel.getSelected());
-        ((TracksEntity) trackModel.getSelected()).setPrioridadId((PrioridadesEntity) prioridadesModel.getSelected());
-        ((TracksEntity) trackModel.getSelected()).setImportanciaId((ImportanciaEntity) importanciaModel.getSelected());
+        track.setTitulo(titulo.getValue());
+        track.setDescripcion(descripcion.getValue());
+        track.setObservaciones(observaciones.getValue());
+        binder.saveComponent(getFellow("ownerWorkersGrid"));
+        track.setUserIdOwner(userOwner);
+        track.setDeadline(fechaLimite.getValue());
+        track.setFechaEstimadaRealizacion(fechaEstimadaRealizacion.getValue());
+        track.setFechaRealizacion(fechaRealizacion.getValue());
+        binder.saveComponent(getFellow("estadoPrioImport"));
+        track.setEstadoId((EstadosEntity) estadosModel.getSelected());
+        track.setPrioridadId((PrioridadesEntity) prioridadesModel.getSelected());
+        track.setImportanciaId((ImportanciaEntity) importanciaModel.getSelected());
 
         try {
             //store into db
+            trackModel.beginTransaction();
 
-            if (trackModel.getSelected().getPK() != null) {
-                trackModel.merge(true);
+            if (track.getPK() != null) {
+                trackModel.edit(track, false);
             } else {
-                trackModel.persist(true);
+                trackModel.create(track, false);
             }
 
+            workersModel.mergeAll(false);
+            workersModel.mergeFiltered(false);
+
+            trackModel.commitTransaction();
             showMessage("El track se guardo correctamente");
 
         } catch (Exception ex) {
             try {
-                showMessage("Ocurrió un error mientras se intentaba crear el track: ", ex);
-                trackModel.getUtx().rollback();
+                showMessage("Ocurrió un error mientras se intentaba crear el track: " + ex.getClass(), ex);
+                trackModel.rollbackTransaction();
             } catch (Exception ex1) {
-                showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex);
+                showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex.getClass(), ex);
             }
         } finally {
             //refresh the rolesList
+            trackModel.refreshAll();
+            binder.loadAttribute(tracksList, "model");
             setListMode(true);
+            trackModel.refreshAll();
             refresh();
         }
     }
 
-    /*public void onClick$addUser (Event event) {
-    Hbox box = new Hbox();
-    Combobox combo = new Combobox();
-    Comboitem item = new Comboitem();
-    Button button = new Button();
+    public void onClick$addUser(Event event) {
+        if (workersModel.getSelected() != null) {
+            try {
+                trackModel.getSelected().addWorker(workersModel.getSelected());
+                refresh();
+            } catch (IllegalStateException ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
-    box.setId("worker"+workersBox.getC);
-
-    box.appendChild(combo);
-    workersBox.appendChild(box);
-
-    refresh();
-    }*/
     public void onClick$deleteUser(Event event) {
-        trabajadorDos = false;
-        refresh();
+        if (workerSelected != null) {
+            try {
+                trackModel.getSelected().removeWorker(workerSelected);
+                refresh();
+            } catch (IllegalStateException ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void refresh() {
+        if (!isListMode()) {
+
+            workersModel.filter(trackModel.getSelected().getWebsiteUsersEntityCollection());
+
+            websiteUserModel.setSelected(trackModel.getSelected().getUserIdOwner());
+            estadosModel.setSelected(trackModel.getSelected().getEstadoId());
+            prioridadesModel.setSelected(trackModel.getSelected().getPrioridadId());
+            importanciaModel.setSelected(trackModel.getSelected().getImportanciaId());
+
+            if (workersModel.getAll().size() > 0) {
+                deleteUser.setVisible(true);
+            } else {
+                deleteUser.setVisible(false);
+            }
+
+            if (workersModel.getFiltered().size() > 0) {
+                addUser.setVisible(true);
+            } else {
+                addUser.setVisible(false);
+            }
+        }
         binder.loadAttribute(trackDetail, "model"); //reload model to force refresh
         binder.loadComponent(trackDetail); //reload visible to force refresh
+        binder.loadAttribute(workersList, "model");
+        binder.loadAttribute(trabajador, "model");
+        binder.loadAttribute(propietario, "selectedItem");
+        binder.loadAttribute(getFellow("postsGrid"), "model");
     }
 
     public void onClick$editarTrack(ForwardEvent event) {
         setListMode(false);
+        refresh();
     }
 
     public void onSelect$tracksList(Event event) {
+        binder.saveAttribute(tracksList, "selectedItem");
     }
 
-    public void onEcualizar$ecualizador(Event event) {
-        System.out.println("ECUALIZAR");
+    public void onEcualizar$ecualizador(ForwardEvent event) {
+
+        if (event.getOrigin().getData() instanceof ArrayList) {
+            trackModel.filter((List) event.getOrigin().getData());
+        }
+
+        binder.loadAttribute(tracksList, "model");
     }
 
+    protected Textbox tbComentario;
+    protected Vbox vboxShowComments;
+    protected Paging pgPaginado;
+    protected Rows filas;
+    protected FCKeditor ingresoComentario;
+    protected Checkbox descendiente;
+    protected ZScript script;
 
-    /********************************************
-     *
-     * Agregado por Cristian
-     *
-     ********************************************/
-
-    protected Textbox tbComentario;     // ingreso de comentario
-    protected Vbox vboxShowComments;    // caja que muestra los comentarios
-    protected Rows filas;               // lista de comentarios
-    protected FCKeditor ingresoComentario;  // editor para escribir un comentario
-    protected Checkbox descendiente;    // indica el modo de ordenamiento
-    protected Label track;              // guarda la pk del track actual
-    //protected String tituloTrack;
-    protected Vbox postBox;
-
-
-    public void onClick$btnSubmit(){
-
+    public void onClick$submitComment(Event event) {
         guardarComentario();
-        mostrarComentarios();
+        refresh();
     }
 
-    private void guardarComentario(){
+    private void guardarComentario() {
+        TracksEntity track = trackModel.getSelected();
         String comentario = ingresoComentario.getValue();
-        PostsEntity post = new PostsEntity();
-        //int pk = Integer.parseInt(track.getValue());
-        //String titulo = track.getValue();
-
-        int pk = Integer.parseInt(trackModel.getSelected().getPK().toString());
-
-//        String salida = procesarCadena(comentario);
-//        System.out.println("############# cadena procesada: " + salida );
-
-        //post.setContenido(procesarCadena(comentario));
-        post.setContenido(comentario);
-        post.setFechaCreacion(new Date());
-        post.setUserId(getUserFromSession());
-        post.setTrackId((TracksEntity) BaseModel.findEntityByPK(pk, TracksEntity.class));
-        try {
-
-            PostModel.createEntity(post, true);
-
-            enviarEmail();
-
-        } catch (RollbackFailureException ex) {
-            showMessage("No se pudo guardar su comentario", ex);
-        } catch (NamingException ex) {
-            showMessage("Error de nombrado", ex);
-        } catch (IllegalStateException ex) {
-            showMessage("Estado ilegal", ex);
-        } catch (SecurityException ex) {
-            showMessage("Se ha violado la seguridad", ex);
-        } catch (SystemException ex) {
-            showMessage("Error del sistema", ex);
-        } catch (MessagingException ex) {
-            showMessage("Ha sucedido un error al intentar enviar el email", ex);
-        } catch (Exception ex) {
-            showMessage("Sucedio un error desconocido", ex);
+        System.out.println("1 --------- " + track + " -------- " + comentario);
+        if (track != null && comentario != null) {
+            try {
+                PostsEntity post = new PostsEntity();
+                post.setContenido(comentario);
+                post.setFechaCreacion(new Date());
+                post.setUserId(getUserFromSession());
+                System.out.println("2 --------- " + track + " -------- " + comentario);
+                track.addPost(post);
+                BaseModel.createEntity(post, true);
+                System.out.println("3 --------- " + track + " -------- " + comentario);
+                enviarEmail();
+                ingresoComentario.setValue(null);
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    private void enviarEmail() throws MessagingException{
-    String emailRemitente = "laykondash@gmail.com";
-    String contraseniaRemitente = "";
-
-    //int pk = Integer.parseInt(track.getValue());
-    int pk = Integer.parseInt(trackModel.getSelected().getPK().toString());
-    TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(pk, TracksEntity.class);
+    private void enviarEmail() throws MessagingException {
+        String emailRemitente = "g2patagonico@gmail.com";
+        String contraseniaRemitente = "gedospee";
 
         Properties conf = new Properties();
         String contenido;
@@ -367,7 +391,10 @@ public class AbmcTracksController extends BaseController {
         // Si requiere o no usuario y password para conectarse.
         conf.setProperty("mail.smtp.auth", "true");
 
-         Session   sesion = Session.getDefaultInstance(conf);
+        // cambiar por el track actual!!!!!!!!!!!!
+        TracksEntity trackActual = trackModel.getSelected();
+
+        Session sesion = Session.getDefaultInstance(conf);
         Message mensaje = new MimeMessage(sesion);
 
         contenido = getUserNameFromSession() + " ha comentado el track " + trackActual.getTitulo();
@@ -384,7 +411,7 @@ public class AbmcTracksController extends BaseController {
             mensaje.setSentDate(new Date());
 
             Transport t = sesion.getTransport("smtp");
-            t.connect(emailRemitente,contraseniaRemitente);
+            t.connect(emailRemitente, contraseniaRemitente);
             t.sendMessage(mensaje, mensaje.getAllRecipients());
             t.close();
 
@@ -392,44 +419,9 @@ public class AbmcTracksController extends BaseController {
         } catch (AddressException ex) {
             Logger.getLogger(DetallesController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }    
 
-    private void mostrarComentarios(){
-        filas.getChildren().clear();
-        // se ordenara de acuerdo a la eleccion del usuario
-        // String order = (descendiente.isChecked()) ? "DESC" : "ASC";
-        String consulta = (descendiente.isChecked()) ? "PostsEntity.findByTrackDesc" : "PostsEntity.findByTrackAsc";
-        // busca el track asociado
-        //int pk = Integer.parseInt(track.getValue());
-        int pk = Integer.parseInt(trackModel.getSelected().getPK().toString());
-    TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(pk, TracksEntity.class);
-        String buscarPor = trackActual.getTitulo();
-        Hashtable<String,String> parametros = new Hashtable<String, String>();
-
-        //parametros.put("direccion", order);
-        parametros.put("titulo", buscarPor);
-
-        List<BaseEntity> comentarios = PostModel.findEntities(consulta, parametros);
-
-        Iterator<BaseEntity> itComentarios = comentarios.iterator();
-
-        FCKeditor visualizadorActual = null;
-        Row fila = null;
-
-        while (itComentarios.hasNext()){
-            PostsEntity postActual = (PostsEntity) itComentarios.next();
-            visualizadorActual = new FCKeditor();
-            fila = new Row();
-
-            visualizadorActual.setCustomConfigurationsPath("/config.js");
-            visualizadorActual.setToolbarSet("visualizar");
-
-            visualizadorActual.setValue(postActual.getContenido());
-            fila.appendChild(visualizadorActual);
-            filas.appendChild(fila);
-        }
-
-    }
+    
 
     private String procesarCadena(String cadena){
         String salida, elemento;
@@ -457,10 +449,5 @@ public class AbmcTracksController extends BaseController {
         }
 
         return salida;
-    }
-
-    public void setTitulo(String track){
-        System.out.println("################ El titulo es " + track + " ####################");
-        this.track.setValue(track);
     }
 }
