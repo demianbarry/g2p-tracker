@@ -6,13 +6,16 @@ package org.g2p.tracker.controllers;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -20,9 +23,6 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.naming.NamingException;
-import javax.transaction.SystemException;
-import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.EstadosEntity;
 import org.g2p.tracker.model.entities.ImportanciaEntity;
@@ -34,7 +34,6 @@ import org.g2p.tracker.model.models.BaseModel;
 import org.zkoss.zul.Listbox;
 import org.g2p.tracker.model.models.EstadosModel;
 import org.g2p.tracker.model.models.ImportanciaModel;
-import org.g2p.tracker.model.models.PostModel;
 import org.g2p.tracker.model.models.PrioridadesModel;
 import org.g2p.tracker.model.models.TracksModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
@@ -42,16 +41,17 @@ import org.zkforge.fckez.FCKeditor;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Paging;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Vbox;
@@ -97,6 +97,7 @@ public class AbmcTracksController extends BaseController {
     protected boolean listMode;
     Vbox workersBox;
     Hbox ecualizadorBox;
+    Div tituloDiv;
 
     public AbmcTracksController() {
         super(true);
@@ -153,6 +154,11 @@ public class AbmcTracksController extends BaseController {
     }
 
     protected void setListMode(boolean list) {
+
+        if (!list) {
+            tituloDiv.setVisible(!(trackModel.getSelected() != null && trackModel.getSelected().getTrackId() != null));
+        }
+
         nuevoTrackView.setVisible(!list);
         listTrackView.setVisible(list);
         cancelarAltaTrack.setVisible(!list);
@@ -230,11 +236,12 @@ public class AbmcTracksController extends BaseController {
             if (track.getPK() != null) {
                 trackModel.edit(track, false);
             } else {
+
                 trackModel.create(track, false);
             }
 
-            workersModel.mergeAll(false);
-            workersModel.mergeFiltered(false);
+            /*workersModel.mergeAll(false);
+            workersModel.mergeFiltered(false);*/
 
             trackModel.commitTransaction();
             showMessage("El track se guardo correctamente");
@@ -244,7 +251,7 @@ public class AbmcTracksController extends BaseController {
                 showMessage("Ocurrió un error mientras se intentaba crear el track: " + ex.getClass(), ex);
                 trackModel.rollbackTransaction();
             } catch (Exception ex1) {
-                showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex.getClass(), ex);
+                showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex1.getClass(), ex);
             }
         } finally {
             //refresh the rolesList
@@ -317,8 +324,12 @@ public class AbmcTracksController extends BaseController {
     }
 
     public void onClick$editarTrack(ForwardEvent event) {
-        setListMode(false);
-        refresh();
+        if (trackModel.getSelected() != null) {
+            setListMode(false);
+            refresh();
+        } else {
+            showMessage("Debe seleccionar un track para editarlo.");
+        }
     }
 
     public void onSelect$tracksList(Event event) {
@@ -334,6 +345,22 @@ public class AbmcTracksController extends BaseController {
         binder.loadAttribute(tracksList, "model");
     }
 
+    public void onOpen$groupbox(Event event) {
+        OpenEvent oEvent = (OpenEvent) ((ForwardEvent) event).getOrigin();
+        Groupbox gb = (Groupbox) oEvent.getTarget();
+        Component comp = null;
+        Iterator it = getFellows().iterator();
+        Boolean flag = true;
+        while (it.hasNext() && flag) {
+            comp = (Component) it.next();
+            if (comp instanceof Groupbox && !gb.equals(comp)) {
+                if (((Groupbox) comp).isOpen()) {
+                    ((Groupbox) comp).setOpen(false);
+                    flag = false;
+                }
+            }
+        }
+    }
     protected Textbox tbComentario;
     protected Vbox vboxShowComments;
     protected Paging pgPaginado;
@@ -402,10 +429,21 @@ public class AbmcTracksController extends BaseController {
         try {
             InternetAddress de = new InternetAddress(emailRemitente);
 
-            InternetAddress a = new InternetAddress(trackActual.getUserIdOwner().getEmail());
+            Set<InternetAddress> a = new HashSet<InternetAddress>();
+            a.add(new InternetAddress((trackActual.getUserIdOwner().getEmail())));
+
+            Iterator worker = trackActual.getWebsiteUsersEntityCollection().iterator();
+
+            String userEmail = null;
+            while (worker.hasNext()) {
+                userEmail = ((WebsiteUsersEntity) worker.next()).getEmail();
+                if (userEmail != null && userEmail.length() > 0) {
+                    a.add(new InternetAddress(userEmail));
+                }
+            }
 
             mensaje.setFrom(de);
-            mensaje.setRecipient(Message.RecipientType.TO, a);
+            mensaje.setRecipients(Message.RecipientType.TO, (Address[]) a.toArray());
             mensaje.setSubject("Se ha comentado el track " + trackActual.getTitulo());
             mensaje.setContent(contenido, "text/plain");
             mensaje.setSentDate(new Date());
@@ -419,32 +457,30 @@ public class AbmcTracksController extends BaseController {
         } catch (AddressException ex) {
             Logger.getLogger(DetallesController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
 
-    
-
-    private String procesarCadena(String cadena){
+    private String procesarCadena(String cadena) {
         String salida, elemento;
-        StringTokenizer tokens = new StringTokenizer(cadena,"$");
+        StringTokenizer tokens = new StringTokenizer(cadena, "$");
 
         //salida = tokens.nextToken();
         salida = cadena;
 
-        while (tokens.hasMoreTokens()){
+        while (tokens.hasMoreTokens()) {
             elemento = tokens.nextToken();
-            Hashtable<String,String> parametros = new Hashtable<String, String>();
-            
+            Hashtable<String, String> parametros = new Hashtable<String, String>();
+
             parametros.put("titulo", elemento);
-            
+
             List<BaseEntity> entities = BaseModel.findEntities("TracksEntity.findByTitulo", parametros);
-            
-            if (entities.size() > 0){
+
+            if (entities.size() > 0) {
                 TracksEntity trackActual = (TracksEntity) entities.get(0);
                 int pk = ((Integer) trackActual.getPK()).intValue();
 
-                salida += "<A href=\"#"+ pk +"\"></A>";
+                salida += "<A href=\"#" + pk + "\"></A>";
             }
-            
+
 
         }
 

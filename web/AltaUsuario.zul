@@ -19,7 +19,7 @@
         </west>
         <east width="15%" style="background-color:#B1CBD5">
         </east>
-        <center style="background-color:#B1CBD5">
+        <center style="background-color:#DAF3FF">
             <div id="usuarioDetail">
 				<!-- edit mode -->
                 <div id="usuarioEdit">
