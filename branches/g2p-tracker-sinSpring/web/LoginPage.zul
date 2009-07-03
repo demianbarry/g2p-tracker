@@ -4,17 +4,13 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./loginWin"?>
 <window id="loginWin" use="org.g2p.tracker.controllers.LoginPageController">
     <borderlayout height="450px">
-        <north size="20%">
+        <north size="20%" style="background-color:#DAF3FF;">
             <div align="center">
                 <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Debe loguearse para comenzar a usar la aplicación</h2>]]>
                 </html>
             </div>
         </north>
-        <east>
-        </east>
-        <west>
-        </west>
-        <center>
+        <center style="background-color:#DAF3FF;border:none;">
             <div align="center">
                 <div id="proveedoresList">
                     <listbox id="proveedoresListbox" width="80%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">

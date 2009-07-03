@@ -64,9 +64,10 @@ public class TracksEntity extends BaseEntity implements Serializable {
     private Date fechaRealizacion;
     @Column(name = "titulo")
     private String titulo;
-    @Column(name = "OBJ_VERSION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date objVersion;
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Basic(optional = false)
+    @Column(name = "orden")
+    private String orden;
     @JoinTable(name = "workers_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<WebsiteUsersEntity> websiteUsersEntityCollection;
@@ -166,12 +167,12 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.titulo = titulo;
     }
 
-    public Date getObjVersion() {
-        return objVersion;
+    public String getOrden() {
+        return orden;
     }
 
-    public void setObjVersion(Date objVersion) {
-        this.objVersion = objVersion;
+    public void setOrden(String orden) {
+        this.orden = orden;
     }
 
     public Set<WebsiteUsersEntity> getWebsiteUsersEntityCollection() {
@@ -252,7 +253,7 @@ public class TracksEntity extends BaseEntity implements Serializable {
             return false;
         }
         TracksEntity other = (TracksEntity) object;
-        if ((this.trackId == null && other.trackId != null) || (this.trackId != null && !this.trackId.equals(other.trackId))) {
+        if (getTrackId() == null || !getTrackId().equals(other.getTrackId())) {
             return false;
         }
         return true;
@@ -279,6 +280,7 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public void addPost(PostsEntity post) {
+        post.setTrackId(this);
         getPostsEntityCollection().add(post);
     }
 }
