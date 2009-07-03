@@ -377,17 +377,14 @@ public class AbmcTracksController extends BaseController {
     private void guardarComentario() {
         TracksEntity track = trackModel.getSelected();
         String comentario = ingresoComentario.getValue();
-        System.out.println("1 --------- " + track + " -------- " + comentario);
         if (track != null && comentario != null) {
             try {
                 PostsEntity post = new PostsEntity();
                 post.setContenido(comentario);
                 post.setFechaCreacion(new Date());
                 post.setUserId(getUserFromSession());
-                System.out.println("2 --------- " + track + " -------- " + comentario);
                 track.addPost(post);
                 BaseModel.createEntity(post, true);
-                System.out.println("3 --------- " + track + " -------- " + comentario);
                 enviarEmail();
                 ingresoComentario.setValue(null);
             } catch (Exception ex) {
@@ -429,21 +426,23 @@ public class AbmcTracksController extends BaseController {
         try {
             InternetAddress de = new InternetAddress(emailRemitente);
 
-            Set<InternetAddress> a = new HashSet<InternetAddress>();
-            a.add(new InternetAddress((trackActual.getUserIdOwner().getEmail())));
+            InternetAddress a[] = new InternetAddress[trackActual.getWebsiteUsersEntityCollection().size()+1];
+            a[0] = (new InternetAddress((trackActual.getUserIdOwner().getEmail())));
 
             Iterator worker = trackActual.getWebsiteUsersEntityCollection().iterator();
 
             String userEmail = null;
-            while (worker.hasNext()) {
+            int i = 1;
+            while (i < a.length) {
                 userEmail = ((WebsiteUsersEntity) worker.next()).getEmail();
                 if (userEmail != null && userEmail.length() > 0) {
-                    a.add(new InternetAddress(userEmail));
+                    a[i] = (new InternetAddress(userEmail));
                 }
+                i++;
             }
 
             mensaje.setFrom(de);
-            mensaje.setRecipients(Message.RecipientType.TO, (Address[]) a.toArray());
+            mensaje.setRecipients(Message.RecipientType.TO, a);
             mensaje.setSubject("Se ha comentado el track " + trackActual.getTitulo());
             mensaje.setContent(contenido, "text/plain");
             mensaje.setSentDate(new Date());
