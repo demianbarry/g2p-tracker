@@ -89,6 +89,8 @@ public class TracksEntity extends BaseEntity implements Serializable {
     private WebsiteUsersEntity userIdOwner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tracksEntity", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
+    @OneToMany(mappedBy = "attachment.attachmentPK.documentoId", fetch = FetchType.EAGER)
+    private Set<AttachmentEntity> adjuntosCollection;
 
     public TracksEntity() {
     }
@@ -238,6 +240,23 @@ public class TracksEntity extends BaseEntity implements Serializable {
     public void setAttachmentEntityCollection(Set<AttachmentEntity> attachmentEntityCollection) {
         this.attachmentEntityCollection = attachmentEntityCollection;
     }
+
+    public Set<AttachmentEntity> getAdjuntosCollection() {
+        return adjuntosCollection;
+    }
+
+    public void setAdjuntosCollection(Set<AttachmentEntity> adjuntosCollection) {
+        this.adjuntosCollection = adjuntosCollection;
+    }
+
+
+//    public Set<WorkersPerTracksEntity> getWorkersCollection() {
+//        return workersCollection;
+//    }
+//
+//    public void setWorkersCollection(Set<WorkersPerTracksEntity> workersCollection) {
+//        this.workersCollection = workersCollection;
+//    }
 
     @Override
     public int hashCode() {

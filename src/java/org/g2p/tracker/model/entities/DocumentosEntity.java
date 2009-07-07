@@ -24,7 +24,7 @@ import javax.persistence.Table;
 @Table(name = "documentos")
 @NamedQueries({
     @NamedQuery(name = "DocumentosEntity.findAll", query = "SELECT d FROM DocumentosEntity d"),
-    @NamedQuery(name = "DocumentosEntity.findDocument", query = "SELECT d FROM DocumentosEntity d WHERE titulo = :titulo AND descripcion = :descripcion AND path = :path AND version = :version")
+    @NamedQuery(name = "DocumentosEntity.findDocument", query = "SELECT d FROM DocumentosEntity d WHERE titulo = :titulo AND descripción = :descripcion AND path = :path AND version = :version")
 })
 public class DocumentosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,9 +44,9 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "version")
     private double version;
-    @Basic(optional = false)
-    @Column(name = "tipo")
-    private String tipo;
+//    @Basic(optional = false)
+//    @Column(name = "tipo")
+//    private String tipo;
 
     public DocumentosEntity() {
     }
@@ -132,12 +132,12 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
         return idDocumento;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+//    public String getTipo() {
+//        return tipo;
+//    }
+//
+//    public void setTipo(String tipo) {
+//        this.tipo = tipo;
+//    }
 
 }

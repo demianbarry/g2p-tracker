@@ -7,7 +7,9 @@ package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +32,7 @@ import javax.persistence.TemporalType;
 @Table(name = "attachment")
 @NamedQueries({
     @NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a"),
-    @NamedQuery(name = "AttachmentEntity.findAllByTrack", query = "SELECT a FROM AttachmentEntity a WHERE trackId = :track")
+    @NamedQuery(name = "AttachmentEntity.findAllByTrack", query = "SELECT a,d FROM AttachmentEntity a, DocumentosEntity d WHERE a.tracksEntity = :track AND d.idDocumento = a.attachmentPK.documentoId")
 })
 public class AttachmentEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,6 +48,16 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    @OneToOne(mappedBy = "idDocumento", fetch = FetchType.EAGER)
+    private DocumentosEntity documentEntity;
+
+    public DocumentosEntity getDocumentEntity() {
+        return documentEntity;
+    }
+
+    public void setDocumentEntity(DocumentosEntity documentEntity) {
+        this.documentEntity = documentEntity;
+    }
 
     public AttachmentEntity() {
     }
