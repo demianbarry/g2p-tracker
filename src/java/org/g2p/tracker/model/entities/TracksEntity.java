@@ -234,11 +234,11 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.userIdOwner = userIdOwner;
     }
 
-    public Set<AttachmentEntity> getAttachmentEntityCollection() {
+    public Set<AttachmentEntity> getAdjuntosCollection() {
         return attachmentEntityCollection;
     }
 
-    public void setAttachmentEntityCollection(Set<AttachmentEntity> attachmentEntityCollection) {
+    public void setAdjuntosCollection(Set<AttachmentEntity> attachmentEntityCollection) {
         this.attachmentEntityCollection = attachmentEntityCollection;
     }
 
