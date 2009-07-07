@@ -6,7 +6,9 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -35,7 +37,8 @@ import javax.persistence.TemporalType;
 @Table(name = "tracks")
 @NamedQueries({
     @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t"),
-    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo")
+    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo"),
+    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection")
 })
 public class TracksEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -89,8 +92,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     private WebsiteUsersEntity userIdOwner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tracksEntity", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
-    @OneToMany(mappedBy = "attachment.attachmentPK.documentoId", fetch = FetchType.EAGER)
-    private Set<AttachmentEntity> adjuntosCollection;
 
     public TracksEntity() {
     }
@@ -241,23 +242,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.attachmentEntityCollection = attachmentEntityCollection;
     }
 
-    public Set<AttachmentEntity> getAdjuntosCollection() {
-        return adjuntosCollection;
-    }
-
-    public void setAdjuntosCollection(Set<AttachmentEntity> adjuntosCollection) {
-        this.adjuntosCollection = adjuntosCollection;
-    }
-
-
-//    public Set<WorkersPerTracksEntity> getWorkersCollection() {
-//        return workersCollection;
-//    }
-//
-//    public void setWorkersCollection(Set<WorkersPerTracksEntity> workersCollection) {
-//        this.workersCollection = workersCollection;
-//    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -289,11 +273,15 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public void addWorker(WebsiteUsersEntity worker) {
+        if(getWebsiteUsersEntityCollection() == null)
+            setWebsiteUsersEntityCollection(new HashSet());
         getWebsiteUsersEntityCollection().add(worker);
         worker.getTracksEntityCollection().add(this);
     }
 
     public void removeWorker(WebsiteUsersEntity worker) {
+        if(getWebsiteUsersEntityCollection() == null)
+            setWebsiteUsersEntityCollection(new HashSet());
         getWebsiteUsersEntityCollection().remove(worker);
         worker.getTracksEntityCollection().remove(this);
     }
