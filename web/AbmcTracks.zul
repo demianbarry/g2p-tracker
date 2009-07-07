@@ -232,7 +232,7 @@
                                                                 <textbox id="descripcionDoc" readonly="false" multiline="true"/>
                                                             </vbox>
                                                             <fileupload id="subir" />
-                                                            <button id="btnMostrar" label="Mostrar"/>
+                                                            <checkbox id="envioEmail" label="Enviar email" checked="true"/>
                                                         </groupbox>
                                                 </div>
                                             </tabpanel>

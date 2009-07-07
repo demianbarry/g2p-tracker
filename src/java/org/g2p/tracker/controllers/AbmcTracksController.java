@@ -530,6 +530,7 @@ public class AbmcTracksController extends BaseController {
     protected Listbox adjuntos;
     protected Textbox tituloDoc;
     protected Textbox descripcionDoc;
+    protected Checkbox envioEmail;
 
     public void onUpload$subir(ForwardEvent evento){
         try {
@@ -540,6 +541,10 @@ public class AbmcTracksController extends BaseController {
 
             String path = subirDocumento(doc);
             guardarAdjunto(path);
+
+            if (!envioEmail.isChecked()){
+                return;
+            }
 
             String asunto = "Se ha agregado un adjunto";
             String contenido = getUserNameFromSession() + " ha adjuntado un documento a la tarea " + trackModel.getSelected().getTitulo();
