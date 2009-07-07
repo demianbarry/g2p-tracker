@@ -7,9 +7,7 @@ package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -18,70 +16,76 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
  *
- * @author nacho
+ * @author g2p
  */
 @Entity
 @Table(name = "attachment")
-@NamedQueries({
-    @NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a"),
-    @NamedQuery(name = "AttachmentEntity.findAllByTrack", query = "SELECT a,d FROM AttachmentEntity a, DocumentosEntity d WHERE a.tracksEntity = :track AND d.idDocumento = a.attachmentPK.documentoId")
-})
+@NamedQueries({@NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a")})
 public class AttachmentEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected AttachmentEntityPK attachmentPK;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private WebsiteUsersEntity usuario;
+    protected AttachmentEntityPK attachmentEntityPK;
+    @Basic(optional = false)
+    @Column(name = "fecha")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id", insertable=false, updatable=false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TracksEntity tracksEntity;
-    @Column(name = "fecha")
-    @Basic(optional = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
-    @OneToOne(mappedBy = "idDocumento", fetch = FetchType.EAGER)
-    private DocumentosEntity documentEntity;
-
-    public DocumentosEntity getDocumentEntity() {
-        return documentEntity;
-    }
-
-    public void setDocumentEntity(DocumentosEntity documentEntity) {
-        this.documentEntity = documentEntity;
-    }
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private WebsiteUsersEntity userId;
 
     public AttachmentEntity() {
     }
 
-    public AttachmentEntity(AttachmentEntityPK attachmentPK) {
-        this.attachmentPK = attachmentPK;
+    public AttachmentEntity(AttachmentEntityPK attachmentEntityPK) {
+        this.attachmentEntityPK = attachmentEntityPK;
+    }
+
+    public AttachmentEntity(AttachmentEntityPK attachmentEntityPK, Date fecha) {
+        this.attachmentEntityPK = attachmentEntityPK;
+        this.fecha = fecha;
     }
 
     public AttachmentEntity(int documentoId, int trackId) {
-        this.attachmentPK = new AttachmentEntityPK(documentoId, trackId);
+        this.attachmentEntityPK = new AttachmentEntityPK(documentoId, trackId);
     }
 
-    public AttachmentEntityPK getAttachmentPK() {
-        return attachmentPK;
+    public AttachmentEntityPK getAttachmentEntityPK() {
+        return attachmentEntityPK;
     }
 
-    public void setAttachmentPK(AttachmentEntityPK attachmentPK) {
-        this.attachmentPK = attachmentPK;
+    public void setAttachmentEntityPK(AttachmentEntityPK attachmentEntityPK) {
+        this.attachmentEntityPK = attachmentEntityPK;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public WebsiteUsersEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(WebsiteUsersEntity userId) {
+        this.userId = userId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (attachmentPK != null ? attachmentPK.hashCode() : 0);
+        hash += (attachmentEntityPK != null ? attachmentEntityPK.hashCode() : 0);
         return hash;
     }
 
@@ -92,7 +96,7 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
             return false;
         }
         AttachmentEntity other = (AttachmentEntity) object;
-        if ((this.attachmentPK == null && other.attachmentPK != null) || (this.attachmentPK != null && !this.attachmentPK.equals(other.attachmentPK))) {
+        if ((this.attachmentEntityPK == null && other.attachmentEntityPK != null) || (this.attachmentEntityPK != null && !this.attachmentEntityPK.equals(other.attachmentEntityPK))) {
             return false;
         }
         return true;
@@ -100,36 +104,12 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.Attachment[attachmentPK=" + attachmentPK + "]";
+        return "org.g2p.tracker.model.entities.AttachmentEntity[attachmentEntityPK=" + attachmentEntityPK + "]";
     }
 
     @Override
     public Object getPK() {
-        return attachmentPK;
+        return getAttachmentEntityPK();
     }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public WebsiteUsersEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public void setUsuario(WebsiteUsersEntity usuario) {
-        this.usuario = usuario;
-    }
-
-
-    public TracksEntity getTracksEntity() {
-        return tracksEntity;
-    }
-
-    public void setTracksEntity(TracksEntity tracksEntity) {
-        this.tracksEntity = tracksEntity;
-    }
 }
