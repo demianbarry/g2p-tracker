@@ -76,6 +76,7 @@
                                             <tab label="Fechas"/>
                                             <tab label="Estado"/>
                                             <tab label="Comentarios"/>
+                                            <tab label="Adjuntos"/>
                                         </tabs>
                                         <tabpanels>
                                             <tabpanel>
@@ -190,6 +191,49 @@
                                                             </rows>
                                                         </grid>
                                                     </vbox>
+                                                </div>
+                                            </tabpanel>
+                                            <tabpanel>
+                                                <div align="center">
+                                                    <listbox id="adjuntos"
+                                                                width="400px"
+                                                                mold="paging"
+                                                                pageSize="10"
+                                                                pagingPosition="top"
+                                                                model="@{tracks.attachmentEntityCollection}"
+                                                    >
+                                                        <listhead>
+                                                            <listheader label="Titulo"/>
+                                                            <listheader label="Descripcion"/>
+                                                            <listheader label="Version"/>
+                                                            <listheader label="Subido por..."/>
+                                                            <listheader label="Subido el..."/>
+                                                        </listhead>
+                                                        <listitem self="@{each=adjunto}">
+                                                            <listcell label="@{adjunto.documentEntity.titulo}">
+                                                                <html content="<a href=${adjunto.documentEntity.path} />" />
+                                                            </listcell>
+                                                            <listcell label="@{adjunto.documentEntity.descripcion}"/>
+                                                            <listcell label="@{adjunto.documentEntity.version}"/>
+                                                            <listcell label="@{adjunto.usuario.loginName}"/>
+                                                            <listcell label="@{adjunto.fecha}"/>
+                                                        </listitem>
+
+
+                                                    </listbox>
+                                                        <groupbox>
+                                                            <caption label="Adjuntar documento "/>
+                                                            <vbox>
+                                                                <label value="Titulo: "/>
+                                                                <textbox id="tituloDoc" readonly="false" multiline="false" />
+                                                            </vbox>
+                                                            <vbox>
+                                                                <label value="Descripcion: "/>
+                                                                <textbox id="descripcionDoc" readonly="false" multiline="true"/>
+                                                            </vbox>
+                                                            <fileupload id="subir" />
+                                                            <button id="btnMostrar" label="Mostrar"/>
+                                                        </groupbox>
                                                 </div>
                                             </tabpanel>
                                         </tabpanels>

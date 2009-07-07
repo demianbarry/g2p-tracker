@@ -21,17 +21,10 @@
                             <listheader label="Subido el..."/>
 						</listhead>
 						<listitem>
-                            <listcell label="">
-                                <attribute name="onClick">{
-                                    Filedownload.save(inputstream,"tipo", documento);
-                                    }
-                                </attribute>
+                            <listcell >
+
                             </listcell>
-							<listcell label=""/>
-                            <listcell label=""/>
-                            <listcell label=""/>
-                            <listcell label=""/>
-						</listitem>
+                        </listitem>
 
 		</listbox>
         <groupbox>
@@ -45,6 +38,7 @@
                 <textbox id="descripcionDoc" readonly="false" multiline="true"/>
             </vbox>
             <fileupload id="subir" />
+            <button id="btnMostrar" label="Mostrar"/>
         </groupbox>
     </window>
 

@@ -16,13 +16,16 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
 import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.AttachmentEntity;
+import org.g2p.tracker.model.entities.AttachmentEntityPK;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.DocumentosEntity;
+import org.g2p.tracker.model.entities.TracksEntity;
 import org.g2p.tracker.model.models.BaseModel;
 import org.g2p.tracker.model.models.DocumentosModel;
 import org.zkoss.util.media.Media;
@@ -31,8 +34,10 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zkplus.databind.DataBinder;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Html;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -59,6 +64,10 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
     }
 
+    public void onCreate$adjuntos(Event evento){
+        mostrarAdjuntos();
+    }
+
     public void onUpload$subir(ForwardEvent evento){
         UploadEvent event = (UploadEvent) evento.getOrigin();
         Media doc = event.getMedia();
@@ -66,10 +75,17 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
         String path = subirDocumento(doc);
 
-        guardarAdjunto(path,doc.getFormat());
+        guardarAdjunto(path);
+        mostrarAdjuntos();
     }
 
-    private void guardarAdjunto(String path,String tipo){
+    public void onClick$btnMostrar(){
+        System.out.println("########### ejecutando ###############");
+        mostrarAdjuntos();
+    }
+
+    //private void guardarAdjunto(String path,String tipo){
+    private void guardarAdjunto(String path){
         if (path != null){
             DocumentosEntity documento = new DocumentosEntity();
             AttachmentEntity adjunto;
@@ -78,7 +94,6 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             documento.setPath(path);
             documento.setTitulo(tituloDoc.getText());
             documento.setDescripción(descripcionDoc.getText());
-            documento.setTipo(tipo);
             documento.setVersion(1); // cambiar!!!!!!!!!!!!!
 
             try {
@@ -182,39 +197,53 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
     private void mostrarAdjuntos(){
         // especifico las variables a usar
-        Hashtable<String,String> parametros = new Hashtable<String, String>();
+        Hashtable<String,Object> parametros = new Hashtable<String, Object>();
         Vector<DocumentosEntity> documentos = new Vector<DocumentosEntity>();
-        Iterator<BaseEntity> itAdjPk;
+        Iterator<AttachmentEntity> itAdjPk;
 
-        //obtengo el track actual
-        parametros.put("track", "1"); // cambiar por el track correspondiente
+        System.out.println("########### etapa 1 ###############");
 
         // obtengo el id de los adjuntos del track
-        List<BaseEntity> adjuntosPk = BaseModel.findEntities("AttachmentEntity.findAllByTrack", parametros);
+        //List<BaseEntity> adjuntosPk = BaseModel.findEntities("AttachmentEntity.findAllByTrack", parametros);
+        TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class);
+        Set<AttachmentEntity> adjuntosE = trackActual.getAdjuntosCollection();
+
+        System.out.println("########### etapa 2 ###############");
+        System.out.println("########### " + adjuntosE + " ###############");
+        System.out.println("########### etapa 3 ###############");
 
         // recupero los datos de los adjuntos del track
-        itAdjPk = adjuntosPk.iterator();
+        itAdjPk = adjuntosE.iterator();
 
         // por cada adjunto
         while (itAdjPk.hasNext()){
-            AttachmentEntity docPk = (AttachmentEntity) itAdjPk.next();
+            AttachmentEntity adjActual = itAdjPk.next();
             Listitem documento = new Listitem();
             Listcell titulo = new Listcell();
             Listcell descripcion = new Listcell();
             Listcell version = new Listcell();
             Listcell subidoPor = new Listcell();
             Listcell subidoEl = new Listcell();
+            Html link = new Html();
 
-            DocumentosEntity docActual = DocumentosModel.findEntityByPK(docPk.getPK());
+            System.out.println("########### etapa 3.1 ###############");
+
+            DocumentosEntity docActual = DocumentosModel.findEntityByPK(adjActual.getAttachmentPK().getDocumentoId());
+
+            // ademas se especifica la posibilidad de descargarlo
+            link.setContent("<![CDATA[<a href=\"" + docActual.getPath() + "\" >" + docActual.getTitulo() + "</a>]]>");
+            titulo.appendChild(link);
 
             // agrego los datos de cada adjunto en un item propio
             titulo.setValue(docActual.getTitulo());
             descripcion.setValue(docActual.getDescripción());
             version.setValue(docActual.getDocumentVersion());
-            subidoPor.setValue(docPk.getUsuario());
-            subidoEl.setValue(docPk.getFecha());
+            subidoPor.setValue(adjActual.getUsuario());
+            subidoEl.setValue(adjActual.getFecha());
 
-            // ademas se especifica la posibilidad de descargarlo
+
+            System.out.println("########### etapa 3.2 ###############");
+            
             //Attribute descargar = new Attribute("onClick", "{Filedownload.save(inputstream,\"" + docActual.getTipo() + "\", documento)}");
 
             // se agrega el item a la lista principal
@@ -224,7 +253,11 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             documento.appendChild(subidoPor);
             documento.appendChild(subidoEl);
 
+            System.out.println("########### etapa 3.3 ###############");
+
             adjuntos.appendChild(documento);
+
+            System.out.println("########### etapa 3.4 ###############");
         }
 
 
