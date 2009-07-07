@@ -88,7 +88,7 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     private Set<UsuarioPreferenciasEntity> usuarioPreferenciasEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
     private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;

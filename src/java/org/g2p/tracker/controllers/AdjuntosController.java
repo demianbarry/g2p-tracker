@@ -94,7 +94,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             documento.setPath(path);
             documento.setTitulo(tituloDoc.getText());
             documento.setDescripción(descripcionDoc.getText());
-            documento.setVersion(1); // cambiar!!!!!!!!!!!!!
+            documento.setDocumentVersion(1); // cambiar!!!!!!!!!!!!!
 
             try {
                 Hashtable<String,String> parametros = new Hashtable<String, String>();
@@ -112,7 +112,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
             // setea el adjunto
             adjunto = new AttachmentEntity(documento.getIdDocumento(), 1); //CAMBIAR!!!!!!!!!!!!
-            adjunto.setUsuario(getUserFromSession());
+            adjunto.setUserId(getUserFromSession());
             adjunto.setFecha(new Date());
 
                 // guardar el adjunto
@@ -228,7 +228,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
             System.out.println("########### etapa 3.1 ###############");
 
-            DocumentosEntity docActual = DocumentosModel.findEntityByPK(adjActual.getAttachmentPK().getDocumentoId());
+            DocumentosEntity docActual = DocumentosModel.findEntityByPK(adjActual.getAttachmentEntityPK().getDocumentoId());
 
             // ademas se especifica la posibilidad de descargarlo
             link.setContent("<![CDATA[<a href=\"" + docActual.getPath() + "\" >" + docActual.getTitulo() + "</a>]]>");
@@ -238,7 +238,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             titulo.setValue(docActual.getTitulo());
             descripcion.setValue(docActual.getDescripción());
             version.setValue(docActual.getDocumentVersion());
-            subidoPor.setValue(adjActual.getUsuario());
+            subidoPor.setValue(adjActual.getUserId());
             subidoEl.setValue(adjActual.getFecha());
 
 

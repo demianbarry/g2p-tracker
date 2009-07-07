@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author nacho
+ * @author g2p
  */
 @Embeddable
 public class AttachmentEntityPK implements Serializable {
@@ -73,7 +73,7 @@ public class AttachmentEntityPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.AttachmentPK[documentoId=" + documentoId + ", trackId=" + trackId + "]";
+        return "org.g2p.tracker.model.entities.AttachmentEntityPK[documentoId=" + documentoId + ", trackId=" + trackId + "]";
     }
 
 }
