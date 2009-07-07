@@ -271,60 +271,6 @@ public class BaseModel {
         }
     }
 
-    public List<BaseEntity> findEntities() {
-        return findEntities(true, -1, -1);
-    }
-
-    public List<BaseEntity> findEntities(int maxResults, int firstResult) {
-        return findEntities(false, maxResults, firstResult);
-    }
-
-    private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        String query = "select object(o) from " + this.entity.getName() + " as o";
-        if (getWhere() != null) {
-            query += " WHERE " + getWhere();
-        }
-        try {
-            Query q = em.createQuery(query);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public static List<BaseEntity> findEntities(String namedQuery, Hashtable parameters) {
-        EntityManager em = getEntityManager();
-        Query query = em.createNamedQuery(namedQuery);
-
-        if (parameters != null) {
-            Enumeration keys = parameters.keys();
-
-            while (keys.hasMoreElements()) {
-                String param = (String) keys.nextElement();
-                Object value = parameters.get(param);
-                System.out.println("---> PARAM: " + param + " - VALUE: " + value);
-                query.setParameter(param, value);
-
-            }
-        }
-        System.out.println("---> QUERY: " + query.getResultList().size());
-        return query.getResultList();
-    }
-
-    public BaseEntity findEntity(Object pk) {
-        EntityManager em = getEntityManager();
-        try {
-            return (BaseEntity) em.find(entity, pk);
-        } finally {
-            em.close();
-        }
-    }
-
     public int getEntitiesCount() throws NamingException, SystemException, NotSupportedException {
         EntityManager em = getEntityManager();
         try {
@@ -344,6 +290,28 @@ public class BaseModel {
 
     public void destroy(BaseEntity entity) throws NamingException, IllegalStateException, SecurityException, SystemException, Exception {
         destroy(entity, true);
+    }
+
+    public void mergeAll(boolean ownTx) throws Exception {
+        Iterator<BaseEntity> it = all.iterator();
+        while (it.hasNext()) {
+            edit(it.next(), ownTx);
+        }
+    }
+
+    public void mergeAll() throws Exception {
+        mergeAll(true);
+    }
+
+    public void mergeFiltered(boolean ownTx) throws Exception {
+        Iterator<BaseEntity> it = filtered.iterator();
+        while (it.hasNext()) {
+            edit(it.next(), ownTx);
+        }
+    }
+
+    public void mergeFiltered() throws Exception {
+        mergeFiltered(true);
     }
 
     public static void createEntity(BaseEntity entity, boolean ownTx) throws RollbackFailureException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
@@ -432,6 +400,92 @@ public class BaseModel {
         }
     }
 
+    public void newEntity() {
+        try {
+            setSelected((BaseEntity) entity.newInstance());
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public List<BaseEntity> findEntities() {
+        return findEntities(true, -1, -1);
+    }
+
+    public List<BaseEntity> findEntities(int maxResults, int firstResult) {
+        return findEntities(false, maxResults, firstResult);
+    }
+
+    private List<BaseEntity> findEntities(boolean all, int maxResults, int firstResult) {
+        EntityManager em = getEntityManager();
+        String query = "select object(o) from " + this.entity.getName() + " as o";
+        if (getWhere() != null) {
+            query += " WHERE " + getWhere();
+        }
+        try {
+            Query q = em.createQuery(query);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public static List<BaseEntity> findEntities(String namedQuery, Hashtable parameters) {
+        EntityManager em = getEntityManager();
+        Query query = em.createNamedQuery(namedQuery);
+
+        if (parameters != null) {
+            Enumeration keys = parameters.keys();
+
+            while (keys.hasMoreElements()) {
+                String param = (String) keys.nextElement();
+                Object value = parameters.get(param);
+                System.out.println("---> PARAM: " + param + " - VALUE: " + value);
+                query.setParameter(param, value);
+
+            }
+        }
+        System.out.println("---> QUERY: " + query.getResultList().size());
+        return query.getResultList();
+    }
+
+    public static List<BaseEntity> findEntitiesByParams(String namedQuery, Object... params) throws Exception {
+        EntityManager em = getEntityManager();
+        Query query = em.createNamedQuery(namedQuery);
+
+
+        int count = params.length;
+        int index = 0;
+        if (count % 2 == 0) {
+            while (index < count) {
+                String param = (String) params[index];
+                Object value = params[index + 1];
+                System.out.println("---> PARAM: " + param + " - VALUE: " + value);
+                query.setParameter(param, value);
+                index = index + 2;
+            }
+        } else {
+            throw new Exception("Debe especificar pares de 'parámetro','valor' para realizar una consulta.");
+        }
+        System.out.println("---> QUERY: " + query.getResultList().size());
+        return query.getResultList();
+    }
+
+    public BaseEntity findEntity(Object pk) {
+        EntityManager em = getEntityManager();
+        try {
+            return (BaseEntity) em.find(entity, pk);
+        } finally {
+            em.close();
+        }
+    }
+
     public static BaseEntity findEntityByPK(Object pk, Class entity) {
         EntityManager em = getEntityManager();
         try {
@@ -515,37 +569,5 @@ public class BaseModel {
     private Object getAttributeValue(String attribute, BaseEntity entity) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Method m = this.entity.getMethod("get" + attribute);
         return m.invoke(entity);
-    }
-
-    public void newEntity() {
-        try {
-            setSelected((BaseEntity) entity.newInstance());
-        } catch (InstantiationException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(BaseModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void mergeAll(boolean ownTx) throws Exception {
-        Iterator<BaseEntity> it = all.iterator();
-        while (it.hasNext()) {
-            edit(it.next(), ownTx);
-        }
-    }
-
-    public void mergeAll() throws Exception {
-        mergeAll(true);
-    }
-
-    public void mergeFiltered(boolean ownTx) throws Exception {
-        Iterator<BaseEntity> it = filtered.iterator();
-        while (it.hasNext()) {
-            edit(it.next(), ownTx);
-        }
-    }
-
-    public void mergeFiltered() throws Exception {
-        mergeFiltered(true);
     }
 }
