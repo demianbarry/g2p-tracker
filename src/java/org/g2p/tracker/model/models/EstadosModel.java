@@ -17,4 +17,9 @@ public class EstadosModel extends BaseModel {
         super(EstadosEntity.class);
     }
 
+    @Override
+    public EstadosEntity getSelected() {
+        return (EstadosEntity) super.getSelected();
+    }
+
 }
