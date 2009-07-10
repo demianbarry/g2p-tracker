@@ -23,7 +23,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "TagsPerTracksEntity.findAll", query = "SELECT t FROM TagsPerTracksEntity t"),
     @NamedQuery(name = "TagsPerTracksEntity.findByTrack", query = "SELECT t FROM TagsPerTracksEntity t WHERE t.tagsPerTracksPK.trackId = :trackId"),
-    @NamedQuery(name = "TagsPerTracksEntity.findByTag", query = "SELECT t FROM TagsPerTracksEntity t WHERE t.tagsPerTracksPK.tagId = :tagId")})
+    @NamedQuery(name = "TagsPerTracksEntity.findByTag", query = "SELECT t FROM TagsPerTracksEntity t WHERE t.tagsPerTracksPK.tagId = :tagId ORDER BY t.track.prioridadId.peso, t.track.importanciaId.peso")})
 public class TagsPerTracksEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
