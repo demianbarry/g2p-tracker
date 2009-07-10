@@ -91,9 +91,9 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             AttachmentEntity adjunto;
 
             // setea los datos del documento
-            documento.setPath(path);
+            documento.setDocPath(path);
             documento.setTitulo(tituloDoc.getText());
-            documento.setDescripción(descripcionDoc.getText());
+            documento.setDescripcion(descripcionDoc.getText());
             documento.setDocumentVersion(1); // cambiar!!!!!!!!!!!!!
 
             try {
@@ -102,9 +102,9 @@ public class AdjuntosController extends BaseController implements AfterCompose{
                 BaseModel.createEntity(documento, true);
 
             // recuperar el documento guardado
-                parametros.put("path", documento.getPath());
+                parametros.put("path", documento.getDocPath());
                 parametros.put("titulo", documento.getTitulo());
-                parametros.put("descripcion", documento.getDescripción());
+                parametros.put("descripcion", documento.getDescripcion());
                 parametros.put("version", new Double(documento.getDocumentVersion()).toString());
                 List<BaseEntity> listDocs = BaseModel.findEntities("DocumentosEntity.findDocument", parametros);
 
@@ -112,7 +112,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
 
             // setea el adjunto
             adjunto = new AttachmentEntity(documento.getIdDocumento(), 1); //CAMBIAR!!!!!!!!!!!!
-            adjunto.setUserId(getUserFromSession());
+            adjunto.setUsuario(getUserFromSession());
             adjunto.setFecha(new Date());
 
                 // guardar el adjunto
@@ -206,7 +206,7 @@ public class AdjuntosController extends BaseController implements AfterCompose{
         // obtengo el id de los adjuntos del track
         //List<BaseEntity> adjuntosPk = BaseModel.findEntities("AttachmentEntity.findAllByTrack", parametros);
         TracksEntity trackActual = (TracksEntity) BaseModel.findEntityByPK(1, TracksEntity.class);
-        Set<AttachmentEntity> adjuntosE = trackActual.getAdjuntosCollection();
+        Set<AttachmentEntity> adjuntosE = trackActual.getAttachmentEntityCollection();
 
         System.out.println("########### etapa 2 ###############");
         System.out.println("########### " + adjuntosE + " ###############");
@@ -231,19 +231,19 @@ public class AdjuntosController extends BaseController implements AfterCompose{
             DocumentosEntity docActual = DocumentosModel.findEntityByPK(adjActual.getAttachmentEntityPK().getDocumentoId());
 
             // ademas se especifica la posibilidad de descargarlo
-            link.setContent("<![CDATA[<a href=\"" + docActual.getPath() + "\" >" + docActual.getTitulo() + "</a>]]>");
+            link.setContent("<![CDATA[<a href=\"" + docActual.getDocPath() + "\" >" + docActual.getTitulo() + "</a>]]>");
             titulo.appendChild(link);
 
             // agrego los datos de cada adjunto en un item propio
             titulo.setValue(docActual.getTitulo());
-            descripcion.setValue(docActual.getDescripción());
+            descripcion.setValue(docActual.getDescripcion());
             version.setValue(docActual.getDocumentVersion());
-            subidoPor.setValue(adjActual.getUserId());
+            subidoPor.setValue(adjActual.getUsuario());
             subidoEl.setValue(adjActual.getFecha());
 
 
             System.out.println("########### etapa 3.2 ###############");
-            
+
             //Attribute descargar = new Attribute("onClick", "{Filedownload.save(inputstream,\"" + docActual.getTipo() + "\", documento)}");
 
             // se agrega el item a la lista principal
