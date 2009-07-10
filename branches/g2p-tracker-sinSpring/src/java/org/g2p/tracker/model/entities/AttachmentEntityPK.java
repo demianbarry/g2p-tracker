@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author g2p
+ * @author Administrador
  */
 @Embeddable
 public class AttachmentEntityPK implements Serializable {
