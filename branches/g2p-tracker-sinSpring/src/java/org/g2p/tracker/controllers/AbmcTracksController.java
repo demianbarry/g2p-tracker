@@ -4,6 +4,11 @@
  */
 package org.g2p.tracker.controllers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -21,7 +26,11 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.naming.NamingException;
+import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
+import org.g2p.tracker.model.entities.AttachmentEntity;
 import org.g2p.tracker.model.entities.BaseEntity;
+import org.g2p.tracker.model.entities.DocumentosEntity;
 import org.g2p.tracker.model.entities.EstadosEntity;
 import org.g2p.tracker.model.entities.ImportanciaEntity;
 import org.g2p.tracker.model.entities.PostsEntity;
@@ -36,10 +45,14 @@ import org.g2p.tracker.model.models.PrioridadesModel;
 import org.g2p.tracker.model.models.TracksModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
 import org.zkforge.fckez.FCKeditor;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.media.Media;
+import org.zkoss.zhtml.Fileupload;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zkplus.databind.DataBinder;
 import org.zkoss.zul.Button;
@@ -47,6 +60,7 @@ import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Paging;
@@ -99,12 +113,17 @@ public class AbmcTracksController extends BaseController {
 
     public AbmcTracksController() {
         super(true);
-        websiteUserModel = new WebsiteUserModel();
-        workersModel = new WebsiteUserModel();
-        prioridadesModel = new PrioridadesModel();
-        importanciaModel = new ImportanciaModel();
-        estadosModel = new EstadosModel();
-        trackModel = new TracksModel();
+        try {
+            websiteUserModel = new WebsiteUserModel();
+            workersModel = new WebsiteUserModel();
+            prioridadesModel = new PrioridadesModel();
+            importanciaModel = new ImportanciaModel();
+            estadosModel = new EstadosModel();
+            trackModel = new TracksModel();
+            trackModel.setAll(BaseModel.findEntitiesByParams("TracksEntity.findByUser", "user", getUserFromSession()));
+        } catch (Exception ex) {
+            Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public WebsiteUserModel getWebsiteUserModel() {
@@ -187,7 +206,6 @@ public class AbmcTracksController extends BaseController {
         try {
             // Obtengo el DataBinder que instancia la página
             binder = (DataBinder) getVariable("binder", true);
-            trackModel.setAll(BaseModel.findEntitiesByParams("TracksEntity.findByUser", "user", getUserFromSession()));
             setListMode(true);
             refresh();
         } catch (Exception ex) {
@@ -243,12 +261,15 @@ public class AbmcTracksController extends BaseController {
                 showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex1.getClass(), ex);
             }
         } finally {
-            //refresh the rolesList
-            trackModel.refreshAll();
-            binder.loadAttribute(tracksList, "model");
-            setListMode(true);
-            trackModel.refreshAll();
-            refresh();
+            try {
+                //refresh the rolesList
+                trackModel.setAll(BaseModel.findEntitiesByParams("TracksEntity.findByUser", "user", getUserFromSession()));
+                binder.loadAttribute(tracksList, "model");
+                setListMode(true);
+                refresh();
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -282,7 +303,7 @@ public class AbmcTracksController extends BaseController {
         }
     }
 
-        public void onClick$editarTrack(ForwardEvent event) {
+    public void onClick$editarTrack(ForwardEvent event) {
         if (trackModel.getSelected() != null) {
             setListMode(false);
             refresh();
@@ -333,12 +354,11 @@ public class AbmcTracksController extends BaseController {
             prioridadesModel.setSelected(track.getPrioridadId());
             importanciaModel.setSelected(track.getImportanciaId());
 
-            System.out.println("----------> "+track.getWebsiteUsersEntityCollection() );
-
             if (track.getWebsiteUsersEntityCollection() != null) {
                 workersModel.filter(track.getWebsiteUsersEntityCollection());
-            } else
+            } else {
                 workersModel.filter(new ArrayList());
+            }
 
             if (workersModel.getAll().size() > 0) {
                 deleteUser.setVisible(true);
@@ -358,7 +378,6 @@ public class AbmcTracksController extends BaseController {
         binder.loadAttribute(propietario, "selectedItem");
         binder.loadAttribute(getFellow("postsGrid"), "model");
     }
-
     protected Textbox tbComentario;
     protected Vbox vboxShowComments;
     protected Paging pgPaginado;
@@ -482,5 +501,104 @@ public class AbmcTracksController extends BaseController {
         }
 
         return salida;
+    }
+
+    public void onUpload$subir(ForwardEvent evento) {
+        UploadEvent event = (UploadEvent) evento.getOrigin();
+        Media doc = event.getMedia();
+        String path = subirDocumento(doc);
+        guardarAdjunto(path);
+        binder.loadComponent(adjuntos);
+    }
+    protected Fileupload subir;
+    protected Filedownload descargar;
+    protected Listbox adjuntos;
+    protected Textbox tituloDoc;
+    protected Textbox descripcionDoc;
+
+    //private void guardarAdjunto(String path,String tipo){
+    private void guardarAdjunto(String path) {
+        if (path != null) {
+
+            DocumentosEntity documento = new DocumentosEntity();
+            AttachmentEntity adjunto;
+
+            // setea los datos del documento
+            documento.setDocPath(path);
+            documento.setTitulo(tituloDoc.getValue());
+            documento.setDescripcion(descripcionDoc.getValue());
+            documento.setDocumentVersion(1); // cambiar!!!!!!!!!!!!!
+
+            try {
+                Hashtable<String, String> parametros = new Hashtable<String, String>();
+                // guardar el documento
+                BaseModel.createEntity(documento, true);
+
+                // setea el adjunto
+                adjunto = new AttachmentEntity(documento.getIdDocumento(), trackModel.getSelected().getTrackId()); //CAMBIAR!!!!!!!!!!!!
+                adjunto.setUsuario(getUserFromSession());
+                adjunto.setFecha(new Date());
+
+                // guardar el adjunto
+                BaseModel.createEntity(adjunto, true);
+
+                trackModel.setAll(BaseModel.findEntitiesByParams("TracksEntity.findByUser", "user", getUserFromSession()));
+
+            } catch (RollbackFailureException ex) {
+                showMessage("No se pudo guardar el adjunto ", ex);
+            } catch (NamingException ex) {
+                showMessage("Error de nombre ", ex);
+            } catch (IllegalStateException ex) {
+                showMessage("Estado ilegal ", ex);
+            } catch (SecurityException ex) {
+                showMessage("Se ha violado la seguridad ", ex);
+            } catch (SystemException ex) {
+                showMessage("Error del sistema ", ex);
+            } catch (Exception ex) {
+                showMessage("Sucedio un error desconocido ", ex);
+            }
+        } else {
+            showMessage("archivo no encontrado");
+        }
+    }
+
+    private String subirDocumento(Media doc) {
+        try {
+
+            // inicializacion de varibles
+            File archivo;
+            String directorio = "/files";
+
+            String realPath = getHttpRequest().getSession().getServletContext().getRealPath(directorio);
+
+            archivo = new File(realPath + "/" + doc.getName());
+
+            FileOutputStream fos = new FileOutputStream(archivo);
+
+            if ("txt".equalsIgnoreCase(doc.getFormat())) {
+                fos.write(doc.getStringData().getBytes());
+            } else if (doc.isBinary()) {
+                InputStream is = doc.getStreamData();
+                int b = 0;
+                while ((b = is.read()) != -1) {
+                    fos.write(b);
+                }
+            } else {
+                fos.write(doc.getByteData());
+            }
+
+            fos.flush();
+            fos.close();
+
+            showMessage("El documento ha sido recibido exitosamente!!");
+
+            return directorio + "/" + doc.getName();
+
+        } catch (FileNotFoundException ex) {
+            showMessage("archivo no encontrado");
+        } catch (IOException ex) {
+            System.out.println("###################  error de entrada / salida  ####################");
+        }
+        return null;
     }
 }
