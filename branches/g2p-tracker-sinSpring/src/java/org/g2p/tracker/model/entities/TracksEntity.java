@@ -90,7 +90,7 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private WebsiteUsersEntity userIdOwner;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tracksEntity", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
 
     public TracksEntity() {
@@ -234,11 +234,11 @@ public class TracksEntity extends BaseEntity implements Serializable {
         this.userIdOwner = userIdOwner;
     }
 
-    public Set<AttachmentEntity> getAdjuntosCollection() {
+    public Set<AttachmentEntity> getAttachmentEntityCollection() {
         return attachmentEntityCollection;
     }
 
-    public void setAdjuntosCollection(Set<AttachmentEntity> attachmentEntityCollection) {
+    public void setAttachmentEntityCollection(Set<AttachmentEntity> attachmentEntityCollection) {
         this.attachmentEntityCollection = attachmentEntityCollection;
     }
 
