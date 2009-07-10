@@ -2,13 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -16,28 +17,32 @@ import javax.persistence.Table;
 
 /**
  *
- * @author g2p
+ * @author Administrador
  */
 @Entity
 @Table(name = "documentos")
-@NamedQueries({@NamedQuery(name = "DocumentosEntity.findAll", query = "SELECT d FROM DocumentosEntity d")})
+@NamedQueries({
+    @NamedQuery(name = "DocumentosEntity.findAll", query = "SELECT d FROM DocumentosEntity d"),
+    @NamedQuery(name = "DocumentosEntity.findDocument", query = "SELECT d FROM DocumentosEntity d WHERE titulo = :titulo AND descripcion = :descripcion AND docPath = :path AND version = :version")})
 public class DocumentosEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id_documento")
     private Integer idDocumento;
     @Basic(optional = false)
     @Column(name = "titulo")
     private String titulo;
-    @Column(name = "descripción")
-    private String descripción;
+    @Column(name = "descripcion")
+    private String descripcion;
     @Basic(optional = false)
-    @Column(name = "path")
-    private String path;
+    @Column(name = "docPath")
+    private String docPath;
     @Basic(optional = false)
     @Column(name = "version")
-    private double version;
+    private double documentVersion;
     @Column(name = "tipo")
     private String tipo;
 
@@ -51,8 +56,8 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
     public DocumentosEntity(Integer idDocumento, String titulo, String path, double version) {
         this.idDocumento = idDocumento;
         this.titulo = titulo;
-        this.path = path;
-        this.version = version;
+        this.docPath = path;
+        this.documentVersion = version;
     }
 
     public Integer getIdDocumento() {
@@ -71,28 +76,28 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
         this.titulo = titulo;
     }
 
-    public String getDescripción() {
-        return descripción;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripción(String descripción) {
-        this.descripción = descripción;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getPath() {
-        return path;
+    public String getDocPath() {
+        return docPath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setDocPath(String path) {
+        this.docPath = path;
     }
 
     public double getDocumentVersion() {
-        return version;
+        return documentVersion;
     }
 
     public void setDocumentVersion(double version) {
-        this.version = version;
+        this.documentVersion = version;
     }
 
     public String getTipo() {
@@ -132,5 +137,4 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return getIdDocumento();
     }
-
 }
