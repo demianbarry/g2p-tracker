@@ -39,6 +39,8 @@ public class PrioridadesEntity extends BaseEntity implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
+    @Column(name = "peso")
+    private Integer peso;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "prioridadId", fetch = FetchType.EAGER)
     private Set<TracksEntity> tracksEntityCollection;
 
@@ -84,6 +86,15 @@ public class PrioridadesEntity extends BaseEntity implements Serializable {
 
     public void setTracksEntityCollection(Set<TracksEntity> tracksEntityCollection) {
         this.tracksEntityCollection = tracksEntityCollection;
+    }
+
+
+    public Integer getPeso() {
+        return peso;
+    }
+
+    public void setPeso(Integer peso) {
+        this.peso = peso;
     }
 
     @Override
