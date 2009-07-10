@@ -4,7 +4,8 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcTracksWin"?>
 <window id="abmcTracksWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcTracksController" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
     <zscript>
-                                    ingresoComentario.EditorDocument.body.contentEditable=false;
+        ingresoComentario.EditorDocument.body.contentEditable=false;
+
     </zscript>
     <borderlayout>
         <north flex="true" height="30%">
@@ -62,7 +63,11 @@
                                             </columns>
                                             <rows>
                                                 <row zclass="z-track-header-row">
-                                                    <label value="@{tracks.titulo}" width="20%" zclass="z-static-header-label"/>
+                                                    <hbox>
+                                                        <label value="@{tracks.trackId}" width="3%" zclass="z-static-header-label"/>
+                                                        -
+                                                        <label value="@{tracks.titulo}" width="17%" zclass="z-static-header-label"/>
+                                                    </hbox>
                                                     <label value="@{tracks.userIdOwner.apellidoNombre}" width="50%" zclass="z-static-header-label"/>
                                                     <label value="@{tracks.fechaEstimadaRealizacion}" width="30%" zclass="z-static-header-label"/>
                                                 </row>
@@ -194,46 +199,31 @@
                                                 </div>
                                             </tabpanel>
                                             <tabpanel>
-                                                <div align="center">
+                                                <div align="center" height="100%">
                                                     <listbox id="adjuntos"
-                                                                width="400px"
+                                                                width="70%"
                                                                 mold="paging"
                                                                 pageSize="10"
                                                                 pagingPosition="top"
-                                                                model="@{tracks.attachmentEntityCollection}"
-                                                    >
-                                                        <listhead>
-                                                            <listheader label="Titulo"/>
-                                                            <listheader label="Descripcion"/>
-                                                            <listheader label="Version"/>
-                                                            <listheader label="Subido por..."/>
-                                                            <listheader label="Subido el..."/>
-                                                        </listhead>
+                                                                model="@{tracks.attachmentEntityCollection}">
                                                         <listitem self="@{each=adjunto}">
                                                             <listcell label="@{adjunto.documentEntity.titulo}">
-                                                                <html content="<a href=${adjunto.documentEntity.path} />" />
+                                                                <toolbarbutton label="@{adjunto.usuario.apellidoNombre}" href="@{adjunto.documentEntity.docPath}" target="__blank"/>
+                                                                <toolbarbutton label="@{adjunto.fecha}" href="@{adjunto.documentEntity.docPath}" target="__blank"/>
                                                             </listcell>
-                                                            <listcell label="@{adjunto.documentEntity.descripcion}"/>
-                                                            <listcell label="@{adjunto.documentEntity.version}"/>
-                                                            <listcell label="@{adjunto.usuario.loginName}"/>
-                                                            <listcell label="@{adjunto.fecha}"/>
                                                         </listitem>
-
-
                                                     </listbox>
-                                                        <groupbox>
-                                                            <caption label="Adjuntar documento "/>
-                                                            <vbox>
-                                                                <label value="Titulo: "/>
-                                                                <textbox id="tituloDoc" readonly="false" multiline="false" />
-                                                            </vbox>
-                                                            <vbox>
-                                                                <label value="Descripcion: "/>
-                                                                <textbox id="descripcionDoc" readonly="false" multiline="true"/>
-                                                            </vbox>
-                                                            <fileupload id="subir" />
-                                                            <checkbox id="envioEmail" label="Enviar email" checked="true"/>
-                                                        </groupbox>
+                                                    <groupbox height="20%">
+                                                        <caption label="Adjuntar documento "/>
+                                                        <vbox>
+                                                            <label value="Titulo: "/>
+                                                            <textbox id="tituloDoc"/>
+                                                            <label value="Descripcion: "/>
+                                                            <textbox id="descripcionDoc" multiline="true"/>
+                                                        </vbox>
+                                                        <fileupload height="20%" id="subir" />
+                                                        <checkbox id="envioEmail" label="Enviar email" checked="true"/>
+                                                    </groupbox>
                                                 </div>
                                             </tabpanel>
                                         </tabpanels>
