@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -22,12 +21,13 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author g2p
+ * @author Administrador
  */
 @Entity
 @Table(name = "attachment")
 @NamedQueries({@NamedQuery(name = "AttachmentEntity.findAll", query = "SELECT a FROM AttachmentEntity a")})
 public class AttachmentEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AttachmentEntityPK attachmentEntityPK;
@@ -35,12 +35,15 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    @JoinColumn(name = "track_id", referencedColumnName = "track_id", insertable=false, updatable=false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private TracksEntity tracksEntity;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private WebsiteUsersEntity userId;
+    private WebsiteUsersEntity usuario;
+    @JoinColumn(name = "track_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private TracksEntity track;
+    @JoinColumn(name = "documento_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private DocumentosEntity documentEntity;
 
     public AttachmentEntity() {
     }
@@ -74,12 +77,28 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
         this.fecha = fecha;
     }
 
-    public WebsiteUsersEntity getUserId() {
-        return userId;
+    public WebsiteUsersEntity getUsuario() {
+        return usuario;
     }
 
-    public void setUserId(WebsiteUsersEntity userId) {
-        this.userId = userId;
+    public void setUsuario(WebsiteUsersEntity userId) {
+        this.usuario = userId;
+    }
+
+    public TracksEntity getTrack() {
+        return track;
+    }
+
+    public void setTrack(TracksEntity track) {
+        this.track = track;
+    }
+
+    public DocumentosEntity getDocumentEntity() {
+        return documentEntity;
+    }
+
+    public void setDocumentEntity(DocumentosEntity documentEntity) {
+        this.documentEntity = documentEntity;
     }
 
     @Override
@@ -111,5 +130,4 @@ public class AttachmentEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return getAttachmentEntityPK();
     }
-
 }
