@@ -163,91 +163,91 @@
                                 <textbox id="nombreCircuito" value="@{abmcCircuitosWin.circuitosModel.selected.nombre}" width="100%"/>
                                 <separator/>
                                 Descripción:
-                                <textbox id="descripcionCircuito" value="@{abmcCircuitosWin.circuitosModel.selected.descripcion}" rows="1" width="100%"/>
+                                <textbox id="descripcionCircuito" value="@{abmcCircuitosWin.circuitosModel.selected.descripcion}" rows="2" width="100%"/>
                                 <separator/>
                                 Observaciones:
-                                <textbox id="observacionesCircuito" value="@{abmcCircuitosWin.circuitosModel.selected.observaciones}" rows="2" width="100%"/>
+                                <textbox id="observacionesCircuito" value="@{abmcCircuitosWin.circuitosModel.selected.observaciones}" rows="4" width="100%"/>
                             </vbox>
                         </groupbox>
                         <div id="estadosAccionesTransiciones" width="100%" style="overflow:auto">
                             <hbox width="100%">
-                                <groupbox id="estados" mold="3d" width="100%">
-                                    <caption label="Estados"/>
-                                        <div id="listEstadosView" width="100%" style="overflow:auto">
-                                            <listbox id="estadosList" model="@{abmcCircuitosWin.circuitosModel.selected.estadosCollection}" width="100%">
-                                                <listhead>
-                                                    <listheader label="Nombre" width="25%"/>
-                                                    <listheader label="Descripcion" width="75%"/>
-                                                </listhead>
-                                                <listitem self="@{each=estado}">
-                                                    <listcell label="@{estado.nombre}"/>
-                                                    <listcell label="@{estado.descripcion}"/>
-                                                </listitem>
-                                            </listbox>
-                                            <separator/>
-                                            <hbox>
-                                                <button id="nuevoEstado" label="Nuevo"/>
-                                                <button id="editarEstado" label="Editar" />
-                                                <button id="eliminarEstado" label="Eliminar"/>
-                                            </hbox>
-                                            <separator/>
-                                        </div>
-                                        <div id="editEstadosView" width="100%" style="overflow:auto">
-                                            Nombre:
-                                            <textbox value="@{abmcCircuitosWin.circuitosModel.estadoSelected.nombre}" width="100%"/>
-                                            Descripción:
-                                            <textbox value="@{abmcCircuitosWin.circuitosModel.estadoSelected.descripcion}" width="100%"/>
-                                            Observaciones:
-                                            <textbox value="@{abmcCircuitosWin.circuitosModel.estadoSelected.observaciones}" rows="2" width="100%"/>
-                                            <separator/>
-                                            <hbox>
-                                                <button id="guardarEstado" label="Guardar"/>
-                                                <button id="cancelarEstado" label="Cancelar" />
-                                            </hbox>
-                                            <separator/>
-                                        </div>
+                                    <groupbox id="estados" width="100%">
+                                        <caption label="Estados"/>
+                                            <div id="listEstadosView" width="100%">
+                                                <listbox id="estadosList" model="@{abmcCircuitosWin.circuitosModel.Estados}" selectedItem="@{abmcCircuitosWin.circuitosModel.estadoSelected}" width="100%" vflex="true">
+                                                    <listhead>
+                                                        <listheader label="Nombre" width="25%"/>
+                                                        <listheader label="Descripcion" width="75%"/>
+                                                    </listhead>
+                                                    <listitem self="@{each=estado}">
+                                                        <listcell label="@{estado.nombre}"/>
+                                                        <listcell label="@{estado.descripcion}"/>
+                                                    </listitem>
+                                                </listbox>
+                                                <separator/>
+                                                <hbox width="100%">
+                                                    <button id="nuevoEstado" label="Nuevo" width="100%"/>
+                                                    <button id="editarEstado" label="Editar" width="100%"/>
+                                                    <button id="eliminarEstado" label="Eliminar" width="100%"/>
+                                                </hbox>
+                                                <separator/>
+                                            </div>
+                                            <div id="editEstadosView" width="100%" style="overflow:auto">
+                                                Nombre:
+                                                <textbox value="@{abmcCircuitosWin.circuitosModel.estadoSelected.nombre}" width="100%"/>
+                                                Descripción:
+                                                <textbox value="@{abmcCircuitosWin.circuitosModel.estadoSelected.descripcion}" width="100%"/>
+                                                Observaciones:
+                                                <textbox value="@{abmcCircuitosWin.circuitosModel.estadoSelected.observaciones}" rows="2" width="100%"/>
+                                                <separator/>
+                                                <hbox width="100%">
+                                                    <button id="guardarEstado" label="Guardar" width="100%"/>
+                                                    <button id="cancelarEstado" label="Cancelar" width="100%" />
+                                                </hbox>
+                                                <separator/>
+                                            </div>
+                                    </groupbox>
+                                    <groupbox id="acciones" width="100%">
+                                        <caption label="Acciones"/>
+                                            <div id="listAccionesView" width="100%" style="overflow:auto">
+                                                <listbox id="accionesList" model="@{abmcCircuitosWin.circuitosModel.Acciones}" selectedItem="@{abmcCircuitosWin.circuitosModel.accionSelected}" width="100%">
+                                                    <listhead>
+                                                        <listheader label="Nombre" width="25%"/>
+                                                        <listheader label="Descripcion" width="75%"/>
+                                                    </listhead>
+                                                    <listitem self="@{each=accion}">
+                                                        <listcell label="@{accion.nombre}"/>
+                                                        <listcell label="@{accion.descripcion}"/>
+                                                    </listitem>
+                                                </listbox>
+                                                <separator/>
+                                                <hbox width="100%">
+                                                    <button id="nuevaAccion" label="Nueva" width="100%"/>
+                                                    <button id="editarAccion" label="Editar" width="100%"/>
+                                                    <button id="eliminarAccion" label="Eliminar" width="100%"/>
+                                                </hbox>
+                                                <separator/>
+                                            </div>
+                                            <div id="editAccionesView" width="100%" style="overflow:auto">
+                                                Nombre:
+                                                <textbox value="@{abmcCircuitosWin.circuitosModel.accionSelected.nombre}" width="100%"/>
+                                                Descripción:
+                                                <textbox value="@{abmcCircuitosWin.circuitosModel.accionSelected.descripcion}" width="100%"/>
+                                                Observaciones:
+                                                <textbox value="@{abmcCircuitosWin.circuitosModel.accionSelected.observaciones}" rows="2" width="100%"/>
+                                                <separator/>
+                                                <hbox width="100%">
+                                                    <button id="guardarAccion" label="Guardar" width="100%"/>
+                                                    <button id="cancelarAccion" label="Cancelar" width="100%"/>
+                                                </hbox>
+                                                <separator/>
+                                            </div>
+                                    </groupbox>
+                                </hbox>
+                                <groupbox id="transiciones" mold="3d" width="200px">
+                                    <caption label="Transiciones"/>
+                                    FUNCIONALIDAD A IMPLEMENTAR
                                 </groupbox>
-                                <groupbox id="acciones" mold="3d" width="100%">
-                                    <caption label="Acciones"/>
-                                        <div id="listAccionesView" width="100%" style="overflow:auto">
-                                            <listbox id="accionesList" model="@{circuitos.accionesAppsCollection}" width="100%">
-                                                <listhead>
-                                                    <listheader label="Nombre" width="25%"/>
-                                                    <listheader label="Descripcion" width="75%"/>
-                                                </listhead>
-                                                <listitem self="@{each=accion}">
-                                                    <listcell label="@{accion.nombre}"/>
-                                                    <listcell label="@{accion.descripcion}"/>
-                                                </listitem>
-                                            </listbox>
-                                            <separator/>
-                                            <hbox>
-                                                <button id="nuevaAccion" label="Nuevo"/>
-                                                <button id="editarAccion" label="Editar" />
-                                                <button id="eliminarAccion" label="Eliminar"/>
-                                            </hbox>
-                                            <separator/>
-                                        </div>
-                                        <div id="editAccionesView" width="100%" style="overflow:auto">
-                                            Nombre:
-                                            <textbox value="@{abmcCircuitosWin.circuitosModel.selected.nombre}" width="100%"/>
-                                            Descripción:
-                                            <textbox value="@{abmcCircuitosWin.circuitosModel.selected.descripcion}" width="100%"/>
-                                            Observaciones:
-                                            <textbox value="@{abmcCircuitosWin.circuitosModel.selected.observaciones}" rows="2" width="100%"/>
-                                            <separator/>
-                                            <hbox>
-                                                <button id="guardarAccion" label="Guardar"/>
-                                                <button id="cancelarAccion" label="Cancelar" />
-                                            </hbox>
-                                            <separator/>
-                                        </div>
-                                </groupbox>
-                            </hbox>
-                            <groupbox id="transiciones" mold="3d" width="100%">
-                                <caption label="Transiciones"/>
-                                FUNCIONALIDAD A IMPLEMENTAR
-                            </groupbox>
                         </div>
                     </vbox>
                 </div>

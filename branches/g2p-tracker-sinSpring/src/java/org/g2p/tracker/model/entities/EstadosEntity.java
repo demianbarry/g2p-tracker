@@ -28,7 +28,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "estados")
-@NamedQueries({@NamedQuery(name = "EstadosEntity.findAll", query = "SELECT e FROM EstadosEntity e")})
+@NamedQueries({
+    @NamedQuery(name = "EstadosEntity.findAll", query = "SELECT e FROM EstadosEntity e"),
+    @NamedQuery(name = "EstadosEntity.findByCircuitoId", query = "SELECT u FROM EstadosEntity u WHERE u.circuitoId.circuitoId = :circuitoId")
+})
+
 public class EstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
