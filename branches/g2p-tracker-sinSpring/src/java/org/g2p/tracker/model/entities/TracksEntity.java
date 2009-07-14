@@ -36,7 +36,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "tracks")
 @NamedQueries({
-    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t"),
+    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t ORDER BY dummy"),
     @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo"),
     @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection")
 })
@@ -67,6 +67,9 @@ public class TracksEntity extends BaseEntity implements Serializable {
     private Date fechaRealizacion;
     @Column(name = "titulo")
     private String titulo;
+    @Basic(optional = false)
+    @Column(name = "complejidad")
+    private Double complejidad;
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Basic(optional = false)
     @Column(name = "orden")
@@ -222,6 +225,14 @@ public class TracksEntity extends BaseEntity implements Serializable {
         return prioridadId;
     }
 
+    public Double getComplejidad() {
+        return complejidad;
+    }
+
+    public void setComplejidad(Double complejidad) {
+        this.complejidad = complejidad;
+    }
+
     public void setPrioridadId(PrioridadesEntity prioridadId) {
         this.prioridadId = prioridadId;
     }
@@ -289,5 +300,11 @@ public class TracksEntity extends BaseEntity implements Serializable {
     public void addPost(PostsEntity post) {
         post.setTrackId(this);
         getPostsEntityCollection().add(post);
+    }
+
+    public Double getDummy(){
+        long factorFecha = deadline.getTime() - fechaCreacion.getTime();
+
+        return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorFecha;
     }
 }
