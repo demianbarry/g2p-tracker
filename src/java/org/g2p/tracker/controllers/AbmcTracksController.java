@@ -26,8 +26,6 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.naming.NamingException;
-import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.AttachmentEntity;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.DocumentosEntity;
@@ -35,6 +33,7 @@ import org.g2p.tracker.model.entities.EstadosEntity;
 import org.g2p.tracker.model.entities.ImportanciaEntity;
 import org.g2p.tracker.model.entities.PostsEntity;
 import org.g2p.tracker.model.entities.PrioridadesEntity;
+import org.g2p.tracker.model.entities.StickyNotesEntity;
 import org.g2p.tracker.model.entities.TracksEntity;
 import org.g2p.tracker.model.entities.WebsiteUsersEntity;
 import org.g2p.tracker.model.models.BaseModel;
@@ -45,10 +44,11 @@ import org.g2p.tracker.model.models.PrioridadesModel;
 import org.g2p.tracker.model.models.TracksModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
 import org.zkforge.fckez.FCKeditor;
-import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.Media;
 import org.zkoss.zhtml.Fileupload;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.CheckEvent;
+import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
@@ -61,9 +61,12 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Hbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Paging;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Vbox;
@@ -81,11 +84,13 @@ public class AbmcTracksController extends BaseController {
     protected PrioridadesModel prioridadesModel = null;
     protected ImportanciaModel importanciaModel = null;
     protected TracksModel trackModel = null;
+    protected StickyNotesEntity sticky;
     protected Button nuevoTrack;
     protected Button guardarTrack;
     protected Button cancelarAltaTrack;
     protected Button editarTrack;
     protected Listbox tracksList;
+    protected Listbox stickyList;
     //Campos del track
     protected Textbox titulo;
     protected Textbox descripcion;
@@ -107,9 +112,14 @@ public class AbmcTracksController extends BaseController {
     protected Component listTrackView;
     protected boolean nuevoTrackMode;
     protected boolean listMode;
+    protected Grid adjuntos;
     Vbox workersBox;
     Hbox ecualizadorBox;
     Div tituloDiv;
+    protected Fileupload subir;
+    protected Filedownload descargar;
+    protected Textbox tituloDoc;
+    protected Textbox descripcionDoc;
 
     public AbmcTracksController() {
         super(true);
@@ -200,6 +210,14 @@ public class AbmcTracksController extends BaseController {
 
     public void setWorkersModel(WebsiteUserModel workersModel) {
         this.workersModel = workersModel;
+    }
+
+    public StickyNotesEntity getSticky() {
+        return sticky;
+    }
+
+    public void setSticky(StickyNotesEntity sticky) {
+        this.sticky = sticky;
     }
 
     public void onCreate$abmcTracksWin(Event event) {
@@ -312,17 +330,11 @@ public class AbmcTracksController extends BaseController {
         }
     }
 
-    public void onSelect$tracksList(Event event) {
-        binder.saveAttribute(tracksList, "selectedItem");
-    }
-
     public void onEcualizar$ecualizador(ForwardEvent event) {
-
         if (event.getOrigin().getData() instanceof ArrayList) {
             trackModel.filter((List) event.getOrigin().getData());
         }
-
-        binder.loadAttribute(tracksList, "model");
+        binder.loadComponent(tracksList);
     }
 
     public void onOpen$groupbox(Event event) {
@@ -332,9 +344,75 @@ public class AbmcTracksController extends BaseController {
             if (comp instanceof Groupbox && !gb.equals(comp)) {
                 if (((Groupbox) comp).isOpen()) {
                     ((Groupbox) comp).setOpen(false);
-                    break;
                 }
             }
+        }
+    }
+
+    public void onDrop$trackEdit(ForwardEvent event) {
+        if (trackModel.getSelected() != null) {
+            try {
+                DropEvent dEvent = (DropEvent) event.getOrigin();
+
+                Component comp = dEvent.getDragged();
+
+                Textbox titulo = (Textbox) comp.getFellow("stickyTitulo");
+                Textbox contenido = (Textbox) comp.getFellow("stickyContenido");
+
+                StickyNotesEntity sticky = new StickyNotesEntity();
+                sticky.setTitulo(titulo.getValue());
+                sticky.setContenido(contenido.getValue());
+                sticky.setTrackId(trackModel.getSelected());
+
+                BaseModel.createEntity(sticky, true);
+
+                trackModel.getSelected().getStickyNotesEntityCollection().add(sticky);
+                binder.loadComponent(stickyList);
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    public void onDrop$trackItem(ForwardEvent event) {
+        DropEvent dEvent = (DropEvent) event.getOrigin();
+        tracksList.setSelectedItem((Listitem) dEvent.getTarget());
+        onDrop$trackEdit(event);
+    }
+
+    public void onClick$stickyDeleteButton(Event event) {
+        if (sticky != null) {
+            try {
+                BaseModel.deleteEntity(sticky, true);
+                trackModel.getSelected().getStickyNotesEntityCollection().remove(sticky);
+                binder.loadComponent(stickyList);
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void onCheck$stickyCheck(ForwardEvent event) {
+        CheckEvent checkEvent = (CheckEvent) event.getOrigin();
+        stickyList.setSelectedItem((Listitem) checkEvent.getTarget().getParent().getParent());
+        binder.saveComponent(stickyList);
+        if (sticky != null) {
+            try {
+                trackModel.getSelected().getStickyNotesEntityCollection().remove(sticky);
+                sticky.setLeido(checkEvent.isChecked());
+                BaseModel.editEntity(sticky, true);
+                trackModel.getSelected().getStickyNotesEntityCollection().add(sticky);
+                binder.loadComponent(stickyList);
+            } catch (Exception ex) {
+                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void onSelect$tracksList(ForwardEvent event) {
+        if (trackModel.getSelected() != null && trackModel.getSelected().getStickyNotesEntityCollection().size() > 0) {
+            ((Popup) getFellow("stickyPopup")).open(tracksList.getSelectedItem());
         }
     }
 
@@ -360,17 +438,8 @@ public class AbmcTracksController extends BaseController {
                 workersModel.filter(new ArrayList());
             }
 
-            if (workersModel.getAll().size() > 0) {
-                deleteUser.setVisible(true);
-            } else {
-                deleteUser.setVisible(false);
-            }
-
-            if (workersModel.getFiltered().size() > 0) {
-                addUser.setVisible(true);
-            } else {
-                addUser.setVisible(false);
-            }
+            deleteUser.setVisible(workersModel.getAll().size() > 0);
+            addUser.setVisible(workersModel.getFiltered().size() > 0);
         }
         binder.loadComponent(trackDetail); //reload visible to force refresh
         binder.loadAttribute(workersList, "model");
@@ -506,15 +575,12 @@ public class AbmcTracksController extends BaseController {
     public void onUpload$subir(ForwardEvent evento) {
         UploadEvent event = (UploadEvent) evento.getOrigin();
         Media doc = event.getMedia();
+        if(doc != null) {
         String path = subirDocumento(doc);
         guardarAdjunto(path);
-        binder.loadComponent(adjuntos);
+        } else
+            showMessage("Seleccione un archivo.");
     }
-    protected Fileupload subir;
-    protected Filedownload descargar;
-    protected Listbox adjuntos;
-    protected Textbox tituloDoc;
-    protected Textbox descripcionDoc;
 
     //private void guardarAdjunto(String path,String tipo){
     private void guardarAdjunto(String path) {
@@ -530,32 +596,32 @@ public class AbmcTracksController extends BaseController {
             documento.setDocumentVersion(1); // cambiar!!!!!!!!!!!!!
 
             try {
-                Hashtable<String, String> parametros = new Hashtable<String, String>();
                 // guardar el documento
-                BaseModel.createEntity(documento, true);
+                trackModel.beginTransaction();
+
+                BaseModel.createEntity(documento, false);
 
                 // setea el adjunto
-                adjunto = new AttachmentEntity(documento.getIdDocumento(), trackModel.getSelected().getTrackId()); //CAMBIAR!!!!!!!!!!!!
+                adjunto = new AttachmentEntity(documento.getIdDocumento(), trackModel.getSelected().getTrackId());
                 adjunto.setUsuario(getUserFromSession());
                 adjunto.setFecha(new Date());
 
                 // guardar el adjunto
-                BaseModel.createEntity(adjunto, true);
+                BaseModel.createEntity(adjunto, false);
+                trackModel.commitTransaction();
+                trackModel.getSelected().getAttachmentEntityCollection().add(adjunto);
+                binder.loadComponent(adjuntos);
+                System.out.println("ADJS: "+tracksList.getSelectedItem().getFirstChild().getFirstChild().getFellows());
 
-                trackModel.setAll(BaseModel.findEntitiesByParams("TracksEntity.findByUser", "user", getUserFromSession()));
-
-            } catch (RollbackFailureException ex) {
-                showMessage("No se pudo guardar el adjunto ", ex);
-            } catch (NamingException ex) {
-                showMessage("Error de nombre ", ex);
-            } catch (IllegalStateException ex) {
-                showMessage("Estado ilegal ", ex);
-            } catch (SecurityException ex) {
-                showMessage("Se ha violado la seguridad ", ex);
-            } catch (SystemException ex) {
-                showMessage("Error del sistema ", ex);
             } catch (Exception ex) {
-                showMessage("Sucedio un error desconocido ", ex);
+                try {
+                    System.out.println("ERROR: "+ex);
+                    ex.printStackTrace();
+                    trackModel.rollbackTransaction();
+                    showMessage("Ocurrió un error: ", ex);
+                } catch (Exception ex1) {
+                    Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex1);
+                }
             }
         } else {
             showMessage("archivo no encontrado");
@@ -564,11 +630,9 @@ public class AbmcTracksController extends BaseController {
 
     private String subirDocumento(Media doc) {
         try {
-
             // inicializacion de varibles
             File archivo;
             String directorio = "/files";
-
             String realPath = getHttpRequest().getSession().getServletContext().getRealPath(directorio);
 
             archivo = new File(realPath + "/" + doc.getName());
