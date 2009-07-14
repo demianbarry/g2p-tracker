@@ -2,6 +2,36 @@
 <div>
     <portallayout>
         <portalchildren style="padding: 5px" width="100%">
+            <panel height="100%" title="Sticky Notes" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <groupbox mold="3d" closable="false" draggable="true">
+                        <caption>
+                            <textbox id="stickyTitulo" value="Título" width="100%" style="background:transparent">
+                                <attribute name="onFocus">
+                                            self.value=null;
+                                </attribute>
+                                <attribute name="onBlur">
+                                        if(self.value == "") {
+                                            self.value="Título";
+                                        }
+                                </attribute>
+                            </textbox>
+                        </caption>
+                        <vbox width="100%">
+                            <textbox id="stickyContenido" value="Contenido" multiline="true" rows="3" width="100%">
+                                <attribute name="onFocus">
+                                            self.value=null;
+                                </attribute>
+                                <attribute name="onBlur">
+                                        if(self.value == "") {
+                                            self.value="Contenido";
+                                        }
+                                </attribute>
+                            </textbox>
+                        </vbox>
+                    </groupbox>
+                </panelchildren>
+            </panel>
             <!--<panel height="100px" title="GTalk" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
                 <panelchildren>
                     <script src="http://www.gmodules.com/ig/ifr?url=http://www.google.com/ig/modules/googletalk.xml%3Fjava&amp;synd=open&amp;w=320&amp;h=451&amp;title=GTalk&amp;lang=es&amp;country=ALL&amp;border=%23ffffff%7C3px%2C1px+solid+%23999999&amp;output=js"></script>
@@ -20,3 +50,4 @@
         </portalchildren>
     </portallayout>
 </div>
+

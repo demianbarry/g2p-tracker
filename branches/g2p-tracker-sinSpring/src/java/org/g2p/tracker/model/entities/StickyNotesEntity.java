@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -24,10 +26,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sticky_notes")
-@NamedQueries({@NamedQuery(name = "StickyNotesEntity.findAll", query = "SELECT s FROM StickyNotesEntity s")})
+@NamedQueries({@NamedQuery(name = "StickyNotesEntity.findAll", query = "SELECT s FROM StickyNotesEntity s ORDER BY leido")})
 public class StickyNotesEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "sticky_note_id")
     private Integer stickyNoteId;
@@ -38,8 +41,8 @@ public class StickyNotesEntity extends BaseEntity implements Serializable {
     @Column(name = "contenido")
     private String contenido;
     @Basic(optional = false)
-    @Column(name = "pegado")
-    private boolean pegado;
+    @Column(name = "leido")
+    private boolean leido;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private TracksEntity trackId;
@@ -51,10 +54,10 @@ public class StickyNotesEntity extends BaseEntity implements Serializable {
         this.stickyNoteId = stickyNoteId;
     }
 
-    public StickyNotesEntity(Integer stickyNoteId, String titulo, boolean pegado) {
+    public StickyNotesEntity(Integer stickyNoteId, String titulo, boolean leido) {
         this.stickyNoteId = stickyNoteId;
         this.titulo = titulo;
-        this.pegado = pegado;
+        this.leido = leido;
     }
 
     public Integer getStickyNoteId() {
@@ -81,12 +84,12 @@ public class StickyNotesEntity extends BaseEntity implements Serializable {
         this.contenido = contenido;
     }
 
-    public boolean getPegado() {
-        return pegado;
+    public boolean getLeido() {
+        return leido;
     }
 
-    public void setPegado(boolean pegado) {
-        this.pegado = pegado;
+    public void setLeido(boolean leido) {
+        this.leido = leido;
     }
 
     public TracksEntity getTrackId() {
