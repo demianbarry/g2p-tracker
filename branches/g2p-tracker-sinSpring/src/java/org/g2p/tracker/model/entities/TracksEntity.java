@@ -303,8 +303,15 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public Double getDummy(){
-        long factorFecha = deadline.getTime() - fechaCreacion.getTime();
+        long fechaActual = new Date().getTime();
 
-        return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorFecha;
+        // a la cantidad de tiempo que falta para la llegada
+        // del deadline se la complementa para que de un valor alto cuando
+        // falta poco y un valor bajo cuando falta mucho
+        long factorLimiteFecha = Math.abs(1000000000 - (fechaActual - deadline.getTime()));
+        
+        long factorAntiguedad = fechaActual - fechaCreacion.getTime();
+
+        return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
     }
 }
