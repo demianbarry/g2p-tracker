@@ -7,6 +7,7 @@ package org.g2p.tracker.controllers;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.g2p.tracker.model.entities.AccionesAppsEntity;
 import org.g2p.tracker.model.models.AccionesModel;
 import org.g2p.tracker.model.models.CircuitosModel;
 import org.g2p.tracker.model.models.EstadosModel;
@@ -68,6 +69,8 @@ public class AbmcCircuitosController extends BaseController {
 
     //Banderas
     protected Boolean circuitoNuevo;
+    protected Boolean estadoNuevo;
+    protected Boolean accionNueva;
 
 
     /*--------------------------------------------------Getter y Setters--------------------------------------------------------*/
@@ -171,6 +174,11 @@ public class AbmcCircuitosController extends BaseController {
         refresh();
     }
 
+    protected void nuevaAccion() {
+        circuitosModel.setAccionSelected(new AccionesAppsEntity());
+        refresh();
+    }
+
     public void refresh() {
         binder.loadComponent(circuitoDetail); //reload visible to force refresh
         binder.loadAttribute(circuitoDetail, "model"); //reload model to force refresh
@@ -207,7 +215,9 @@ public class AbmcCircuitosController extends BaseController {
     }
 
 
-    /*--------------------------------------------------Listeners--------------------------------------------------------*/
+    /*--------------------------------------------------LISTENERS--------------------------------------------------------*/
+
+    /*--------------------------------------------------Circuitos--------------------------------------------------------*/
 
     public void onCreate$abmcCircuitosWin(Event event) {
         try {
@@ -223,30 +233,19 @@ public class AbmcCircuitosController extends BaseController {
 
     public void onClick$nuevoCircuito(Event event) {
         circuitoNuevo = true;
+        estadoNuevo = true;
+        accionNueva = true;
         changeCircuitoMode();
         setEstadoListMode(false);
         setAccionesListMode(false);
         nuevoCircuito();
         nuevoEstado();
+        nuevaAccion();
         refresh();
     }
-
-    public void onClick$guardarEstado(Event event) {
-        circuitosModel.getEstadoSelected().setCircuitoId(circuitosModel.getSelected());
-        //showMessage("ESTADO - Nombre: " + circuitosModel.getEstadoSelected().getNombre() + "Descripcion: " + circuitosModel.getEstadoSelected().getDescripcion() + "Obs.: " + circuitosModel.getEstadoSelected().getObservaciones() + "CircuitoID: " + circuitosModel.getEstadoSelected().getCircuitoId().getPK());
-        try {
-            circuitosModel.persistEstado();
-        } catch (Exception ex) {
-            showMessage("Ocurrió un error mientras se intentaba guardar el estado: ", ex);
-        }
-        changeEstadoMode();
-        binder.saveAll();
-        binder.loadAttribute(estadosList, "model");
-        refresh();
-    }
-
+    
     public void onBlur$nombreCircuito(Event event) {
-        if (circuitoNuevo) {
+        if (circuitoNuevo && nombreCircuito.getValue() != null) {
             /*CircuitosEstadosEntity circuito = circuitosModel.getSelected();
 
             circuito.setNombre(circuitosModel.getSelected().getNombre());*/
@@ -276,9 +275,109 @@ public class AbmcCircuitosController extends BaseController {
                 estadosAccionesTransiciones.setVisible(true);
                 circuitosModel.refreshAll();
                 binder.loadAttribute(estadosList, "model");
+                binder.loadAttribute(accionesList, "model");
+                circuitoNuevo = false;
                 refresh();
             }
         }
+    }
+
+    /*--------------------------------------------------Estados--------------------------------------------------------*/
+
+    public void onClick$guardarEstado(Event event) {
+
+        try {
+            if (estadoNuevo) {
+                circuitosModel.getEstadoSelected().setCircuitoId(circuitosModel.getSelected());
+                circuitosModel.persistEstado();
+            } else {
+                circuitosModel.mergeEstado();
+            }
+        } catch (Exception ex) {
+            showMessage("Ocurrió un error mientras se intentaba guardar el estado: ", ex);
+        }
+        
+        changeEstadoMode();
+        binder.saveAll();
+        binder.loadAttribute(estadosList, "model");
+        refresh();
+    }
+
+    public void onClick$nuevoEstado(Event event) {
+        estadoNuevo = true;
+        circuitosModel.setEstadoSelected(new EstadosEntity());
+        changeEstadoMode();
+        refresh();
+    }
+
+    public void onClick$editarEstado(Event event) {
+        estadoNuevo = false;
+        changeEstadoMode();
+        refresh();
+    }
+
+    public void onClick$cancelarEstado(Event event) {
+        changeEstadoMode();
+        refresh();
+    }
+
+    public void onClick$eliminarEstado(Event event) {
+        try {
+                circuitosModel.deleteEstado();
+            } catch (Exception ex) {
+                showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+            }
+            circuitosModel.setEstadoSelected(null);
+            refresh();
+    }
+
+    /*--------------------------------------------------Acciones--------------------------------------------------------*/
+
+    public void onClick$guardarAccion(Event event) {
+
+        try {
+            if (accionNueva) {
+                circuitosModel.getAccionSelected().setCircuitoId(circuitosModel.getSelected());
+                circuitosModel.persistAccion();
+            } else {
+                circuitosModel.mergeAccion();
+            }
+        } catch (Exception ex) {
+            showMessage("Ocurrió un error mientras se intentaba guardar la accion: ", ex);
+        }
+
+        changeAccionesMode();
+        binder.saveAll();
+        binder.loadAttribute(accionesList, "model");
+        refresh();
+    }
+
+    public void onClick$nuevaAccion(Event event) {
+        accionNueva = true;
+        circuitosModel.setAccionSelected(new AccionesAppsEntity());
+        changeAccionesMode();
+        refresh();
+    }
+
+    public void onClick$editarAccion(Event event) {
+        accionNueva = false;
+        changeAccionesMode();
+        refresh();
+    }
+
+    public void onClick$cancelarAccion(Event event) {
+        changeAccionesMode();
+        refresh();
+    }
+
+    public void onClick$eliminarAccion(Event event) {
+        try {
+                circuitosModel.deleteAccion();
+            } catch (Exception ex) {
+                showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+            }
+            circuitosModel.setAccionSelected(null);
+            refresh();
     }
 
 }
