@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -29,7 +29,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.g2p.tracker.utils.Fecha;
 
 /**
  *
@@ -38,11 +37,12 @@ import org.g2p.tracker.utils.Fecha;
 @Entity
 @Table(name = "tracks")
 @NamedQueries({
-    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t ORDER BY dummy"),
-    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo ORDER BY dummy"),
-    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection ORDER BY dummy")
+    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t"),
+    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo"),
+    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection")
 })
 public class TracksEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +72,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "complejidad")
     private Double complejidad;
-    @GeneratedValue(strategy = GenerationType.TABLE)
     @Basic(optional = false)
     @Column(name = "orden")
     private String orden;
@@ -192,7 +191,9 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public Set<StickyNotesEntity> getStickyNotesEntityCollection() {
-        return stickyNotesEntityCollection;
+        List stickys = (new ArrayList(stickyNotesEntityCollection));
+        Collections.sort(stickys);
+        return new HashSet(stickys);
     }
 
     public void setStickyNotesEntityCollection(Set<StickyNotesEntity> stickyNotesEntityCollection) {
@@ -286,15 +287,17 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public void addWorker(WebsiteUsersEntity worker) {
-        if(getWebsiteUsersEntityCollection() == null)
+        if (getWebsiteUsersEntityCollection() == null) {
             setWebsiteUsersEntityCollection(new HashSet());
+        }
         getWebsiteUsersEntityCollection().add(worker);
         worker.getTracksEntityCollection().add(this);
     }
 
     public void removeWorker(WebsiteUsersEntity worker) {
-        if(getWebsiteUsersEntityCollection() == null)
+        if (getWebsiteUsersEntityCollection() == null) {
             setWebsiteUsersEntityCollection(new HashSet());
+        }
         getWebsiteUsersEntityCollection().remove(worker);
         worker.getTracksEntityCollection().remove(this);
     }
@@ -304,45 +307,15 @@ public class TracksEntity extends BaseEntity implements Serializable {
         getPostsEntityCollection().add(post);
     }
 
-    public Double getDummy(){
-        final int EDAD_INFERIOR = 10;
-        final int EDAD_SUPERIOR = 20;
-        final int LIMITE_INFERIOR = -5;
-        final int LIMITE_MEDIO = -2;
-        final int LIMITE_SUPERIOR = 0;
+    public Double getDummy() {
+        long fechaActual = new Date().getTime();
 
-        int factorAntiguedad;
-        float factorLimiteFecha;
-        Fecha fechaActual = new Fecha();
-        // obtengo la diferencia en dias
-        long edad = fechaActual.getDiff(fechaCreacion, Fecha.DIAS);
-        long limite = fechaActual.getDiff(deadline, Fecha.DIAS);
+        // a la cantidad de tiempo que falta para la llegada
+        // del deadline se la complementa para que de un valor alto cuando
+        // falta poco y un valor bajo cuando falta mucho
+        long factorLimiteFecha = Math.abs(1000000000 - (fechaActual - deadline.getTime()));
 
-        factorAntiguedad = 5;
-        if (edad <= EDAD_INFERIOR){
-            factorAntiguedad = 1;
-        }
-        else {
-            if (edad > EDAD_INFERIOR && edad <= EDAD_SUPERIOR){
-                factorAntiguedad = 3;
-            }
-        }
-
-        factorLimiteFecha = (float) 1.0;
-        if (limite >= LIMITE_MEDIO && limite < LIMITE_SUPERIOR){
-            factorLimiteFecha = (float) 0.75;
-        }
-        else {
-            if (limite >= LIMITE_INFERIOR && limite < LIMITE_MEDIO){
-                factorLimiteFecha = (float) 0.5;
-            }
-            else {
-                if (limite < LIMITE_INFERIOR){
-                    factorLimiteFecha = (float) 0.25;
-                }
-            }
-        }
-        
+        long factorAntiguedad = fechaActual - fechaCreacion.getTime();
 
         return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
     }
