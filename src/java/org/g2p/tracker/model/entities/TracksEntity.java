@@ -8,6 +8,7 @@ package org.g2p.tracker.model.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -28,6 +29,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.g2p.tracker.utils.Fecha;
 
 /**
  *
@@ -37,8 +39,8 @@ import javax.persistence.TemporalType;
 @Table(name = "tracks")
 @NamedQueries({
     @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t ORDER BY dummy"),
-    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo"),
-    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection")
+    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo ORDER BY dummy"),
+    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection ORDER BY dummy")
 })
 public class TracksEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -303,14 +305,44 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public Double getDummy(){
-        long fechaActual = new Date().getTime();
+        final int EDAD_INFERIOR = 10;
+        final int EDAD_SUPERIOR = 20;
+        final int LIMITE_INFERIOR = -5;
+        final int LIMITE_MEDIO = -2;
+        final int LIMITE_SUPERIOR = 0;
 
-        // a la cantidad de tiempo que falta para la llegada
-        // del deadline se la complementa para que de un valor alto cuando
-        // falta poco y un valor bajo cuando falta mucho
-        long factorLimiteFecha = Math.abs(1000000000 - (fechaActual - deadline.getTime()));
+        int factorAntiguedad;
+        float factorLimiteFecha;
+        Fecha fechaActual = new Fecha();
+        // obtengo la diferencia en dias
+        long edad = fechaActual.getDiff(fechaCreacion, Fecha.DIAS);
+        long limite = fechaActual.getDiff(deadline, Fecha.DIAS);
+
+        factorAntiguedad = 5;
+        if (edad <= EDAD_INFERIOR){
+            factorAntiguedad = 1;
+        }
+        else {
+            if (edad > EDAD_INFERIOR && edad <= EDAD_SUPERIOR){
+                factorAntiguedad = 3;
+            }
+        }
+
+        factorLimiteFecha = (float) 1.0;
+        if (limite >= LIMITE_MEDIO && limite < LIMITE_SUPERIOR){
+            factorLimiteFecha = (float) 0.75;
+        }
+        else {
+            if (limite >= LIMITE_INFERIOR && limite < LIMITE_MEDIO){
+                factorLimiteFecha = (float) 0.5;
+            }
+            else {
+                if (limite < LIMITE_INFERIOR){
+                    factorLimiteFecha = (float) 0.25;
+                }
+            }
+        }
         
-        long factorAntiguedad = fechaActual - fechaCreacion.getTime();
 
         return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
     }
