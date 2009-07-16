@@ -33,7 +33,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "website_users", uniqueConstraints = {@UniqueConstraint(columnNames = {"login_name"}), @UniqueConstraint(columnNames = {"nombre", "fecha_nacimiento", "apellido"})})
-@NamedQueries({    
+@NamedQueries({
     @NamedQuery(name = "WebsiteUsersEntity.findByUserId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = :userId"),
     @NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w"),
     @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId AND wu.fechaAsociacion IS NOT NULL)"),
@@ -73,7 +73,7 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     @Column(name = "fecha_nacimiento", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
-    @JoinTable(name = "workers_per_tracks", 
+    @JoinTable(name = "workers_per_tracks",
         joinColumns = {@JoinColumn(name = "user_id")},
         inverseJoinColumns = {@JoinColumn(name = "track_id")})
     @ManyToMany(fetch = FetchType.EAGER)
