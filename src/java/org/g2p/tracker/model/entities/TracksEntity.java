@@ -6,11 +6,10 @@ package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -191,9 +190,8 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public Set<StickyNotesEntity> getStickyNotesEntityCollection() {
-        List stickys = (new ArrayList(stickyNotesEntityCollection));
-        Collections.sort(stickys);
-        return new HashSet(stickys);
+        //return new TreeSet(new ArrayList(stickyNotesEntityCollection));
+        return stickyNotesEntityCollection;
     }
 
     public void setStickyNotesEntityCollection(Set<StickyNotesEntity> stickyNotesEntityCollection) {

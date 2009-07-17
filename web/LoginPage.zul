@@ -28,18 +28,20 @@
                         </listitem>
                     </listbox>                    
                 </div>
-                <grid id="localLoginGrid" width="80%">
+                <grid id="localLoginGrid" 
+                    width="80%"
+                    oddRowSclass="none">
                     <rows>
-                        <row>Username:
+                        <row zclass="simple-row">Username:
                             <textbox id="username"/>
                         </row>
-                        <row>Password:
+                        <row zclass="simple-row">Password:
                             <textbox id="password" type="password"/>
                         </row>
-                        <row spans="2">
+                        <row spans="2"  zclass="simple-row">
                             <checkbox id="remember" label="Recordarme en esta computadora"/>
                         </row>
-                        <row spans="2">
+                        <row spans="2" zclass="simple-row">
                             <div align="center">
                                 <hbox valign="middle" spacing="10%">
                                     <button id="okButton" label="OK" width="100px"/>

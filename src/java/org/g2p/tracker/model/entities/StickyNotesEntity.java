@@ -27,7 +27,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sticky_notes")
 @NamedQueries({@NamedQuery(name = "StickyNotesEntity.findAll", query = "SELECT s FROM StickyNotesEntity s ORDER BY leido")})
-public class StickyNotesEntity extends BaseEntity implements Serializable {
+public class StickyNotesEntity extends BaseEntity implements Serializable, Comparable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -118,6 +118,17 @@ public class StickyNotesEntity extends BaseEntity implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Object other) {
+        StickyNotesEntity sticky = (StickyNotesEntity) other;
+        if(this.getLeido() == sticky.getLeido()) {
+            return 0;
+        } else if(this.getLeido() && !sticky.getLeido()) {
+            return -1;
+        }
+        return 1;
     }
 
     @Override

@@ -120,6 +120,8 @@ public class AbmcTracksController extends BaseController {
     protected Filedownload descargar;
     protected Textbox tituloDoc;
     protected Textbox descripcionDoc;
+    protected Checkbox envioEmailAdjuntos;
+    protected Checkbox envioEmailPosts;
 
     public AbmcTracksController() {
         super(true);
@@ -432,6 +434,7 @@ public class AbmcTracksController extends BaseController {
             prioridadesModel.setSelected(track.getPrioridadId());
             importanciaModel.setSelected(track.getImportanciaId());
 
+            System.out.println("WORKERS: "+track.getWebsiteUsersEntityCollection());
             if (track.getWebsiteUsersEntityCollection() != null) {
                 workersModel.filter(track.getWebsiteUsersEntityCollection());
             } else {
@@ -471,8 +474,9 @@ public class AbmcTracksController extends BaseController {
                 post.setUserId(getUserFromSession());
                 track.addPost(post);
                 BaseModel.createEntity(post, true);
-                enviarEmail();
                 ingresoComentario.setValue(null);
+                if(envioEmailAdjuntos.isChecked())
+                    enviarEmail();
             } catch (Exception ex) {
                 Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -611,8 +615,9 @@ public class AbmcTracksController extends BaseController {
                 trackModel.commitTransaction();
                 trackModel.getSelected().getAttachmentEntityCollection().add(adjunto);
                 binder.loadComponent(adjuntos);
-                System.out.println("ADJS: "+tracksList.getSelectedItem().getFirstChild().getFirstChild().getFellows());
 
+                if(envioEmailAdjuntos.isChecked())
+                    enviarEmail();
             } catch (Exception ex) {
                 try {
                     System.out.println("ERROR: "+ex);
