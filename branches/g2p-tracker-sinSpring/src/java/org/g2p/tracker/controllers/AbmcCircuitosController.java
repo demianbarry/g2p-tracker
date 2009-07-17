@@ -8,11 +8,10 @@ package org.g2p.tracker.controllers;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.g2p.tracker.model.entities.AccionesAppsEntity;
-import org.g2p.tracker.model.models.AccionesModel;
 import org.g2p.tracker.model.models.CircuitosModel;
-import org.g2p.tracker.model.models.EstadosModel;
 import org.g2p.tracker.model.entities.CircuitosEstadosEntity;
 import org.g2p.tracker.model.entities.EstadosEntity;
+import org.g2p.tracker.model.entities.TransicionEstadosEntity;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.DataBinder;
@@ -36,21 +35,27 @@ public class AbmcCircuitosController extends BaseController {
 
     //Vistas
     protected Component circuitoDetail;
-    protected Component estadosAccionesTransiciones;
     protected Component listCircuitoView;
     protected Component editCircuitoView;
     protected Component listEstadosView;
     protected Component editEstadosView;
     protected Component listAccionesView;
     protected Component editAccionesView;
+    protected Component listTransicionesView;
+    protected Component editTransicionesView;
 
     //Listbox
     protected Listbox circuitosList;
     protected Listbox estadosList;
     protected Listbox accionesList;
+    protected Listbox transicionesList;
 
     //Botones
     protected Button nuevoCircuito;
+    protected Button editarCircuito;
+    protected Button eliminarCircuito;
+    protected Button guardarCircuito;
+    protected Button cancelarCircuito;
     protected Button nuevoEstado;
     protected Button editarEstado;
     protected Button eliminarEstado;
@@ -61,6 +66,11 @@ public class AbmcCircuitosController extends BaseController {
     protected Button eliminarAccion;
     protected Button guardarAccion;
     protected Button cancelarAccion;
+    protected Button nuevaTransicion;
+    protected Button editarTransicion;
+    protected Button eliminarTransicion;
+    protected Button guardarTransicion;
+    protected Button cancelarTransicion;
 
     //Campos de Circuitos
     protected Textbox nombreCircuito;
@@ -71,6 +81,7 @@ public class AbmcCircuitosController extends BaseController {
     protected Boolean circuitoNuevo;
     protected Boolean estadoNuevo;
     protected Boolean accionNueva;
+    protected Boolean transicionNueva;
 
 
     /*--------------------------------------------------Getter y Setters--------------------------------------------------------*/
@@ -83,22 +94,6 @@ public class AbmcCircuitosController extends BaseController {
         this.circuitosModel = circuitosModel;
     }
 
-    /*public AccionesModel getAccionesModel() {
-        return accionesModel;
-    }
-
-    public void setAccionesModel(AccionesModel accionesModel) {
-        this.accionesModel = accionesModel;
-    }
-
-    public EstadosModel getEstadosModel() {
-        return estadosModel;
-    }
-
-    public void setEstadosModel(EstadosModel estadosModel) {
-        this.estadosModel = estadosModel;
-    }*/
-
 
     /*--------------------------------------------------Metodos generales--------------------------------------------------------*/
 
@@ -106,8 +101,6 @@ public class AbmcCircuitosController extends BaseController {
     public AbmcCircuitosController() {
         super(true);
         circuitosModel = new CircuitosModel();
-        /*estadosModel = new EstadosModel();
-        accionesModel = new AccionesModel();*/
     }
 
     public void setCircuitoListMode(boolean mode){
@@ -164,6 +157,43 @@ public class AbmcCircuitosController extends BaseController {
         }
     }
 
+    public void setTransicionesListMode(boolean mode){
+        if (mode) {
+            listTransicionesView.setVisible(true);
+            editTransicionesView.setVisible(false);
+        } else {
+            listTransicionesView.setVisible(false);
+            editTransicionesView.setVisible(true);
+        }
+    }
+
+    public void changeTransicionesMode() {
+        if (listTransicionesView.isVisible()) {
+            setTransicionesListMode(false);
+        } else {
+            setTransicionesListMode(true);
+        }
+    }
+
+    protected void ocultarEstadosAcciones() {
+        listEstadosView.setVisible(false);
+        editEstadosView.setVisible(false);
+        listAccionesView.setVisible(false);
+        editAccionesView.setVisible(false);
+    }
+
+    protected void ocultarTransiciones() {
+        listTransicionesView.setVisible(false);
+        editTransicionesView.setVisible(false);
+    }
+
+    protected void comprobarEstadosAcciones() {
+        if (estadosList.getItemCount() >= 2 && accionesList.getItemCount() >= 1) {
+            setTransicionesListMode(false);
+            refresh();
+        }
+    }
+
     protected void nuevoCircuito() {
         circuitosModel.setSelected(new CircuitosEstadosEntity());
         refresh();
@@ -179,37 +209,72 @@ public class AbmcCircuitosController extends BaseController {
         refresh();
     }
 
+    protected void nuevaTransicion() {
+        circuitosModel.setTransicionSelected(new TransicionEstadosEntity());
+        refresh();
+    }
+
     public void refresh() {
+        circuitosModel.refreshAll();
         binder.loadComponent(circuitoDetail); //reload visible to force refresh
         binder.loadAttribute(circuitoDetail, "model"); //reload model to force refresh
     }
 
+    public void refreshEstados() {
+        binder.loadComponent(listEstadosView); //reload visible to force refresh
+        binder.loadAttribute(listEstadosView, "model"); //reload model to force refresh
+        binder.loadComponent(editEstadosView); //reload visible to force refresh
+        binder.loadAttribute(editEstadosView, "model"); //reload model to force refresh
+    }
+
+    public void refreshAcciones() {
+        binder.loadComponent(listAccionesView); //reload visible to force refresh
+        binder.loadAttribute(listAccionesView, "model"); //reload model to force refresh
+        binder.loadComponent(editAccionesView); //reload visible to force refresh
+        binder.loadAttribute(editAccionesView, "model"); //reload model to force refresh
+    }
+
+    public void refreshTransiciones() {
+        binder.loadComponent(listTransicionesView); //reload visible to force refresh
+        binder.loadAttribute(listTransicionesView, "model"); //reload model to force refresh
+        binder.loadComponent(editTransicionesView); //reload visible to force refresh
+        binder.loadAttribute(editTransicionesView, "model"); //reload model to force refresh
+    }
+
+    public void botonesCircuitos(Boolean nuevo, Boolean editar, Boolean eliminar, Boolean guardar, Boolean cancelar) {
+        nuevoCircuito.setVisible(nuevo);
+        editarCircuito.setVisible(editar);
+        eliminarCircuito.setVisible(eliminar);
+        guardarCircuito.setVisible(guardar);
+        cancelarCircuito.setVisible(cancelar);
+    }
+
     public void doSaveCircuito(Event event) {
                    
-        //save into bean
-        binder.saveComponent(editCircuitoView); //reload model to force refresh
-
         try {
             //store into db
-            circuitosModel.getUtx().begin();
+            circuitosModel.beginTransaction();
 
-            if (_create) {
-                this.circuitosModel.persist(false);
+            if (circuitosModel.getSelected().getPK() != null) {
+                circuitosModel.edit(circuitosModel.getSelected(), false);
             } else {
-                this.circuitosModel.merge(false);
+                circuitosModel.create(circuitosModel.getSelected(), false);
             }
 
-            circuitosModel.getUtx().commit();
+            circuitosModel.commitTransaction();
+            //showMessage("El circuito se guardo correctamente. Circuito_ID: " + circuitosModel.getSelected().getPK());
+
         } catch (Exception ex) {
             try {
-                showMessage("Ocurrió un error mientras se intentaba guardar el circuito: ", ex);
-                circuitosModel.getUtx().rollback();
-                circuitosModel.setSelected((CircuitosEstadosEntity) circuitosList.getModel().getElementAt(0));
+                showMessage("Ocurrió un error mientras se intentaba crear el circuito: " + ex.getClass(), ex);
+                circuitosModel.rollbackTransaction();
             } catch (Exception ex1) {
-                showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: ", ex);
+                showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex1.getClass(), ex);
             }
         } finally {
-            //refresh the rolesList
+            circuitosModel.refreshAll();
+            binder.loadAttribute(estadosList, "model");
+            binder.loadAttribute(accionesList, "model");
             refresh();
         }
     }
@@ -224,7 +289,7 @@ public class AbmcCircuitosController extends BaseController {
             // Obtengo el DataBinder que instancia la página
             binder = (DataBinder) getVariable("binder", true);
             setCircuitoListMode(true);
-            estadosAccionesTransiciones.setVisible(false);
+            botonesCircuitos(true, true, true, false, false);
             refresh();
         } catch (Exception ex) {
             Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
@@ -235,12 +300,47 @@ public class AbmcCircuitosController extends BaseController {
         circuitoNuevo = true;
         estadoNuevo = true;
         accionNueva = true;
-        changeCircuitoMode();
+        transicionNueva = true;
+        botonesCircuitos(false, false,false, false, true);
+        setCircuitoListMode(false);
         setEstadoListMode(false);
         setAccionesListMode(false);
+        setTransicionesListMode(true);
         nuevoCircuito();
         nuevoEstado();
         nuevaAccion();
+        ocultarEstadosAcciones();
+        ocultarTransiciones();
+        refresh();
+    }
+    
+    public void onClick$editarCircuito(Event event) {
+        circuitoNuevo = false;
+        estadoNuevo = false;
+        accionNueva = false;
+        transicionNueva = false;
+        botonesCircuitos(false, false,false, true, true);
+        setCircuitoListMode(false);
+        setEstadoListMode(true);
+        setAccionesListMode(true);
+        setTransicionesListMode(true);
+        refresh();
+    }
+
+    public void onClick$guardarCircuito(Event event) {
+        botonesCircuitos(true, true, true, false, false);
+        doSaveCircuito(event);
+        setCircuitoListMode(true);
+        refresh();
+    }
+
+    public void onClick$eliminarCircuito (Event event) {
+
+    }
+
+    public void onClick$cancelarCircuito(Event event) {
+        botonesCircuitos(true, true, true, false, false);
+        setCircuitoListMode(true);
         refresh();
     }
     
@@ -249,36 +349,11 @@ public class AbmcCircuitosController extends BaseController {
             /*CircuitosEstadosEntity circuito = circuitosModel.getSelected();
 
             circuito.setNombre(circuitosModel.getSelected().getNombre());*/
-
-            try {
-                //store into db
-                circuitosModel.beginTransaction();
-
-                if (circuitosModel.getSelected().getPK() != null) {
-                    circuitosModel.edit(circuitosModel.getSelected(), false);
-                } else {
-                    circuitosModel.create(circuitosModel.getSelected(), false);
-                }
-
-                circuitosModel.commitTransaction();
-                //showMessage("El circuito se guardo correctamente. Circuito_ID: " + circuitosModel.getSelected().getPK());
-
-            } catch (Exception ex) {
-                try {
-                    showMessage("Ocurrió un error mientras se intentaba crear el circuito: " + ex.getClass(), ex);
-                    circuitosModel.rollbackTransaction();
-                } catch (Exception ex1) {
-                    showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex1.getClass(), ex);
-                }
-            } finally {
-                //refresh the r
-                estadosAccionesTransiciones.setVisible(true);
-                circuitosModel.refreshAll();
-                binder.loadAttribute(estadosList, "model");
-                binder.loadAttribute(accionesList, "model");
-                circuitoNuevo = false;
-                refresh();
-            }
+            botonesCircuitos(false, false, false, true, true);
+            doSaveCircuito(event);
+            circuitoNuevo = false;
+            setEstadoListMode(true);
+            setAccionesListMode(true);
         }
     }
 
@@ -300,35 +375,36 @@ public class AbmcCircuitosController extends BaseController {
         changeEstadoMode();
         binder.saveAll();
         binder.loadAttribute(estadosList, "model");
-        refresh();
+        comprobarEstadosAcciones();
+        refreshEstados();
     }
 
     public void onClick$nuevoEstado(Event event) {
         estadoNuevo = true;
         circuitosModel.setEstadoSelected(new EstadosEntity());
         changeEstadoMode();
-        refresh();
+        refreshEstados();
     }
 
     public void onClick$editarEstado(Event event) {
         estadoNuevo = false;
         changeEstadoMode();
-        refresh();
+        refreshEstados();
     }
 
     public void onClick$cancelarEstado(Event event) {
-        changeEstadoMode();
-        refresh();
+        setEstadoListMode(true);
+        refreshEstados();
     }
 
     public void onClick$eliminarEstado(Event event) {
         try {
-                circuitosModel.deleteEstado();
-            } catch (Exception ex) {
-                showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
-            }
-            circuitosModel.setEstadoSelected(null);
-            refresh();
+            circuitosModel.deleteEstado();
+        } catch (Exception ex) {
+            showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+        }
+        circuitosModel.setEstadoSelected(null);
+        refreshEstados();
     }
 
     /*--------------------------------------------------Acciones--------------------------------------------------------*/
@@ -349,35 +425,85 @@ public class AbmcCircuitosController extends BaseController {
         changeAccionesMode();
         binder.saveAll();
         binder.loadAttribute(accionesList, "model");
-        refresh();
+        comprobarEstadosAcciones();
+        refreshAcciones();
     }
 
     public void onClick$nuevaAccion(Event event) {
         accionNueva = true;
         circuitosModel.setAccionSelected(new AccionesAppsEntity());
         changeAccionesMode();
-        refresh();
+        refreshAcciones();
     }
 
     public void onClick$editarAccion(Event event) {
         accionNueva = false;
         changeAccionesMode();
-        refresh();
+        refreshAcciones();
     }
 
     public void onClick$cancelarAccion(Event event) {
-        changeAccionesMode();
-        refresh();
+        setAccionesListMode(true);
+        refreshAcciones();
     }
 
     public void onClick$eliminarAccion(Event event) {
         try {
-                circuitosModel.deleteAccion();
-            } catch (Exception ex) {
-                showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+            circuitosModel.deleteAccion();
+        } catch (Exception ex) {
+            showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+        }
+        circuitosModel.setAccionSelected(null);
+        refreshAcciones();
+    }
+
+    /*--------------------------------------------------Transiciones--------------------------------------------------------*/
+
+    public void onClick$guardarTransicion(Event event) {
+
+        try {
+            if (transicionNueva) {
+                circuitosModel.getTransicionSelected().setCircuitoId(circuitosModel.getSelected());
+                circuitosModel.persistTransicion();
+            } else {
+                circuitosModel.mergeTransicion();
             }
-            circuitosModel.setAccionSelected(null);
-            refresh();
+        } catch (Exception ex) {
+            showMessage("Ocurrió un error mientras se intentaba guardar la transicion: ", ex);
+        }
+
+        changeTransicionesMode();
+        binder.saveAll();
+        binder.loadAttribute(transicionesList, "model");
+        refreshTransiciones();
+    }
+
+    public void onClick$nuevaTransicion(Event event) {
+        transicionNueva = true;
+        circuitosModel.setTransicionSelected(new TransicionEstadosEntity());
+        changeTransicionesMode();
+        refreshTransiciones();
+    }
+
+    public void onClick$editarTransicion(Event event) {
+        transicionNueva = false;
+        changeTransicionesMode();
+        refreshTransiciones();
+    }
+
+    public void onClick$cancelarTransicion(Event event) {
+        setTransicionesListMode(true);
+        refreshTransiciones();
+    }
+
+    public void onClick$eliminarTransicion(Event event) {
+        try {
+            circuitosModel.deleteTransicion();
+        } catch (Exception ex) {
+            showMessage("Ocurrió un error mientras intentaba eliminar un ítem: ", ex);
+        }
+        circuitosModel.setTransicionSelected(null);
+        refreshTransiciones();
     }
 
 }

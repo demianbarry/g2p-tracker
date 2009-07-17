@@ -51,6 +51,9 @@ public class CircuitosEstadosEntity extends BaseEntity implements Serializable {
     private Set<AplicaCircuitoEntity> aplicaCircuitoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
     private Set<AccionesAppsEntity> accionesAppsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
+    private Set<TransicionEstadosEntity> transicionEstadosCollection;
+
 
     public CircuitosEstadosEntity() {
     }
@@ -134,6 +137,14 @@ public class CircuitosEstadosEntity extends BaseEntity implements Serializable {
 
     public void setAccionesAppsCollection(Set<AccionesAppsEntity> accionesAppsCollection) {
         this.accionesAppsCollection = accionesAppsCollection;
+    }
+
+    public Set<TransicionEstadosEntity> getTransicionEstadosCollection() {
+        return transicionEstadosCollection;
+    }
+
+    public void setTransicionEstadosCollection(Set<TransicionEstadosEntity> transicionEstadosCollection) {
+        this.transicionEstadosCollection = transicionEstadosCollection;
     }
 
     @Override

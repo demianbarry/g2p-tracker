@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,10 +25,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "transicion_estados")
-@NamedQueries({@NamedQuery(name = "TransicionEstadosEntity.findAll", query = "SELECT t FROM TransicionEstadosEntity t")})
+@NamedQueries({
+    @NamedQuery(name = "TransicionEstadosEntity.findAll", query = "SELECT t FROM TransicionEstadosEntity t"),
+    @NamedQuery(name = "TransicionEstadosEntity.findByCircuitoId", query = "SELECT u FROM TransicionEstadosEntity u WHERE u.circuitoId.circuitoId = :circuitoId")
+})
 public class TransicionEstadosEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "transicion_id")
     private Integer transicionId;
@@ -49,6 +55,10 @@ public class TransicionEstadosEntity extends BaseEntity implements Serializable 
     @JoinColumn(name = "estado_id_origen", referencedColumnName = "estado_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntity estadoIdOrigen;
+    @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private CircuitosEstadosEntity circuitoId;
+
 
     public TransicionEstadosEntity() {
     }
@@ -127,6 +137,14 @@ public class TransicionEstadosEntity extends BaseEntity implements Serializable 
 
     public void setEstadoIdOrigen(EstadosEntity estadoIdOrigen) {
         this.estadoIdOrigen = estadoIdOrigen;
+    }
+
+    public CircuitosEstadosEntity getCircuitoId() {
+        return circuitoId;
+    }
+
+    public void setCircuitoId(CircuitosEstadosEntity circuitoId) {
+        this.circuitoId = circuitoId;
     }
 
     @Override
