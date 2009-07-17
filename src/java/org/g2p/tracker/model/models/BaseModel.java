@@ -452,7 +452,7 @@ public class BaseModel {
 
             }
         }
-        System.out.println("---> QUERY: " + query.getResultList().size());
+        //System.out.println("---> QUERY: " + query.getResultList().size());
         return query.getResultList();
     }
 
