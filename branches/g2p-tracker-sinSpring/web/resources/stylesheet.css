@@ -61,6 +61,13 @@ div.tracks-grid {
     padding-right:0px;
 }
 
+tr.simple-row td.simple-row-inner {
+    border-width:0;
+    padding-bottom:5px;
+    padding-top:5px;
+    background:#E8F7FE;
+}
+
 /* div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 
 }

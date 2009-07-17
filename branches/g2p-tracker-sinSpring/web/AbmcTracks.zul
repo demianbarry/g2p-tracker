@@ -86,21 +86,23 @@
                                         <tabpanels>
                                             <tabpanel>
                                                 <div align="center">
-                                                    <grid width="70%">
+                                                    <grid 
+                                                        width="70%"
+                                                        oddRowSclass="none">
                                                         <columns>
                                                             <column width="20%"/>
                                                             <column width="80%"/>
                                                         </columns>
                                                         <rows>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Título:
                                                                 <textbox value="@{tracks.titulo}" width="100%" readonly="true"/>
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                        Descripción:
                                                                 <textbox value="@{tracks.descripcion}" rows="5" width="100%" readonly="true"/>
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Observaciones:
                                                                 <textbox value="@{tracks.observaciones}" rows="5" width="100%" disabled="true"/>
                                                             </row>
@@ -110,13 +112,15 @@
                                             </tabpanel>
                                             <tabpanel >
                                                 <div align="center">
-                                                    <grid width="70%">
+                                                    <grid 
+                                                        width="70%"
+                                                        oddRowSclass="none">
                                                         <rows>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                             Propietario:
                                                                 <label value="@{tracks.userIdOwner.apellidoNombre}" zclass="z-static-label"/>
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                             Trabajadores:
                                                                 <listbox model="@{tracks.websiteUsersEntityCollection}" width="100%">
                                                                     <listhead>
@@ -133,21 +137,23 @@
                                             </tabpanel>
                                             <tabpanel>
                                                 <div align="center">
-                                                    <grid width="70%">
+                                                    <grid 
+                                                        width="70%"
+                                                        oddRowSclass="none">
                                                         <rows>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Fecha de Creacion:
                                                                 <datebox value="@{tracks.fechaCreacion}" buttonVisible="false" readonly="true"/>
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Fecha Estimada de Realización:
                                                                 <datebox value="@{tracks.fechaEstimadaRealizacion}" buttonVisible="false" readonly="true"/>
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Fecha límite:
                                                                 <datebox value="@{tracks.deadline}" buttonVisible="false" readonly="true"/>
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Fecha de Realización:
                                                                 <datebox value="@{tracks.fechaRealizacion}" buttonVisible="false" readonly="true"/>
                                                             </row>
@@ -157,17 +163,19 @@
                                             </tabpanel>
                                             <tabpanel>
                                                 <div align="center">
-                                                    <grid width="70%">
+                                                    <grid 
+                                                        width="70%"
+                                                        oddRowSclass="none">
                                                         <rows>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Estado:
                                                                 <label value="@{tracks.estadoId.nombre}" zclass="z-static-label" />
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Prioridad:
                                                                 <label value="@{tracks.prioridadId.nombre}" zclass="z-static-label" />
                                                             </row>
-                                                            <row>
+                                                            <row zclass="simple-row">
                                                         Importancia:
                                                                 <label value="@{tracks.importanciaId.nombre}" zclass="z-static-label" />
                                                             </row>
@@ -178,7 +186,11 @@
                                             <tabpanel>
                                                 <div align="center">
                                                     <vbox width="60%">
-                                                        <grid mold="paging" pageSize="5" pagingPosition="top" model="@{tracks.postsEntityCollection}">
+                                                        <grid 
+                                                            mold="paging"
+                                                            pageSize="5"
+                                                            pagingPosition="top"
+                                                            model="@{tracks.postsEntityCollection}">
                                                             <rows>
                                                                 <row self="@{each=post}">
                                                                     <hbox width="100%">
@@ -201,11 +213,12 @@
                                             <tabpanel>
                                                 <div align="center"
                                                     height="100%">
-                                                    <grid id="adjuntos"
+                                                    <grid
                                                         width="70%"
-                                                        model="@{abmcTracksWin.trackModel.selected.attachmentEntityCollection}">
+                                                        model="@{abmcTracksWin.trackModel.selected.attachmentEntityCollection}"
+                                                        oddRowSclass="none">
                                                         <rows>
-                                                            <row self="@{each=adjunto}">
+                                                            <row self="@{each=adjunto}" zclass="simple-row">
                                                                 <toolbarbutton  label="@{adjunto.documentEntity.titulo}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
@@ -219,24 +232,6 @@
                                                         </rows>
                                                     </grid>
                                                     <space />
-                                                    <hbox>
-                                                        <vbox>
-                                                            <label
-                                                                value="Titulo: "/>
-                                                            <textbox id="tituloDoc"
-                                                                width="100%"/>
-                                                            <label
-                                                                value="Descripcion: "/>
-                                                            <textbox id="descripcionDoc"
-                                                                width="100%"
-                                                                multiline="true"/>
-                                                            <checkbox id="envioEmail"
-                                                                label="Enviar email"
-                                                                checked="true"/>
-                                                        </vbox>
-                                                        <space />
-                                                        <fileupload height="20%" id="subir" />
-                                                    </hbox>
                                                 </div>
                                             </tabpanel>
                                         </tabpanels>
@@ -261,160 +256,218 @@
                 </div>
                 <!--ALTA DE TRACK-->
                 <div id="nuevoTrackView" width="100%" style="overflow:auto;">
-                    <columnlayout>
-                        <columnchildren width="60%">
-                            <panel id="trackEdit" title="@{abmcTracksWin.trackModel.selected.titulo}" droppable="true">
-                                <panelchildren>
-                                    <vbox width="100%">
-                                        <div id="tituloDiv">
-                                        Título:
-                                            <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="90%"/>
-                                        </div>
-                                        <separator/>
-                                        Descripción:
-                                        <textbox id="descripcion" value="@{abmcTracksWin.trackModel.selected.descripcion}" rows="2" width="90%"/>
-                                        <separator/>
-                                        Observaciones:
-                                        <textbox id="observaciones" value="@{abmcTracksWin.trackModel.selected.observaciones}" rows="4" width="90%"/>
-                                        <div width="100%">
-                                            <groupbox mold="3d">
-                                                <caption label="Comentarios" />
+                    <tabbox width="100%">
+                        <tabs>
+                            <tab label="Principal"/>
+                            <tab label="Comentarios"/>
+                            <tab label="Adjuntos"/>
+                        </tabs>
+                        <tabpanels>
+                            <tabpanel>
+                                <columnlayout>
+                                    <columnchildren width="60%">
+                                        <panel id="trackEdit" title="@{abmcTracksWin.trackModel.selected.titulo}" droppable="true">
+                                            <panelchildren>
                                                 <vbox width="100%">
-                                                    <label value="Ingrese un comentario: "/>
-                                                    <fckeditor id="ingresoComentario"  customConfigurationsPath="/config.js" toolbarSet="Post" width="90%"/>
-                                                    <hbox>
-                                                        <button id="submitComment" label="Enviar"/>
-                                                        <checkbox id="descendiente" label="Descendiente" />
-                                                    </hbox>
-                                                    <html ></html>
+                                                    <div id="tituloDiv">
+                                        Título:
+                                                        <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="90%"/>
+                                                    </div>
+                                                    <separator/>
+                                        Descripción:
+                                                    <textbox id="descripcion" value="@{abmcTracksWin.trackModel.selected.descripcion}" rows="2" width="90%"/>
+                                                    <separator/>
+                                        Observaciones:
+                                                    <textbox id="observaciones" value="@{abmcTracksWin.trackModel.selected.observaciones}" rows="4" width="90%"/>
                                                 </vbox>
-                                                <vbox id="vboxShowComments" width="100%">
-                                                    <grid id="postsGrid" mold="paging" pageSize="5" pagingPosition="top" width="100%" model="@{abmcTracksWin.trackModel.selected.postsEntityCollection}">
-                                                        <rows>
-                                                            <row self="@{each=post}">
-                                                                <hbox width="100%">
-                                                                    <div>
-                                                                        <html content="@{post.contenido}"/>
-                                                                        <separator orient="horizontal" bar="true"/>
-                                                                        <hbox>
-                                                                            <label value="@{post.userId.apellidoNombre}"/>
-                                                                            <space bar="true" width="10%"/>
-                                                                            <label value="@{post.fechaCreacion}"/>
+                                            </panelchildren>
+                                        </panel>
+                                    </columnchildren>
+                                    <columnchildren width="40%">
+                                        <panel title="|">
+                                            <panelchildren>
+                                                <vbox width="100%">
+                                                    <vbox width="100%">
+                                                        <grid id="ownerWorkersGrid">
+                                                            <rows>
+                                                                <row width="100%">Propietario:
+                                                                    <combobox id="propietario"
+                                                                    model="@{abmcTracksWin.websiteUserModel.all}"
+                                                                    autodrop="true"
+                                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}" width="90%">
+                                                                        <comboitem self="@{each=prop}"
+                                                                        label="@{prop.apellidoNombre}"
+                                                                        description="@{prop.loginName}"
+                                                                        value="@{abmcTracksWin.trackModel.selected.userIdOwner}"
+                                                                        />
+                                                                    </combobox>
+                                                                </row>
+                                                                <row width="100%">Trabajadores:
+                                                                    <vbox width="100%" id="workersBox">
+                                                                        <listbox id="workersList" model="@{abmcTracksWin.workersModel.all}" selectedItem="@{abmcTracksWin.workerSelected}">
+                                                                            <listitem self="@{each=worker}">
+                                                                                <listcell label="@{worker.apellidoNombre}"/>
+                                                                            </listitem>
+                                                                        </listbox>
+                                                                        <hbox width="100%">
+                                                                            <combobox id="trabajador"
+                                                                            model="@{abmcTracksWin.workersModel.filtered}"
+                                                                            autodrop="true"
+                                                                            selectedItem="@{abmcTracksWin.workersModel.selected}" width="80%">
+                                                                                <comboitem
+                                                                                self="@{each=trab}"
+                                                                                label="@{trab.apellidoNombre}"
+                                                                                description="@{trab.loginName}"/>
+                                                                            </combobox>
+                                                                            <button id="addUser" image="/img/user_add.png" />
+                                                                            <button id="deleteUser" image="/img/user_delete.png" />
                                                                         </hbox>
-                                                                    </div>
-                                                                </hbox>
-                                                            </row>
-                                                        </rows>
-                                                    </grid>
-                                                </vbox>
-                                            </groupbox>
-                                        </div>
-                                    </vbox>
-                                </panelchildren>
-                            </panel>
-                        </columnchildren>
-                        <columnchildren width="40%">
-                            <panel title="|">
-                                <panelchildren>
-                                    <vbox width="100%">
-                                        <vbox width="100%">
-                                            <grid id="ownerWorkersGrid">
-                                                <rows>
-                                                    <row width="100%">Propietario:
-                                                        <combobox id="propietario"
-                                                    model="@{abmcTracksWin.websiteUserModel.all}"
-                                                    autodrop="true"
-                                                    selectedItem="@{abmcTracksWin.websiteUserModel.selected}" width="90%">
-                                                            <comboitem self="@{each=prop}"
-                                                        label="@{prop.apellidoNombre}"
-                                                        description="@{prop.loginName}"
-                                                        />
-                                                        </combobox>
-                                                    </row>
-                                                    <row width="100%">Trabajadores:
-                                                        <vbox width="100%" id="workersBox">
-                                                            <listbox id="workersList" model="@{abmcTracksWin.workersModel.all}" selectedItem="@{abmcTracksWin.workerSelected}">
-                                                                <listitem self="@{each=worker}">
-                                                                    <listcell label="@{worker.apellidoNombre}"/>
-                                                                </listitem>
-                                                            </listbox>
-                                                            <hbox width="100%">
-                                                                <combobox id="trabajador"
-                                                                model="@{abmcTracksWin.workersModel.filtered}"
-                                                                autodrop="true"
-                                                                selectedItem="@{abmcTracksWin.workersModel.selected}" width="80%">
-                                                                    <comboitem
-                                                                    self="@{each=trab}"
-                                                                    label="@{trab.apellidoNombre}"
-                                                                    description="@{trab.loginName}"/>
-                                                                </combobox>
-                                                                <button id="addUser" image="/img/user_add.png" />
-                                                                <button id="deleteUser" image="/img/user_delete.png" />
-                                                            </hbox>
-                                                        </vbox>
-                                                    </row>
-                                                </rows>
-                                            </grid>
-                                        </vbox>
-                                        <separator bar="true"/>
-                                        <vbox width="100%">
-                                            <grid>
-                                                <rows>
-                                                    <row width="100%">Fecha de Creacion:
-                                                        <datebox id="fechaCreacion" value="@{abmcTracksWin.trackModel.selected.fechaCreacion}" buttonVisible="false" disabled="true"/>
-                                                    </row>
-                                                    <row width="100%">Fecha Estimada de Realización:
-                                                        <datebox id="fechaEstimadaRealizacion"/>
-                                                    </row>
-                                                    <row width="100%">Fecha límite:
-                                                        <datebox id="fechaLimite"/>
-                                                    </row>
-                                                    <row width="100%">Fecha de Realización:
-                                                        <datebox id="fechaRealizacion"/>
-                                                    </row>
-                                                </rows>
-                                            </grid>
-                                        </vbox>
-                                        <separator bar="true"/>
-                                        <vbox width="100%">
-                                            <grid id="estadoPrioImport">
-                                                <rows>
-                                                    <row width="100%">Estado:
-                                                        <combobox id="estado"
+                                                                    </vbox>
+                                                                </row>
+                                                            </rows>
+                                                        </grid>
+                                                    </vbox>
+                                                    <separator bar="true"/>
+                                                    <vbox width="100%">
+                                                        <grid>
+                                                            <rows>
+                                                                <row width="100%">Fecha de Creacion:
+                                                                    <datebox id="fechaCreacion" value="@{abmcTracksWin.trackModel.selected.fechaCreacion}" buttonVisible="false" disabled="true"/>
+                                                                </row>
+                                                                <row width="100%">Fecha Estimada de Realización:
+                                                                    <datebox id="fechaEstimadaRealizacion"/>
+                                                                </row>
+                                                                <row width="100%">Fecha límite:
+                                                                    <datebox id="fechaLimite"/>
+                                                                </row>
+                                                                <row width="100%">Fecha de Realización:
+                                                                    <datebox id="fechaRealizacion"/>
+                                                                </row>
+                                                            </rows>
+                                                        </grid>
+                                                    </vbox>
+                                                    <separator bar="true"/>
+                                                    <vbox width="100%">
+                                                        <grid id="estadoPrioImport">
+                                                            <rows>
+                                                                <row width="100%">Estado:
+                                                                    <combobox id="estado"
                                                     model="@{abmcTracksWin.estadosModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.estadosModel.selected}" width="90%">
-                                                            <comboitem self="@{each=est}"
+                                                                        <comboitem self="@{each=est}"
                                                         label="@{est.nombre}"/>
-                                                        </combobox>
-                                                    </row>
-                                                    <row width="100%">Prioridad:
-                                                        <combobox id="prioridad"
+                                                                    </combobox>
+                                                                </row>
+                                                                <row width="100%">Prioridad:
+                                                                    <combobox id="prioridad"
                                                     model="@{abmcTracksWin.prioridadesModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.prioridadesModel.selected}" width="90%">
-                                                            <comboitem self="@{each=prio}"
+                                                                        <comboitem self="@{each=prio}"
                                                         label="@{prio.nombre}"/>
-                                                        </combobox>
-                                                    </row>
-                                                    <row width="100%">Importancia:
-                                                        <combobox id="importancia"
+                                                                    </combobox>
+                                                                </row>
+                                                                <row width="100%">Importancia:
+                                                                    <combobox id="importancia"
                                                     model="@{abmcTracksWin.importanciaModel.all}"
                                                     autodrop="true"
                                                     selectedItem="@{abmcTracksWin.importanciaModel.selected}" width="90%">
-                                                            <comboitem self="@{each=imp}"
+                                                                        <comboitem self="@{each=imp}"
                                                         label="@{imp.nombre}"/>
-                                                        </combobox>
+                                                                    </combobox>
+                                                                </row>
+                                                            </rows>
+                                                        </grid>
+                                                        <tagsadmin model="@{abmcTracksWin.trackModel}" />
+                                                    </vbox>
+                                                </vbox>
+                                            </panelchildren>
+                                        </panel>
+                                    </columnchildren>
+                                </columnlayout>
+                            </tabpanel>
+                            <tabpanel>
+                                <div width="100%">
+                                    <groupbox mold="3d">
+                                        <caption label="Comentarios" />
+                                        <vbox width="100%">
+                                            <checkbox id="envioEmailPosts"
+                                                                label="Enviar email"
+                                                                checked="true"/>
+                                            <label value="Ingrese un comentario: "/>
+                                            <fckeditor id="ingresoComentario"  customConfigurationsPath="/config.js" toolbarSet="Post" width="90%"/>
+                                            <hbox>
+                                                <button id="submitComment" label="Enviar"/>
+                                                <checkbox id="descendiente" label="Descendiente" />
+                                            </hbox>
+                                            <html ></html>
+                                        </vbox>
+                                        <vbox id="vboxShowComments" width="100%">
+                                            <grid id="postsGrid" mold="paging" pageSize="5" pagingPosition="top" width="100%" model="@{abmcTracksWin.trackModel.selected.postsEntityCollection}">
+                                                <rows>
+                                                    <row self="@{each=post}">
+                                                        <hbox width="100%">
+                                                            <div>
+                                                                <html content="@{post.contenido}"/>
+                                                                <separator orient="horizontal" bar="true"/>
+                                                                <hbox>
+                                                                    <label value="@{post.userId.apellidoNombre}"/>
+                                                                    <space bar="true" width="10%"/>
+                                                                    <label value="@{post.fechaCreacion}"/>
+                                                                </hbox>
+                                                            </div>
+                                                        </hbox>
                                                     </row>
                                                 </rows>
                                             </grid>
-                                            <tagsadmin model="@{abmcTracksWin.trackModel}" />
                                         </vbox>
-                                    </vbox>
-                                </panelchildren>
-                            </panel>
-                        </columnchildren>
-                    </columnlayout>
+                                    </groupbox>
+                                </div>
+                            </tabpanel>
+                            <tabpanel>
+                                <div align="center"
+                                     height="100%">
+                                    <grid id="adjuntos"
+                                          width="70%"
+                                          model="@{abmcTracksWin.trackModel.selected.attachmentEntityCollection}">
+                                        <rows>
+                                            <row self="@{each=adjunto}">
+                                                <toolbarbutton  label="@{adjunto.documentEntity.titulo}"
+                                                                                href="@{adjunto.documentEntity.docPath}"
+                                                                                target="__blank"/>
+                                                <toolbarbutton  label="@{adjunto.usuario.apellidoNombre}"
+                                                                                href="@{adjunto.documentEntity.docPath}"
+                                                                                target="__blank"/>
+                                                <toolbarbutton  label="@{adjunto.fecha}"
+                                                                                href="@{adjunto.documentEntity.docPath}"
+                                                                                target="__blank"/>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                    <space />
+                                    <hbox>
+                                        <vbox>
+                                            <label
+                                                                value="Titulo: "/>
+                                            <textbox id="tituloDoc"
+                                                                width="100%"/>
+                                            <label
+                                                                value="Descripcion: "/>
+                                            <textbox id="descripcionDoc"
+                                                                width="100%"
+                                                                multiline="true"/>
+                                            <checkbox id="envioEmailAdjuntos"
+                                                                label="Enviar email"
+                                                                checked="true"/>
+                                        </vbox>
+                                        <space />
+                                        <fileupload height="20%" id="subir" />
+                                    </hbox>
+                                </div>
+                            </tabpanel>
+                        </tabpanels>
+                    </tabbox>
                 </div>
             </div>
         </center>
