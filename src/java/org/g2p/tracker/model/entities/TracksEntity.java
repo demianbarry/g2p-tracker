@@ -5,11 +5,9 @@
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,6 +26,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import org.g2p.tracker.utils.Fecha;
 
 /**
@@ -96,6 +95,8 @@ public class TracksEntity extends BaseEntity implements Serializable {
     private WebsiteUsersEntity userIdOwner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
+    @Transient
+    private Double dummy;
 
     public TracksEntity() {
     }
@@ -313,37 +314,37 @@ public class TracksEntity extends BaseEntity implements Serializable {
         final int LIMITE_MEDIO = -2;
         final int LIMITE_SUPERIOR = 0;
 
-            Fecha fechaActual = new Fecha();
+        Fecha fechaActual = new Fecha();
 
-            long edad = fechaActual.getDiff(fechaCreacion, Fecha.DIAS);
-            long limite = fechaActual.getDiff(deadline, Fecha.DIAS);
-            int factorAntiguedad = 1;
-            float factorLimiteFecha = (float) 1.0;
+        long edad = fechaActual.getDiff(fechaCreacion, Fecha.DIAS);
+        long limite = fechaActual.getDiff(deadline, Fecha.DIAS);
+        int factorAntiguedad = 1;
+        float factorLimiteFecha = (float) 1.0;
 
-            if (edad > EDAD_INFERIOR && edad <= EDAD_SUPERIOR){
-                factorAntiguedad = 3;
+        if (edad > EDAD_INFERIOR && edad <= EDAD_SUPERIOR) {
+            factorAntiguedad = 3;
+        } else {
+            if (edad > EDAD_SUPERIOR) {
+                factorAntiguedad = 5;
             }
-            else {
-                if (edad > EDAD_SUPERIOR){
-                    factorAntiguedad = 5;
+        }
+
+        if (limite >= LIMITE_MEDIO && limite < LIMITE_SUPERIOR) {
+            factorLimiteFecha = (float) 0.75;
+        } else {
+            if (limite >= LIMITE_INFERIOR && limite < LIMITE_MEDIO) {
+                factorLimiteFecha = (float) 0.5;
+            } else {
+                if (limite < LIMITE_INFERIOR) {
+                    factorLimiteFecha = (float) 0.25;
                 }
             }
-
-            if (limite >= LIMITE_MEDIO && limite < LIMITE_SUPERIOR){
-                factorLimiteFecha = (float) 0.75;
-            }
-            else {
-                if (limite >= LIMITE_INFERIOR && limite < LIMITE_MEDIO){
-                    factorLimiteFecha = (float) 0.5;
-                }
-                else {
-                    if (limite < LIMITE_INFERIOR){
-                        factorLimiteFecha = (float) 0.25;
-                    }
-                }
-            }
+        }
 //
         return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
+    }
 
+    public void setDummy(Double dummy) {
+        this.dummy = dummy;
     }
 }
