@@ -15,6 +15,7 @@ import org.g2p.tracker.model.entities.AccionesAppsEntity;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.CircuitosEstadosEntity;
 import org.g2p.tracker.model.entities.EstadosEntity;
+import org.g2p.tracker.model.entities.TransicionEstadosEntity;
 
 /**
  *
@@ -27,10 +28,12 @@ public class CircuitosModel extends BaseModel {
     //Models
     protected EstadosModel estadosModel = new EstadosModel();
     protected AccionesModel accionesModel = new AccionesModel();
+    protected TransicionesModel transicionesModel = new TransicionesModel();
     
     //Entitys
     protected EstadosEntity estadoSelected;
     protected AccionesAppsEntity accionSelected;
+    protected TransicionEstadosEntity transicionSelected;
 
 
     //Constructor
@@ -127,6 +130,50 @@ public class CircuitosModel extends BaseModel {
             Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
             queryParameters.put("circuitoId", (Integer) selected.getPK());
             return findEntities("AccionesAppsEntity.findByCircuitoId", queryParameters);
+        }
+
+        return null;
+    }
+
+    /*--------------------------------------------------Metodos para manejar transiciones--------------------------------------------------------*/
+
+    public void persistTransicion(boolean ownTx) throws Exception {
+        transicionesModel.create(transicionSelected, ownTx);
+    }
+
+    public void mergeTransicion(boolean ownTx) throws IllegalOrphanException, NonexistentEntityException, Exception {
+        transicionesModel.edit(transicionSelected, ownTx);
+    }
+
+    public void deleteTransicion(boolean ownTx) throws IllegalOrphanException, NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        transicionesModel.destroy(transicionSelected, ownTx);
+    }
+
+    public void persistTransicion() throws Exception {
+        transicionesModel.create(transicionSelected);
+    }
+
+    public void mergeTransicion() throws IllegalOrphanException, NonexistentEntityException, Exception {
+        transicionesModel.edit(transicionSelected);
+    }
+
+    public void deleteTransicion() throws IllegalOrphanException, NonexistentEntityException, NamingException, IllegalStateException, SecurityException, SystemException, Exception {
+        transicionesModel.destroy(transicionSelected);
+    }
+
+    public void setTransicionSelected(TransicionEstadosEntity transicionSelected) {
+        this.transicionSelected = transicionSelected;
+    }
+
+    public TransicionEstadosEntity getTransicionSelected() {
+        return transicionSelected;
+    }
+
+    public List<BaseEntity> getTransiciones() {
+        if (selected != null && selected.getPK() != null) {
+            Hashtable<String, Integer> queryParameters = new Hashtable<String, Integer>();
+            queryParameters.put("circuitoId", (Integer) selected.getPK());
+            return findEntities("TransicionEstadosEntity.findByCircuitoId", queryParameters);
         }
 
         return null;
