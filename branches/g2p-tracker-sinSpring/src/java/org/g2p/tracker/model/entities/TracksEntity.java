@@ -28,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.g2p.tracker.utils.Fecha;
 
 /**
  *
@@ -36,9 +37,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "tracks")
 @NamedQueries({
-    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t"),
-    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo"),
-    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection")
+    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t ORDER BY dummy"),
+    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo ORDER BY dummy"),
+    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection ORDER BY dummy")
 })
 public class TracksEntity extends BaseEntity implements Serializable {
 
@@ -306,15 +307,43 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public Double getDummy() {
-        long fechaActual = new Date().getTime();
+        final int EDAD_INFERIOR = 10;
+        final int EDAD_SUPERIOR = 20;
+        final int LIMITE_INFERIOR = -5;
+        final int LIMITE_MEDIO = -2;
+        final int LIMITE_SUPERIOR = 0;
 
-        // a la cantidad de tiempo que falta para la llegada
-        // del deadline se la complementa para que de un valor alto cuando
-        // falta poco y un valor bajo cuando falta mucho
-        long factorLimiteFecha = Math.abs(1000000000 - (fechaActual - deadline.getTime()));
+            Fecha fechaActual = new Fecha();
 
-        long factorAntiguedad = fechaActual - fechaCreacion.getTime();
+            long edad = fechaActual.getDiff(fechaCreacion, Fecha.DIAS);
+            long limite = fechaActual.getDiff(deadline, Fecha.DIAS);
+            int factorAntiguedad = 1;
+            float factorLimiteFecha = (float) 1.0;
 
+            if (edad > EDAD_INFERIOR && edad <= EDAD_SUPERIOR){
+                factorAntiguedad = 3;
+            }
+            else {
+                if (edad > EDAD_SUPERIOR){
+                    factorAntiguedad = 5;
+                }
+            }
+
+            if (limite >= LIMITE_MEDIO && limite < LIMITE_SUPERIOR){
+                factorLimiteFecha = (float) 0.75;
+            }
+            else {
+                if (limite >= LIMITE_INFERIOR && limite < LIMITE_MEDIO){
+                    factorLimiteFecha = (float) 0.5;
+                }
+                else {
+                    if (limite < LIMITE_INFERIOR){
+                        factorLimiteFecha = (float) 0.25;
+                    }
+                }
+            }
+//
         return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
+
     }
 }
