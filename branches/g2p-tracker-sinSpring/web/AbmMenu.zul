@@ -6,113 +6,102 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmMenuWin"?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul" >
-    <window id="abmMenuWin" title="Administrar Páginas" use="org.g2p.tracker.controllers.AbmMenuController" width="900px"  height="300px" >
-            <borderlayout>
-                <west title="Paginas" size="25%" flex="true" maxsize="250" splittable="true" collapsible="true">
-                    <vbox>
-                        <hbox>
+    <window id="abmMenuWin" title="Administrar Páginas" use="org.g2p.tracker.controllers.AbmMenuController" width="100%"  height="100%"  >
+        <panel title="Páginas" collapsible="true" framable="true">
+            <panelchildren>
+                <vbox>
+                    <hbox>
                 <!-- botones ejecutadores -->
-                            <button id="btnBaja"
+                        <button id="btnBaja"
                             label="DarBaja"
                             />
-                            <button id="btnAlta"
+                        <button id="btnAlta"
                             label="DarAlta"
                             />
-                        </hbox>
-                        
-                        <listbox id="lbPaginas"
+                    </hbox>
+                    <listbox id="lbPaginas"
                             multiple="true"
-                            height="300px"
+                            height="100%"
                             oddRowSclass="non-odd"
                             fixedLayout="true"
                             checkmark="true"
-
                             >
-                        
-                        </listbox>
+                    </listbox>
 
                         
-                    </vbox>
-                </west>
+                </vbox>
+            </panelchildren>
+        </panel>
 
-
-                <center title="Menues" border="none" flex="true">
-                    <vbox>
+        <panel title="Menues" collapsible="true" framable="true">
+            <panelchildren>
+                <vbox>
                     <hbox>
-                            <button id="btnAceptar" label="Aceptar" />
-                            <button id="btnAplicar" label="Aplicar" />
-                            <button id="btnCancelar" label="Cancelar" />
-                            <button id="btnDesSel" label="Desmarcar todo" />
-                            <button id="btnSel" label="Marcar todo" />
-                        </hbox>
-                    
+                        <button id="btnAceptar" label="Aceptar" />
+                        <button id="btnAplicar" label="Aplicar" />
+                        <button id="btnCancelar" label="Cancelar" />
+                        <button id="btnDesSel" label="Desmarcar todo" />
+                        <button id="btnSel" label="Marcar todo" />
+                    </hbox>
                     <grid>
-                        
-
-                            <columns>
-                                <column label="Seleccionar" />
-                                <column label="Nombre" />
-                                <column label="Descripcion" />
-                                <column label="URL" />
-                                <column label="Grupo" />
-                            </columns>
-
-                            <rows id="filas" >
+                        <columns>
+                            <column label="Seleccionar" />
+                            <column label="Nombre" />
+                            <column label="Descripcion" />
+                            <column label="URL" />
+                            <column label="Grupo" />
+                        </columns>
+                        <rows id="filas" >
                                 <!--
                                 se cargan los menues
                                 -->
-                            </rows>
+                        </rows>
                     </grid>
-                    </vbox>
-                </center>
-
-                <east title="Roles y Usuarios" size="50%" flex="true" maxsize="250" splittable="true" collapsible="true">
-                    <vbox>
-                        <hbox>
-                            <button id="btnAsociar" label="Asociar" />
-                            <button id="btnDesasociar" label="Desasociar"/>
-                        </hbox>
-                        <columnlayout>
+                </vbox>
+            </panelchildren>
+        </panel>
+        <panel title="Accesos" collapsible="true" framable="true">
+            <panelchildren>
+                <vbox>
+                    <hbox>
+                        <button id="btnAsociar" label="Asociar" />
+                        <button id="btnDesasociar" label="Desasociar"/>
+                    </hbox>
+                    <columnlayout>
 				<!-- descripcion del menu seleccionado -->
-                            <columnchildren width="50%">
-                                <panel title="Roles:" height="">
-                                    <panelchildren>
-                                        <listbox id="lbRoles"
+                        <columnchildren width="50%">
+                            <panel title="Roles:" height="">
+                                <panelchildren>
+                                    <listbox id="lbRoles"
                             width=""
                             height=""
                             multiple="true"
                             checkmark="true"
                             oddRowSclass="non-odd"
                             fixedLayout="true"
-            
                             >
-                                           
-
-                                        </listbox>
-                                    </panelchildren>
-                                </panel>
-                            </columnchildren>
-
+                                    </listbox>
+                                </panelchildren>
+                            </panel>
+                        </columnchildren>
                  <!-- grupos -->
-                            <columnchildren width="50%">
-                                <panel title="Usuarios:" height="">
-                                    <panelchildren>
-                                        <listbox id="lbUsuarios"
+                        <columnchildren width="50%">
+                            <panel title="Usuarios:" height="">
+                                <panelchildren>
+                                    <listbox id="lbUsuarios"
                             multiple="true"
-                            height="300px"
+                            height="100%"
                             oddRowSclass="non-odd"
                             fixedLayout="true"
                             checkmark="true"
                             >
-                                            
-                                        </listbox>
-                                    </panelchildren>
-                                </panel>
-                                </columnchildren>
-                                </columnlayout>
-                                
-                    </vbox>
-                </east>
-            </borderlayout>
-        </window>
-    </zk>
+                                    </listbox>
+                                </panelchildren>
+                            </panel>
+                        </columnchildren>
+                    </columnlayout>
+                </vbox>
+            </panelchildren>
+        </panel>
+</window>
+</zk>
