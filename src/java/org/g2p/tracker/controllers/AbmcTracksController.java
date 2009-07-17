@@ -369,7 +369,8 @@ public class AbmcTracksController extends BaseController {
                 BaseModel.createEntity(sticky, true);
 
                 trackModel.getSelected().getStickyNotesEntityCollection().add(sticky);
-                binder.loadComponent(stickyList);
+                binder.loadComponent(getFellow("stickyPopup"));
+                ((Popup) getFellow("stickyPopup")).open(tracksList.getSelectedItem());
             } catch (Exception ex) {
                 Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -413,6 +414,7 @@ public class AbmcTracksController extends BaseController {
     }
 
     public void onSelect$tracksList(ForwardEvent event) {
+        binder.saveAttribute(tracksList, "selectedItem");
         if (trackModel.getSelected() != null && trackModel.getSelected().getStickyNotesEntityCollection().size() > 0) {
             ((Popup) getFellow("stickyPopup")).open(tracksList.getSelectedItem());
         }
