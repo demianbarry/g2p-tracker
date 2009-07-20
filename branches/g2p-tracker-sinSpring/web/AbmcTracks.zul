@@ -335,13 +335,13 @@
                                                                     <datebox id="fechaCreacion" value="@{abmcTracksWin.trackModel.selected.fechaCreacion}" buttonVisible="false" disabled="true"/>
                                                                 </row>
                                                                 <row width="100%">Fecha Estimada de Realización:
-                                                                    <datebox id="fechaEstimadaRealizacion"/>
+                                                                    <datebox id="fechaEstimadaRealizacion" value="@{abmcTracksWin.trackModel.selected.fechaEstimadaRealizacion}"/>
                                                                 </row>
                                                                 <row width="100%">Fecha límite:
-                                                                    <datebox id="fechaLimite"/>
+                                                                    <datebox id="fechaLimite" value="@{abmcTracksWin.trackModel.selected.deadline}"/>
                                                                 </row>
                                                                 <row width="100%">Fecha de Realización:
-                                                                    <datebox id="fechaRealizacion"/>
+                                                                    <datebox id="fechaRealizacion" value="@{abmcTracksWin.trackModel.selected.fechaRealizacion}"/>
                                                                 </row>
                                                             </rows>
                                                         </grid>
@@ -352,29 +352,33 @@
                                                             <rows>
                                                                 <row width="100%">Estado:
                                                                     <combobox id="estado"
-                                                    model="@{abmcTracksWin.estadosModel.all}"
-                                                    autodrop="true"
-                                                    selectedItem="@{abmcTracksWin.estadosModel.selected}" width="90%">
+                                                                                model="@{abmcTracksWin.estadosModel.all}"
+                                                                                autodrop="true"
+                                                                                selectedItem="@{abmcTracksWin.estadosModel.selected}" width="90%">
                                                                         <comboitem self="@{each=est}"
-                                                        label="@{est.nombre}"/>
+                                                                                    label="@{est.nombre}"/>
                                                                     </combobox>
                                                                 </row>
                                                                 <row width="100%">Prioridad:
                                                                     <combobox id="prioridad"
-                                                    model="@{abmcTracksWin.prioridadesModel.all}"
-                                                    autodrop="true"
-                                                    selectedItem="@{abmcTracksWin.prioridadesModel.selected}" width="90%">
+                                                                                model="@{abmcTracksWin.prioridadesModel.all}"
+                                                                                autodrop="true"
+                                                                                selectedItem="@{abmcTracksWin.prioridadesModel.selected}"
+                                                                                width="90%"
+                                                                                onFocus="@{abmcTracksWin.refreshLists()}">
                                                                         <comboitem self="@{each=prio}"
-                                                        label="@{prio.nombre}"/>
+                                                                                    label="@{prio.nombre}"/>
                                                                     </combobox>
                                                                 </row>
                                                                 <row width="100%">Importancia:
                                                                     <combobox id="importancia"
-                                                    model="@{abmcTracksWin.importanciaModel.all}"
-                                                    autodrop="true"
-                                                    selectedItem="@{abmcTracksWin.importanciaModel.selected}" width="90%">
+                                                                                model="@{abmcTracksWin.importanciaModel.all}"
+                                                                                autodrop="true"
+                                                                                selectedItem="@{abmcTracksWin.importanciaModel.selected}"
+                                                                                width="90%"
+                                                                                onFocus="@{abmcTracksWin.refreshLists()}">
                                                                         <comboitem self="@{each=imp}"
-                                                        label="@{imp.nombre}"/>
+                                                                                    label="@{imp.nombre}"/>
                                                                     </combobox>
                                                                 </row>
                                                             </rows>

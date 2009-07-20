@@ -56,8 +56,7 @@ public class BaseModel {
 
     public BaseModel(Class entity) {
         setEntity(entity);
-        System.out.println("QUERY::::::::: "+entity.getSimpleName()+".findAll");
-        all = Collections.synchronizedList(findEntities(entity.getSimpleName()+".findAll",null));
+        setAll(Collections.synchronizedList(findEntities(entity.getSimpleName() + ".findAll", null)));
         filtered = new ArrayList();
     }
 
@@ -133,6 +132,10 @@ public class BaseModel {
     }
 
     public void setAll(List<BaseEntity> allEntities) {
+        if (Comparable.class.isAssignableFrom(entity)) {
+            List entities = allEntities;
+            Collections.sort(entities);
+        }
         all = allEntities;
     }
 
@@ -497,7 +500,7 @@ public class BaseModel {
     }
 
     public void refreshAll() {
-        setAll(findEntities(entity.getSimpleName()+".findAll",null));
+        setAll(findEntities(entity.getSimpleName() + ".findAll", null));
     }
 
     public void filter(List<BaseEntity> entities) {

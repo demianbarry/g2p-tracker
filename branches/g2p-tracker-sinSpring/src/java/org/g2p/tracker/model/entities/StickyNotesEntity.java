@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
@@ -28,6 +27,7 @@ import javax.persistence.Table;
 @Table(name = "sticky_notes")
 @NamedQueries({@NamedQuery(name = "StickyNotesEntity.findAll", query = "SELECT s FROM StickyNotesEntity s ORDER BY leido")})
 public class StickyNotesEntity extends BaseEntity implements Serializable, Comparable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -123,12 +123,7 @@ public class StickyNotesEntity extends BaseEntity implements Serializable, Compa
     @Override
     public int compareTo(Object other) {
         StickyNotesEntity sticky = (StickyNotesEntity) other;
-        if(this.getLeido() == sticky.getLeido()) {
-            return 0;
-        } else if(this.getLeido() && !sticky.getLeido()) {
-            return -1;
-        }
-        return 1;
+        return (this.getLeido() ? 1 : 0) - (sticky.getLeido() ? 1 : 0);
     }
 
     @Override
@@ -140,5 +135,4 @@ public class StickyNotesEntity extends BaseEntity implements Serializable, Compa
     public Object getPK() {
         return stickyNoteId;
     }
-
 }
