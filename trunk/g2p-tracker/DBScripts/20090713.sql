@@ -1,0 +1,1 @@
+ALTER TABLE `g2p_tracker`.`tracks` ADD COLUMN `complejidad` FLOAT  NOT NULL AFTER `OBJ_VERSION`;
