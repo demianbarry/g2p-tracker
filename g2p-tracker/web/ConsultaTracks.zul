@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="" width=""  height="">
+        <grid fixedLayout="true" width="600px" oddRowSclass="myodd">
+	<rows>
+		<row model="@{}">
+            <textbox value="" disabled="true"/>
+			<detail open="false">
+                <vbox>
+                    <label id=""
+                    value="Escribe tu cometario:"
+                    />
+                    <textbox id="putComment"
+                    value=""
+                    />
+                </vbox>
+			</detail>
+
+		</row>
+	</rows>
+</grid>
+	</window>
+</zk>

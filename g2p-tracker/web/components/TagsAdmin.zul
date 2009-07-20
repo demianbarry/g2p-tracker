@@ -1,0 +1,49 @@
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estandar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./tagsAdmin"?>
+<zk>
+    <label value="Etiquetar"/>
+    <bandbox id="tagsAdmin" apply="org.g2p.tracker.composers.TagsAdminComposer">
+    <!--<caption id="tagsCaption" label="Tags" style="color:red;"/>-->
+        <bandpopup id="tagsAdminPopup">
+            <div id="t">
+                <!--<hbox>Search:
+                    <textbox id="searchBox"/>
+                </hbox>
+                <separator bar="true" spacing="20px"/>-->
+                <hbox>
+                    <button id="nuevoButton" label="Nuevo" />
+                    <button id="administrarButton" label="Administrar" />
+                    <checkbox id="treeCheck" label="Árbol" width="100%"/>
+                </hbox>
+                <separator bar="true" spacing="20px"/>
+                <tree id="tagsTree" visible="false" fixedLayout="true" multiple="true" checkmark="true" vflex="true">
+                </tree>
+                <listbox id="tagsList" visible="true" multiple="true" height="200px" checkmark="true" vflex="true" model="@{tagsAdmin$TagsAdminComposer.tags}" >
+                    <listitem self="@{each=tag}" >
+                        <listcell label="@{tag.tag}"/>
+                        <listcell label="@{tag.descripcion}"/>
+                    </listitem>
+                </listbox>
+                <hbox>
+                    <button id="aplicarButton" label="Aplicar"/>
+                </hbox>
+                <window visible="false" id="newTagWin" title="Nuevo tag" border="normal" apply="org.g2p.tracker.composers.TagsAdminComposer">
+                    <vbox width="100%" spacing="0">
+                        Tag:
+                        <textbox id="tagText" width="40%" constraint="no empty"/>
+                        Descripción:
+                        <textbox id="descripcionText" width="80%" constraint="no empty"/>
+                    </vbox>
+                    <separator bar="true" spacing="20px"/>
+                    <hbox>
+                        <button id="aceptarButton" label="Aceptar"/>
+                        <button id="cancelarButton" label="Cancelar"/>
+                    </hbox>
+                </window>
+            </div>
+        </bandpopup>
+    </bandbox>
+</zk>
+

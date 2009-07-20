@@ -1,0 +1,58 @@
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./loginWin"?>
+<window id="loginWin" use="org.g2p.tracker.controllers.LoginPageController">
+    <borderlayout height="450px">
+        <north size="20%" style="background-color:#DAF3FF;">
+            <div align="center">
+                <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Debe loguearse para comenzar a usar la aplicación</h2>]]>
+                </html>
+            </div>
+        </north>
+        <center style="background-color:#DAF3FF;border:none;">
+            <div align="center">
+                <div id="proveedoresList">
+                    <listbox id="proveedoresListbox" width="80%" model="@{loginWin.proveedoresSSOModel.all}" selectedItem="@{loginWin.proveedoresSSOModel.selected}">
+                        <listhead sizable="false">
+                            <listheader width="30%" height="10%"/>
+                            <listheader width="50%" height="10%"/>
+                            <listheader width="20%" height="10%"/>
+                        </listhead>
+                        <listitem self="@{each=x0}">
+                            <listcell label="@{x0.nombre}" />
+                            <listcell label="@{x0.descripcion}" />
+                            <listcell>
+                                <image src="@{x0.urlIcono}" width="80%"/>
+                            </listcell>
+                        </listitem>
+                    </listbox>                    
+                </div>
+                <grid id="localLoginGrid" 
+                    width="80%"
+                    oddRowSclass="none">
+                    <rows>
+                        <row zclass="simple-row">Username:
+                            <textbox id="username"/>
+                        </row>
+                        <row zclass="simple-row">Password:
+                            <textbox id="password" type="password"/>
+                        </row>
+                        <row spans="2"  zclass="simple-row">
+                            <checkbox id="remember" label="Recordarme en esta computadora"/>
+                        </row>
+                        <row spans="2" zclass="simple-row">
+                            <div align="center">
+                                <hbox valign="middle" spacing="10%">
+                                    <button id="okButton" label="OK" width="100px"/>
+                                </hbox>
+                            </div>
+                        </row>
+                    </rows>
+                </grid>
+                <space spacing="5%" orient="horizontal"/>
+                <toolbarbutton id="openIdLoginButton" label="Usar cuenta OpenId"/>
+            </div>
+        </center>
+    </borderlayout>
+</window>

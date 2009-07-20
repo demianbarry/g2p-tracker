@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+   <div apply="org.g2p.tracker.composers.BaseLeftPageComposer">
+        <panel width="100%" border="normal" title="Navigation">
+            <panelchildren style="padding:5px;">
+                <vbox id="navBar">
+                </vbox>
+            </panelchildren>
+        </panel>
+        <panel width="100%" border="normal" style="margin-top:20px;" title="Project Goals">
+            <panelchildren>
+                <vbox id="navBar1">
+                    <label value="${sessionScope.User}"/>
+                </vbox>
+            </panelchildren>
+        </panel>
+    </div>
+</zk>

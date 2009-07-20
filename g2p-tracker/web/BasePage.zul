@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./baseWin"?>
+    <window id="baseWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.BasePageController" style="">
+        <borderlayout height="100%" style="background:#c5e6ef;">
+            <north border="0" height="17%" zclass="external-page-n">
+                <hbox width="100%">
+                    <div width="100%">
+                        <label value="G2P Tracker" sclass="main-title-label"/>
+                    </div>
+                    <div style="float:right">
+                        <hbox>
+                            <vbox id="loginBox" style="float:left">
+                                <toolbarbutton id="loginLabel" label="Login" style="float:left"/>
+                                <toolbarbutton id="logoutLabel" label="Logout" style="float:right"/>
+                            </vbox>
+                            <label value="-"/>
+                            <div style="float:right">
+                                <toolbarbutton id="registerLabel" label="Registrarse"/>
+                            </div>
+                        </hbox>
+                    </div>
+                </hbox>
+            </north>
+	<!-- Sidebar -->
+            <west width="20%" title="Navegación" splittable="true" collapsible="true" sclass="external-page-w">
+                <panel collapsible="true" title="Barra de navegación">
+                    <panelchildren id="panelChildren" zclass="menu-panel-child">
+                        <vbox id="navBar">
+                        </vbox>
+                    </panelchildren>
+                </panel>
+            </west>
+            <east width="20%" title="Gadgets" flex="true" splittable="true" collapsible="true" sclass="external-page-w">
+                <include src="BaseRightPage.zul" />
+            </east>
+	<!-- Content -->
+            <center flex="true">
+                <include id="include" src="HomePage.zul"  />
+            </center>
+            <south size="10%" border="0" sclass="external-page-w">
+                <include src="BaseAfterPage.zul" />
+            </south>
+        </borderlayout>
+    </window>
+</zk>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmAccesoMenuWin"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="abmAccesoMenuWin" title="Administrar acceso a los menues" width="100%"  height="100%" >
+        <vbox>
+            <hbox>
+                <!-- permite seleccionar si le le va a permitir el acceso
+                a roles y/o usuarios -->
+                <listbox id="autorizado" mold="select" onSelect="">
+						<listitem>
+							<listcell label="Roles" />
+						</listitem>
+                        <listitem>
+							<listcell label="Usuarios" />
+						</listitem>
+
+				</listbox>
+            </hbox>
+                <columnlayout>
+                    <!-- muestra las páginas disponibles -->
+                    <columnchildren width="30%" style="padding: 5px">
+                        <panel height="100px" style="margin-bottom:10px"
+                            title="Páginas" border="normal" maximizable="true"
+                            collapsible="true">
+                                <panelchildren>
+                                    <listbox id="paginas" multiple="true"
+                                    height="100%" oddRowSclass="non-odd"
+                                    fixedLayout="true" checkmark="true">
+                                        <listitem >
+                                            <listcell label="pag1"/>
+                                        </listitem>
+                                        <listitem>
+                                        <listcell label="pag2"/>
+                                    </listitem>
+
+                                    </listbox>
+                                </panelchildren>
+                        </panel>
+                    <!-- muestra los usuarios o roles a los cuales permitir
+                    ver las páginas -->
+                    </columnchildren>
+                    <columnchildren width="30%" style="padding: 5px">
+					<panel height="100px" style="margin-bottom:10px"
+						title="autorizado.selected" border="normal" maximizable="true"
+						collapsible="true">
+                            <panelchildren>
+                                <listbox id="roles" multiple="true"
+                                    height="100%" oddRowSclass="non-odd"
+                                    fixedLayout="true" checkmark="true">
+                                    <listitem>
+                                        <listcell label="algo1"/>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="algo2"/>
+                                    </listitem>
+                                </listbox>
+                            </panelchildren>
+					</panel>
+
+                    </columnchildren>
+                 </columnlayout>
+            <hbox>
+                <!-- botones ejecutadores -->
+                <button label="Desvincular"/>
+                <button label="Vincular"/>
+            </hbox>
+        </vbox>
+	</window>
+</zk>
