@@ -1,0 +1,645 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.g2p.tracker.model.entities;
+
+import java.io.Serializable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+/**
+ *
+ * @author nacho
+ */
+@Entity
+@Table(name = "workers_per_tracks")
+@NamedQueries({@NamedQuery(name = "WorkersPerTracksEntity.findAll", query = "SELECT w FROM WorkersPerTracksEntity w")})
+public class WorkersPerTracksEntity extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected WorkersPerTracksEntityPK workersPerTracksPK;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private WebsiteUsersEntity worker;
+    @JoinColumn(name = "track _id", referencedColumnName = "track_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private TracksEntity track;
+
+    public TracksEntity getTrack() {
+        return track;
+    }
+
+    public void setTrack(TracksEntity track) {
+        this.track = track;
+    }
+
+    public WebsiteUsersEntity getWorker() {
+        return worker;
+    }
+
+    public void setWorker(WebsiteUsersEntity worker) {
+        this.worker = worker;
+    }
+
+    public WorkersPerTracksEntity() {
+    }
+
+    public WorkersPerTracksEntity(WorkersPerTracksEntityPK workersPerTracksPK) {
+        this.workersPerTracksPK = workersPerTracksPK;
+    }
+
+    public WorkersPerTracksEntity(int trackId, int userId) {
+        this.workersPerTracksPK = new WorkersPerTracksEntityPK(trackId, userId);
+    }
+
+    public WorkersPerTracksEntityPK getWorkersPerTracksPK() {
+        return workersPerTracksPK;
+    }
+
+    public void setWorkersPerTracksPK(WorkersPerTracksEntityPK workersPerTracksPK) {
+        this.workersPerTracksPK = workersPerTracksPK;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (workersPerTracksPK != null ? workersPerTracksPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof WorkersPerTracksEntity)) {
+            return false;
+        }
+        WorkersPerTracksEntity other = (WorkersPerTracksEntity) object;
+        if ((this.workersPerTracksPK == null && other.workersPerTracksPK != null) || (this.workersPerTracksPK != null && !this.workersPerTracksPK.equals(other.workersPerTracksPK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "org.g2p.tracker.model.entities.WorkersPerTracks[workersPerTracksPK=" + workersPerTracksPK + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return workersPerTracksPK;
+    }
+
+    public int getWorkerId() {
+        return getWorkersPerTracksPK().getUserId();
+    }
+}
+
+-----
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package org.g2p.tracker.model.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ *
+ * @author nacho
+ */
+@Entity
+@Table(name = "tracks")
+@NamedQueries({@NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t")})
+public class TracksEntity extends BaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "track_id")
+    private Integer trackId;
+    @Basic(optional = false)
+    @Column(name = "descripcion")
+    private String descripcion;
+    @Column(name = "observaciones")
+    private String observaciones;
+    @Basic(optional = false)
+    @Column(name = "fecha_creacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    @Column(name = "fecha_estimada_realizacion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaEstimadaRealizacion;
+    @Column(name = "deadline")
+    @Temporal(TemporalType.DATE)
+    private Date deadline;
+    @Column(name = "fecha_realizacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaRealizacion;
+    @Column(name = "titulo")
+    private String titulo;
+    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER)
+    private Set<StickyNotesEntity> stickyNotesEntityCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
+    private Set<PostsEntity> postsEntityCollection;
+    @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private PrioridadesEntity prioridadId;
+    @JoinColumn(name = "importancia_id", referencedColumnName = "importancia_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private ImportanciaEntity importanciaId;
+    @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private WebsiteUsersEntity userIdOwner;
+    @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private EstadosEntity estadoId;
+    @OneToMany(mappedBy = "track", fetch = FetchType.EAGER)
+    private Set<WorkersPerTracksEntity> workersCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
+    private Set<TagsPerTracksEntity> tagsCollection;
+
+    public Set<TagsPerTracksEntity> getTagsCollection() {
+        return tagsCollection;
+    }
+
+    public void setTagsCollection(Set<TagsPerTracksEntity> tagsCollection) {
+        this.tagsCollection = tagsCollection;
+    }
+
+    public TracksEntity() {
+    }
+
+    public TracksEntity(Integer trackId) {
+        this.trackId = trackId;
+    }
+
+    public TracksEntity(Integer trackId, String descripcion, Date fechaCreacion) {
+        this.trackId = trackId;
+        this.descripcion = descripcion;
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Integer getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(Integer trackId) {
+        this.trackId = trackId;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaEstimadaRealizacion() {
+        return fechaEstimadaRealizacion;
+    }
+
+    public void setFechaEstimadaRealizacion(Date fechaEstimadaRealizacion) {
+        this.fechaEstimadaRealizacion = fechaEstimadaRealizacion;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    public Date getFechaRealizacion() {
+        return fechaRealizacion;
+    }
+
+    public void setFechaRealizacion(Date fechaRealizacion) {
+        this.fechaRealizacion = fechaRealizacion;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Set<StickyNotesEntity> getStickyNotesEntityCollection() {
+        return stickyNotesEntityCollection;
+    }
+
+    public void setStickyNotesEntityCollection(Set<StickyNotesEntity> stickyNotesEntityCollection) {
+        this.stickyNotesEntityCollection = stickyNotesEntityCollection;
+    }
+
+    public Set<PostsEntity> getPostsEntityCollection() {
+        return postsEntityCollection;
+    }
+
+    public void setPostsEntityCollection(Set<PostsEntity> postsEntityCollection) {
+        this.postsEntityCollection = postsEntityCollection;
+    }
+
+    public PrioridadesEntity getPrioridadId() {
+        return prioridadId;
+    }
+
+    public void setPrioridadId(PrioridadesEntity prioridadId) {
+        this.prioridadId = prioridadId;
+    }
+
+    public ImportanciaEntity getImportanciaId() {
+        return importanciaId;
+    }
+
+    public void setImportanciaId(ImportanciaEntity importanciaId) {
+        this.importanciaId = importanciaId;
+    }
+
+    public WebsiteUsersEntity getUserIdOwner() {
+        return userIdOwner;
+    }
+
+    public void setUserIdOwner(WebsiteUsersEntity userIdOwner) {
+        this.userIdOwner = userIdOwner;
+    }
+
+    public EstadosEntity getEstadoId() {
+        return estadoId;
+    }
+
+    public void setEstadoId(EstadosEntity estadoId) {
+        this.estadoId = estadoId;
+    }
+
+    public Set<WorkersPerTracksEntity> getWorkersCollection() {
+        return workersCollection;
+    }
+
+    public void setWorkersCollection(Set<WorkersPerTracksEntity> workersCollection) {
+        this.workersCollection = workersCollection;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (trackId != null ? trackId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TracksEntity)) {
+            return false;
+        }
+        TracksEntity other = (TracksEntity) object;
+        if (!getTrackId().equals(other.getTrackId())) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "org.g2p.tracker.model.entities.TracksEntity[trackId=" + trackId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return getTrackId();
+    }
+
+
+}
+
+--------------
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.g2p.tracker.model.entities;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ *
+ * @author nacho
+ */
+@Entity
+@Table(name = "website_users")
+@NamedQueries({
+    @NamedQuery(name = "WebsiteUsersEntity.findByUserId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = :userId"),
+    @NamedQuery(name = "WebsiteUsersEntity.findAll", query = "SELECT w FROM WebsiteUsersEntity w"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByClaimedId", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.userId = (SELECT wu.websiteUsersPerProveedoresOpenidEntityPK.userId FROM WebsiteUsersPerProveedoresOpenidEntity wu WHERE wu.claimedId LIKE :claimedId AND wu.fechaAsociacion IS NOT NULL)"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByNameAndBirthday", query = "SELECT w FROM WebsiteUsersEntity w WHERE CONCAT(w.nombre,w.apellido,w.fechaNacimiento) = :concat"),
+    @NamedQuery(name = "WebsiteUsersEntity.findByLogin", query = "SELECT w FROM WebsiteUsersEntity w WHERE w.loginName = :loginName AND w.loginPassword = :loginPassword")
+})
+public class WebsiteUsersEntity extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "user_id")
+    private Integer userId;
+    @Basic(optional = false)
+    @Column(name = "login_name")
+    private String loginName;
+    @Column(name = "login_password")
+    private String loginPassword;
+    @Column(name = "nivel_visibilidad")
+    private String nivelVisibilidad;
+    @Basic(optional = false)
+    @Column(name = "nombre")
+    private String nombre;
+    @Basic(optional = false)
+    @Column(name = "apellido")
+    private String apellido;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "nro_legajo")
+    private Integer nroLegajo;
+    @Column(name = "nro_comprador")
+    private Integer nroComprador;
+    @Column(name = "OBJ_VERSION")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date objVersion;
+    @Basic(optional = false)
+    @Column(name = "fecha_nacimiento")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaNacimiento;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
+    private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
+    private Set<PostsEntity> postsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
+    private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
+    private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userIdOwner", fetch = FetchType.EAGER)
+    private Set<TracksEntity> tracksCollection;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    private Set<AccesoMenuEntity> accesoMenuCollection;
+    @OneToMany(mappedBy = "worker", fetch = FetchType.EAGER)
+    private Set<WorkersPerTracksEntity> tracksPerWorkerCollection;
+
+    public WebsiteUsersEntity() {
+    }
+
+    public WebsiteUsersEntity(Integer userId) {
+        this.userId = userId;
+    }
+
+    public WebsiteUsersEntity(Integer userId, String loginName, String loginPassword, String nombreCompleto, Date fechaNacimiento) {
+        this.userId = userId;
+        this.loginName = loginName;
+        this.loginPassword = loginPassword;
+        this.apellido = nombreCompleto;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getLoginPassword() {
+        return loginPassword;
+    }
+
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
+    }
+
+    public String getNivelVisibilidad() {
+        return nivelVisibilidad;
+    }
+
+    public void setNivelVisibilidad(String nivelVisibilidad) {
+        this.nivelVisibilidad = nivelVisibilidad;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getNroLegajo() {
+        return nroLegajo;
+    }
+
+    public void setNroLegajo(Integer nroLegajo) {
+        this.nroLegajo = nroLegajo;
+    }
+
+    public Integer getNroComprador() {
+        return nroComprador;
+    }
+
+    public void setNroComprador(Integer nroComprador) {
+        this.nroComprador = nroComprador;
+    }
+
+    public Date getObjVersion() {
+        return objVersion;
+    }
+
+    public void setObjVersion(Date objVersion) {
+        this.objVersion = objVersion;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getApellidoNombre() {
+        return getNombre() + " " + getApellido();
+    }
+
+    public Set<AuditaEstadosCircuitosEntity> getAuditaEstadosCircuitosCollection() {
+        return auditaEstadosCircuitosCollection;
+    }
+
+    public void setAuditaEstadosCircuitosCollection(Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection) {
+        this.auditaEstadosCircuitosCollection = auditaEstadosCircuitosCollection;
+    }
+
+    public Set<PostsEntity> getPostsCollection() {
+        return postsCollection;
+    }
+
+    public void setPostsCollection(Set<PostsEntity> postsCollection) {
+        this.postsCollection = postsCollection;
+    }
+
+    public Set<UsuarioPreferenciasEntity> getUsuarioPreferenciasCollection() {
+        return usuarioPreferenciasCollection;
+    }
+
+    public void setUsuarioPreferenciasCollection(Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection) {
+        this.usuarioPreferenciasCollection = usuarioPreferenciasCollection;
+    }
+
+    public Set<RolesPerWebsiteUsersEntity> getRolesPerWebsiteUsersCollection() {
+        return rolesPerWebsiteUsersCollection;
+    }
+
+    public void setRolesPerWebsiteUsersCollection(Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersCollection) {
+        this.rolesPerWebsiteUsersCollection = rolesPerWebsiteUsersCollection;
+    }
+
+    public Set<TracksEntity> getTracksCollection() {
+        return tracksCollection;
+    }
+
+    public void setTracksCollection(Set<TracksEntity> tracksCollection) {
+        this.tracksCollection = tracksCollection;
+    }
+
+    public Set<AccesoMenuEntity> getAccesoMenuCollection() {
+        return accesoMenuCollection;
+    }
+
+    public void setAccesoMenuCollection(Set<AccesoMenuEntity> accesoMenuCollection) {
+        this.accesoMenuCollection = accesoMenuCollection;
+    }
+
+    public Set<WorkersPerTracksEntity> getTracksOnWorkerCollection() {
+        return tracksPerWorkerCollection;
+    }
+
+    public void setTracksOnWorkerCollection(Set<WorkersPerTracksEntity> tracksOnWorkerCollection) {
+        this.tracksPerWorkerCollection = tracksOnWorkerCollection;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (userId != null ? userId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof WebsiteUsersEntity)) {
+            return false;
+        }
+        WebsiteUsersEntity other = (WebsiteUsersEntity) object;
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "org.g2p.tracker.model.entities.WebsiteUsers[userId=" + userId + "]";
+    }
+
+    @Override
+    public Object getPK() {
+        return userId;
+    }
+}
+
