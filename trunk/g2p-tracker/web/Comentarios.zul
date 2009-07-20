@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./detallesWin"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" >
+    <window id="detallesWin" title="Detalles" use="org.g2p.tracker.controllers.DetallesController" width="300px"  height="1000px" >
+        <tabbox orient="horizontal">
+            <tabs>
+                <tab label="Comentarios"
+                    closable="false"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel>
+                    <vbox>
+                        <label >
+                            Ingrese un comentario:
+                        </label>
+                        <fckeditor id="ingresoComentario"
+                                    customConfigurationsPath="/config.js"
+                                    toolbarSet="Post"
+                        />
+                        <hbox>
+                            <button id="btnSubmit"
+                            label="Enviar"
+                        />
+                            <checkbox id="descendiente" label="Descendiente" />
+                        </hbox>
+                        <html ></html>
+                        
+                    </vbox>
+                    <vbox id="vboxShowComments" >
+
+                        <grid id="grid" mold="paging" pageSize="2" pagingPosition="top">
+                            <rows id="filas">
+
+                            </rows>
+                        </grid>
+                    </vbox>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </window>
+    <zscript>
+            ingresoComentario.EditorDocument.body.contentEditable=false;
+    </zscript>
+
+</zk>

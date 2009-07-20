@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <toolbar mold="panel" align="center">
+        <toolbarbutton label="Sign in"/>
+        <toolbarbutton label="Sitemap"/>
+        <toolbarbutton label="Terms"/>
+        <toolbarbutton label="Report Abuse"/>
+        <toolbarbutton label="Print"/>
+        <separator orient="vertical" bar="true"/>
+        <toolbarbutton src="/img/Logo1.JPG"/>
+    </toolbar>
+</zk>

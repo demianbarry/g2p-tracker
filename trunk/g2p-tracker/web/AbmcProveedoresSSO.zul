@@ -1,0 +1,110 @@
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcProveedoresSSOWin"?>
+<window id="abmcProveedoresSSOWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcProveedoresSSOController">
+    <borderlayout>
+        <north size="60px">
+            <borderlayout>
+                <center border="none" style="background-color:#B1CBD5">
+                    <html><![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Proveedores SSO</h2>]]>
+                    </html>
+                </center>
+            </borderlayout>
+        </north>
+        <west width="70%" splittable="true" style="background-color:#B1CBD5">
+            <listbox id="proveedoresList" multiple="true" width="100%" model="@{abmcProveedoresSSOWin.proveedoresSSOModel.all}" selectedItem="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected}" >
+                <listhead sizable="true">
+                    <listheader id="proveedorNombreHeader" label="Nombre" sort="auto(nombre)" width="15%"/>
+                    <listheader id="proveedorDescripcionHeader" label="Descripcion" sort="auto(descripcion)" width="20%"/>
+                    <listheader id="proveedorObservacionesHeader" label="Observaciones" sort="auto(observaciones)" width="20%"/>
+                    <listheader id="proveedorURLDiscoveryHeader" label="URL Discovery" sort="auto(urlDiscovery)" width="20%"/>
+                    <listheader id="proveedorURLIconoHeader" label="Icon" width="25%"/>
+                </listhead>
+                <listitem self="@{each=x0}">
+                    <listcell label="@{x0.nombre}"/>
+                    <listcell label="@{x0.descripcion}"/>
+                    <listcell>
+                        <textbox rows="3" value="@{x0.observaciones}" readonly="true" width="100%" style="background:transparent;border:none;"/>
+                    </listcell>
+                    <listcell label="@{x0.urlDiscovery}"/>
+                    <listcell>
+                        <image src="@{x0.urlIcono}" height="60%" width="60%" />
+                    </listcell>
+                </listitem>
+            </listbox>
+        </west>
+        <center style="background-color:#B1CBD5">
+            <div id="proveedorDetail">
+		<!-- view mode -->
+                <div id="proveedorView" visible="@{abmcProveedoresSSOWin.viewMode}" width="100%">
+                    <grid width="100%">
+                        <columns>
+                            <column align="right" width="80px"/>
+                            <column align="left"/>
+                        </columns>
+                        <rows>
+                            <row>Nombre:
+                                <label value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.nombre,load-when='proveedoresList.onSelect'}"/>
+                            </row>
+                            <row>Descripcion:
+                                <label value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.descripcion,load-when='proveedoresList.onSelect'}"/>
+                            </row>
+                            <row>Observaciones:
+                                <label value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.observaciones,load-when='proveedoresList.onSelect'}"/>
+                            </row>
+                            <row>URL Discovery:
+                                <label value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.urlDiscovery,load-when='proveedoresList.onSelect'}"/>
+                            </row>
+                            <row>URL Icono:
+                                <label value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.urlIcono,load-when='proveedoresList.onSelect'}"/>
+                            </row>
+                        </rows>
+                    </grid>
+                    <separator/>
+                    <div align="right">
+                        <hbox>
+                            <button id="proveedorCreate" label="${c:l('app.viewbox.new')}"/>
+                            <button id="proveedorUpdate" label="${c:l('app.viewbox.edit')}" disabled="@{abmcProveedoresSSOWin.notSelected,load-when='proveedoresList.onSelect'}"/>
+                            <button id="proveedorDelete" label="${c:l('app.viewbox.delete')}" disabled="@{abmcProveedoresSSOWin.notSelected,load-when='proveedoresList.onSelect'}"/>
+                        </hbox>
+                    </div>
+                </div>
+
+		<!-- edit mode -->
+                <div id="proveedorEdit" visible="@{abmcProveedoresSSOWin.editMode}">
+                    <grid width="100%" fixedLayout="true">
+                        <columns>
+                            <column align="right" style="width:80px"/>
+                            <column align="left"/>
+                        </columns>
+                        <rows>
+                            <row>Nombre:
+                                <textbox id="proveedorNombre" width="99%" constraint="no empty" value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.nombre}"/>
+                            </row>
+                            <row>Descripción:
+                                <textbox id="proveedorDescripcion" constraint="no empty" value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.descripcion}"/>
+                            </row>
+                            <row>Observaciones:
+                                <textbox id="proveedorObservaciones" rows="3" value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.observaciones}"/>
+                            </row>
+                            <row>URL Discovery:
+                                <textbox id="proveedorURLDiscovery" rows="3" value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.urlDiscovery}"/>
+                            </row>
+                            <row>URL Icono:
+                                <textbox id="proveedorURLIcono" rows="3" value="@{abmcProveedoresSSOWin.proveedoresSSOModel.selected.urlIcono}"/>
+                            </row>
+                        </rows>
+                    </grid>
+                    <separator/>
+                    <div align="right">
+                        <hbox>
+                            <button id="proveedorSave" label="${c:l('app.editbox.save')}"/>
+                            <button id="proveedorCancel" label="${c:l('app.editbox.cancel')}"/>
+                        </hbox>
+                    </div>
+                </div>
+            </div>
+        </center>
+    </borderlayout>
+</window>

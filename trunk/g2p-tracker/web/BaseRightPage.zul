@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div>
+    <portallayout>
+        <portalchildren style="padding: 5px" width="100%">
+            <panel height="100%" title="Sticky Notes" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <groupbox mold="3d" closable="false" draggable="true">
+                        <caption>
+                            <textbox id="stickyTitulo" value="Título" width="100%" style="background:transparent">
+                                <attribute name="onFocus">
+                                            self.value=null;
+                                </attribute>
+                                <attribute name="onBlur">
+                                        if(self.value == "") {
+                                            self.value="Título";
+                                        }
+                                </attribute>
+                            </textbox>
+                        </caption>
+                        <vbox width="100%">
+                            <textbox id="stickyContenido" value="Contenido" multiline="true" rows="3" width="100%">
+                                <attribute name="onFocus">
+                                            self.value=null;
+                                </attribute>
+                                <attribute name="onBlur">
+                                        if(self.value == "") {
+                                            self.value="Contenido";
+                                        }
+                                </attribute>
+                            </textbox>
+                        </vbox>
+                    </groupbox>
+                </panelchildren>
+            </panel>
+            <!--<panel height="100px" title="GTalk" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <script src="http://www.gmodules.com/ig/ifr?url=http://www.google.com/ig/modules/googletalk.xml%3Fjava&amp;synd=open&amp;w=320&amp;h=451&amp;title=GTalk&amp;lang=es&amp;country=ALL&amp;border=%23ffffff%7C3px%2C1px+solid+%23999999&amp;output=js"></script>
+                </panelchildren>
+            </panel>-->
+            <!--<panel height="150px" title="Google Tools" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <iframe width="100%" height="100%" src="http://3.gmodules.com/ig/ifr?url=http://www.google.com/ig/modules/toolspromo.xml&amp;nocache=0&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=3&amp;ifpctok=5090480830848781425&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMAs4ACwrMBA4ACwrMBI4ACwrMBM4ACw/zYieI_ujwr4.js"/>
+                </panelchildren>
+            </panel>-->
+            <!--<panel height="300px" title="LabPixies Clock" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <iframe width="100%" height="100%" src="http://34.gmodules.com/ig/ifr?url=http://www.labpixies.com/campaigns/clock/mini_clock.xml&amp;nocache=0&amp;up_skin_id=&amp;upt_skin_id=hidden&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=34&amp;ifpctok=-3234052241260630457&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
+                </panelchildren>
+            </panel>-->
+        </portalchildren>
+    </portallayout>
+</div>
+

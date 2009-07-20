@@ -1,0 +1,60 @@
+<!-- Indicó la taglib para poder llamar a la función que recupera los labels de acuerdo al idioma del navegador -->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./altaUsuarioWin"?>
+<window id="altaUsuarioWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AltaUsuarioController">
+    <borderlayout>
+        <north size="60px">
+            <borderlayout>
+                <center border="none" style="background-color:#B1CBD5">
+                    <html>
+                    <![CDATA[<h2 style="color:#0C7A9A;margin-left:10px">Ingrese sus datos para acceder a la aplicación</h2>
+                    <h3 style="color:#0C7A9A;margin-left:8px">Ud se ha logueado correctamente, pero no está identificado dentro de la aplicación. Por favor, cree su cuenta en el G2P-Tracker proporcionando los siguientes datos:</h3>
+                    ]]>
+                    </html>
+                </center>
+            </borderlayout>
+        </north>
+        <west width="15%" style="background-color:#B1CBD5">
+        </west>
+        <east width="15%" style="background-color:#B1CBD5">
+        </east>
+        <center style="background-color:#DAF3FF">
+            <div id="usuarioDetail">
+				<!-- edit mode -->
+                <div id="usuarioEdit">
+                    <grid width="100%" fixedLayout="true">
+                        <columns>
+                            <column align="right" style="width:80px"/>
+                            <column align="left"/>
+                        </columns>
+                        <rows>
+                            <row>Login:
+                                <textbox id="usuarioLoginName" width="99%" constraint="no empty"  value="@{altaUsuarioWin.usuario.loginName}"/>
+                            </row>
+                            <row id="usuarioLoginPassRow">Password:
+                                <textbox id="usuarioLoginPassword" type="password" width="99%" constraint="no empty" value="@{altaUsuarioWin.usuario.loginPassword}"/>
+                            </row>
+                            <row>Nombre:
+                                <textbox id="usuarioNombre" constraint="no empty" value="@{altaUsuarioWin.usuario.nombre}"/>
+                            </row>
+                            <row>Apellido:
+                                <textbox id="usuarioApellido" constraint="no empty" value="@{altaUsuarioWin.usuario.apellido}"/>
+                            </row>
+                            <row>Fecha de Nacimiento:
+                                <datebox id="usuarioFechaNacimiento" constraint="no empty"  value="@{altaUsuarioWin.usuario.fechaNacimiento}"/>
+                            </row>
+                        </rows>
+                    </grid>
+                    <separator/>
+                    <div align="right">
+                        <hbox>
+                            <button id="usuarioSave" label="${c:l('app.editbox.save')}"/>
+                            <button id="usuarioCancel" label="${c:l('app.editbox.cancel')}"/>
+                        </hbox>
+                    </div>
+                </div>
+            </div>
+        </center>
+    </borderlayout>
+</window>
