@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>g2p-tracker</display-name>
+
+    <!-- ZK -->
+    <listener>
+        <description>Used to cleanup when a session is destroyed</description>
+        <listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
+    </listener>
+    <servlet>
+        <description>ZK loader for ZUML pages</description>
+        <servlet-name>zkLoader</servlet-name>
+        <servlet-class>org.zkoss.zk.ui.http.DHtmlLayoutServlet</servlet-class>
+        <init-param>
+            <param-name>update-uri</param-name>
+            <param-value>/zkau</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <description>The asynchronous update engine for ZK</description>
+        <servlet-name>auEngine</servlet-name>
+        <servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>
+                The servlet loads the DSP pages.
+        </description>
+        <servlet-name>dspLoader</servlet-name>
+        <servlet-class>
+                org.zkoss.web.servlet.dsp.InterpreterServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zkLoader</servlet-name>
+        <url-pattern>*.zul</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>auEngine</servlet-name>
+        <url-pattern>/zkau/*</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>BasePage.zul</welcome-file>
+    </welcome-file-list>
+    <persistence-unit-ref>
+        <persistence-unit-ref-name>g2p-tracker-sinSpringPU</persistence-unit-ref-name>
+        <persistence-unit-name>g2p-tracker-sinSpringPU</persistence-unit-name>
+    </persistence-unit-ref>
+
+    <servlet>
+        <servlet-name>MainServ</servlet-name>
+        <servlet-class>org.g2p.tracker.openid.MainServ</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainServ</servlet-name>
+        <url-pattern>/MainServ</url-pattern>
+    </servlet-mapping>
+</web-app>
