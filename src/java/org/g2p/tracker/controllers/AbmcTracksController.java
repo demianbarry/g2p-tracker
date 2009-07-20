@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -247,14 +248,8 @@ public class AbmcTracksController extends BaseController {
         TracksEntity track = trackModel.getSelected();
         WebsiteUsersEntity userOwner = websiteUserModel.getSelected();
 
-        track.setTitulo(titulo.getValue());
-        track.setDescripcion(descripcion.getValue());
-        track.setObservaciones(observaciones.getValue());
         binder.saveComponent(getFellow("ownerWorkersGrid"));
-        track.setUserIdOwner(userOwner);
-        track.setDeadline(fechaLimite.getValue());
-        track.setFechaEstimadaRealizacion(fechaEstimadaRealizacion.getValue());
-        track.setFechaRealizacion(fechaRealizacion.getValue());
+        track.setUserIdOwner(userOwner);        
         binder.saveComponent(getFellow("estadoPrioImport"));
         track.setEstadoId((EstadosEntity) estadosModel.getSelected());
         track.setPrioridadId((PrioridadesEntity) prioridadesModel.getSelected());
@@ -416,6 +411,7 @@ public class AbmcTracksController extends BaseController {
     public void onSelect$tracksList(ForwardEvent event) {
         binder.saveAttribute(tracksList, "selectedItem");
         if (trackModel.getSelected() != null && trackModel.getSelected().getStickyNotesEntityCollection().size() > 0) {
+            System.out.println("STICKYS: "+trackModel.getSelected().getStickyNotesEntityCollection());
             ((Popup) getFellow("stickyPopup")).open(tracksList.getSelectedItem());
         }
     }
@@ -671,5 +667,10 @@ public class AbmcTracksController extends BaseController {
             System.out.println("###################  error de entrada / salida  ####################");
         }
         return null;
+    }
+
+    public void refreshLists(){
+        prioridadesModel.refreshAll();
+        importanciaModel.refreshAll();
     }
 }

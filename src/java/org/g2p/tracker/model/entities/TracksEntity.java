@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,10 +24,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import org.g2p.tracker.utils.Fecha;
 
 /**
@@ -36,11 +37,11 @@ import org.g2p.tracker.utils.Fecha;
 @Entity
 @Table(name = "tracks")
 @NamedQueries({
-    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t ORDER BY dummy"),
-    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo ORDER BY dummy"),
-    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection ORDER BY dummy")
+    @NamedQuery(name = "TracksEntity.findAll", query = "SELECT t FROM TracksEntity t"),
+    @NamedQuery(name = "TracksEntity.findByTitulo", query = "SELECT t FROM TracksEntity t WHERE titulo = :titulo"),
+    @NamedQuery(name = "TracksEntity.findByUser", query = "SELECT t FROM TracksEntity t WHERE t.userIdOwner = :user OR :user MEMBER OF t.websiteUsersEntityCollection")
 })
-public class TracksEntity extends BaseEntity implements Serializable {
+public class TracksEntity extends BaseEntity implements Serializable, Comparable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -77,7 +78,8 @@ public class TracksEntity extends BaseEntity implements Serializable {
     @JoinTable(name = "workers_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<WebsiteUsersEntity> websiteUsersEntityCollection;
-    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER)
+    @OrderBy(value="leido")
+    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<StickyNotesEntity> stickyNotesEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<PostsEntity> postsEntityCollection;
@@ -95,8 +97,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     private WebsiteUsersEntity userIdOwner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
-    @Transient
-    private Double dummy;
 
     public TracksEntity() {
     }
@@ -192,7 +192,6 @@ public class TracksEntity extends BaseEntity implements Serializable {
     }
 
     public Set<StickyNotesEntity> getStickyNotesEntityCollection() {
-        //return new TreeSet(new ArrayList(stickyNotesEntityCollection));
         return stickyNotesEntityCollection;
     }
 
@@ -339,12 +338,14 @@ public class TracksEntity extends BaseEntity implements Serializable {
                     factorLimiteFecha = (float) 0.25;
                 }
             }
-        }
-//
+        }//
+
         return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
     }
 
-    public void setDummy(Double dummy) {
-        this.dummy = dummy;
+    @Override
+    public int compareTo(Object o) {
+        TracksEntity otherTrack = (TracksEntity) o;
+        return (int) (otherTrack.getDummy() - this.getDummy());
     }
 }
