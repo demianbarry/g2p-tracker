@@ -186,7 +186,7 @@ public class BaseModel {
 
     public static EntityManager getEntityManager() {
         if (emf == null) {
-            emf = Persistence.createEntityManagerFactory("g2p-tracker-sinSpringPU");
+            emf = Persistence.createEntityManagerFactory("g2p-tracker-PU");
         }
         return emf.createEntityManager();
     }
