@@ -43,8 +43,8 @@
         <welcome-file>BasePage.zul</welcome-file>
     </welcome-file-list>
     <persistence-unit-ref>
-        <persistence-unit-ref-name>g2p-tracker-sinSpringPU</persistence-unit-ref-name>
-        <persistence-unit-name>g2p-tracker-sinSpringPU</persistence-unit-name>
+        <persistence-unit-ref-name>g2p-tracker-PU</persistence-unit-ref-name>
+        <persistence-unit-name>g2p-tracker-PU</persistence-unit-name>
     </persistence-unit-ref>
 
     <servlet>
