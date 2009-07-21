@@ -77,6 +77,6 @@ public class LoginPostProcessor implements Constants {
 
     // eliminar cuando corresponda
     public static void solicitarLogin(HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://localhost:8081/g2p-tracker-sinSpring/LoginPage.zul");
+        response.sendRedirect(LOGIN_PAGE);
     }
 }
