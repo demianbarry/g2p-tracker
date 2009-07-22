@@ -5,12 +5,10 @@
 package org.g2p.tracker.model.models;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.TagsEntity;
-import org.g2p.tracker.model.entities.TagsPerTracksEntity;
 import org.g2p.tracker.model.entities.TracksEntity;
 
 /**
@@ -24,75 +22,52 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
     }
 
     @Override
-    public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void aplicarTags(List<TagsEntity> tagsList) throws Exception {
         TracksEntity track = ((TracksEntity) getSelected());
 
-
         if (track != null) {
-            Hashtable parameters = new Hashtable();
-            parameters.put("trackId", track.getTrackId());
-            List tagsByTrack = BaseModel.findEntities("TagsEntity.findByTrack", parameters);
-
+            track.getTagsEntityCollection().clear();
             Iterator<TagsEntity> tags = tagsList.iterator();
             TagsEntity tag = null;
-            TagsPerTracksEntity tagPerTrack = null;
 
             while (tags.hasNext()) {
                 tag = tags.next();
-                if (!tagsByTrack.contains(tag)) {
-                    tagPerTrack = new TagsPerTracksEntity(
-                            tag.getTagId(),
-                            track.getTrackId());
-                    BaseModel.createEntity(tagPerTrack, true);
-                }
+                track.addTag(tag);
             }
-
-            tags = tagsByTrack.iterator();
-            while (tags.hasNext()) {
-                tag = tags.next();
-                if (!tagsList.contains(tag)) {
-                    tagPerTrack = new TagsPerTracksEntity(
-                            tag.getTagId(),
-                            track.getTrackId());
-                    BaseModel.deleteEntity(tagPerTrack, true);
-                }
-            }
-
         }
     }
 
     @Override
-    public List getStoredTags() {
-        System.out.println("SELECTED "+getSelected());
+    public List getStoredTags() throws Exception {
         if (getSelected() != null) {
-            Hashtable parameters = new Hashtable();
-            parameters.put("trackId", ((TracksEntity) getSelected()).getTrackId());
-            return BaseModel.findEntities("TagsEntity.findByTrack", parameters);
+            return (List) getSelected().getTagsEntityCollection();
         }
         return null;
     }
 
     @Override
-    public List<BaseEntity> ecualizarByTags(List<TagsEntity> tagsList) throws Exception {
+    public List<BaseEntity> ecualizarByTags(List<TagsEntity> tagsList, boolean and) throws Exception {
+        if (tagsList == null || tagsList.size() == 0) {
+            return getAll();
+        }
         Iterator<TagsEntity> tagsIterator = tagsList.iterator();
-        Iterator tracksIterator;
+        Iterator tracksIterator = getAll().iterator();
         List tracks = new ArrayList();
         TracksEntity track;
 
         getParameters().clear();
 
-        while(tagsIterator.hasNext()) {
-            parameters.put("tagId", tagsIterator.next().getTagId());
-            tracksIterator = BaseModel.findEntities("TagsPerTracksEntity.findByTag", parameters).iterator();
-            while(tracksIterator.hasNext()) {
-                track = ((TagsPerTracksEntity) tracksIterator.next()).getTrack();
-                if(!tracks.contains(track)) {
+        while (tracksIterator.hasNext()) {
+            track = (TracksEntity) tracksIterator.next();
+            if (and) {
+                if (track.getTagsEntityCollection().containsAll(tagsList) && !tracks.contains(track)) {
                     tracks.add(track);
+                }
+            } else {
+                while (tagsIterator.hasNext()) {
+                    if (track.getTagsEntityCollection().contains(tagsIterator.next()) && !tracks.contains(track)) {
+                        tracks.add(track);
+                    }
                 }
             }
         }
@@ -103,6 +78,4 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
     public TracksEntity getSelected() {
         return (TracksEntity) super.getSelected();
     }
-
-
 }

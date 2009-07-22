@@ -12,6 +12,13 @@
                 <textbox id="searchBox"/>
                 <separator bar="true" spacing="20px"/>-->
                     <checkbox id="treeCheck" label="Árbol" width="100%"/>
+                    <radiogroup id="andOrCheck">
+                        <radio id="and"
+                            label="Y"
+                            selected="true"/>
+                        <radio id="or"
+                            label="O"/>
+                    </radiogroup>
                     <button id="ecualizarButton" label="Ecualizar"/>
                 </hbox>
                 <separator bar="true" spacing="20px"/>
@@ -23,7 +30,7 @@
                         <listcell label="@{tag.descripcion}"/>
                     </listitem>
                 </listbox>
-                <hbox>                    
+                <hbox>
                 </hbox>
             </vbox>
         </bandpopup>

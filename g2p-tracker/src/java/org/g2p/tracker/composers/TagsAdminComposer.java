@@ -128,7 +128,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         return tagsList;
     }
 
-    public void onChanging$tagsAdmin(InputEvent event) {
+    public void onChanging$tagsAdmin(InputEvent event) throws Exception {
         String value = event.getValue();
         populateTagsTree(value);
         setCriteria(value);
@@ -136,7 +136,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         setSelectedItems();
     }
 
-    public void onOpen$tagsAdmin(Event event){
+    public void onOpen$tagsAdmin(Event event) throws Exception{
         if(self instanceof Bandbox)
             setSelectedItems();
     }
@@ -246,7 +246,7 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         }
     }
 
-    public void onCheck$treeCheck(CheckEvent event) {
+    public void onCheck$treeCheck(CheckEvent event) throws Exception {
         tagsTree.setVisible(event.isChecked());
         tagsList.setVisible(!event.isChecked());
         setSelectedItems();
@@ -256,10 +256,9 @@ public class TagsAdminComposer extends BaseComposer implements Constants {
         showMessage(msg, null);
     }
 
-    private void setSelectedItems() {
+    private void setSelectedItems() throws Exception {
         tagsTree.clearSelection();
         tagsList.clearSelection();
-        System.out.println("---------> "+self);
         if (self instanceof Bandbox && getModel().getStoredTags() != null) {
             Iterator it = getModel().getStoredTags().iterator();
             List<String> tagNames = new ArrayList();

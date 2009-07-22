@@ -3,7 +3,6 @@ package org.g2p.tracker.model.entities;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,7 +31,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "TagsEntity.findByFather", query = "SELECT t FROM TagsEntity t WHERE t.tagIdGrupo.tagId = :tagId"),
     @NamedQuery(name = "TagsEntity.findByCriteria", query = "SELECT t FROM TagsEntity t WHERE t.tag LIKE :criteria OR t.descripcion LIKE :criteria"),
     @NamedQuery(name = "TagsEntity.findByTag", query = "SELECT t FROM TagsEntity t WHERE t.tag = :tag"),
-    @NamedQuery(name = "TagsEntity.findByTrack", query = "SELECT t FROM TagsEntity t WHERE t.tagId IN (SELECT tpt.tagsPerTracksPK.tagId FROM TagsPerTracksEntity tpt WHERE tpt.tagsPerTracksPK.trackId = :trackId)")
+    @NamedQuery(name = "TagsEntity.findByTrack", query = "SELECT t FROM TagsEntity t WHERE :trackId MEMBER OF t.tracksEntityCollection")
 })
 public class TagsEntity extends BaseEntity implements Serializable {
 
@@ -52,16 +53,9 @@ public class TagsEntity extends BaseEntity implements Serializable {
     @JoinColumn(name = "tag_id_grupo", referencedColumnName = "tag_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private TagsEntity tagIdGrupo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tag", fetch = FetchType.EAGER)
-    private Set<TagsPerTracksEntity> tracksPerTagCollection;
-
-    public Set<TagsPerTracksEntity> getTracksPerWorkerCollection() {
-        return tracksPerTagCollection;
-    }
-
-    public void setTracksPerWorkerCollection(Set<TagsPerTracksEntity> tracksPerTagCollection) {
-        this.tracksPerTagCollection = tracksPerTagCollection;
-    }
+    @JoinTable(name = "tags_per_tracks", joinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")}, inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<TracksEntity> tracksEntityCollection;
 
     public TagsEntity() {
     }
@@ -121,6 +115,14 @@ public class TagsEntity extends BaseEntity implements Serializable {
 
     public void setTagIdGrupo(TagsEntity tagIdGrupo) {
         this.tagIdGrupo = tagIdGrupo;
+    }
+
+    public Set<TracksEntity> getTracksEntityCollection() {
+        return tracksEntityCollection;
+    }
+
+    public void setTracksEntityCollection(Set<TracksEntity> tracksPerTagCollection) {
+        this.tracksEntityCollection = tracksPerTagCollection;
     }
 
     @Override

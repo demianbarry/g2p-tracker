@@ -13,7 +13,6 @@ import org.g2p.tracker.model.entities.TagsEntity;
  * @author Administrador
  */
 public interface Taggeable {
-    public String getNombre();
-    public List getStoredTags();
+    public List getStoredTags() throws Exception;
     public void aplicarTags(List<TagsEntity> tagsList) throws Exception;
 }

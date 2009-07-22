@@ -34,7 +34,6 @@
     <class>org.g2p.tracker.model.entities.RolesPerWebsiteUsersEntity</class>
     <class>org.g2p.tracker.model.entities.StickyNotesEntity</class>
     <class>org.g2p.tracker.model.entities.TagsEntity</class>
-    <class>org.g2p.tracker.model.entities.TagsPerTracksEntity</class>
     <class>org.g2p.tracker.model.entities.TracksEntity</class>
     <class>org.g2p.tracker.model.entities.TransicionEstadosEntity</class>
     <class>org.g2p.tracker.model.entities.UsuarioPreferenciasEntity</class>
