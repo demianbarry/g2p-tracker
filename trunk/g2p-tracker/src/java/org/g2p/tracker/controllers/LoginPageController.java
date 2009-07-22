@@ -121,10 +121,12 @@ public class LoginPageController extends BaseController {
             Cookie cookies[] = getHttpRequest().getCookies();
             boolean b = true;
             int i = 0;
-            while (cookies.length > i++) {
-                if (USER.equals(cookies[i - 1].getName())) {
-                    cookies[i - 1].setValue(null);
-                    b = false;
+            if (cookies != null) {
+                while (cookies.length > i++) {
+                    if (USER.equals(cookies[i - 1].getName())) {
+                        cookies[i - 1].setValue(null);
+                        b = false;
+                    }
                 }
             }
 

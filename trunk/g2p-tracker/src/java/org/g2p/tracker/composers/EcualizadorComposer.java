@@ -23,10 +23,10 @@ import org.g2p.tracker.model.models.Ecualizable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Bandbox;
-import org.zkoss.zul.Bandpopup;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
@@ -46,6 +46,7 @@ public class EcualizadorComposer extends BaseComposer implements Constants {
     TagsList tagsTreeList;
     Checkbox treeCheck;
     String criteria = null;
+    Radiogroup andOrCheck;
 
     public void onClick$administrarButton(Event event) {
     }
@@ -167,7 +168,7 @@ public class EcualizadorComposer extends BaseComposer implements Constants {
                 Events.sendEvent(
                         new Event("onEcualizar",
                         (Component) self.getDesktop().getAttribute("ECUALIZABLE_COMPONENT"),
-                        getModel().ecualizarByTags(tagsList)));
+                        getModel().ecualizarByTags(tagsList, "and".equalsIgnoreCase(andOrCheck.getSelectedItem().getId()))));
             } catch (Exception ex) {
                 showMessage("ERROR aplicando tags: ", ex);
             }

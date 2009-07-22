@@ -411,7 +411,6 @@ public class AbmcTracksController extends BaseController {
     public void onSelect$tracksList(ForwardEvent event) {
         binder.saveAttribute(tracksList, "selectedItem");
         if (trackModel.getSelected() != null && trackModel.getSelected().getStickyNotesEntityCollection().size() > 0) {
-            System.out.println("STICKYS: "+trackModel.getSelected().getStickyNotesEntityCollection());
             ((Popup) getFellow("stickyPopup")).open(tracksList.getSelectedItem());
         }
     }

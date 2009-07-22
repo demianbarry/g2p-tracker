@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -74,8 +73,8 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
     @JoinTable(name = "workers_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<WebsiteUsersEntity> websiteUsersEntityCollection;
-    @OrderBy(value="leido")
-    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OrderBy(value = "leido")
+    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<StickyNotesEntity> stickyNotesEntityCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
     private Set<PostsEntity> postsEntityCollection;
@@ -93,6 +92,9 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
     private WebsiteUsersEntity userIdOwner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
     private Set<AttachmentEntity> attachmentEntityCollection;
+    @JoinTable(name = "tags_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<TagsEntity> tagsEntityCollection;
 
     public TracksEntity() {
     }
@@ -251,6 +253,14 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
         this.attachmentEntityCollection = attachmentEntityCollection;
     }
 
+    public Set<TagsEntity> getTagsEntityCollection() {
+        return tagsEntityCollection;
+    }
+
+    public void setTagsEntityCollection(Set<TagsEntity> tagsEntityCollection) {
+        this.tagsEntityCollection = tagsEntityCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -281,6 +291,12 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
         return getTrackId();
     }
 
+    @Override
+    public int compareTo(Object o) {
+        TracksEntity otherTrack = (TracksEntity) o;
+        return (int) (otherTrack.getDummy() - this.getDummy());
+    }
+
     public void addWorker(WebsiteUsersEntity worker) {
         if (getWebsiteUsersEntityCollection() == null) {
             setWebsiteUsersEntityCollection(new HashSet());
@@ -300,6 +316,22 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
     public void addPost(PostsEntity post) {
         post.setTrackId(this);
         getPostsEntityCollection().add(post);
+    }
+
+    public void addTag(TagsEntity tag) {
+        if (getWebsiteUsersEntityCollection() == null) {
+            setWebsiteUsersEntityCollection(new HashSet());
+        }
+        getTagsEntityCollection().add(tag);
+        tag.getTracksEntityCollection().add(this);
+    }
+
+    public void removeTag(TagsEntity tag) {
+        if (getWebsiteUsersEntityCollection() == null) {
+            setWebsiteUsersEntityCollection(new HashSet());
+        }
+        getTagsEntityCollection().remove(tag);
+        tag.getTracksEntityCollection().remove(this);
     }
 
     public Double getDummy() {
@@ -337,11 +369,5 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
         }//
 
         return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        TracksEntity otherTrack = (TracksEntity) o;
-        return (int) (otherTrack.getDummy() - this.getDummy());
     }
 }

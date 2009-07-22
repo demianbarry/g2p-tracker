@@ -14,5 +14,5 @@ import org.g2p.tracker.model.entities.TagsEntity;
  * @author Administrador
  */
 public interface Ecualizable {
-    public List<BaseEntity> ecualizarByTags(List<TagsEntity> tagsList) throws Exception;
+    public List<BaseEntity> ecualizarByTags(List<TagsEntity> tagsList, boolean and) throws Exception;
 }
