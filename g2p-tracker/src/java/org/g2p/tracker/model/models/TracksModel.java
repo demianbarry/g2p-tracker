@@ -40,7 +40,7 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
     @Override
     public List getStoredTags() throws Exception {
         if (getSelected() != null) {
-            return (List) getSelected().getTagsEntityCollection();
+            return new ArrayList(getSelected().getTagsEntityCollection());
         }
         return null;
     }
