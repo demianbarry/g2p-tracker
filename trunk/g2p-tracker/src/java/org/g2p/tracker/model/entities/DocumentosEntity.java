@@ -2,6 +2,7 @@ package org.g2p.tracker.model.entities;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.StringTokenizer;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -108,6 +109,23 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getNombre(){
+        String path;
+        StringTokenizer tokens;
+        String nombre;
+
+        path = getDocPath();
+        tokens = new StringTokenizer(path, "/");
+        nombre = "";
+
+        // el ultimo token es el nombre
+        while (tokens.hasMoreTokens()){
+            nombre = tokens.nextToken();
+        }
+
+        return nombre;
     }
 
     public Set<AttachmentEntity> getAttachmentEntityCollection() {

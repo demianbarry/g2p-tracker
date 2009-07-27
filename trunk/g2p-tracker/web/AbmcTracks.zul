@@ -438,10 +438,19 @@
                                                 <toolbarbutton  label="@{adjunto.documentEntity.titulo}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
+                                                <toolbarbutton  label="@{adjunto.documentEntity.descripcion}"
+                                                                                href="@{adjunto.documentEntity.docPath}"
+                                                                                target="__blank"/>
                                                 <toolbarbutton  label="@{adjunto.usuario.apellidoNombre}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
                                                 <toolbarbutton  label="@{adjunto.fecha}"
+                                                                                href="@{adjunto.documentEntity.docPath}"
+                                                                                target="__blank"/>
+                                                <toolbarbutton  label="@{adjunto.documentEntity.nombre}"
+                                                                                href="@{adjunto.documentEntity.docPath}"
+                                                                                target="__blank"/>
+                                                <toolbarbutton  label="@{adjunto.documentEntity.tipo}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
                                             </row>

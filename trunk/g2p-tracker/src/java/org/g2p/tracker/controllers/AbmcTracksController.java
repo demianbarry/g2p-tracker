@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -473,76 +474,104 @@ public class AbmcTracksController extends BaseController {
                 BaseModel.createEntity(post, true);
                 ingresoComentario.setValue(null);
                 if(envioEmailAdjuntos.isChecked())
-                    enviarEmail();
+                    enviarEmail("Se ha recibido un comentario","ha comentado el track");
             } catch (Exception ex) {
                 Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    private void enviarEmail() throws MessagingException {
-        String emailRemitente = "g2patagonico@gmail.com";
-        String contraseniaRemitente = "gedospee";
-
-        Properties conf = new Properties();
+    private void enviarEmail(String subject, String body) throws MessagingException, IOException {
         String contenido;
+        String asunto;
+        String emailRemitente;
+        String contraseniaRemitente;
+        String[] emailDestinatarios;
+        Properties datos;
+        Set<WebsiteUsersEntity> trabajadores;
+        Iterator<WebsiteUsersEntity> itTrabajadores;
 
-        // nombre del host de correo
-        conf.put("mail.smtp.host", "smtp.gmail.com");
-
-        // TLS si está disponible
-        conf.setProperty("mail.smtp.starttls.enable", "true");
-
-        // Puerto de gmail para envio de correos
-        conf.setProperty("mail.smtp.port", "587");
-
-        // Nombre del usuario
-        conf.setProperty("mail.smtp.user", emailRemitente);
-
-        // Si requiere o no usuario y password para conectarse.
-        conf.setProperty("mail.smtp.auth", "true");
-
-        // cambiar por el track actual!!!!!!!!!!!!
         TracksEntity trackActual = trackModel.getSelected();
+        trabajadores = trackActual.getWebsiteUsersEntityCollection();
+        itTrabajadores = trabajadores.iterator();
+        InputStream is = (getHttpRequest().getSession().getServletContext().getResourceAsStream("/WEB-INF/mail.properties"));
+        datos = new Properties();
+        datos.load(is);
+        emailDestinatarios = new String[trabajadores.size()];
 
-        Session sesion = Session.getDefaultInstance(conf);
-        Message mensaje = new MimeMessage(sesion);
+        contenido = getUserNameFromSession() + " " + body + " " + trackActual.getTitulo();
+        asunto = subject;
+        emailRemitente = datos.getProperty("email");
+        contraseniaRemitente = datos.getProperty("password");
 
-        contenido = getUserNameFromSession() + " ha comentado el track " + trackActual.getTitulo();
-
-        try {
-            InternetAddress de = new InternetAddress(emailRemitente);
-
-            InternetAddress a[] = new InternetAddress[trackActual.getWebsiteUsersEntityCollection().size() + 1];
-            a[0] = (new InternetAddress((trackActual.getUserIdOwner().getEmail())));
-
-            Iterator worker = trackActual.getWebsiteUsersEntityCollection().iterator();
-
-            String userEmail = null;
-            int i = 1;
-            while (i < a.length) {
-                userEmail = ((WebsiteUsersEntity) worker.next()).getEmail();
-                if (userEmail != null && userEmail.length() > 0) {
-                    a[i] = (new InternetAddress(userEmail));
-                }
-                i++;
-            }
-
-            mensaje.setFrom(de);
-            mensaje.setRecipients(Message.RecipientType.TO, a);
-            mensaje.setSubject("Se ha comentado el track " + trackActual.getTitulo());
-            mensaje.setContent(contenido, "text/plain");
-            mensaje.setSentDate(new Date());
-
-            Transport t = sesion.getTransport("smtp");
-            t.connect(emailRemitente, contraseniaRemitente);
-            t.sendMessage(mensaje, mensaje.getAllRecipients());
-            t.close();
-
-
-        } catch (AddressException ex) {
-            Logger.getLogger(DetallesController.class.getName()).log(Level.SEVERE, null, ex);
+        for (int i = 0; itTrabajadores.hasNext(); i++){
+            emailDestinatarios[i] = itTrabajadores.next().getEmail();
         }
+
+
+        BaseEntity.enviarEmail(contenido, asunto, emailRemitente, contraseniaRemitente, emailDestinatarios);
+//        String emailRemitente = "g2patagonico@gmail.com";
+//        String contraseniaRemitente = "gedospee";
+//
+//        Properties conf = new Properties();
+//        String contenido;
+//
+//        // nombre del host de correo
+//        conf.put("mail.smtp.host", "smtp.gmail.com");
+//
+//        // TLS si está disponible
+//        conf.setProperty("mail.smtp.starttls.enable", "true");
+//
+//        // Puerto de gmail para envio de correos
+//        conf.setProperty("mail.smtp.port", "587");
+//
+//        // Nombre del usuario
+//        conf.setProperty("mail.smtp.user", emailRemitente);
+//
+//        // Si requiere o no usuario y password para conectarse.
+//        conf.setProperty("mail.smtp.auth", "true");
+//
+//        // cambiar por el track actual!!!!!!!!!!!!
+//        TracksEntity trackActual = trackModel.getSelected();
+//
+//        Session sesion = Session.getDefaultInstance(conf);
+//        Message mensaje = new MimeMessage(sesion);
+//
+//        contenido = getUserNameFromSession() + " ha comentado el track " + trackActual.getTitulo();
+//
+//        try {
+//            InternetAddress de = new InternetAddress(emailRemitente);
+//
+//            InternetAddress a[] = new InternetAddress[trackActual.getWebsiteUsersEntityCollection().size() + 1];
+//            a[0] = (new InternetAddress((trackActual.getUserIdOwner().getEmail())));
+//
+//            Iterator worker = trackActual.getWebsiteUsersEntityCollection().iterator();
+//
+//            String userEmail = null;
+//            int i = 1;
+//            while (i < a.length) {
+//                userEmail = ((WebsiteUsersEntity) worker.next()).getEmail();
+//                if (userEmail != null && userEmail.length() > 0) {
+//                    a[i] = (new InternetAddress(userEmail));
+//                }
+//                i++;
+//            }
+//
+//            mensaje.setFrom(de);
+//            mensaje.setRecipients(Message.RecipientType.TO, a);
+//            mensaje.setSubject("Se ha comentado el track " + trackActual.getTitulo());
+//            mensaje.setContent(contenido, "text/plain");
+//            mensaje.setSentDate(new Date());
+//
+//            Transport t = sesion.getTransport("smtp");
+//            t.connect(emailRemitente, contraseniaRemitente);
+//            t.sendMessage(mensaje, mensaje.getAllRecipients());
+//            t.close();
+//
+//
+//        } catch (AddressException ex) {
+//            Logger.getLogger(DetallesController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     private String procesarCadena(String cadena) {
@@ -578,13 +607,13 @@ public class AbmcTracksController extends BaseController {
         Media doc = event.getMedia();
         if(doc != null) {
         String path = subirDocumento(doc);
-        guardarAdjunto(path);
+        guardarAdjunto(path, doc.getFormat());
         } else
             showMessage("Seleccione un archivo.");
     }
 
     //private void guardarAdjunto(String path,String tipo){
-    private void guardarAdjunto(String path) {
+    private void guardarAdjunto(String path,String tipo) {
         if (path != null) {
 
             DocumentosEntity documento = new DocumentosEntity();
@@ -594,6 +623,7 @@ public class AbmcTracksController extends BaseController {
             documento.setDocPath(path);
             documento.setTitulo(tituloDoc.getValue());
             documento.setDescripcion(descripcionDoc.getValue());
+            documento.setTipo(tipo);
             documento.setDocumentVersion(1); // cambiar!!!!!!!!!!!!!
 
             try {
@@ -614,7 +644,7 @@ public class AbmcTracksController extends BaseController {
                 binder.loadComponent(adjuntos);
 
                 if(envioEmailAdjuntos.isChecked())
-                    enviarEmail();
+                    enviarEmail("Se ha recibido un adjunto","se ha adjuntado un documento al track");
             } catch (Exception ex) {
                 try {
                     System.out.println("ERROR: "+ex);
