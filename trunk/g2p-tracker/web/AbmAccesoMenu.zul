@@ -18,7 +18,6 @@
                         <listitem>
 							<listcell label="Usuarios" />
 						</listitem>
-
 				</listbox>
             </hbox>
                 <columnlayout>

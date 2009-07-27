@@ -1,6 +1,5 @@
 package org.g2p.tracker.model.entities;
 
-import org.g2p.tracker.model.models.Taggeable;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -12,6 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,6 +29,7 @@ import javax.persistence.TemporalType;
 @Table(name = "roles")
 @NamedQueries({@NamedQuery(name = "RolesEntity.findAll", query = "SELECT r FROM RolesEntity r")})
 public class RolesEntity extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +50,11 @@ public class RolesEntity extends BaseEntity implements Serializable {
     private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
     @OneToMany(mappedBy = "rolId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
+    @JoinTable(name = "acceso_menu",
+        joinColumns = {@JoinColumn(name = "rol_id")},
+        inverseJoinColumns = {@JoinColumn(name = "rol_id")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<MenuEntity> menuPerRol;
 
     public RolesEntity() {
     }
@@ -116,6 +124,14 @@ public class RolesEntity extends BaseEntity implements Serializable {
         this.accesoMenuEntityCollection = accesoMenuEntityCollection;
     }
 
+    public Set<MenuEntity> getMenuPerRol() {
+        return menuPerRol;
+    }
+
+    public void setMenuPerRol(Set<MenuEntity> menuPerRol) {
+        this.menuPerRol = menuPerRol;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -145,6 +161,4 @@ public class RolesEntity extends BaseEntity implements Serializable {
     public Object getPK() {
         return getRolId();
     }
-
-
 }

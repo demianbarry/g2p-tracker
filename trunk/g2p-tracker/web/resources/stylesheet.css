@@ -124,10 +124,9 @@ div.z-listbox-body {
 }
 
 .z-title-label {
-    font-size:40px;
+    font-size:20%;
     color:#008BB6;
     font-weight:bold;
-    padding-left:30%;
 }
 
 .z-static-label {
@@ -140,6 +139,14 @@ div.z-listbox-body {
     border:none;
     font-weight:bold;
 }
+
+.z-static-header-datebox-label-inp {
+        background:transparent;
+        border:none;
+        font-weight:bold;
+        font-size:12px;
+}
+
 
 .z-header-row {
     background:#CEE3F6;

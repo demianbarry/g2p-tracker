@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -43,7 +46,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
     private String grupo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
-
+    
     public MenuEntity() {
     }
 

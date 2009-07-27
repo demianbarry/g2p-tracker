@@ -2,49 +2,47 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <!-- Instancio el DataBinder estadar, que vincula cada anotacion ${...} con el objeto correspondiente -->
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./abmcTracksWin"?>
-<window id="abmcTracksWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcTracksController" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+<window id="abmcTracksWin" width="100%" height="100%" ctrlKeys="#up#down" use="org.g2p.tracker.controllers.AbmcTracksController" style="background:#0C7A9A;" >
     <zscript>
         ingresoComentario.EditorDocument.body.contentEditable=false;
     </zscript>
-    <borderlayout>
-        <north flex="true" height="30%">
-            <vbox height="100%" style="width:100%;background:#DAF3FF;">
+    <vbox width="100">
+        <vbox height="100%" style="width:100%;background:#DAF3FF;">
                 <!-- Título -->
-                <label zclass="z-title-label"
-					value="Tracks"/>
-                <hbox id="ecualizadorBox">
-                    <ecualizador id="ecualizador" model="@{abmcTracksWin.trackModel}" visible="true" width="100%"/>
-                </hbox>
-                <hbox>
-                    <button id="nuevoTrack" label="Nuevo Track"/>
-                    <button id="editarTrack" label="Editar" />
-                    <bandbox id="buscarTrack" buttonVisible="true" width="400px">
-                        <bandpopup>
-                                Funcionalidad a implementar
-                        </bandpopup>
-                    </bandbox>
-                    <button id="guardarTrack" label="Guardar Track"/>
-                    <button id="cancelarAltaTrack" label="Cancelar"/>
-                </hbox>
-            </vbox>
-        </north>
-        <center autoscroll="true">
-            <div id="trackDetail"  style="overflow:auto">
-                <div id="listTrackView" width="100%">
-                    <listbox id="tracksList" fixedLayout="true" width="100%" model="@{abmcTracksWin.trackModel.all}" selectedItem="@{abmcTracksWin.trackModel.selected}"  >
+            <label zclass="z-title-label"
+					value="Tracks"/>            
+            <hbox>
+                <button id="nuevoTrack" label="Nuevo Track"/>
+                <button id="editarTrack" label="Editar" />
+                <button id="guardarTrack" label="Guardar Track"/>
+                <button id="cancelarAltaTrack" label="Cancelar"/>
+            </hbox>
+            <space height="5%"/>
+            <hbox id="ecualizadorBox">
+                <ecualizador id="ecualizador" model="@{abmcTracksWin.trackModel}" visible="true" width="100%"/>
+            </hbox>
+            <space height="10%"/>
+        </vbox>
+        <hbox width="100%">
+            <space width="5%"/>
+            <div id="trackDetail" style="overflow:auto">
+                <div id="listTrackView" style="overflow:auto">
+                    <listbox id="tracksList" fixedLayout="true" width="100%" height="100%" model="@{abmcTracksWin.trackModel.all}" selectedItem="@{abmcTracksWin.trackModel.selected}" vflex="true" >
                         <listhead>
                             <listheader>
                                 <grid zclass="tracks-grid">
                                     <columns>
-                                        <column width="20%"/>
-                                        <column width="50%"/>
                                         <column width="30%"/>
+                                        <column width="30%"/>
+                                        <column width="20%"/>
+                                        <column width="20%"/>
                                     </columns>
                                     <rows zclass="tracks-title-grid-rows">
                                         <row zclass="z-header-row">
-                                            <label width="20%" value="Título" zclass="z-static-header-label"/>
-                                            <label width="50%" value="Propietario" zclass="z-static-header-label"/>
-                                            <label width="30%" value="Fecha de realización" zclass="z-static-header-label"/>
+                                            <label width="30%" value="Título" zclass="z-static-header-label"/>
+                                            <label width="30%" value="Propietario" zclass="z-static-header-label"/>
+                                            <label width="20%" value="Fecha de realización" zclass="z-static-header-label"/>
+                                            <label width="20%" value="Deadline" zclass="z-static-header-label"/>
                                         </row>
                                     </rows>
                                 </grid>
@@ -56,19 +54,17 @@
                                     <caption zclass="tracks-caption">
                                         <grid zclass="tracks-caption-grid">
                                             <columns>
-                                                <column width="20%" />
-                                                <column width="50%"/>
+                                                <column width="30%" />
                                                 <column width="30%"/>
+                                                <column width="20%"/>
+                                                <column width="20%"/>
                                             </columns>
                                             <rows>
                                                 <row zclass="z-track-header-row">
-                                                    <hbox>
-                                                        <label value="@{tracks.trackId}" width="3%" zclass="z-static-header-label"/>
-                                                        -
-                                                        <label value="@{tracks.titulo}" width="17%" zclass="z-static-header-label"/>
-                                                    </hbox>
-                                                    <label value="@{tracks.userIdOwner.apellidoNombre}" width="50%" zclass="z-static-header-label"/>
-                                                    <label value="@{tracks.fechaEstimadaRealizacion}" width="30%" zclass="z-static-header-label"/>
+                                                    <label value="@{tracks}" width="30%" zclass="z-static-header-label"/>
+                                                    <label value="@{tracks.userIdOwner.apellidoNombre}" width="30%" zclass="z-static-header-label"/>
+                                                    <label value="@{tracks.fechaEstimadaRealizacion}" width="20%" zclass="z-static-header-label"/>
+                                                    <datebox value="@{tracks.deadline}" buttonVisible="false" readonly="true" zclass="z-static-header-datebox-label"/>
                                                 </row>
                                             </rows>
                                         </grid>
@@ -242,20 +238,20 @@
                             </listcell>
                         </listitem>
                     </listbox>
-                    <popup id="stickyPopup" width="30%">
-                           Notes
-                        <listbox id="stickyList" model="@{abmcTracksWin.trackModel.selected.stickyNotesEntityCollection}" width="100%" selectedItem="@{abmcTracksWin.sticky}">
-                            <listitem self="@{each=sticky}">
-                                <listcell label="@{sticky.titulo}"/>
-                                <listcell label="@{sticky.contenido}"/>
-                                <listcell>
-                                    <checkbox id="stickyCheck" checked="@{sticky.leido}" />
-                                </listcell>
-                            </listitem>
-                        </listbox>
-                        <button id="stickyDeleteButton" image="/img/delete.PNG" width="100%" height="100%"/>
-                    </popup>
                 </div>
+                <popup id="stickyPopup" width="30%">
+                           Notes
+                    <listbox id="stickyList" model="@{abmcTracksWin.trackModel.selected.stickyNotesEntityCollection}" width="100%" selectedItem="@{abmcTracksWin.sticky}">
+                        <listitem self="@{each=sticky}">
+                            <listcell label="@{sticky.titulo}"/>
+                            <listcell label="@{sticky.contenido}"/>
+                            <listcell>
+                                <checkbox id="stickyCheck" checked="@{sticky.leido}" />
+                            </listcell>
+                        </listitem>
+                    </listbox>
+                    <button id="stickyDeleteButton" image="/img/delete.PNG" width="20%" height="100%"/>
+                </popup>
                 <!--ALTA DE TRACK-->
                 <div id="nuevoTrackView" width="100%" style="overflow:auto;">
                     <tabbox width="100%">
@@ -476,6 +472,8 @@
                     </tabbox>
                 </div>
             </div>
-        </center>
-    </borderlayout>
+            <space width="5%"/>
+        </hbox>
+    </vbox>
+
 </window>

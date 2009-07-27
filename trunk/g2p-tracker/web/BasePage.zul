@@ -6,7 +6,7 @@
         <borderlayout height="100%" style="background:#c5e6ef;">
             <north border="0" height="17%" zclass="external-page-n">
                 <hbox width="100%">
-                    <div width="100%">
+                    <div width="100%" align="center">
                         <label value="G2P Tracker" sclass="main-title-label"/>
                     </div>
                     <div style="float:right">
@@ -25,16 +25,52 @@
             </north>
 	<!-- Sidebar -->
             <west width="20%" title="Navegación" splittable="true" collapsible="true" sclass="external-page-w">
-                <panel collapsible="true" title="Barra de navegación">
-                    <panelchildren id="panelChildren" zclass="menu-panel-child">
-                        <vbox id="navBar">
-                        </vbox>
-                    </panelchildren>
-                </panel>
+                <portallayout>
+                    <portalchildren style="padding: 5px" width="100%">
+                        <panel collapsible="true" title="Barra de navegación">
+                            <panelchildren id="panelChildren" zclass="menu-panel-child">
+                                <vbox id="navBar">
+                                </vbox>
+                            </panelchildren>
+                        </panel>
+                    </portalchildren>
+                    <portalchildren style="padding: 5px" width="100%">
+                        <panel height="100%" title="Sticky Notes" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                            <panelchildren>
+                                <groupbox mold="3d" closable="false" draggable="true">
+                                    <caption>
+                                        <textbox id="stickyTitulo" value="Título" width="100%" style="background:transparent">
+                                            <attribute name="onFocus">
+                                            self.value=null;
+                                            </attribute>
+                                            <attribute name="onBlur">
+                                        if(self.value == "") {
+                                            self.value="Título";
+                                        }
+                                            </attribute>
+                                        </textbox>
+                                    </caption>
+                                    <vbox width="100%">
+                                        <textbox id="stickyContenido" value="Contenido" multiline="true" rows="3" width="100%">
+                                            <attribute name="onFocus">
+                                            self.value=null;
+                                            </attribute>
+                                            <attribute name="onBlur">
+                                        if(self.value == "") {
+                                            self.value="Contenido";
+                                        }
+                                            </attribute>
+                                        </textbox>
+                                    </vbox>
+                                </groupbox>
+                            </panelchildren>
+                        </panel>
+                    </portalchildren>
+                </portallayout>
             </west>
-            <east width="20%" title="Gadgets" flex="true" splittable="true" collapsible="true" sclass="external-page-w">
+            <!--<east width="20%" title="Gadgets" flex="true" splittable="true" collapsible="true" sclass="external-page-w">
                 <include src="BaseRightPage.zul" />
-            </east>
+            </east>-->
 	<!-- Content -->
             <center flex="true">
                 <include id="include" src="HomePage.zul"  />

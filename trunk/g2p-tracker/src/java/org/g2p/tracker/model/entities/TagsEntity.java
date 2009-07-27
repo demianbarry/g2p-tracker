@@ -147,7 +147,7 @@ public class TagsEntity extends BaseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.TagsEntity[tagId=" + tagId + "]";
+        return getTag();
     }
 
     @Override
