@@ -283,7 +283,7 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
 
     @Override
     public String toString() {
-        return "org.g2p.tracker.model.entities.TracksEntity[trackId=" + trackId + "]";
+        return getTrackId() + " - " + getTitulo() + (getTagsEntityCollection().size() > 0 ? " | " +getTagsEntityCollection() : "");
     }
 
     @Override
