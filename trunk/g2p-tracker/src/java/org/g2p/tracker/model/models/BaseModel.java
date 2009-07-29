@@ -32,7 +32,6 @@ import org.g2p.tracker.model.daos.exceptions.IllegalOrphanException;
 import org.g2p.tracker.model.daos.exceptions.NonexistentEntityException;
 import org.g2p.tracker.model.daos.exceptions.RollbackFailureException;
 import org.g2p.tracker.model.entities.BaseEntity;
-import org.g2p.tracker.model.entities.TracksEntity;
 import org.zkoss.lang.Strings;
 
 /**
@@ -508,7 +507,10 @@ public class BaseModel {
             all.addAll(filtered);
             filtered.clear();
         }
-        if (all != null && entities != null && entities.size() != 0) {
+        if(entities == null){
+            entities = new ArrayList();
+        }
+        if (all != null) {
             int i = 0;
             while (all.size() > i) {
                 if (!entities.contains(all.get(i))) {
@@ -524,25 +526,7 @@ public class BaseModel {
     }
 
     public void filter(Set entities) {
-        if (filtered != null & filtered.size() > 0) {
-            all.addAll(filtered);
-            filtered.clear();
-        }
-        if (all != null && entities != null) {
-
-            int i = 0;
-            while (all.size() > i) {
-                if (!entities.contains(all.get(i))) {
-                    filtered.add(all.get(i));
-                    all.remove(i);
-                } else {
-                    i++;
-                }
-            }
-
-        } else {
-            refreshAll();
-        }
+        filter(new ArrayList(entities));
     }
 
     public void filter(Hashtable criteria) throws Exception {
