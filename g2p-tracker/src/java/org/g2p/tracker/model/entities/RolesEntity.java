@@ -11,9 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -50,12 +47,7 @@ public class RolesEntity extends BaseEntity implements Serializable {
     private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
     @OneToMany(mappedBy = "rolId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
-    @JoinTable(name = "acceso_menu",
-        joinColumns = {@JoinColumn(name = "rol_id")},
-        inverseJoinColumns = {@JoinColumn(name = "rol_id")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<MenuEntity> menuPerRol;
-
+   
     public RolesEntity() {
     }
 
@@ -122,14 +114,6 @@ public class RolesEntity extends BaseEntity implements Serializable {
 
     public void setAccesoMenuEntityCollection(Set<AccesoMenuEntity> accesoMenuEntityCollection) {
         this.accesoMenuEntityCollection = accesoMenuEntityCollection;
-    }
-
-    public Set<MenuEntity> getMenuPerRol() {
-        return menuPerRol;
-    }
-
-    public void setMenuPerRol(Set<MenuEntity> menuPerRol) {
-        this.menuPerRol = menuPerRol;
     }
 
     @Override
