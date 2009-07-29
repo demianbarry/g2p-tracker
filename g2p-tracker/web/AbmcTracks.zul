@@ -10,7 +10,7 @@
         <vbox height="100%" style="width:100%;background:#DAF3FF;">
                 <!-- Título -->
             <label zclass="z-title-label"
-					value="Tracks"/>            
+					value="Tracks"/>
             <hbox>
                 <button id="nuevoTrack" label="Nuevo Track"/>
                 <button id="editarTrack" label="Editar" />
@@ -264,7 +264,7 @@
                             <tabpanel>
                                 <columnlayout>
                                     <columnchildren width="60%">
-                                        <panel id="trackEdit" title="@{abmcTracksWin.trackModel.selected.titulo}" droppable="true">
+                                        <panel id="trackEdit" title="@{abmcTracksWin.trackModel.selected.titulo}" droppable="true" height="100%">
                                             <panelchildren>
                                                 <vbox width="100%">
                                                     <div id="tituloDiv">
@@ -282,7 +282,7 @@
                                         </panel>
                                     </columnchildren>
                                     <columnchildren width="40%">
-                                        <panel title="|">
+                                        <panel title="|" height="100%">
                                             <panelchildren>
                                                 <vbox width="100%">
                                                     <vbox width="100%">
@@ -438,19 +438,10 @@
                                                 <toolbarbutton  label="@{adjunto.documentEntity.titulo}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
-                                                <toolbarbutton  label="@{adjunto.documentEntity.descripcion}"
-                                                                                href="@{adjunto.documentEntity.docPath}"
-                                                                                target="__blank"/>
                                                 <toolbarbutton  label="@{adjunto.usuario.apellidoNombre}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
                                                 <toolbarbutton  label="@{adjunto.fecha}"
-                                                                                href="@{adjunto.documentEntity.docPath}"
-                                                                                target="__blank"/>
-                                                <toolbarbutton  label="@{adjunto.documentEntity.nombre}"
-                                                                                href="@{adjunto.documentEntity.docPath}"
-                                                                                target="__blank"/>
-                                                <toolbarbutton  label="@{adjunto.documentEntity.tipo}"
                                                                                 href="@{adjunto.documentEntity.docPath}"
                                                                                 target="__blank"/>
                                             </row>
