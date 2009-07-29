@@ -87,12 +87,7 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     private Set<AttachmentEntity> attachmentEntityCollection;
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
-    @JoinTable(name = "acceso_menu",
-            joinColumns = {@JoinColumn(name = "user_id")},
-        inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<MenuEntity> menuPerWebsiteUsers;
-
+    
     public WebsiteUsersEntity() {
     }
 
@@ -262,14 +257,6 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
 
     public void setTracksOwnedEntityCollection(Set<TracksEntity> tracksOwnedEntityCollection) {
         this.tracksOwnedEntityCollection = tracksOwnedEntityCollection;
-    }
-
-    public Set<MenuEntity> getMenuPerWebsiteUsers() {
-        return menuPerWebsiteUsers;
-    }
-
-    public void setMenuPerWebsiteUsers(Set<MenuEntity> menuPerWebsiteUsers) {
-        this.menuPerWebsiteUsers = menuPerWebsiteUsers;
     }
 
     @Override
