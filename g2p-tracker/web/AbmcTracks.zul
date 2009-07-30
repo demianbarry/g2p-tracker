@@ -6,27 +6,29 @@
     <zscript>
         ingresoComentario.EditorDocument.body.contentEditable=false;
     </zscript>
-    <vbox width="100">
+    <vbox width="100" height="100%">
         <vbox height="100%" style="width:100%;background:#DAF3FF;">
                 <!-- Título -->
-            <label zclass="z-title-label"
+            <div align="center" style="background:#0C7A9A;">
+                <label zclass="z-title-label"
 					value="Tracks"/>
+            </div>
             <hbox>
                 <button id="nuevoTrack" label="Nuevo Track"/>
                 <button id="editarTrack" label="Editar" />
                 <button id="guardarTrack" label="Guardar Track"/>
                 <button id="cancelarAltaTrack" label="Cancelar"/>
-            </hbox>
-            <space height="5%"/>
-            <hbox id="ecualizadorBox">
-                <ecualizador id="ecualizador" model="@{abmcTracksWin.trackModel}" visible="true" width="100%"/>
+                <space width="5%"/>
+                <hbox id="ecualizadorBox">
+                    <ecualizador id="ecualizador" model="@{abmcTracksWin.trackModel}" visible="true" width="100%"/>
+                </hbox>
             </hbox>
             <space height="10%"/>
         </vbox>
         <hbox width="100%">
             <space width="5%"/>
-            <div id="trackDetail" style="overflow:auto">
-                <div id="listTrackView" style="overflow:auto">
+            <div id="trackDetail" style="overflow:auto" height="100%">
+                <div id="listTrackView" style="overflow:auto" height="100%">
                     <listbox id="tracksList" fixedLayout="true" width="100%" height="100%" model="@{abmcTracksWin.trackModel.all}" selectedItem="@{abmcTracksWin.trackModel.selected}" vflex="true" >
                         <listhead>
                             <listheader>
@@ -253,7 +255,7 @@
                     <button id="stickyDeleteButton" image="/img/delete.PNG" width="20%" height="100%"/>
                 </popup>
                 <!--ALTA DE TRACK-->
-                <div id="nuevoTrackView" width="100%" style="overflow:auto;">
+                <div id="nuevoTrackView" width="100%" style="overflow:auto;background:#DAF3FF;">
                     <tabbox width="100%">
                         <tabs>
                             <tab label="Principal"/>
@@ -266,16 +268,18 @@
                                     <columnchildren width="60%">
                                         <panel id="trackEdit" title="@{abmcTracksWin.trackModel.selected.titulo}" droppable="true" height="100%">
                                             <panelchildren>
-                                                <vbox width="100%">
+                                                <vbox width="100%" style="background:#DAF3FF;">
                                                     <div id="tituloDiv">
-                                        Título:
-                                                        <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="90%"/>
+                                                        <vbox>
+                                                            Título:
+                                                            <textbox id="titulo" value="@{abmcTracksWin.trackModel.selected.titulo}" width="90%"/>
+                                                        </vbox>
                                                     </div>
                                                     <separator/>
-                                        Descripción:
+                                                    Descripción:
                                                     <textbox id="descripcion" value="@{abmcTracksWin.trackModel.selected.descripcion}" rows="2" width="90%"/>
                                                     <separator/>
-                                        Observaciones:
+                                                    Observaciones:
                                                     <textbox id="observaciones" value="@{abmcTracksWin.trackModel.selected.observaciones}" rows="4" width="90%"/>
                                                 </vbox>
                                             </panelchildren>
