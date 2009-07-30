@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -21,13 +20,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import org.g2p.tracker.model.entities.AttachmentEntity;
 import org.g2p.tracker.model.entities.BaseEntity;
 import org.g2p.tracker.model.entities.DocumentosEntity;
@@ -432,7 +425,6 @@ public class AbmcTracksController extends BaseController {
             prioridadesModel.setSelected(track.getPrioridadId());
             importanciaModel.setSelected(track.getImportanciaId());
 
-            System.out.println("WORKERS: "+track.getWebsiteUsersEntityCollection());
             if (track.getWebsiteUsersEntityCollection() != null) {
                 workersModel.filter(track.getWebsiteUsersEntityCollection());
             } else {
