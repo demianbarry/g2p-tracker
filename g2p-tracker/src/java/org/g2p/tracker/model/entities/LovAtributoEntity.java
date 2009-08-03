@@ -31,7 +31,7 @@ public class LovAtributoEntity extends BaseEntity implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     @JoinColumn(name = "clase_lov_atributo_id", referencedColumnName = "clase_lov_atributo_id", insertable = false, updatable = false)
-    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     private ClaseLovAtributoEntity claseLovAtributo;
 
     public LovAtributoEntity() {
