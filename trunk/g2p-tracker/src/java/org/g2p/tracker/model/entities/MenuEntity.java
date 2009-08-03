@@ -44,7 +44,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
     private String url;
     @Column(name = "grupo")
     private String grupo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuId", fetch = FetchType.LAZY)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
     
     public MenuEntity() {

@@ -36,7 +36,7 @@ public class ImportanciaEntity extends BaseEntity implements Serializable {
     private String descripcion;
     @Column(name = "peso")
     private Integer peso;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "importanciaId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "importanciaId", fetch = FetchType.LAZY)
     private Set<TracksEntity> tracksEntityCollection;
 
     public ImportanciaEntity() {
