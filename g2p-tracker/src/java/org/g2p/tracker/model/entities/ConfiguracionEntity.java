@@ -45,9 +45,9 @@ public class ConfiguracionEntity extends BaseEntity implements Serializable {
     @Column(name = "prioridad")
     private int prioridad;
     @JoinColumn(name = "esquema_configuracion_id", referencedColumnName = "esquema_configuracion_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EsquemaConfiguracionEntity esquemaConfiguracionId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "configuracion", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "configuracion", fetch = FetchType.LAZY)
     private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection;
 
     public ConfiguracionEntity() {

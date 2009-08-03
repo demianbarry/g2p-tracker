@@ -503,10 +503,7 @@ public class BaseModel {
     }
 
     public void filter(List<BaseEntity> entities) {
-        if (filtered != null & filtered.size() > 0) {
-            all.addAll(filtered);
-            filtered.clear();
-        }
+        removeFilter();
         if(entities == null){
             entities = new ArrayList();
         }
@@ -530,6 +527,7 @@ public class BaseModel {
     }
 
     public void filter(Hashtable criteria) throws Exception {
+        removeFilter();
         if (all != null) {
             Iterator<BaseEntity> entities = all.iterator();
             while (entities.hasNext()) {
@@ -557,5 +555,12 @@ public class BaseModel {
     private Object getAttributeValue(String attribute, BaseEntity entity) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Method m = this.entity.getMethod("get" + attribute);
         return m.invoke(entity);
+    }
+
+    public void removeFilter() {
+        if (filtered != null & filtered.size() > 0) {
+            all.addAll(filtered);
+            filtered.clear();
+        }
     }
 }

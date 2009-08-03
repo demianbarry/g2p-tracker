@@ -33,7 +33,7 @@ public class DiccionarioAplicacionDetalleEntity extends BaseEntity implements Se
     @Column(name = "nombre_detalle")
     private String nombreDetalle;
     @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private DiccionarioAplicacionEntity diccionarioAplicacion;
 
     public DiccionarioAplicacionDetalleEntity() {

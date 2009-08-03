@@ -44,9 +44,9 @@ public class EntidadExternaEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "anulado")
     private char anulado;
-    @OneToMany(mappedBy = "entidadId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "entidadId", fetch = FetchType.LAZY)
     private Set<AtributosEntidadEntity> atributosEntidadCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entidadExterna", fetch = FetchType.LAZY)
     private Set<RolesEntidadEntity> rolesEntidadCollection;
 
 

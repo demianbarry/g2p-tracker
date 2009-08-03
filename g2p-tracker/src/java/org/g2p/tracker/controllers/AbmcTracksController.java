@@ -90,7 +90,7 @@ public class AbmcTracksController extends BaseController {
     protected Textbox titulo;
     protected Textbox descripcion;
     protected Textbox observaciones;
-    protected Combobox propietario;
+    //protected Combobox propietario;
     protected Combobox trabajador;
     protected Datebox fechaCreacion;
     protected Datebox fechaEstimadaRealizacion;
@@ -240,14 +240,13 @@ public class AbmcTracksController extends BaseController {
     public void onClick$guardarTrack(Event event) {
         //save into bean
         TracksEntity track = trackModel.getSelected();
-        WebsiteUsersEntity userOwner = websiteUserModel.getSelected();
+        //WebsiteUsersEntity userOwner = websiteUserModel.getSelected();
 
-        binder.saveComponent(getFellow("ownerWorkersGrid"));
-        track.setUserIdOwner(userOwner);        
+        binder.saveComponent(getFellow("propietario"));
         binder.saveComponent(getFellow("estadoPrioImport"));
-        track.setEstadoId((EstadosEntity) estadosModel.getSelected());
+        /*track.setEstadoId((EstadosEntity) estadosModel.getSelected());
         track.setPrioridadId((PrioridadesEntity) prioridadesModel.getSelected());
-        track.setImportanciaId((ImportanciaEntity) importanciaModel.getSelected());
+        track.setImportanciaId((ImportanciaEntity) importanciaModel.getSelected());*/
 
         try {
             //store into db
@@ -268,16 +267,6 @@ public class AbmcTracksController extends BaseController {
                 trackModel.rollbackTransaction();
             } catch (Exception ex1) {
                 showMessage("Ocurrió un error mientras se intentaba hacer rollback de la operacion: " + ex1.getClass(), ex);
-            }
-        } finally {
-            try {
-                //refresh the rolesList
-                trackModel.setAll(BaseModel.findEntitiesByParams("TracksEntity.findByUser", "user", getUserFromSession()));
-                binder.loadAttribute(tracksList, "model");
-                setListMode(true);
-                refresh();
-            } catch (Exception ex) {
-                Logger.getLogger(AbmcTracksController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -420,10 +409,10 @@ public class AbmcTracksController extends BaseController {
     public void refresh() {
         if (!isListMode()) {
             TracksEntity track = trackModel.getSelected();
-            websiteUserModel.setSelected(track.getUserIdOwner());
+            /*websiteUserModel.setSelected(track.getUserIdOwner());
             estadosModel.setSelected(track.getEstadoId());
             prioridadesModel.setSelected(track.getPrioridadId());
-            importanciaModel.setSelected(track.getImportanciaId());
+            importanciaModel.setSelected(track.getImportanciaId());*/
 
             if (track.getWebsiteUsersEntityCollection() != null) {
                 workersModel.filter(track.getWebsiteUsersEntityCollection());
@@ -437,7 +426,6 @@ public class AbmcTracksController extends BaseController {
         binder.loadComponent(trackDetail); //reload visible to force refresh
         binder.loadAttribute(workersList, "model");
         binder.loadAttribute(trabajador, "model");
-        binder.loadAttribute(propietario, "selectedItem");
         binder.loadAttribute(getFellow("postsGrid"), "model");
     }
     protected Textbox tbComentario;

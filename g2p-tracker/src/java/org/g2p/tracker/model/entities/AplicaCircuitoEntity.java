@@ -40,7 +40,7 @@ public class AplicaCircuitoEntity extends BaseEntity implements Serializable {
     @Column(name = "circuito")
     private String circuito;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CircuitosEstadosEntity circuitoId;
 
     public AplicaCircuitoEntity() {
