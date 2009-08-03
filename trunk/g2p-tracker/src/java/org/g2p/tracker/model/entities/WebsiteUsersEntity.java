@@ -71,21 +71,21 @@ public class WebsiteUsersEntity extends BaseEntity implements Serializable {
     @JoinTable(name = "workers_per_tracks",
         joinColumns = {@JoinColumn(name = "user_id")},
         inverseJoinColumns = {@JoinColumn(name = "track_id")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<TracksEntity> tracksEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userIdOwner", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userIdOwner", fetch = FetchType.LAZY)
     private Set<TracksEntity> tracksOwnedEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
     private Set<PostsEntity> postsEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.LAZY)
     private Set<UsuarioPreferenciasEntity> usuarioPreferenciasEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "websiteUsers", fetch = FetchType.LAZY)
     private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<AttachmentEntity> attachmentEntityCollection;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
     
     public WebsiteUsersEntity() {

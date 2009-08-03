@@ -27,10 +27,10 @@ public class UsuarioPreferenciasEntity extends BaseEntity implements Serializabl
     @Column(name = "valor")
     private String valor;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private WebsiteUsersEntity websiteUsers;
     @JoinColumn(name = "preferencia_id", referencedColumnName = "preferencia_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private PreferenciasEntity preferencias;
 
     public UsuarioPreferenciasEntity() {
