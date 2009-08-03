@@ -54,19 +54,19 @@ public class AuditaEstadosCircuitosEntity extends BaseEntity implements Serializ
     @Column(name = "de_estado")
     private String deEstado;
     @JoinColumn(name = "accion_id", referencedColumnName = "accion_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AccionesAppsEntity accionId;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CircuitosEstadosEntity circuitoId;
     @JoinColumn(name = "estado_id_a", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadosEntity estadoIdA;
     @JoinColumn(name = "estado_id_de", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadosEntity estadoIdDe;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private WebsiteUsersEntity userId;
 
     public AuditaEstadosCircuitosEntity() {

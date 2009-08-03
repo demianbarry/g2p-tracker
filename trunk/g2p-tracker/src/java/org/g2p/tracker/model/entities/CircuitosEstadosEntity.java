@@ -38,15 +38,15 @@ public class CircuitosEstadosEntity extends BaseEntity implements Serializable {
     private String observaciones;
     @Column(name = "circuito")
     private String circuito;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
     private Set<EstadosEntity> estadosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
     private Set<AplicaCircuitoEntity> aplicaCircuitoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
     private Set<AccionesAppsEntity> accionesAppsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "circuitoId", fetch = FetchType.LAZY)
     private Set<TransicionEstadosEntity> transicionEstadosCollection;
 
 

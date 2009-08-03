@@ -39,10 +39,10 @@ public class EsquemaConfiguracionEntity extends BaseEntity implements Serializab
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esquemaConfiguracionId", fetch = FetchType.LAZY)
     private Set<ConfiguracionEntity> configuracionCollection;
     @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private DiccionarioAplicacionEntity diccionarioAplicacion;
 
     public EsquemaConfiguracionEntity() {

@@ -31,7 +31,7 @@ public class ClaseAtributoRolEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "etiqueta")
     private String etiqueta;
-    @OneToMany(mappedBy = "claseAtributoRolId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "claseAtributoRolId", fetch = FetchType.LAZY)
     private Set<AtributosRolEntity> atributosRolCollection;
 
     public ClaseAtributoRolEntity() {

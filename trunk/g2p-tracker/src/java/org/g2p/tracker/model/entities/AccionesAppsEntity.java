@@ -48,12 +48,12 @@ public class AccionesAppsEntity extends BaseEntity implements Serializable {
     private Integer accion;
     @Column(name = "circuito")
     private String circuito;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.LAZY)
     private Set<AuditaEstadosCircuitosEntity> auditaEstadosCircuitosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accionId", fetch = FetchType.LAZY)
     private Set<TransicionEstadosEntity> transicionEstadosCollection;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CircuitosEstadosEntity circuitoId;
 
     public AccionesAppsEntity() {

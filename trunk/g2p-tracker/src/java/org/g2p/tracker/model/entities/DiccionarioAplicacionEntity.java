@@ -22,11 +22,11 @@ public class DiccionarioAplicacionEntity extends BaseEntity implements Serializa
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DiccionarioAplicacionEntityPK diccionarioAplicacionPK;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
     private Set<EsquemaConfiguracionEntity> esquemaConfiguracionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
     private Set<DiccionarioAplicacionDetalleEntity> diccionarioAplicacionDetalleCollection;
-    @OneToMany(mappedBy = "diccionarioAplicacion", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "diccionarioAplicacion", fetch = FetchType.LAZY)
     private Set<AtributosRolEntity> atributosRolCollection;
 
     public DiccionarioAplicacionEntity() {

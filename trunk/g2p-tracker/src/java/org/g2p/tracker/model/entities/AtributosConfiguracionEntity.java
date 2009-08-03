@@ -30,10 +30,10 @@ public class AtributosConfiguracionEntity extends BaseEntity implements Serializ
     @Column(name = "valor_hasta")
     private String valorHasta;
     @JoinColumn(name = "configuracion_id", referencedColumnName = "configuracion_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ConfiguracionEntity configuracion;
     @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AtributosRolEntity atributosRol;
 
     public AtributosConfiguracionEntity() {

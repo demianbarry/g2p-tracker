@@ -46,7 +46,7 @@ public class DocumentosEntity extends BaseEntity implements Serializable {
     private double documentVersion;
     @Column(name = "tipo")
     private String tipo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "documentEntity", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "documentEntity", fetch = FetchType.LAZY)
     private Set<AttachmentEntity> attachmentEntityCollection;
 
     public DocumentosEntity() {

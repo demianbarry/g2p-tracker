@@ -66,18 +66,18 @@ public class AtributosRolEntity extends BaseEntity implements Serializable {
     private String validador;
     @Column(name = "clase_lov_atributo_id")
     private Integer claseLovAtributoId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributoId", fetch = FetchType.LAZY)
     private Set<AtributosEntidadEntity> atributosEntidadCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atributosRol", fetch = FetchType.LAZY)
     private Set<AtributosConfiguracionEntity> atributosConfiguracionCollection;
     @JoinColumn(name = "clase_atributo_rol_id", referencedColumnName = "clase_atributo_rol_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private ClaseAtributoRolEntity claseAtributoRolId;
     @JoinColumn(name = "rol", referencedColumnName = "rol")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RolEntidadEntity rol;
     @JoinColumns({@JoinColumn(name = "tipo_objeto", referencedColumnName = "tipo_objeto"), @JoinColumn(name = "nombre_objeto", referencedColumnName = "nombre_objeto")})
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private DiccionarioAplicacionEntity diccionarioAplicacion;
 
     public AtributosRolEntity() {

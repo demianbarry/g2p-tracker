@@ -27,7 +27,7 @@
             <west width="20%" title="Navegación" splittable="true" collapsible="true" sclass="external-page-w">
                 <portallayout>
                     <portalchildren style="padding: 5px" width="100%">
-                        <panel collapsible="true" title="Barra de navegación">
+                        <panel title="Barra de navegación" collapsible="true" border="normal">
                             <panelchildren id="panelChildren" zclass="menu-panel-child">
                                 <vbox id="navBar">
                                 </vbox>
@@ -35,7 +35,7 @@
                         </panel>
                     </portalchildren>
                     <portalchildren style="padding: 5px" width="100%">
-                        <panel height="100%" title="Sticky Notes" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                        <panel height="100%" title="Sticky Notes" collapsible="true" border="normal" style="margin-bottom:10px">
                             <panelchildren>
                                 <groupbox mold="3d" closable="false" draggable="true">
                                     <caption>

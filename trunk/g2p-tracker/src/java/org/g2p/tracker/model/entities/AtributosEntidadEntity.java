@@ -49,10 +49,10 @@ public class AtributosEntidadEntity extends BaseEntity implements Serializable {
     @Column(name = "nombre_objeto")
     private String nombreObjeto;
     @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private EntidadExternaEntity entidadId;
     @JoinColumn(name = "atributo_id", referencedColumnName = "atributo_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AtributosRolEntity atributoId;
 
     public AtributosEntidadEntity() {

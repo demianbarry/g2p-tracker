@@ -35,7 +35,7 @@ public class ClaseLovAtributoEntity extends BaseEntity implements Serializable {
     private String descripcion;
     @Column(name = "observaciones")
     private String observaciones;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "claseLovAtributo", fetch = FetchType.LAZY)
     private LovAtributoEntity lovAtributo;
 
     public ClaseLovAtributoEntity() {
