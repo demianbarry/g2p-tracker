@@ -54,7 +54,7 @@ public class TagsEntity extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private TagsEntity tagIdGrupo;
     @JoinTable(name = "tags_per_tracks", joinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")}, inverseJoinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<TracksEntity> tracksEntityCollection;
 
     public TagsEntity() {

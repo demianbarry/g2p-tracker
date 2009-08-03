@@ -42,10 +42,10 @@ public class RolesEntidadEntity extends BaseEntity implements Serializable {
     @Column(name = "rol")
     private String rol;
     @JoinColumn(name = "entidad_id", referencedColumnName = "entidad_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EntidadExternaEntity entidadExterna;
     @JoinColumn(name = "rol_id", referencedColumnName = "rol", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private RolEntidadEntity rolEntidad;
 
     public RolesEntidadEntity() {

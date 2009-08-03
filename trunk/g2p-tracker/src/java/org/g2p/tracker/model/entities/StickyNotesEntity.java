@@ -40,7 +40,7 @@ public class StickyNotesEntity extends BaseEntity implements Serializable, Compa
     @Column(name = "leido")
     private boolean leido;
     @JoinColumn(name = "track_id", referencedColumnName = "track_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private TracksEntity trackId;
 
     public StickyNotesEntity() {

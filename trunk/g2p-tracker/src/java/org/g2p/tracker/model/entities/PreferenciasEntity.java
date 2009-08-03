@@ -36,7 +36,7 @@ public class PreferenciasEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "default")
     private String default1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencias", fetch = FetchType.LAZY)
     private Set<UsuarioPreferenciasEntity> usuarioPreferenciasCollection;
 
     public PreferenciasEntity() {

@@ -46,9 +46,9 @@ public class RolEntidadEntity extends BaseEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "anulado")
     private char anulado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rolEntidad", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rolEntidad", fetch = FetchType.LAZY)
     private Set<RolesEntidadEntity> rolesEntidadCollection;
-    @OneToMany(mappedBy = "rol", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rol", fetch = FetchType.LAZY)
     private Set<AtributosRolEntity> atributosRolCollection;
 
     public RolEntidadEntity() {

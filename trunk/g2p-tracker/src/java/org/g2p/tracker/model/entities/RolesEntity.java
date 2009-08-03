@@ -43,9 +43,9 @@ public class RolesEntity extends BaseEntity implements Serializable {
     @Column(name = "OBJ_VERSION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date objVersion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roles", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<RolesPerWebsiteUsersEntity> rolesPerWebsiteUsersEntityCollection;
-    @OneToMany(mappedBy = "rolId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rolId", fetch = FetchType.LAZY)
     private Set<AccesoMenuEntity> accesoMenuEntityCollection;
    
     public RolesEntity() {
