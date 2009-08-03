@@ -39,7 +39,7 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
 
     @Override
     public List getStoredTags() throws Exception {
-        if (getSelected() != null) {
+        if (getSelected() != null && getSelected().getTagsEntityCollection() != null) {
             return new ArrayList(getSelected().getTagsEntityCollection());
         }
         return null;
@@ -51,6 +51,7 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
             return getAll();
         }
         Iterator<TagsEntity> tagsIterator = tagsList.iterator();
+        removeFilter();
         Iterator tracksIterator = getAll().iterator();
         List tracks = new ArrayList();
         TracksEntity track;
@@ -69,6 +70,7 @@ public class TracksModel extends BaseModel implements Taggeable, Ecualizable {
                         tracks.add(track);
                     }
                 }
+                tagsIterator = tagsList.iterator();
             }
         }
         return tracks;

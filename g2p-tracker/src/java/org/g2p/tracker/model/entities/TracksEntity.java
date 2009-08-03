@@ -64,36 +64,34 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
     private Date fechaRealizacion;
     @Column(name = "titulo")
     private String titulo;
-    @Basic(optional = false)
     @Column(name = "complejidad")
     private Double complejidad;
-    @Basic(optional = false)
     @Column(name = "orden")
     private String orden;
     @JoinTable(name = "workers_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<WebsiteUsersEntity> websiteUsersEntityCollection;
     @OrderBy(value = "leido")
-    @OneToMany(mappedBy = "trackId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trackId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<StickyNotesEntity> stickyNotesEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trackId", fetch = FetchType.LAZY)
     private Set<PostsEntity> postsEntityCollection;
     @JoinColumn(name = "importancia_id", referencedColumnName = "importancia_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private ImportanciaEntity importanciaId;
     @JoinColumn(name = "estado_id", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadosEntity estadoId;
     @JoinColumn(name = "prioridad_id", referencedColumnName = "prioridad_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private PrioridadesEntity prioridadId;
     @JoinColumn(name = "user_id_owner", referencedColumnName = "user_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private WebsiteUsersEntity userIdOwner;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track", fetch = FetchType.LAZY)
     private Set<AttachmentEntity> attachmentEntityCollection;
     @JoinTable(name = "tags_per_tracks", joinColumns = {@JoinColumn(name = "track_id", referencedColumnName = "track_id")}, inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<TagsEntity> tagsEntityCollection;
 
     public TracksEntity() {
@@ -368,6 +366,6 @@ public class TracksEntity extends BaseEntity implements Serializable, Comparable
             }
         }//
 
-        return complejidad * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
+        return (complejidad != null? complejidad : 1) * prioridadId.getPeso() * importanciaId.getPeso() * factorLimiteFecha * factorAntiguedad;
     }
 }

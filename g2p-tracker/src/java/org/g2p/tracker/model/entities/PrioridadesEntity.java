@@ -36,7 +36,7 @@ public class PrioridadesEntity extends BaseEntity implements Serializable {
     private String descripcion;
     @Column(name = "peso")
     private Integer peso;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "prioridadId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "prioridadId", fetch = FetchType.LAZY)
     private Set<TracksEntity> tracksEntityCollection;
 
     public PrioridadesEntity() {

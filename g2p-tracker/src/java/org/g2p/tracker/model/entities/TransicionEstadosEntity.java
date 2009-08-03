@@ -42,16 +42,16 @@ public class TransicionEstadosEntity extends BaseEntity implements Serializable 
     @Column(name = "estado_destino")
     private String estadoDestino;
     @JoinColumn(name = "accion_id", referencedColumnName = "accion_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AccionesAppsEntity accionId;
     @JoinColumn(name = "estado_id_destino", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadosEntity estadoIdDestino;
     @JoinColumn(name = "estado_id_origen", referencedColumnName = "estado_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadosEntity estadoIdOrigen;
     @JoinColumn(name = "circuito_id", referencedColumnName = "circuito_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CircuitosEstadosEntity circuitoId;
 
 
