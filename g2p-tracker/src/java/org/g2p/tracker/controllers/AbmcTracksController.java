@@ -38,6 +38,7 @@ import org.g2p.tracker.model.models.ImportanciaModel;
 import org.g2p.tracker.model.models.PrioridadesModel;
 import org.g2p.tracker.model.models.TracksModel;
 import org.g2p.tracker.model.models.WebsiteUserModel;
+import org.g2p.tracker.utils.Net;
 import org.zkforge.fckez.FCKeditor;
 import org.zkoss.util.media.Media;
 import org.zkoss.zhtml.Fileupload;
@@ -489,69 +490,7 @@ public class AbmcTracksController extends BaseController {
         }
 
 
-        BaseEntity.enviarEmail(contenido, asunto, emailRemitente, contraseniaRemitente, emailDestinatarios);
-//        String emailRemitente = "g2patagonico@gmail.com";
-//        String contraseniaRemitente = "gedospee";
-//
-//        Properties conf = new Properties();
-//        String contenido;
-//
-//        // nombre del host de correo
-//        conf.put("mail.smtp.host", "smtp.gmail.com");
-//
-//        // TLS si está disponible
-//        conf.setProperty("mail.smtp.starttls.enable", "true");
-//
-//        // Puerto de gmail para envio de correos
-//        conf.setProperty("mail.smtp.port", "587");
-//
-//        // Nombre del usuario
-//        conf.setProperty("mail.smtp.user", emailRemitente);
-//
-//        // Si requiere o no usuario y password para conectarse.
-//        conf.setProperty("mail.smtp.auth", "true");
-//
-//        // cambiar por el track actual!!!!!!!!!!!!
-//        TracksEntity trackActual = trackModel.getSelected();
-//
-//        Session sesion = Session.getDefaultInstance(conf);
-//        Message mensaje = new MimeMessage(sesion);
-//
-//        contenido = getUserNameFromSession() + " ha comentado el track " + trackActual.getTitulo();
-//
-//        try {
-//            InternetAddress de = new InternetAddress(emailRemitente);
-//
-//            InternetAddress a[] = new InternetAddress[trackActual.getWebsiteUsersEntityCollection().size() + 1];
-//            a[0] = (new InternetAddress((trackActual.getUserIdOwner().getEmail())));
-//
-//            Iterator worker = trackActual.getWebsiteUsersEntityCollection().iterator();
-//
-//            String userEmail = null;
-//            int i = 1;
-//            while (i < a.length) {
-//                userEmail = ((WebsiteUsersEntity) worker.next()).getEmail();
-//                if (userEmail != null && userEmail.length() > 0) {
-//                    a[i] = (new InternetAddress(userEmail));
-//                }
-//                i++;
-//            }
-//
-//            mensaje.setFrom(de);
-//            mensaje.setRecipients(Message.RecipientType.TO, a);
-//            mensaje.setSubject("Se ha comentado el track " + trackActual.getTitulo());
-//            mensaje.setContent(contenido, "text/plain");
-//            mensaje.setSentDate(new Date());
-//
-//            Transport t = sesion.getTransport("smtp");
-//            t.connect(emailRemitente, contraseniaRemitente);
-//            t.sendMessage(mensaje, mensaje.getAllRecipients());
-//            t.close();
-//
-//
-//        } catch (AddressException ex) {
-//            Logger.getLogger(DetallesController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        Net.enviarEmail(contenido, asunto, emailRemitente, contraseniaRemitente, emailDestinatarios);
     }
 
     private String procesarCadena(String cadena) {
