@@ -5,10 +5,6 @@
 
 package org.g2p.tracker.openid;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Observer;
-import java.util.Vector;
 import javax.servlet.http.HttpSession;
 
 /**
