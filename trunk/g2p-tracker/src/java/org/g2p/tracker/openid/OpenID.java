@@ -60,56 +60,69 @@ public class OpenID implements IOpenID, Constants {
         RealmVerifier rv = new RealmVerifier();
         rv.setEnforceRpId(false);
         manager.setRealmVerifier(rv);
-        manager.setConnectTimeout(4999);
+        
     }
 
-    // --- placing the authentication request ---
+    /**
+     * Realiza la preparación y todos los procesos previos
+     * a la redirección al endpoint de autentificacion del proveedor
+     *
+     * @param userSuppliedString El identificador OpenID
+     * @param httpReq El Request
+     * @param httpResp El Response
+     * @return El endpoint del proveedor
+     * @throws IOException
+     * @throws DiscoveryException
+     */
     private String authRequest(String userSuppliedString,
             HttpServletRequest httpReq,
             HttpServletResponse httpResp)
             throws IOException, DiscoveryException {
         try {
 
+            // abro el archivo de propiedades
             InputStream is = (httpReq.getSession().getServletContext().getResourceAsStream("/WEB-INF/openid.properties"));
 
-
+            // mapeo el archivo de propiedades con un objeto de propiedades
             properties = new Properties();
             properties.load(is);
 
-            // configure the return_to URL where your application will receive
-            // the authentication responses from the OpenID provider
+            // obtengo la url de retorno, a la cual el provedor OpenId
+            // enviara su respuesta
             String returnToUrl = properties.getProperty("return_to_url");
+            manager.setConnectTimeout(Integer.parseInt(properties.getProperty("timeout")));
 
-
-            // --- Forward proxy setup (only if needed) ---
+            // verifico si hay un proxy funcionando
             if (Boolean.parseBoolean(properties.getProperty("is_proxy"))) {
+                // si lo hay, lo configuro
                 ProxyProperties proxyProps = new ProxyProperties();
-                proxyProps.setProxyHostName("192.168.0.16");
-                proxyProps.setProxyPort(80);
+                proxyProps.setProxyHostName(properties.getProperty("ip_proxy"));
+                proxyProps.setProxyPort(Integer.parseInt(properties.getProperty("port_proxy")));
                 HttpClientFactory.setProxyProperties(proxyProps);
             }
 
             manager.setMaxRedirects(3);
 
             System.out.println("---URLLLLLLLLLLLLLLLL "+returnToUrl);
-            // perform discovery on the user-supplied identifier
+            // realizo el discovery con el identificador suminstrado
             List discoveries = manager.discover(userSuppliedString);
 
-            // attempt to associate with the OpenID provider
-            // and retrieve one service endpoint for authentication
+            // establezco una asociación con el proveedor
+            // y obtenego el endpoint del sitio de autentificacion
             DiscoveryInformation discovered = manager.associate(discoveries);
 
-            // store the discovery information in the user's session
+            // guardo la informacion recuperada en la sesion del usuario
             httpReq.getSession().setAttribute("openid-disc", discovered);
 
-
-            // obtain a AuthRequest message to be sent to the OpenID provider
+            // obtengo un mensaje de solicitud de autentificacion para ser
+            // enviado al proveedor de OpenID
             AuthRequest authReq;
             authReq = manager.authenticate(discovered, returnToUrl);
 
-
+            // armo la solicitud de los datos de usuario
             authReq.addExtension(crearSolicitudDatos());
 
+            // retorno el endpoint del proveedor
             return authReq.getDestinationUrl(true);
 
         } catch (MessageException ex) {
@@ -126,17 +139,18 @@ public class OpenID implements IOpenID, Constants {
 
     }
 
+    /**
+     * Arma la solicitud de datos del usuario al proveedor
+     * @return La solicitud de datos
+     */
     private FetchRequest crearSolicitudDatos() {
-        // Attribute Exchange example: fetching the 'email' attribute
+        
         FetchRequest fetch = FetchRequest.createFetchRequest();
         try {
 
             fetch.addAttribute("FirstName", "http://schema.openid.net/namePerson/first", true);
             fetch.addAttribute("LastName", "http://schema.openid.net/namePerson/last", true);
             fetch.addAttribute("Email", "http://schema.openid.net/contact/email", true);
-
-
-
 
         } catch (MessageException ex) {
             Logger.getLogger(OpenID.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,6 +159,13 @@ public class OpenID implements IOpenID, Constants {
         return fetch;
     }
 
+    /**
+     * Una vez recuperados los datos del usuario del proveedor
+     * los vincula con el objeto usuario actual
+     * 
+     * @param fetch Solicitud de datos con los valores recuperados
+     * @param user Usuario al cual asignarle los datos
+     */
     private void setDatos(FetchResponse fetch, WebsiteUsersEntity user) {
         List emails = fetch.getAttributeValues("Email");
         String nombre = fetch.getAttributeValue("FirstName");
@@ -159,64 +180,83 @@ public class OpenID implements IOpenID, Constants {
         user.setEmail((String) emails.get(0));
     }
 
-    // --- processing the authentication response ---
-    //public Identifier verifyResponse(HttpServletRequest httpReq)
+    /**
+     * Verifica si se ha autenticado exitosamente el usuario ante el proveedor
+     * 
+     * @param httpReq
+     * @return
+     * @throws NoAutentificadoException
+     */
     private WebsiteUsersEntity verifyResponse(HttpServletRequest httpReq) throws NoAutentificadoException {
         try {
-            // extract the parameters from the authentication response
-            // (which comes in as a HTTP request from the OpenID provider)
+            // recupero los parametros de la respuesta
+            // (que proviene como un HTTP Request desde el proveedor OpenID)
             ParameterList response =
                     new ParameterList(httpReq.getParameterMap());
 
-            // retrieve the previously stored discovery information
+            // recupero los datos guardados del discovery realizado previamente
             DiscoveryInformation discovered = (DiscoveryInformation) httpReq.getSession().getAttribute("openid-disc");
 
-            // extract the receiving URL from the HTTP request
+            // obtengo la URL del HTTP Request
             StringBuffer receivingURL = httpReq.getRequestURL();
+            // y le agrego los parametros correspondientes, si los tiene
             String queryString = httpReq.getQueryString();
             if (queryString != null && queryString.length() > 0) {
                 receivingURL.append("?").append(httpReq.getQueryString());
             }
 
-            // verify the response; ConsumerManager needs to be the same
-            // (static) instance used to place the authentication request
+            // verifico la respuesta
+            // el ConsumerManager debe ser la misma instancia que se uso para
+            // enviar la solicitud de autentificacion
             System.out.println("----------------URLLLLL "+receivingURL);
             VerificationResult verification = manager.verify(
                     receivingURL.toString(),
                     response, discovered);
 
-            // examine the verification result and extract the verified identifier
+            // examino el resultado de la verificación
+            // y extraigo el identificador verificado
             Identifier verified = verification.getVerifiedId();
 
+            // verifico si el usuario ya esta registrado en la base de
+            // datos de la aplicacion
             Hashtable parameters = new Hashtable();
             parameters.put("claimedId", verified.getIdentifier());
 
             List users = BaseModel.findEntities("WebsiteUsersEntity.findByClaimedId", parameters);
 
             WebsiteUsersEntity usuario = null;
-            if (users.size() != 0) {
+            if (users.size() != 0) { // si lo esta
+                // lo recupero
                 usuario = (WebsiteUsersEntity) users.get(0);
+                // y el proveedor ya no me interesa recordarlo
                 httpReq.getSession().removeAttribute(PROVEEDOR_SSO_ID);
-            } else {
+            } else { // si no esta
+                // guardo su identificación
                 httpReq.getSession().setAttribute(CLAIMED_ID, verified.getIdentifier());
             }
 
+            // si la verificacion fue exitosa
             if (verified != null) {
+                // recupero la respuesta de autentificacion
                 AuthSuccess authSuccess =
                         (AuthSuccess) verification.getAuthResponse();
 
 
-
+                // si trae mas información de lo habitual
                 if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
+                    // la recupero
                     FetchResponse fetchResp = (FetchResponse) authSuccess.getExtension(AxMessage.OPENID_NS_AX);
 
-
+                    // y se la asigno al usuario
                     setDatos(fetchResp, usuario);
                 }
 
                 //return verified;  // success
+                // devuelvo la información del usuario
                 return usuario;  // success
-            } else {
+            } else { // si no lo fue
+                // aviso que la autentificacion no fue exitosa y no pudo ingresar a
+                // la aplicacion
                 throw new NoAutentificadoException("No se ha podido identificar");
             }
         } catch (OpenIDException e) {
@@ -254,6 +294,12 @@ public class OpenID implements IOpenID, Constants {
         return authRequest(userSuppliedString, httpReq, httpResp);
     }
 
+    /**
+     * Verifica si se trata de un usuario con la sesión activa
+     * @param req Requerimiento HTTP
+     * @param user Usuario a comprobar su estado
+     * @return true si se encuentra con la sesión activa, false en cualquier otro caso
+     */
     @Override
     public boolean isUserLogged(HttpServletRequest req, WebsiteUsersEntity user) {
         if (user != null && user.equals((WebsiteUsersEntity) req.getSession().getAttribute(USER))) {
