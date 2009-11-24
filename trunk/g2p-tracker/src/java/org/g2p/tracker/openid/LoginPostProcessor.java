@@ -45,18 +45,12 @@ public class LoginPostProcessor implements Constants {
         // el usuario ingresa al sistema
         WebsiteUsersEntity usuario = sso.login(request);
 
-
-            /*if(usuario == null)
-            throw new NoAutentificadoException("");*/
-
-            /*if (!sso.isUserLogged(request, usuario)) {
-                throw new NoAutentificadoException("Por favor autentifiquese");
-            }*/
-        // otro usuario conectado
+        // si se obtuvieron sus datos exitosamente
         if (usuario != null) {
             request.getSession().setAttribute(USER, usuario);
             request.getSession().setAttribute(USER_NAME, usuario.getNombre() + " " + usuario.getApellido());
         } else {
+            // si no se ha obtenido su ID abortar
             if (request.getSession().getAttribute(CLAIMED_ID) == null) {
                 return;
             }
@@ -67,10 +61,10 @@ public class LoginPostProcessor implements Constants {
         properties = new Properties();
         properties.load(is);
 
-        // configure the return_to URL where your application will receive
-        // the authentication responses from the OpenID provider
+        
         String app_url = properties.getProperty("app_url");
 
+        // se redirige a la pagina principal de la aplicacion
         response.sendRedirect(app_url);
         return;
     }

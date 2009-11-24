@@ -33,10 +33,15 @@ public class LoginPreProcessor implements Constants{
     public static String processRequest(HttpServletRequest request, HttpServletResponse response, String url)
             throws ServletException, IOException, ConsumerException, DiscoveryException {
 
+        // creo el objeto que llevara a cabo el proceso de autentificacion
         IOpenID auth = (IOpenID) new OpenIDFactory().create();
 
+        // guardo el objeto de autentificacion
+        // para poder invocarlo cuando el proveedor
+        // me devuerlva el control
         request.getSession().setAttribute(SSO, auth);
 
+        // invoco la autentificacion del usuario
         return auth.solicitarAutentificacion(url,
                 request,
                 response);
