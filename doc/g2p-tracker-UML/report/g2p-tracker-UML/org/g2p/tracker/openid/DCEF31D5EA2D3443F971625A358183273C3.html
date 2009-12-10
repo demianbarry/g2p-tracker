@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Interface</TITLE>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../stylesheet.css" TITLE="Style"></HEAD>
+<BODY BGCOLOR="white">
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+<HR>
+<H2>
+<FONT SIZE="-1">org::g2p::tracker::openid</FONT>
+<BR>
+Interface IUsuario</H2>
+<PRE>
+<B>org::g2p::tracker::openid::IUsuario</B>
+</PRE>
+<HR>
+<DL>
+<DT><PRE>public interface <B>IUsuario</B></DT></DL>
+</PRE>
+
+<P>
+Encapsula los datos del usuario y su estado
+ @author Cristian Pacheco</P><HR>
+<!-- =========== PROPERTY SUMMARY =========== -->
+<A NAME="property_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Properties</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Alias</B></TD>
+<TD>IUsuario</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Visibility</B></TD>
+<TD>public</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Final</B></TD>
+<TD><IMG src="../../../../../images/unchecked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Transient</B></TD>
+<TD><IMG src="../../../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Abstract</B></TD>
+<TD><IMG src="../../../../../images/checked.png" border=n></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B>Leaf</B></TD>
+<TD><IMG src="../../../../../images/unchecked.png" border=n></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION SUMMARY =========== -->
+<A NAME="operation_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Operation Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/DCE50F1585BC2209B29E0816E6AAAF5D03C.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#desconectar">desconectar</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Desconecta al usuario de la aplicación
+     </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/DCE70A455D36F73DBAF1D4D37A932E713B0.html">boolean</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#isConectado">isConectado</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Chequea si esta conectado o no.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/DCE78DFD22EE38B23DE5C9106310DA7C78B.html">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getID">getID</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Averigua el ID del usuario
+     
+     @return el id esociado al usuario
+     </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/DCE78DFD22EE38B23DE5C9106310DA7C78B.html">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getNombre">getNombre</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Averigua el nombre del usuario
+          @return el nombre del usuario
+     </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/DCE78DFD22EE38B23DE5C9106310DA7C78B.html">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getApellido">getApellido</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Averigua el apellido del usuario
+          @return el apellido del usuario
+     </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/java/util/DCE3E17777DE72FA27CF32B7DF73C4DBF69.html">Enumeration&lt;String&gt;</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#getEmails">getEmails</A></B>()</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Averigua los emails del usuario
+     
+     @return los emails del usuario
+     </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE><A HREF="../../../../../g2p-tracker-UML/DCE50F1585BC2209B29E0816E6AAAF5D03C.html">void</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="#agregarObservador">agregarObservador</A></B>(<A HREF="../../../../../g2p-tracker-UML/java/util/DCE493F481A3DD129851D88470E4F71FEAB.html">Observer</A>&nbsp;observador)</CODE><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Especifica un objeto interesado en saber los cambios del usuario
+          @param observador interesado de los cambios
+     </TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== STEREOTYPE SUMMARY =========== -->
+
+<A NAME="stereotype_summary"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Stereotype Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="left" VALIGN="top" WIDTH="15%">
+interface
+</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== OPERATION DETAIL =========== -->
+
+<A NAME="operationr_detail"></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Operation Detail</B></FONT></TH>
+</TR>
+</TABLE>
+<A NAME="desconectar"></A><H3>desconectar</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/DCE50F1585BC2209B29E0816E6AAAF5D03C.html">void</A> <B>desconectar</B>()</PRE>
+<DL>
+<DD>     Desconecta al usuario de la aplicación
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="isConectado"></A><H3>isConectado</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/DCE70A455D36F73DBAF1D4D37A932E713B0.html">boolean</A> <B>isConectado</B>()</PRE>
+<DL>
+<DD>     Chequea si esta conectado o no.
+          @return true si esta conectado o false sino lo esta
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="getID"></A><H3>getID</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/DCE78DFD22EE38B23DE5C9106310DA7C78B.html">String</A> <B>getID</B>()</PRE>
+<DL>
+<DD>     Averigua el ID del usuario
+     
+     @return el id esociado al usuario
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="getNombre"></A><H3>getNombre</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/DCE78DFD22EE38B23DE5C9106310DA7C78B.html">String</A> <B>getNombre</B>()</PRE>
+<DL>
+<DD>     Averigua el nombre del usuario
+          @return el nombre del usuario
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="getApellido"></A><H3>getApellido</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/DCE78DFD22EE38B23DE5C9106310DA7C78B.html">String</A> <B>getApellido</B>()</PRE>
+<DL>
+<DD>     Averigua el apellido del usuario
+          @return el apellido del usuario
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="getEmails"></A><H3>getEmails</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/java/util/DCE3E17777DE72FA27CF32B7DF73C4DBF69.html">Enumeration&lt;String&gt;</A> <B>getEmails</B>()</PRE>
+<DL>
+<DD>     Averigua los emails del usuario
+     
+     @return los emails del usuario
+     
+<P>
+</DD></DL>
+<HR>
+<A NAME="agregarObservador"></A><H3>agregarObservador</H3>
+<PRE>
+public abstract <A HREF="../../../../../g2p-tracker-UML/DCE50F1585BC2209B29E0816E6AAAF5D03C.html">void</A> <B>agregarObservador</B>(<A HREF="../../../../../g2p-tracker-UML/java/util/DCE493F481A3DD129851D88470E4F71FEAB.html">Observer</A>&nbsp;observador)</PRE>
+<DL>
+<DD>     Especifica un objeto interesado en saber los cambios del usuario
+          @param observador interesado de los cambios
+     
+<P>
+</DD></DL>
+
+<HR>
+<!-- ========= START OF NAVBAR ======= -->
+<A NAME="navbar_top"></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1"> &nbsp;<A HREF="../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Package</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1Rev">    <FONT CLASS="NavBarFont1Rev"><B>Element</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Diagram</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../help.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>NetBeans UML Modeling</b>
+</TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF NAVBAR ========= -->
+
+</BODY>
+</HTML>
