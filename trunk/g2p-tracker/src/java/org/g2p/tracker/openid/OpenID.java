@@ -57,7 +57,7 @@ public class OpenID implements IOpenID, Constants {
         // instantiate a ConsumerManager object
         manager = new ConsumerManager();
 
-        RealmVerifier rv = new RealmVerifier();
+        RealmVerifier rv = new RealmVerifier(false);
         rv.setEnforceRpId(false);
         manager.setRealmVerifier(rv);
         
