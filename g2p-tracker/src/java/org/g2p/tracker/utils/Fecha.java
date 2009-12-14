@@ -49,9 +49,12 @@ public class Fecha extends Date{
      * @return la diferencia en base a la unidad de medida especificada
      */
     public long getDiff(Date otraFecha, int unidad){
-        long diferencia = this.getTime() - otraFecha.getTime();
-
-        return (long) (diferencia / unidad);
+        if(otraFecha != null) {
+            long diferencia = this.getTime() - otraFecha.getTime();
+            return (long) (diferencia / unidad);
+        } else {
+            return 0;
+        }
 
     }
 
