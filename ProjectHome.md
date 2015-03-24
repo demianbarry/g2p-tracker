@@ -1,0 +1,2 @@
+**g2p-tracker** is an integrated managment tool for tasks, issues and any other kind of project's events, with a simple built-in notification system. It also enables you to tag items and content as you wish, log in using your Google or OpenID account, provides automatic event prioritization and much more. Ideal for scrum and other agile-oriented
+development teams. Developed by the _Patagonian Open Source Development Group_.
